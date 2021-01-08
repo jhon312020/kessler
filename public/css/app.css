@@ -1,1 +1,9 @@
-
+.fill-ups{
+    line-height: 1.2;
+    border: none; 
+    border-bottom: 1px solid #757575;
+    width: 125px;
+}
+.form-control{
+    width:550px;
+}
