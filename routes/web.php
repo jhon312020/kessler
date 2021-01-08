@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SessionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/home', [SessionsController::class, 'index']);
+Route::get('/home', [SessionsController::class, 'index']);
+Route::get('/sessions',[SessionsController::class, 'sessions']);
+Route::get('/recallwords', [SessionsController::class, 'recall']);
+Route::post('/sessions', [SessionsController::class,'store']);
