@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 08, 2021 at 03:01 PM
+-- Generation Time: Jan 08, 2021 at 03:04 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.4.13
 
@@ -20,6 +20,208 @@ SET time_zone = "+00:00";
 --
 -- Database: `msmt`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `failed_jobs`
+--
+
+CREATE TABLE `failed_jobs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `instructions`
+--
+
+CREATE TABLE `instructions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `instructions` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `migrations`
+--
+
+CREATE TABLE `migrations` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `migrations`
+--
+
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
+(1, '2014_10_12_000000_create_users_table', 1),
+(2, '2014_10_12_100000_create_password_resets_table', 1),
+(3, '2019_08_19_000000_create_failed_jobs_table', 1),
+(4, '2020_12_25_164116_create_instructions_table', 1),
+(5, '2020_12_26_071743_create_stories_table', 1),
+(6, '2020_12_26_095156_create_words_table', 1),
+(7, '2020_12_28_094746_create_overviews_table', 1),
+(8, '2021_01_02_092337_create_trainee_journeys_table', 1),
+(9, '2021_01_06_090630_create_trainees_table', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `overviews`
+--
+
+CREATE TABLE `overviews` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `overviews` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `overviews`
+--
+
+INSERT INTO `overviews` (`id`, `overviews`, `created_at`, `updated_at`) VALUES
+(1, 'For participants, the first four intervention sessions (sessions 1-4) consist of reading short stories displayed on a computer screen and remembering 20 target words embedded within the stories. During each session the participant reads a story that stays on the\r\nscreen for 100 seconds. The target words are capitalised within the story. The participant is instructed to use imagery to assist them in remembering target words. Once the story is read, there is a free recall for the target words. Following the free recall, a contextual cue, and if necessary a categorical cue, is given to facilitate recall for each of the target words. After this is completed, training is provided by the trainer, and the process is repeated with the same story', '2020-12-28 04:21:10', '2020-12-28 04:21:10'),
+(2, 'Each of the next four intervention sessions (sessions 5-8) consist of a list of 20 target words displayed on a computer screen. The participant creates a story using all the words. Once the story is written, there is a free recall. Following the free recall, a contextual cue, and if necessary a categorical cue is given to facilitate recall of each of the target words. After this is completed, additional training is provided by the trainer and the process is repeated.', '2020-12-28 04:37:00', '2020-12-28 04:37:00'),
+(3, 'Finally, in the last 2 sessions (sessions 9 and 10), the treatment session is focused on the application of the mSMT to everyday life. That is, memory-taxing situations that a given participant would be faced with are utilised during training. Such situations may involve\r\nremembering a list of shopping items, remembering a to-do list or remembering directions to a destination. Regardless, the last 2 session focus on specific situations such that the participant identified early in treatment important to their functional memory.', '2020-12-28 04:37:38', '2020-12-28 04:37:38');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `password_resets`
+--
+
+CREATE TABLE `password_resets` (
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stories`
+--
+
+CREATE TABLE `stories` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `story` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `stories`
+--
+
+INSERT INTO `stories` (`id`, `story`, `created_at`, `updated_at`) VALUES
+(1, 'Mr. Jones pulled a fresh APPLE from a tree. This made him think of his childhood summers with the flowers in BLOSSOM and his mother churning BUTTER sitting on a CHAIR drinking COFFEE. Mr. Jones was a DIAMOND salesman but his father worked in a FACTORY using a pitch FORK and a HAMMER. On Saturdays his mother would KISS him and send him to the MARKET. The goods there reminded him of a PALACE. On Sundays he went to church to visit his PRIEST making sure to get a SEAT in the first row. One day Mr. Jones’ father left boarding a STEAM boat with a TICKET that his WIFE had bought. Her BETRAYAL by not using DISCRETION in their personal lives led him to mistrust members of the opposite GENDER.', '2020-12-27 07:54:27', '2020-12-27 07:54:27'),
+(2, 'Mr. Smith saw an ANIMAL painting BLOOD on a BUILDING. As he entered the CELLAR he saw pigs boarding a train for the west COAST leaving at DAWN. As the ENGINE pulled the train through the FOREST, Mr. Smith walked down a long HALL. He entered a room and saw a KING pig reading a Playboy MAGAZINE. The pig summoned an OFFICER who was peeling a POTATO in the SEA. A STAR witness sentenced Mr. Smith to spend the rest of his life in a TEMPLE growing WHEAT. Mrs. Smith heard this DISCLOSURE and showed little BEREAVEMENT towards the OUTCOME of the trial.', '2020-12-27 07:55:42', '2020-12-27 07:55:42'),
+(3, 'Peter went to a PARTY at the COLLEGE near the LAKE. There he met a girl that was wearing a nice FUR and high-heeled SHOES. Although she was drinking WINE she had a BODY of a young CHILD who should be at home playing with a DOLL. Since Peter was a military man the girl asked for an ELABORATION of his days in the ARMY. He told her of his days as a PRISONER in a concentration CAMP where there was very little MEAT to eat. One night as a STORM approached he noticed there was no guard in the TOWER and had a HANKERING to escape on a HORSE he could steal from the stable. The SUPPRESSION of his freedom and dignity made him eager to be back in his country where the FLAG flew freely.', '2020-12-27 07:57:00', '2020-12-27 07:57:00'),
+(4, 'Cindy was a girl who went to PRISON to visit her FRIEND. While there she kept putting a COIN on the table in effort to buy a STONE. Using the TOBACCO at the end of her ARM she tried to start her hair on FIRE. Since this did not remove the BLANDNESS from her life she decided becoming a DOCTOR would be the perfect REPLACEMENT for her sagging EGO. Since this did not work she decided to find a good LAD to be her CHIEF so they could BOARD a SHIP and sail through a MEADOW. On the other side they would find a CABIN made of PAPER with WINDOWS in the floor which would be their perfect HOME.', '2020-12-27 07:57:54', '2020-12-27 07:57:54');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `trainees`
+--
+
+CREATE TABLE `trainees` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `session_pin` int(11) DEFAULT NULL,
+  `recall_words` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ans_contextual_cue` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ans_categorical_cue` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `dk_contextual_cue` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `dk_categorical_cue` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `correct_ans_contextual_cue` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `correct_ans_categorical_cue` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `incorrect_ans_contextual_cue` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `incorrect_ans_categorical_cue` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `num_correct_ans_contextual_cue` int(11) DEFAULT NULL,
+  `num_correct_ans_categorical_cue` int(11) DEFAULT NULL,
+  `num_incorrect_ans_contextual_cue` int(11) DEFAULT NULL,
+  `num_incorrect_ans_categorical_cue` int(11) DEFAULT NULL,
+  `num_dk_contextual_cue` int(11) DEFAULT NULL,
+  `num_dk_categorical_cue` int(11) DEFAULT NULL,
+  `total` int(11) NOT NULL DEFAULT 20,
+  `story` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `round` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `trainee_journeys`
+--
+
+CREATE TABLE `trainee_journeys` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `session_pin` int(11) DEFAULT NULL,
+  `trainee_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `session_type` varchar(3) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `session_number` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `trainee_journeys`
+--
+
+INSERT INTO `trainee_journeys` (`id`, `session_pin`, `trainee_id`, `session_type`, `session_number`, `created_at`, `updated_at`) VALUES
+(1, 182981, 'KF-01', 'A', 1, '2021-01-06 03:49:02', '2021-01-06 03:49:02'),
+(2, 798308, 'KF-02', 'A', 2, '2021-01-07 03:38:56', '2021-01-07 03:38:56'),
+(3, 936650, 'KF-03', 'A', 3, '2021-01-07 03:40:17', '2021-01-07 03:41:35'),
+(4, 288325, 'KF-04', 'A', 4, '2021-01-07 03:40:27', '2021-01-07 03:40:27'),
+(5, 631677, 'KF07', 'A', 3, '2021-01-08 01:41:36', '2021-01-08 01:41:36'),
+(6, 293411, 'KF05', 'A', 1, '2021-01-08 01:42:07', '2021-01-08 01:42:07');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `trainer_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `location` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone_number` bigint(20) DEFAULT NULL,
+  `speciality` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `is_active` char(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `trainer_id`, `name`, `email`, `email_verified_at`, `password`, `role`, `location`, `address`, `phone_number`, `speciality`, `remember_token`, `created_at`, `updated_at`, `deleted_at`, `is_active`) VALUES
+(1, NULL, 'Charu Prakash', 'charu@proisc.com', NULL, '$2y$10$z4NMVTSgsAUT4WYUGQPYh..6hDAjNw7wNPRszsan0.B1TLZNZfCPq', NULL, NULL, NULL, NULL, NULL, NULL, '2021-01-06 03:42:13', '2021-01-06 03:42:13', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -206,6 +408,63 @@ INSERT INTO `words` (`id`, `words`, `contextual_cue`, `categorical_cue`, `create
 --
 
 --
+-- Indexes for table `failed_jobs`
+--
+ALTER TABLE `failed_jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
+
+--
+-- Indexes for table `instructions`
+--
+ALTER TABLE `instructions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `migrations`
+--
+ALTER TABLE `migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `overviews`
+--
+ALTER TABLE `overviews`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `password_resets`
+--
+ALTER TABLE `password_resets`
+  ADD KEY `password_resets_email_index` (`email`);
+
+--
+-- Indexes for table `stories`
+--
+ALTER TABLE `stories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `trainees`
+--
+ALTER TABLE `trainees`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `trainee_journeys`
+--
+ALTER TABLE `trainee_journeys`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD UNIQUE KEY `users_trainer_id_unique` (`trainer_id`);
+
+--
 -- Indexes for table `words`
 --
 ALTER TABLE `words`
@@ -215,6 +474,54 @@ ALTER TABLE `words`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `failed_jobs`
+--
+ALTER TABLE `failed_jobs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `instructions`
+--
+ALTER TABLE `instructions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `migrations`
+--
+ALTER TABLE `migrations`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `overviews`
+--
+ALTER TABLE `overviews`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `stories`
+--
+ALTER TABLE `stories`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `trainees`
+--
+ALTER TABLE `trainees`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `trainee_journeys`
+--
+ALTER TABLE `trainee_journeys`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `words`
