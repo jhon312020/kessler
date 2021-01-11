@@ -1,10 +1,7 @@
 @extends('msmt.layouts.master')
-
+@section('content')
   <!-- Content Wrapper. Contains page content -->
-  @section('content')
   <div class="content-wrapper">
-  <!-- Content Header (Page header) -->
-  <!-- Main content -->
      <section class="page-section">
             <div class="container">
                 <!-- Contact Section Heading-->

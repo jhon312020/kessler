@@ -9,6 +9,7 @@ use Redirect,Response;
 use Auth;
 use DB;
 use App\Models\Story;
+use App\Models\Words;
 use Illuminate\Support\Facades\Validator;
 
 class SessionsController extends Controller
@@ -35,7 +36,7 @@ class SessionsController extends Controller
         ]);
 
         if (!$validator->fails()) {
-            $record = TraineeJourney::select('id', 'session_pin', 'session_number', 'session_type')->where('session_pin', $request->sessionpin)->first();
+            $record = TraineeJourney::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type')->where('session_pin', $request->sessionpin)->first();
             if ($record) {
               $request->session()->put('trainee', $record);
               return redirect('sessions');
@@ -85,10 +86,25 @@ class SessionsController extends Controller
     public function store(Request $request) {
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee');
+        //$this->pr($trainee);
         $data = $request->only('words');
-        $test['recall_words'] = json_encode($data);
-        Trainee::insert($test);
-        $msmt = Story::select('*')->where('id', $trainee['session_number'])->get(); 
+        $traineeRecall['recall_words'] = json_encode($data);
+        $traineeRecall['trainee_id'] = $trainee['trainee_id'];
+        $traineeRecall['session_pin'] = $trainee['session_pin'];
+        Trainee::insert($traineeRecall);
+        $msmt = Story::select('id', 'story')->where('id', $trainee['session_number'])->get();
+        if ($msmt) {
+          $this->pr($msmt->toArray());
+          $sessionStory = $msmt[0]['story'];
+          $sessionStory = explode('.', $sessionStory);
+          echo $sentence = $sessionStory[0];
+          preg_match_all("/[A-Z][a-z]*/",$sentence, $op);
+          print_r($op);
+          echo $output;
+        }
+        
+
+        //$msmt = Words::select('contextual_cue')->where('story_id', $trainee['session_number'])->get(); 
         return view('msmt.sessions.questions.sessionquestions')->with('msmt',$msmt);
       } else {
         return redirect('home');
