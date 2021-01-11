@@ -10,4 +10,10 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+     function pr($data) {
+    	echo '<pre>';
+    	print_r($data);
+    	echo '</pre>';
+    }
 }
