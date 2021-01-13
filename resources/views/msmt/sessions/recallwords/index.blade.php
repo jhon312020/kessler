@@ -29,7 +29,7 @@
                 <div class="row">
                     <div class="col-lg-8 mx-auto">
                         <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19.-->
-                        <form action="{{ url('sessions') }}" method="POST">
+                        <form action="{{ url('sessions') }}" method="POST" id="recallWords">
                          @csrf {{ method_field('post') }}
                             <div class="control-group">
                                 <div class="form-group floating-label-form-group controls mb-0 pb-2">
@@ -39,11 +39,24 @@
                             </div>
                             <br />
                             <div id="success"></div>
-                            <div class="form-group"><button class="btn btn-primary btn-xl" id="submit" type="submit">SUBMIT</button></div>
+                            <div class="form-group"><button class="btn btn-primary btn-xl" id="jsSubmit" type="submit">SUBMIT</button></div>
                         </form>
                     </div>
                 </div>
             </div>
         </section>
   </div>
-  @endsection
+<script type="text/javascript">
+  $(document).ready( function() { // Wait until document is fully parsed
+    var timer = performance.now();
+    $("#jsSubmit").on('click', function(event) {
+      event.preventDefault();
+      var startTime = $("<input>").attr("name", "startTime").val(timer);
+      $('#recallWords').append(startTime);
+      var endTime = $("<input>").attr("name", "endTime").val(performance.now());
+      $('#recallWords').append(endTime);
+      $("#recallWords").submit();
+    });
+  })
+</script>
+@endsection

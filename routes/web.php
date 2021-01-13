@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SessionsController;
+use App\Http\Controllers\AjaxController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +24,4 @@ Route::get('/home', [SessionsController::class, 'index']);
 Route::get('/sessions',[SessionsController::class, 'sessions']);
 Route::get('/recallwords', [SessionsController::class, 'recall']);
 Route::post('/sessions', [SessionsController::class,'store']);
+Route::post('/next', [AjaxController::class,'store']);

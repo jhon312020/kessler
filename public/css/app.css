@@ -7,3 +7,6 @@
 .form-control{
     width:550px;
 }
+.fill-ups-error {
+	border-bottom: 1px solid #721c24;
+}
