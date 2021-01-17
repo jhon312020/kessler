@@ -111,4 +111,16 @@ class SessionsController extends Controller
         return redirect('home');
       }
   }
+
+    /**
+     * On completting the session story the user is redirected to completion page.
+     * @return \Illuminate\Http\Response
+     */
+    public function complete(Request $request) {
+      if ($request->session()->has('completed')) {
+        $request->session()->forget('completed');
+        return view('msmt.sessions.questions.complete');
+      }
+       return redirect('home');
+    }
 }

@@ -76,11 +76,19 @@
     $(document).on('keyup', '#answer', function() {
         this.value = this.value.toUpperCase();
     });
+    $(document).on("keydown", "form", function(event) { 
+      if (event.key == "Enter") {
+        event.preventDefault();
+        $("#jsNext").trigger('click');
+        return false;
+      } else {
+        return event.key;
+      }
+    });
     var timer = null;
     var categoryCueShowed = 0;
     //var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     $("#jsNext").on('click', function(event) {
-      console.log('categoryCueShowed', categoryCueShowed);
       $('#jsCategoricalMessage').addClass('d-none');
       $('#jsErrorMessage').addClass('d-none');
       var answer = $('#answer').val();
@@ -88,23 +96,24 @@
         $('#jsErrorMessage').text('Please fill the blank!');
         $('#jsErrorMessage').removeClass('d-none').show();
         $('#answer').addClass('fill-ups-error');
+        $('#answer').focus();
         return false;
       }
       var form = $('#jsQuestionForm');
-      var startTime = $("<input type='hidden'>").attr("name", "startTime").val(timer);
-      form.append(startTime);
-      var endTime = $("<input type='hidden'>").attr("name", "endTime").val(performance.now());
-      form.append(endTime);
-      var categoryCue = $("<input type='hidden'>").attr("name", "categoryCue").val(categoryCueShowed);
-      form.append(categoryCue);
-      var formData = form.serialize(); 
+      var startTime = timer;
+      var endTime = performance.now();
+      var categoryCue = categoryCueShowed; 
+      var formData = form.serialize()+ "&startTime=" + startTime+ "&endTime=" + endTime + "&categoryCue=" + categoryCue; 
       $.ajax({
         type: "POST",
         url: form.attr("action"),
         data: formData,
         success: function(response) {
-           if (response.reload) {
+           if (response.completed) {
             //location.reload();
+            console.log(response);
+            window.location = response.redirectURL;
+           } else if (response.reload) {
             console.log(response.reload);
            } else {
             timer = performance.now();
@@ -113,8 +122,10 @@
               $('#jsCategoricalMessage').html(response.categorical_cue);
               $('#jsCategoricalMessage').removeClass('d-none').show();
               categoryCueShowed = 1;
+              $('#answer').focus();
             } else {
               categoryCueShowed = 0;
+              $('#answer').focus();
             }
            }
         },
@@ -126,6 +137,7 @@
       $('#jsTraineeMessage').slideUp();
       $('#jsTraineeMessage').html('');
       $('#questions').removeClass('d-none').show();
+      $('#answer').focus();
       timer = performance.now();
     });
   })

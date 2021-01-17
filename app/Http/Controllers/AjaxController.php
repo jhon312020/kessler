@@ -33,7 +33,7 @@ class AjaxController extends Controller
           $wordID = array_pop($wordKey);
           $answer = $answer;
         }
-
+        $lastWord = Word::select('id')->where('story_id', $trainee['session_number'])->orderBy('id', 'desc')->first();
         $word = Word::select('id', 'word', 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
         if ($word) {
           $traineeTransaction['correct_or_wrong'] = 0;
@@ -52,7 +52,6 @@ class AjaxController extends Controller
           }
           if ($word['word'] == strtoupper($answer) || $request->categoryCue) {
             $word = Word::select('id', 'word', 'question')->where('id','>', $wordID)->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->first();
-            
           } 
           TraineeTransaction::insert($traineeTransaction);
         }
@@ -67,9 +66,14 @@ class AjaxController extends Controller
           $response['reload'] = false;
           if ($wordID == $word['id']) {
             $response['categorical_cue'] = $word['categorical_cue'];
-          } 
+          }
           return $response;
+        } else if ($wordID == $lastWord->id) {
+            $response['completed'] = true;
+            $response['redirectURL'] = url("/complete");
+            $request->session()->put('completed', true);
         }
+        return $response;
       } else {
         return $respone;
       }

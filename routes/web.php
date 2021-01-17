@@ -25,3 +25,4 @@ Route::get('/sessions',[SessionsController::class, 'sessions']);
 Route::get('/recallwords', [SessionsController::class, 'recall']);
 Route::post('/sessions', [SessionsController::class,'store']);
 Route::post('/next', [AjaxController::class,'store']);
+Route::get('/complete', [SessionsController::class,'complete']);

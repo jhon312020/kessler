@@ -51,9 +51,9 @@
     var timer = performance.now();
     $("#jsSubmit").on('click', function(event) {
       event.preventDefault();
-      var startTime = $("<input>").attr("name", "startTime").val(timer);
+      var startTime = $("<input>").attr("name", "startTime").attr("type", "hidden").val(timer);
       $('#recallWords').append(startTime);
-      var endTime = $("<input>").attr("name", "endTime").val(performance.now());
+      var endTime = $("<input>").attr("name", "endTime").attr("type", "hidden").val(performance.now());
       $('#recallWords').append(endTime);
       $("#recallWords").submit();
     });
