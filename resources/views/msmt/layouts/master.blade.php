@@ -45,7 +45,7 @@
         </header>
 
         <!-- Contact Section-->
-@yield('content')
+        @yield('content')
         <!-- ./Contact Section-->
 
         <!-- Footer-->
@@ -91,10 +91,10 @@
         <script src="{{asset('assets/mail/contact_me.js')}}"></script>
         <!-- Core theme JS-->
         <script type="text/javascript"> 
-        window.addEventListener('beforeunload', function (e) { 
-            e.preventDefault();
-            e.returnValue = ''; 
-        });
+        // window.addEventListener('beforeunload', function (e) { 
+        //     e.preventDefault();
+        //     e.returnValue = ''; 
+        // });
       /*  window.addEventListener('beforeunload', (event) => {
              if(event.clientY < 0) {
                    event.returnValue = `Are you sure you want to leave?`;

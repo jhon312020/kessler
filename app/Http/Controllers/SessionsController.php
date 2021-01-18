@@ -25,30 +25,24 @@ class SessionsController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
-    public function index(Request $request){
-
-        //return view ('msmt.user.home');
+    public function index(Request $request) {
       $validator = [];
-         if ($request->isMethod('post')) {
+       if ($request->isMethod('post')) {
           $validator = Validator::make($request->all(), [
-            'sessionpin' => 'required'
-            
-        ]);
+            'sessionpin' => 'required'    
+          ]);
 
         if (!$validator->fails()) {
-            $record = TraineeJourney::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type')->where('session_pin', $request->sessionpin)->first();
-            if ($record) {
-              $request->session()->put('trainee', $record);
-              return redirect('sessions');
-            } else {
-               $validator->errors()->add('sessionpin', 'INVALID PIN! Please contact your trainer..');
-            }
-          
+          $record = TraineeJourney::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed')->where('session_pin', $request->sessionpin)->where('completed', 0)->first();
+          if ($record) {
+            $request->session()->put('trainee', $record);
+            return redirect('sessions');
+          } else {
+             $validator->errors()->add('sessionpin', 'INVALID PIN! Please contact your trainer..');
+          } 
         } 
-
-       }
-         return view('msmt.user.home')->withErrors($validator);
-
+      }
+      return view('msmt.user.home')->withErrors($validator);
     }
 
     /**
@@ -62,8 +56,8 @@ class SessionsController extends Controller
     public function sessions(Request $request) {
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
-        $msmt = Story::select('*')->where('id', $trainee['session_number'])->get(); 
-        return view('msmt.sessions.sessionstories')->with('msmt',$msmt);
+        $story = Story::select('*')->where('id', $trainee['session_number'])->first(); 
+        return view('msmt.sessions.story')->with('story', $story);
       } else {
         return redirect('home');
       }
@@ -93,6 +87,7 @@ class SessionsController extends Controller
         $traineeTransaction['trainee_id'] = $trainee['trainee_id'];
         $traineeTransaction['story_id'] = $trainee['session_number'];
         $traineeTransaction['session_pin'] = $trainee['session_pin'];
+        $traineeTransaction['round'] = $trainee['round'];
         $traineeTransaction['time_taken'] = $timeTaken;
         $traineeTransaction['type'] = 'Recall';
         TraineeTransaction::insert($traineeTransaction);
@@ -106,7 +101,7 @@ class SessionsController extends Controller
           $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$wordID."' id='answer'>", $question);
           $question = str_replace("$$", str_repeat("_", 15), $question);
         } 
-        return view('msmt.sessions.questions.sessionquestions')->with('question',$question);
+        return view('msmt.sessions.questions.show')->with('question',$question);
       } else {
         return redirect('home');
       }
@@ -119,6 +114,19 @@ class SessionsController extends Controller
     public function complete(Request $request) {
       if ($request->session()->has('completed')) {
         $request->session()->forget('completed');
+        $trainee = $request->session()->get('trainee');
+        $traineeObj = TraineeJourney::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed')->where('id', $trainee->id)->first();
+        if ($traineeObj) {
+          switch($traineeObj->round) {
+            case 1:
+              $traineeObj->round = 2;
+            break;
+            case 2:
+              $traineeObj->completed = 1;
+            break;
+          }
+          $traineeObj->save();
+        }
         return view('msmt.sessions.questions.complete');
       }
        return redirect('home');
