@@ -9,7 +9,7 @@ use Redirect,Response;
 use Auth;
 use DB;
 use App\Models\Story;
-use App\Models\Word;
+use App\Models\Words;
 use Illuminate\Support\Facades\Validator;
 
 class AjaxController extends Controller
@@ -33,8 +33,8 @@ class AjaxController extends Controller
           $wordID = array_pop($wordKey);
           $answer = $answer;
         }
-        $lastWord = Word::select('id')->where('story_id', $trainee['session_number'])->orderBy('id', 'desc')->first();
-        $word = Word::select('id', 'word', 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
+        $lastWord = Words::select('id')->where('story_id', $trainee['session_number'])->orderBy('id', 'desc')->first();
+        $word = Words::select('id', 'word', 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
         if ($word) {
           $traineeTransaction['correct_or_wrong'] = 0;
           $traineeTransaction['round'] = 1;
@@ -51,7 +51,7 @@ class AjaxController extends Controller
             $traineeTransaction['type'] = 'Categorical';
           }
           if ($word['word'] == strtoupper($answer) || $request->categoryCue) {
-            $word = Word::select('id', 'word', 'question')->where('id','>', $wordID)->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->first();
+            $word = Words::select('id', 'word', 'question')->where('id','>', $wordID)->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->first();
           } 
           TraineeTransaction::insert($traineeTransaction);
         }

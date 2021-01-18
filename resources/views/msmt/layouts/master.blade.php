@@ -90,5 +90,18 @@
         <script src="{{asset('assets/mail/jqBootstrapValidation.js')}}"></script>
         <script src="{{asset('assets/mail/contact_me.js')}}"></script>
         <!-- Core theme JS-->
+        <script type="text/javascript"> 
+        window.addEventListener('beforeunload', function (e) { 
+            e.preventDefault();
+            e.returnValue = ''; 
+        });
+      /*  window.addEventListener('beforeunload', (event) => {
+             if(event.clientY < 0) {
+                   event.returnValue = `Are you sure you want to leave?`;
+                }
+          event.returnValue = `Are you sure you want to leave?`;
+        });*/
+    </script> 
+
     </body>
 </html>
