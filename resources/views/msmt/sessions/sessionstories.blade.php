@@ -1,8 +1,9 @@
 @extends('msmt.layouts.master')
 @section('content')
-  <!-- Content Wrapper. Contains page content -->
+ <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
+
   <!--   <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
@@ -18,68 +19,87 @@
         </div>
       </div>
     </section>   -->
-
-      <!-- /.container-fluid -->
+<!-- /.container-fluid -->
       
-    <!-- Main content -->
-     <br><br>
-  <section class="content">
-     <div class="container-fluid" id="time">
-      
-        <div class="card card-primary card-outline">
-          <div class="card-header">
-            <h3 class="card-title">START SESSION</h3>
-        </div> <!-- /.card-body -->
-          <div class="card-body">
-          <h1 class="m-0"></h1>
-          <p>On the same page below you are going to see a story. It will stay on the screen for a
-          set period of time. Certain words in the story will be capitalized like THIS. Use this story to help you remember the capitalized words. Try to make a picture of each storyline in your head. Click on START when you are ready.</p>
-          </div>
-        
-      <div class="card-footer">
-    <!-- <button type="submit" class="btn btn-primary">Generate Session Pin</button>
-                <br><br> -->
-        <button type="button" class="btn btn-primary" id="start" style="float: right;" onclick="display();">START</button>
-      </div>
+         <!-- Main content -->
+        <section class="page-section" id="jsTraineeSession">
+            <div class="container">
+                <!-- Contact Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">START SESSION</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                <p>On the same page below you are going to see a story. It will stay on the screen for a
+                set period of time. Certain words in the story will be capitalized like THIS. Use this story to help you remember the capitalized words. Try to make a picture of each storyline in your head. Click on START when you are ready.</p>
+                <br>
+                </div>
+              </div>
+ 
+                <!-- Contact Section Form-->
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19.-->
+                          
+                            <div id="success"></div>
+                            <div class="form-group text-center"><button class="btn btn-primary btn-xl" id="jsStartSession" type="submit">START</button></div>
+                    </div>
+                </div>
+            </div>
+              <!-- /.container-fluid -->
+        </section>
+ 
+  <section class="page-section text-center d-none" id="jsTraineeStory">
+            <div class="container">
+                <!-- Contact Section Heading-->
+            <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Session Story</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
 
-      <!-- /.container-fluid -->
-  </section>
- <br><br>
-    <section class="content">
-      <div class="container-fluid" style="display:none;" id="story">
-        <div class="card card-primary card-outline">
-          <div class="card-header">
-          <h3 class="card-title">Session Story</h3>
-          </div> <!-- /.card-body -->
-        <div class="card-body" id="time-out">
-          <h1 class="m-0"></h1>
-              @foreach($msmt as $story)
-              <p>{{ $story -> story}}</p>
-              @endforeach
-        </div>
-        <div class="card-footer">
-        <button type="submit" class="btn btn-primary" style="float:right;" onclick="window.location.replace('/recallwords');">CONTINUE</button>
-        </div>
-          <!-- /.card-body -->
-        </div>
-        </div>
-      <!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-  <br><br>
+                <!-- Contact Section Form-->
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19.-->
+               <form action="{{ url('recallwords') }}" method="POST" id="jsQuestionForm">
+                <div class="control-group">
+                  <div class="form-group floating-label-form-group controls mb-0 pb-2" id="time-out">
+                   
+                      @foreach($msmt as $story)
+                      <p>{{ $story -> story}}</p>
+                      @endforeach
+                  </div>
+                <div class="form-group text-center">
+               <button type="button" id="jsContinue" class="btn btn-primary btn-xl">CONTINUE</button>
+              <br><br> 
+               </div>
+              </div>
+             </form>
+              </div>
+              </div>
+            </div>
+        </section>
+
     <script type="text/javascript">
-      function display() {
-        document.getElementById('story').style.display = "block";
-        $('#time').slideUp();
-      }
-      /*setTimeout(function() {
-      $('#time').fadeOut('fast');
-      }, 1000);*/
-    </script>
-    
-    <script type="text/javascript">
+      $(document).ready( function() { 
+      $('#jsStartSession').on('click', function(event) { 
+      $('#jsTraineeSession').slideUp();
+      $('#jsTraineeStory').removeClass('d-none').show();
       setTimeout(function() {
       $('#time-out').fadeOut('fast');
       }, 120000); // <-- time in milliseconds
+    });
+       $('#jsContinue').on('click', function(event) { 
+        window.location.replace('/recallwords');
+    });
+    })
     </script>
+
 @endsection
