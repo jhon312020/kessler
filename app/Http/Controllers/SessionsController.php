@@ -9,7 +9,7 @@ use Redirect,Response;
 use Auth;
 use DB;
 use App\Models\Story;
-use App\Models\Words;
+use App\Models\Word;
 use Illuminate\Support\Facades\Validator;
 
 class SessionsController extends Controller
@@ -98,7 +98,7 @@ class SessionsController extends Controller
         TraineeTransaction::insert($traineeTransaction);
         //$story = Story::select('id', 'story')->where('id', $trainee['session_number'])->first();
         $wordID = 1;
-        $word = Words::select('id', 'word', 'question')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
+        $word = Word::select('id', 'word', 'question')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
         //$this->pr($word->toArray());
         if ($word) {
           $question = $word['question'];
