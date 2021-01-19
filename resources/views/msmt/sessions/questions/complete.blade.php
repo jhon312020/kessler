@@ -30,32 +30,36 @@
 @section('content')
   <!-- Content Wrapper. Contains page content -->
   <link href="{{asset('css/app.css')}}" rel="stylesheet" />
- <!-- Main content -->
-  <section class="page-section" id="jsTraineeMessage">
-    <div class="container">
-      <!-- Contact Section Heading-->
-      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Session Completed</h2>
-      <!-- Icon Divider-->
-      <div class="divider-custom">
-        <div class="divider-custom-line"></div>
-        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-        <div class="divider-custom-line"></div>
-      </div>
-      <div class="row">
-        <div class="col-lg-8 mx-auto">
-        <p>Thanks and you have successfully completed the first round of your session!</p>
-        <br>
-      </div>
-    </div>
+  <div class="content-wrapper">
 
-    <div class="row">
-      <div class="col-lg-8 mx-auto">
-        <div class="form-group text-center">
-          <button class="btn btn-primary btn-xl" id="jsStartSession" type="submit">HOME</button>
-        </div>
-      </div>
-    </div>
-      <!-- /.container-fluid -->
-  </section>
- @endsection  
-<!-- /.content -->
+             <!-- Main content -->
+        <section class="page-section">
+            <div class="container">
+                <!-- Contact Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">CONGRATULATIONS</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                <p class="text-center">You have successfully completed the first round of your session! Please contact your traineer!!!</p>
+                <br>
+                </div>
+              </div>
+ 
+                <!-- Contact Section Form-->
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19.-->
+                            <br />
+                            <div id="success"></div>
+                            <div class="form-group text-center"><button class="btn btn-primary btn-xl" type="submit">Home</button></div>
+                    </div>
+                </div>
+            </div>
+              <!-- /.container-fluid -->
+        </section>
+@endsection
