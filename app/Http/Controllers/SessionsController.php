@@ -92,10 +92,12 @@ class SessionsController extends Controller
         $traineeTransaction['type'] = 'Recall';
         TraineeTransaction::insert($traineeTransaction);
         //$story = Story::select('id', 'story')->where('id', $trainee['session_number'])->first();
-        $wordID = 1;
-        $word = Word::select('id', 'word', 'question')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
+
+        //$word = Word::select('id', 'word', 'question')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
+        $word = Word::select('id', 'word', 'question')->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->first();
         //$this->pr($word->toArray());
         if ($word) {
+          $wordID = $word['id'];
           $question = $word['question'];
           $findWord = $word['word'];
           $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$wordID."' id='answer'>", $question);
@@ -120,14 +122,16 @@ class SessionsController extends Controller
           switch($traineeObj->round) {
             case 1:
               $traineeObj->round = 2;
+              $round = 'first';
             break;
             case 2:
               $traineeObj->completed = 1;
+              $round = 'second';
             break;
           }
           $traineeObj->save();
         }
-        return view('msmt.sessions.questions.complete');
+        return view('msmt.sessions.questions.complete')->with('round', $round);
       }
        return redirect('home');
     }

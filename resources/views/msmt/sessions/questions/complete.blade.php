@@ -45,7 +45,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-8 mx-auto">
-                <p class="text-center">You have successfully completed the first round of your session! Please contact your traineer!!!</p>
+                <p class="text-center">You have successfully completed the {{ $round }} round of your session! Please contact your traineer!!!</p>
                 <br>
                 </div>
               </div>
