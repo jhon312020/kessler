@@ -16,6 +16,10 @@
         <p>Now, try to remember as many of the CAPITALIZED words from the story as you can<br> Use the story to help you remember the words</p>
       </div>
     </div>
+    <div class="row" >
+      <div class="col-lg-8 mx-auto" id="jsRecallWords">
+      </div>
+    </div>
     <div class="row">
       <div class="col-lg-8 mx-auto">
         <form action="{{ url('sessions') }}" method="POST" id="recallWords">
@@ -23,7 +27,7 @@
           <div class="control-group">
             <div class="form-group floating-label-form-group controls mb-0 pb-2">
               <label>RECALL WORDS</label>
-                <input class="form-control" id="words" name="words" type="text" placeholder="Recall Words">
+                <input class="form-control" id="jsRecallWord" name="words" type="text" placeholder="Recall Words" autocomplete="off">
             </div>
             <br/>
           </div>
@@ -37,16 +41,29 @@
 <script type="text/javascript">
   $(document).ready( function() { // Wait until document is fully parsed
     var timer = performance.now();
-   $(document).on('keyup', '#words', function() {
-      this.value = this.value.toUpperCase();
+    var words = new Array();
+   $(document).on('keyup', '#jsRecallWord', function(event) {
+      if (event.keyCode == 32 ) {
+        var typedWord = $('#jsRecallWord').val();
+        words.push(typedWord);
+        $("#jsRecallWords").append('<div style="display: inline; line-height:3.5em; margin: 5px" class="col alert alert-info alert-dismissible fade show" role="alert" data-word="'+typedWord+'"><strong>'+typedWord+'</strong> <button type="button" class="btn close" data-dismiss="alert" aria-label="Close" data-word="'+typedWord+'"><span aria-hidden="true" data-word="'+typedWord+'">×</span></button></div>');
+        $('#jsRecallWord').val('');
+      } else {
+        this.value = this.value.toUpperCase();
+      }
     });
     $("#jsSubmit").on('click', function(event) {
       event.preventDefault();
+      $('#jsRecallWord').val(words.join(' '));
       var startTime = $("<input>").attr("name", "startTime").attr("type", "hidden").val(timer);
       $('#recallWords').append(startTime);
       var endTime = $("<input>").attr("name", "endTime").attr("type", "hidden").val(performance.now());
       $('#recallWords').append(endTime);
       $("#recallWords").submit();
+    });
+    $(document).on('close.bs.alert', ".alert", function (event) {
+      var removeWord = $(event.currentTarget).data('word');
+      words.splice(words.indexOf(removeWord), 1);
     });
   })
 </script>

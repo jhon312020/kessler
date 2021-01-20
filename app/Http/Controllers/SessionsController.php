@@ -103,7 +103,7 @@ class SessionsController extends Controller
           $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$wordID."' id='answer'>", $question);
           $question = str_replace("$$", str_repeat("_", 15), $question);
         } 
-        return view('msmt.sessions.questions.show')->with('question',$question);
+        return view('msmt.sessions.questions.show')->with('question', $question);
       } else {
         return redirect('home');
       }

@@ -40,6 +40,7 @@ class AjaxController extends Controller
           $traineeTransaction['round'] = 1;
           $traineeTransaction['trainee_id'] = $trainee['trainee_id'];
           $traineeTransaction['story_id'] = $trainee['session_number'];
+          $traineeTransaction['word_id'] = $wordID;
           $traineeTransaction['session_pin'] = $trainee['session_pin'];
           $traineeTransaction['time_taken'] = $timeTaken;
           $traineeTransaction['type'] = 'Contextual';
