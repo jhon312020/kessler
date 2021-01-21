@@ -56,18 +56,13 @@
                         <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19.-->
                             <br />
                             <div id="success"></div>
-                            <div class="form-group text-center"><button class="btn btn-primary btn-xl" id="jsHome" type="submit">Home</button></div>
+                            <div class="form-group text-center">
+                            <a href="/home" class="btn btn-primary btn-xl" id="jsHome" type="submit">Home
+                            </a>
+                          </div>
                     </div>
                 </div>
             </div>
               <!-- /.container-fluid -->
         </section>
-
-<script type="text/javascript">
-  $(document).ready( function() { 
-   $(document).on('click', '#jsHome', function(event) { 
-      window.location.replace('/home');
-    });
-  })
-</script>
 @endsection
