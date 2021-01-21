@@ -46,6 +46,7 @@ class AjaxController extends Controller
             $traineeTransaction['word_id'] = $wordID;
             $traineeTransaction['session_pin'] = $trainee['session_pin'];
             $traineeTransaction['time_taken'] = $timeTaken;
+            $traineeTransaction['round'] = $trainee['round'];
             $traineeTransaction['type'] = 'Contextual';
             $traineeTransaction['answer'] = $answer;
             if ($word['word'] == strtoupper($answer) ) {
