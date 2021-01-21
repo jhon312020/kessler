@@ -20,6 +20,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Auth::routes();
+
+Route::get('/logout', [App\Http\Controllers\HomeController::class, 'logout']);
+Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+
+// ---------------------------------------- ./ ADMIN --------------------------------------------- //
+Route::resource('/traineejourney', 'App\Http\Controllers\TraineeJourneyController');
+Route::resource('/overviews', 'App\Http\Controllers\OverviewsController');
+Route::resource('/instructions', 'App\Http\Controllers\InstructionsController');
+Route::resource('/story', 'App\Http\Controllers\StoryController');
+Route::resource('/words', 'App\Http\Controllers\WordsController');
+// ---------------------------------------- ./ ADMIN --------------------------------------------- //
+
+// ---------------------------------------- / SESSIONS / --------------------------------------------- //
 Route::post('/home', [SessionsController::class, 'index']);
 Route::get('/home', [SessionsController::class, 'index']);
 Route::get('/sessions',[SessionsController::class, 'sessions']);
@@ -27,4 +41,11 @@ Route::get('/recallwords', [SessionsController::class, 'recall']);
 Route::post('/sessions', [SessionsController::class,'store']);
 Route::post('/next', [AjaxController::class,'store']);
 Route::get('/complete', [SessionsController::class,'complete']);
-Route::get('/admin', [AdminController::class,'index']);
+// ---------------------------------------- ./ SESSIONS / ------------------------------------------ //
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
