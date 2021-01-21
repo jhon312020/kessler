@@ -49,9 +49,8 @@
               <p id="question"> {!! $question !!}</p>    
             </div>
             <div>
-              <div class="alert alert-danger d-none" role="alert" id="jsErrorMessage"></div>
-              <div class="alert alert-info d-none" role="alert" id="jsCategoricalMessage"></div>
-              <button type="button" id="jsNext" class="btn btn-primary btn-xl float-right">Next</button>
+              <div class="alert d-none" role="alert" id="jsUserMessage"></div>
+              <button type="button" id="jsNext" class="btn btn-primary btn-xl float-right">Check</button>
             </div>     
           </div>
         </form>
@@ -76,14 +75,16 @@
     });
     var timer = null;
     var categoryCueShowed = 0;
+    var showedAnswer = 0;
     //var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     $("#jsNext").on('click', function(event) {
-      $('#jsCategoricalMessage').addClass('d-none');
-      $('#jsErrorMessage').addClass('d-none');
+      $('#jsUserMessage').text('');
+      $('#jsUserMessage').removeClass().addClass('alert d-none');
       var answer = $('#answer').val();
       if (answer == '') {
-        $('#jsErrorMessage').text('Please fill the blank!');
-        $('#jsErrorMessage').removeClass('d-none').show();
+        $('#jsUserMessage').addClass('alert-danger');
+        $('#jsUserMessage').text('Please fill the blank!');
+        $('#jsUserMessage').removeClass('d-none').show();
         $('#answer').addClass('fill-ups-error');
         $('#answer').focus();
         return false;
@@ -92,7 +93,7 @@
       var startTime = timer;
       var endTime = performance.now();
       var categoryCue = categoryCueShowed; 
-      var formData = form.serialize()+ "&startTime=" + startTime+ "&endTime=" + endTime + "&categoryCue=" + categoryCue; 
+      var formData = form.serialize()+ "&startTime=" + startTime+ "&endTime=" + endTime + "&categoryCue=" + categoryCue + "&showedAnswer=" + showedAnswer; 
       $.ajax({
         type: "POST",
         url: form.attr("action"),
@@ -105,15 +106,31 @@
            } else if (response.reload) {
             console.log(response.reload);
            } else {
+            console.log(response);
             timer = performance.now();
             $('#question').html(response.question);
-            if (response.categorical_cue) {
-              $('#jsCategoricalMessage').html(response.categorical_cue);
-              $('#jsCategoricalMessage').removeClass('d-none').show();
+            if (response.categorical_cue && !response.show_answer) {
+              $('#jsUserMessage').addClass('alert-info');
+              $('#jsUserMessage').html(response.categorical_cue);
+              $('#jsUserMessage').removeClass('d-none').show();
               categoryCueShowed = 1;
               $('#answer').focus();
+            } else if(response.show_answer) {
+              categoryCueShowed = 0;
+              showedAnswer = 1;
+              $('#jsUserMessage').html(response.answer);
+              if (response.is_answer_correct) {
+                $('#jsUserMessage').addClass('alert-success');
+              } else {
+                $('#jsUserMessage').addClass('alert-danger');
+              }
+              $('#jsUserMessage').removeClass('d-none').show();
+              $("#jsNext").text("Next");
+              $('#jsNext').focus();
             } else {
               categoryCueShowed = 0;
+              showedAnswer = 0;
+              $("#jsNext").text("Check");
               $('#answer').focus();
             }
            }
