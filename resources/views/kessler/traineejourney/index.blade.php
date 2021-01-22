@@ -16,6 +16,7 @@
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
               <tr>
+                <th>S.No</th>
                 <th>Trainee ID</th>
                 <th>Session Pin</th>
                 <th>Session Type</th>
@@ -25,6 +26,7 @@
             </thead>
             <tfoot>
               <tr>
+                <th>S.No</th>
                 <th>Trainee ID</th>
                 <th>Session Pin</th>
                 <th>Session Type</th>
@@ -35,6 +37,7 @@
             <tbody>
               @foreach($traineejourney as $traineejourney)
               <tr>
+                <td>{{$traineejourney->id}}</td>
                 <td>{{$traineejourney->trainee_id}}</td>
                 <td>{{$traineejourney->session_pin}}</td>
                 <td>{{$traineejourney->session_type}}</td>
