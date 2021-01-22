@@ -57,7 +57,7 @@
                             </a>
                              <a class="nav-link" href="{{url('/instructions')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Instructions
+                                Instruction
                             </a>
                              <a class="nav-link" href="{{url('/story')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
@@ -65,7 +65,7 @@
                             </a>
                              <a class="nav-link" href="{{url('/words')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Words
+                                Word
                             </a>
                         </div>
                     </div>

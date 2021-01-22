@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\TraineeJourney;
-use DB;
+use App\Models\TraineeTransaction;
+use App\Models\Word;
 
 class TraineeJourneyController extends Controller
 {
@@ -17,7 +18,6 @@ class TraineeJourneyController extends Controller
     public function index()
     {
 
-        DB::statement("UPDATE trainee_journeys SET `session_pin` = LEFT(CAST(RAND()*1000000000 AS INT),6)");
         $traineejourney = TraineeJourney::all();
         return view('kessler.traineejourney.index', compact('traineejourney'));
         exit;
@@ -51,15 +51,15 @@ class TraineeJourneyController extends Controller
 
         ]);
 
-     
+        $session_pin = mt_rand(100000, 999999);
         $traineejourney = new TraineeJourney([
             'trainee_id' => $request->get('trainee_id'),
             'session_type' => $request->get('session_type'),
             'session_number' => $request->get('session_number'),
-             'session_pin' => $request->get('session_pin')
-     
-        ]);
+            'session_pin' => $session_pin
 
+        ]);
+            
         $traineejourney->save();
         return redirect('/traineejourney')->with('success', 'TRAINEE JOURNEY SAVED!');
     } 
@@ -124,26 +124,29 @@ class TraineeJourneyController extends Controller
         return redirect('/traineejourney')->with('success', 'TRAINEE JOURNEY DELETED!');
     }
 
-      /*  public function changeStatus(Request $request)
+     /**
+     * View report of the trainee for the session.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+
+    public function view($id)
     {
-        $user = User::find($request->user_id);
-        $user->status = $request->status;
-        $user->save();
-
-        return response()->json(['success'=>'Status change successfully.']);
-    }*/
-
-   /* public function copy()
-    {
-          TraineeJourney::query()
-  ->where('id','=', 1)
-  ->each(function ($oldRecord) {
-    $newRecord = $oldRecord->replicate();
-    $newRecord->setTable('traineejourney');
-    $newRecord->save();
-
-    $oldRecord->delete();
-  });
-    }*/
-
+        
+       $traineejourney = TraineeJourney::find($id);
+       $storyWords = Word::select('id', 'word')->where('story_id', $traineejourney['session_number'])->get();
+        $aroundOneReport = TraineeTransaction::select('id', 'word_id', 'trainee_id', 'session_pin', 'type', 'answer', 'correct_or_wrong','round','time_taken')->where('trainee_id', $traineejourney['trainee_id'])->where('session_pin', $traineejourney['session_pin'])->where('type', '!=', 'Recall')->where('round', '=', '1')->get();
+        //$this->pr($aroundOneReport->toArray());
+        $aroundOneReport = $aroundOneReport->groupBy('word_id');
+       /*$this->pr($traineeReport->toArray());
+        exit;*/
+        $aroundTwoReport = TraineeTransaction::select('id', 'word_id', 'trainee_id', 'session_pin', 'type', 'answer', 'correct_or_wrong','round','time_taken')->where('trainee_id', $traineejourney['trainee_id'])->where('session_pin', $traineejourney['session_pin'])->where('type', '!=', 'Recall')->where('round', '=', '2')->get();
+        //$this->pr($aroundTwoReport->toArray());
+        $aroundTwoReport = $aroundTwoReport->groupBy('word_id');
+       /*$this->pr($traineeReport->toArray());
+        exit;*/
+       return view('kessler.traineejourney.view')->with(compact('aroundOneReport','aroundTwoReport', 'storyWords'));
+        }
+    
 }

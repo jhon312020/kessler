@@ -41,7 +41,7 @@
                     <th>Session Type</th>
                     <th>Session Number</th>
               <!--  <th>Status</th>  -->
-                    <th colspan = 2>Actions</th>
+                    <th colspan = 3>Actions</th>
                   </tr>
                   </thead>
                  <tbody>
@@ -56,6 +56,9 @@
                          </td> -->
                          <td>
                             <a href="{{ route('traineejourney.edit',$traineejourney->id)}}" class="btn btn-primary far fa-edit"></a>
+                          </td>
+                           <td>
+                            <a href="{{ url('traineejourney/view',$traineejourney->id)}}" class="btn btn-primary far fa-eye"></a>
                           </td>
                           <td>
                               <form action="{{ route('traineejourney.destroy', $traineejourney->id)}}" method="post">
@@ -100,19 +103,5 @@
     </section>
     <!-- /.content -->
   </div>
-
-<script>
-  $(function () {
-    $('#traineejourney').DataTable({
-      "paging": true,
-      "lengthChange": true,
-      "searching": true,
-      "ordering": true,
-      "info": true,
-      "autoWidth": true,
-      "responsive": true,
-    });
-  });
-</script>
 
 @endsection
