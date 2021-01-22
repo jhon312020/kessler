@@ -27,3 +27,14 @@
 .fill-ups-error {
 	border-bottom: 1px solid #721c24;
 }
+.categorical.correct{
+ color: orange;
+}
+
+.correct {
+ color: green;
+}
+
+.wrong {
+ color: red;
+}

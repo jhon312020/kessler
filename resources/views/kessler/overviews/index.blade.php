@@ -22,13 +22,13 @@
             <thead>
               <tr>
                 <th>Overview</th>
-                <th width="15%">Actions</th>
+                <th width="25%">Actions</th>
               </tr>
             </thead>
             <tfoot>
               <tr>
                 <th>Overview</th>
-                <th>Actions</th>
+                <th width="25%">Actions</th>
               </tr>
             </tfoot>
             <tbody>

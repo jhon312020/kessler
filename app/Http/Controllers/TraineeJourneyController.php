@@ -49,17 +49,17 @@ class TraineeJourneyController extends Controller
             'session_number'=>'required'
 
         ]);
-
+ 
         $session_pin = mt_rand(100000, 999999);
         $traineejourney = new TraineeJourney([
             'trainee_id' => $request->get('trainee_id'),
             'session_type' => $request->get('session_type'),
             'session_number' => $request->get('session_number'),
             'session_pin' => $session_pin
-
-        ]);  
+            
+        ]);
+            
         $traineejourney->save();
-        
         return redirect('/traineejourney')->with('success', 'TRAINEE JOURNEY SAVED!');
     } 
 

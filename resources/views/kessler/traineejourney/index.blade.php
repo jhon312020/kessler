@@ -20,7 +20,7 @@
                 <th>Session Pin</th>
                 <th>Session Type</th>
                 <th>Session Number</th>
-                <th width="20%">Actions</th>
+                <th width="30%">Actions</th>
               </tr>
             </thead>
             <tfoot>
@@ -29,7 +29,7 @@
                 <th>Session Pin</th>
                 <th>Session Type</th>
                 <th>Session Number</th>
-                <th width="20%">Actions</th>
+                <th width="30%">Actions</th>
               </tr>
             </tfoot>
             <tbody>

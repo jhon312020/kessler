@@ -21,23 +21,26 @@
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
               <tr>
+                <th>S.No</th>
                 <th>Word</th>
                 <th>Contextual Cue</th>
                 <th>Categorical Cue</th>
-                <th width="12%">Actions</th>
+                <th width="25%">Actions</th>
               </tr>
             </thead>
             <tfoot>
               <tr>
+                <th>S.No</th>
                 <th>Word</th>
                 <th>Contextual Cue</th>
                 <th>Categorical Cue</th>
-                <th>Actions</th>
+                <th width="25%">Actions</th>
               </tr>
             </tfoot>
             <tbody>
             @foreach($words as $words)
               <tr>
+               <td>{{$words->id}}</td>
                <td>{{$words->word}}</td>
                <td>{{$words->contextual_cue}}</td>
                <td>{{$words->categorical_cue}}</td>

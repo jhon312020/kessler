@@ -21,19 +21,22 @@
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
               <tr>
+                <th>S.No</th>
                 <th>Story</th>
-                <th width="12%">Actions</th>
+                <th width="20%">Actions</th>
               </tr>
             </thead>
             <tfoot>
               <tr>
+                <th>S.No</th>
                 <th>Story</th>
-                <th colspan = 2>Actions</th>
+                <th width="20%">Actions</th>
               </tr>
             </tfoot>
             <tbody>
             @foreach($story as $story)
               <tr>
+                <td>{{$story->id}}</td>
                 <td>{{$story->story}}</td>
                 <td>
                   <a href="{{ route('story.edit',$story->id)}}" class="btn btn-primary" role="button"><i class="fa fa-edit">&nbsp;</i>Edit</a>
