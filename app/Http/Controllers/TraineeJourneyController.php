@@ -20,7 +20,6 @@ class TraineeJourneyController extends Controller
 
         $traineejourney = TraineeJourney::all();
         return view('kessler.traineejourney.index', compact('traineejourney'));
-        exit;
     }
 
     /**

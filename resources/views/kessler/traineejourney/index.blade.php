@@ -29,8 +29,7 @@
                                           <th>Session Pin</th>
                                           <th>Session Type</th>
                                           <th>Session Number</th>
-                                    <!--  <th>Status</th>  -->
-                                          <th colspan = 3>Actions</th>
+                                          <th width="20%">Actions</th>
                                         </tr>
                                         </thead>
                                         <tfoot>
@@ -39,33 +38,25 @@
                                           <th>Session Pin</th>
                                           <th>Session Type</th>
                                           <th>Session Number</th>
-                                    <!--  <th>Status</th> -->
-                                          <th colspan = 3>Actions</th>
+                                          <th>Actions</th>
                                         </tr>
                                         </tfoot>
                                           <tbody>
                                           @foreach($traineejourney as $traineejourney)
                                           <tr>
-                                             <td>{{$traineejourney->trainee_id}}</td>
-                                             <td>{{$traineejourney->session_pin}}</td>
-                                             <td>{{$traineejourney->session_type}}</td>
-                                             <td>{{$traineejourney->session_number}}</td>
-                                  <!--       <td>
-                                            <input data-id="{{$traineejourney->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $traineejourney->status ? 'checked' : '' }}>
-                                             </td> -->
-                                             <td>
-                                                <a href="{{ route('traineejourney.edit',$traineejourney->id)}}" class="btn btn-primary far fa-edit"></a>
-                                              </td>
-                                               <td>
-                                                <a href="{{ url('traineejourney/view',$traineejourney->id)}}" class="btn btn-primary far fa-eye"></a>
-                                              </td>
-                                              <td>
-                                                  <form action="{{ route('traineejourney.destroy', $traineejourney->id)}}" method="post">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="btn btn-danger far fa-trash-alt" type="submit"></button>
-                                                  </form>
-                                              </td>
+                                           <td>{{$traineejourney->trainee_id}}</td>
+                                           <td>{{$traineejourney->session_pin}}</td>
+                                           <td>{{$traineejourney->session_type}}</td>
+                                           <td>{{$traineejourney->session_number}}</td>
+                                            <td>
+                                              <form action="{{ route('traineejourney.destroy', $traineejourney->id)}}" method="post" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <a href="{{ route('traineejourney.edit',$traineejourney->id)}}" class="btn btn-primary d-inline" role="button"><i class="fa fa-edit">&nbsp;</i>Edit</a>
+                                                <a href="{{ url('traineejourney/view',$traineejourney->id)}}" class="btn btn-primary d-inline" role="button"><i class="fa fa-eye">&nbsp;</i>View</a>
+                                                <button class="btn btn-danger d-inline" type="submit"><i class="fa fa-trash">&nbsp;</i>Delete</button>
+                                              </form>
+                                            </td>
                                           </tr>
                                           @endforeach
                                       </tbody>
