@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\AdminController;
@@ -27,8 +28,8 @@ use App\Http\Controllers\WordsController;
 
 Auth::routes();
 
-Route::get('/logout', [App\Http\Controllers\HomeController::class, 'logout']);
-Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+Route::get('/logout', [HomeController::class, 'logout']);
+Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
 // ---------------------------------------- ./ ADMIN --------------------------------------------- //
 Route::resource('/trainee', TraineeController::class);

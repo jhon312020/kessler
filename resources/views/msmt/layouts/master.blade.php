@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Kessler Foundation | MSMT</title>
+        <title>Kessler Foundation</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="{{asset('assets/img/favicon.ico')}}" />
         <!-- Font Awesome icons (free version)-->
