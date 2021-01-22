@@ -7,7 +7,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Modified Story Memory Technique</h1>
+            <h1></h1>
             <div>
     @if ($errors->any())
       <div class="alert alert-danger">
@@ -33,7 +33,7 @@
             <!-- general form elements -->
            <div class="card card-primary">
             <div class="card-header">
-            <h3 class="card-title">MSMT Overviews</h3>
+            <h3 class="card-title">MSMT Overview</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->

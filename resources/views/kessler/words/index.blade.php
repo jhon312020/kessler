@@ -3,20 +3,20 @@
   <!-- Content Wrapper. Contains page content -->
  <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4">Table Words</h1>
+                        <h1 class="mt-4">Table Word</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
                             <li class="breadcrumb-item active">Tables</li>
                         </ol>
                         <div class="card mb-4">
                             <div class="card-body">
-                               Create, View, Edit and Delete Words
+                               Create, View, Edit and Delete Word
                             </div>
                         </div>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table mr-1"></i>
-                                Words
+                                Word
                             </div>
                             <br>
                              <a href="{{ route('words.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;">Add Word</a>
@@ -60,12 +60,12 @@
                                           </tbody>
                                     </table>
                                      <div>
-                      @if(session()->get('success'))
-                        <div class="alert alert-success">
-                          {{ session()->get('success') }}  
-                        </div>
-                      @endif
-                    </div>
+                                      @if(session()->get('success'))
+                                        <div class="alert alert-success">
+                                          {{ session()->get('success') }}  
+                                        </div>
+                                      @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>

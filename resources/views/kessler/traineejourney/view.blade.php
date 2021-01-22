@@ -35,8 +35,6 @@
                   <th>Word</th>
                   <th colspan="2">Round 1</th>
                   <th colspan="2">Round 2</th>
-                <!--   <th>Contextual</th>
-                  <th>Categorical</th> -->
                   </tr>
                   <tr>
                     <tr align="center">

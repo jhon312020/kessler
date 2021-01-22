@@ -3,20 +3,20 @@
   <!-- Content Wrapper. Contains page content -->
 <main>
       <div class="container-fluid">
-          <h1 class="mt-4">Table Overviews</h1>
+          <h1 class="mt-4">Table Overview</h1>
           <ol class="breadcrumb mb-4">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
           <li class="breadcrumb-item active">Tables</li>
           </ol>
         <div class="card mb-4">
         <div class="card-body">
-              Create, View, Edit and Remove Overviews
+              Create, View, Edit and Remove Overview
         </div>
         </div>
         <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table mr-1"></i>
-                Overviews
+                Overview
         </div>
         <br>
         <a href="{{ route('overviews.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;">Add Overview</a>
