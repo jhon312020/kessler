@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\TraineeTransaction;
-use App\Models\TraineeJourney;
+use App\Models\Trainee;
 use Redirect,Response;
 use Auth;
 use DB;
@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Validator;
 
 class SessionsController extends Controller
 {
-
-
     /**
      * Show the application dashboard.
      * Get session pin, validate as required if submitted empty else invalid if wrong pin
@@ -33,7 +31,7 @@ class SessionsController extends Controller
           ]);
 
         if (!$validator->fails()) {
-          $record = TraineeJourney::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed')->where('session_pin', $request->sessionpin)->where('completed', 0)->first();
+          $record = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed')->where('session_pin', $request->sessionpin)->where('completed', 0)->first();
           if ($record) {
             $request->session()->put('trainee', $record);
             return redirect('sessions');
@@ -41,7 +39,7 @@ class SessionsController extends Controller
              $validator->errors()->add('sessionpin', 'INVALID PIN! Please contact your trainer..');
           } 
         } 
-      }
+      } 
       return view('msmt.user.home')->withErrors($validator);
     }
 
@@ -59,7 +57,7 @@ class SessionsController extends Controller
         $story = Story::select('*')->where('id', $trainee['session_number'])->first(); 
         return view('msmt.sessions.story')->with('story', $story);
       } else {
-        return redirect('home');
+        return redirect('/');
       }
     }
 
@@ -92,7 +90,6 @@ class SessionsController extends Controller
         $traineeTransaction['type'] = 'Recall';
         TraineeTransaction::insert($traineeTransaction);
         //$story = Story::select('id', 'story')->where('id', $trainee['session_number'])->first();
-
         //$word = Word::select('id', 'word', 'question')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
         $word = Word::select('id', 'word', 'question')->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->first();
         //$this->pr($word->toArray());
@@ -107,32 +104,32 @@ class SessionsController extends Controller
       } else {
         return redirect('home');
       }
-  }
-
-    /**
-     * On completting the session story the user is redirected to completion page.
-     * @return \Illuminate\Http\Response
-     */
-    public function complete(Request $request) {
-      if ($request->session()->has('completed')) {
-        $request->session()->forget('completed');
-        $trainee = $request->session()->get('trainee');
-        $traineeObj = TraineeJourney::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed')->where('id', $trainee->id)->first();
-        if ($traineeObj) {
-          switch($traineeObj->round) {
-            case 1:
-              $traineeObj->round = 2;
-              $round = 'first';
-            break;
-            case 2:
-              $traineeObj->completed = 1;
-              $round = 'second';
-            break;
-          }
-          $traineeObj->save();
-        }
-        return view('msmt.sessions.questions.complete')->with('round', $round);
-      }
-       return redirect('home');
     }
+
+  /**
+   * On completting the session story the user is redirected to completion page.
+   * @return \Illuminate\Http\Response
+   */
+  public function complete(Request $request) {
+    if ($request->session()->has('completed')) {
+      $request->session()->forget('completed');
+      $trainee = $request->session()->get('trainee');
+      $traineeObj = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed')->where('id', $trainee->id)->first();
+      if ($traineeObj) {
+        switch($traineeObj->round) {
+          case 1:
+            $traineeObj->round = 2;
+            $round = 'first';
+          break;
+          case 2:
+            $traineeObj->completed = 1;
+            $round = 'second';
+          break;
+        }
+        $traineeObj->save();
+      }
+      return view('msmt.sessions.questions.complete')->with('round', $round);
+    }
+     return redirect('/');
+  }
 }

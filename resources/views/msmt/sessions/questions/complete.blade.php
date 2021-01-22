@@ -57,7 +57,7 @@
                             <br />
                             <div id="success"></div>
                             <div class="form-group text-center">
-                            <a href="/home" class="btn btn-primary btn-xl" id="jsHome" type="submit">Home
+                            <a href="{{ url('/') }}" class="btn btn-primary btn-xl" id="jsHome" type="submit">Home
                             </a>
                           </div>
                     </div>

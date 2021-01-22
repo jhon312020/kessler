@@ -50,7 +50,7 @@
             @endif
           </div>
           <div class="form-group text-center">
-            <button type="button" id="jsContinue" class="btn btn-primary btn-xl">CONTINUE</button>
+            <a href="{{ url('recallwords')}}" class="btn btn-primary btn-xl">CONTINUE</a>
           </div>
         </div>
       </div>
@@ -70,9 +70,9 @@
     $('#jsStartSession').on('click', function(event) { 
         
     });
-    $(document).on('click', '#jsContinue', function(event) { 
-      window.location.replace('/recallwords');
-    });
+    // $(document).on('click', '#jsContinue', function(event) { 
+    //   window.location.replace('/recallwords');
+    // });
   })
 </script>
 {{-- </div> --}}

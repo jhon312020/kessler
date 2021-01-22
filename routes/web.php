@@ -40,7 +40,7 @@ Route::resource('/words', WordsController::class);
 // ---------------------------------------- ./ ADMIN --------------------------------------------- //
 
 // ---------------------------------------- / SESSIONS /--------------------------------------------- //
-Route::post('/home', [SessionsController::class, 'index']);
+Route::post('/index', [SessionsController::class, 'index']);
 Route::get('/', [SessionsController::class, 'index']);
 Route::get('/sessions',[SessionsController::class, 'sessions']);
 Route::get('/recallwords', [SessionsController::class, 'recall']);
