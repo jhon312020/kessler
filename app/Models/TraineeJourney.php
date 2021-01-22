@@ -12,6 +12,7 @@ class TraineeJourney extends Model
     protected $fillable = [
         'trainee_id',
         'session_type',
-        'session_number'
+        'session_number',
+        'session_pin'
     ];
 }

@@ -57,9 +57,9 @@ class TraineeJourneyController extends Controller
             'session_number' => $request->get('session_number'),
             'session_pin' => $session_pin
 
-        ]);
-            
+        ]);  
         $traineejourney->save();
+        
         return redirect('/traineejourney')->with('success', 'TRAINEE JOURNEY SAVED!');
     } 
 
