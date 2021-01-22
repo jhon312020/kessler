@@ -42,7 +42,7 @@
                                           <tbody>
                                               @foreach($words as $words)
                                               <tr>
-                                                 <td>{{$words->words}}</td>
+                                                 <td>{{$words->word}}</td>
                                                  <td>{{$words->contextual_cue}}</td>
                                                  <td>{{$words->categorical_cue}}</td>
                                                  <td>
