@@ -38,7 +38,7 @@
                                           <th>Session Pin</th>
                                           <th>Session Type</th>
                                           <th>Session Number</th>
-                                          <th>Actions</th>
+                                          <th width="20%">Actions</th>
                                         </tr>
                                         </tfoot>
                                           <tbody>
@@ -49,12 +49,12 @@
                                            <td>{{$traineejourney->session_type}}</td>
                                            <td>{{$traineejourney->session_number}}</td>
                                             <td>
+                                              <a href="{{ route('traineejourney.edit',$traineejourney->id)}}" class="btn btn-primary" role="button"><i class="fa fa-edit">&nbsp;</i> Edit</a>
+                                              <a href="{{ url('traineejourney/view',$traineejourney->id)}}" class="btn btn-primary" role="button"><i class="fa fa-eye">&nbsp;</i> View</a>
                                               <form action="{{ route('traineejourney.destroy', $traineejourney->id)}}" method="post" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <a href="{{ route('traineejourney.edit',$traineejourney->id)}}" class="btn btn-primary d-inline" role="button"><i class="fa fa-edit">&nbsp;</i>Edit</a>
-                                                <a href="{{ url('traineejourney/view',$traineejourney->id)}}" class="btn btn-primary d-inline" role="button"><i class="fa fa-eye">&nbsp;</i>View</a>
-                                                <button class="btn btn-danger d-inline" type="submit"><i class="fa fa-trash">&nbsp;</i>Delete</button>
+                                                <button class="btn btn-danger" type="submit"><i class="fa fa-trash">&nbsp;</i> Delete</button>
                                               </form>
                                             </td>
                                           </tr>

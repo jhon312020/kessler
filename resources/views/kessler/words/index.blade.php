@@ -3,11 +3,7 @@
   <!-- Content Wrapper. Contains page content -->
  <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4">Table Word</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Tables</li>
-                        </ol>
+                        <h1 class="mt-4">Words</h1>
                         <div class="card mb-4">
                             <div class="card-body">
                                Create, View, Edit and Delete Word
@@ -16,7 +12,7 @@
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table mr-1"></i>
-                                Word
+                                Words
                             </div>
                             <br>
                              <a href="{{ route('words.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;">Add Word</a>
@@ -28,7 +24,7 @@
                                             <th>Word</th>
                                             <th>Contextual Cue</th>
                                             <th>Categorical Cue</th>
-                                            <th colspan = 2>Actions</th>
+                                            <th width="12%">Actions</th>
                                           </tr>
                                         </thead>
                                         <tfoot>
@@ -36,7 +32,7 @@
                                             <th>Word</th>
                                             <th>Contextual Cue</th>
                                             <th>Categorical Cue</th>
-                                            <th colspan = 2>Actions</th>
+                                            <th>Actions</th>
                                           </tr>
                                           </tfoot>
                                           <tbody>
@@ -46,13 +42,11 @@
                                                  <td>{{$words->contextual_cue}}</td>
                                                  <td>{{$words->categorical_cue}}</td>
                                                  <td>
-                                                      <a href="{{ route('words.edit',$words->id)}}" class="btn btn-primary">Edit</a>
-                                                  </td>
-                                                  <td>
-                                                      <form action="{{ route('words.destroy', $words->id)}}" method="post">
+                                                      <a href="{{ route('words.edit',$words->id)}}" class="btn btn-primary"><i class="fa fa-edit">&nbsp;</i> Edit</a>
+                                                      <form action="{{ route('words.destroy', $words->id)}}" method="post" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button class="btn btn-danger" type="submit">Delete</button>
+                                                        <button class="btn btn-danger" type="submit"><i class="fa fa-trash">&nbsp;</i> Delete</button>
                                                       </form>
                                                   </td>
                                               </tr>
