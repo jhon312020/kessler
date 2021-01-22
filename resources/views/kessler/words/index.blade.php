@@ -5,9 +5,9 @@
   <div class="container-fluid">
     <h1 class="mt-4">Words</h1>
     <div class="card mb-4">
-        <div class="card-body">
-           Create, View, Edit and Delete Word
-        </div>
+      <div class="card-body">
+        Create, View, Edit and Delete Word
+      </div>
     </div>
     <div class="card mb-4">
       <div class="card-header">

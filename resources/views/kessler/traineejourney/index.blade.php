@@ -7,10 +7,10 @@
     <div class="card mb-4">
       <div class="card-header">
         <i class="fa fa-table mr-1"></i>
-        Trainee Journey
+        Trainees Information
       </div>
       <br/>
-      <a href="{{ route('traineejourney.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;">Add Trainee Journey</a>
+      <a href="{{ route('traineejourney.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;">Add Trainee</a>
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
