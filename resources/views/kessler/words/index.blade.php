@@ -3,7 +3,7 @@
   <!-- Content Wrapper. Contains page content -->
 <main>
   <div class="container-fluid">
-    <h1 class="mt-4">Words</h1>
+    <h1 class="mt-4">Word</h1>
     <div class="card mb-4">
       <div class="card-body">
         Create, View, Edit and Delete Word
@@ -12,7 +12,7 @@
     <div class="card mb-4">
       <div class="card-header">
         <i class="fa fa-table mr-1"></i>
-        Words
+        Word
       </div>
       <br/>
       <a href="{{ route('words.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;">Add Word</a>
@@ -22,18 +22,18 @@
             <thead>
               <tr>
                 <th>S.No</th>
-                <th>Word</th>
-                <th>Contextual Cue</th>
-                <th>Categorical Cue</th>
+                <th width="25%">Word</th>
+                <th width="25%">Contextual Cue</th>
+                <th width="25%">Categorical Cue</th>
                 <th width="25%">Actions</th>
               </tr>
             </thead>
             <tfoot>
               <tr>
                 <th>S.No</th>
-                <th>Word</th>
-                <th>Contextual Cue</th>
-                <th>Categorical Cue</th>
+                <th width="25%">Word</th>
+                <th width="25%">Contextual Cue</th>
+                <th width="25%">Categorical Cue</th>
                 <th width="25%">Actions</th>
               </tr>
             </tfoot>

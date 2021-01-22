@@ -1,77 +1,34 @@
 @extends('kessler.layouts.master')
 @section('content')
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1></h1>
-             @if ($errors->any())
-             <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-        <br /> 
-        @endif
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-5">
+      <div class="card shadow-lg border-0 rounded-lg mt-5">
+          <div class="card-header"><h3 class="text-center font-weight-light my-4">Edit Overview</h3></div>
+          <div class="card-body">
+            @if ($errors->any())
+              <div class="alert alert-danger">
+                <ul>
+                  @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                  @endforeach
+                </ul>
+              </div>
+            @endif
+            <form method="post" action="{{ route('overviews.update', $overviews->id) }}">
+              @method('PATCH') 
+              @csrf
+              <div class="form-group">
+                <label class="small mb-1" for="overviews">Update Overview</label>
+                <textarea class="form-control py-4" name="overviews"  style="height: 218px;" rows="30" cols="150" placeholder="Enter ..." autofocus value={{$overviews->overviews}}></textarea>
+              </div>
+              <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                <button type="submit" class="btn btn-primary">Update</button>
+              </div>
+            </form>
           </div>
-<!--          <div class="col-sm-6">
-              <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">General Form</li>
-            </ol>
-          </div> -->
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <!-- left column -->
-          <div class="col-md-20">
-            <!-- general form elements -->
-           <div class="card card-primary">
-            <div class="card-header">
-            <h3 class="card-title">MSMT Overview</h3>
-              </div>
-              <!-- /.card-header -->
-              <!-- form start -->
-              <form method="post" action="{{ route('overviews.update', $overviews->id) }}">
-            @method('PATCH') 
-            @csrf
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-sm-6">
-                    <div class="form-group">
-                      <label for="overviews">Update Overview</label>
-                        <textarea class="form-control" name="overviews" style="margin-left: 100px; margin-right: 50px; height: 300px;" rows="30" cols="150" placeholder="Enter ..." autofocus value={{$overviews->overviews}}></textarea>
-              </div>
-                </div>
-                  </div>
-                    </div>
-                <!-- /.card-body -->
-               <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
-               </div>
-               </form>
-                </div>
-                  </div>
-                    </div>
-                      </div>
-    </section>
-  
       </div>
-
-<!-- Page specific script -->
-<script>
-$(function () {
-  bsCustomFileInput.init();
-});
-</script>
+    </div>
+  </div>
+</div>
 @endsection

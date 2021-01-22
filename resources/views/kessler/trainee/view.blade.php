@@ -26,20 +26,20 @@
                   <th colspan="2">Round 2</th>
                   </tr>
                   <tr align="center">
-                  <th width="30%"></th>
-                  <th width="30%">Contextual</th>
-                  <th width="30%">Categorical</th>
-                  <th width="30%">Contextual</th>
-                  <th width="30%">Categorical</th>
+                  <th width="25%"></th>
+                  <th width="25%">Contextual</th>
+                  <th width="25%">Categorical</th>
+                  <th width="25%">Contextual</th>
+                  <th width="25%">Categorical</th>
                   </tr>
               </thead>
               <tfoot>
                 <tr align="center">
-                  <th width="30%"></th>
-                  <th width="30%">Contextual</th>
-                  <th width="30%">Categorical</th>
-                  <th width="30%">Contextual</th>
-                  <th width="30%">Categorical</th>
+                  <th width="25%"></th>
+                  <th width="25%">Contextual</th>
+                  <th width="25%">Categorical</th>
+                  <th width="25%">Contextual</th>
+                  <th width="25%">Categorical</th>
                 </tr>
                 <tr align="center">
                   <th>Word</th>

@@ -10,7 +10,6 @@ class TraineeTransaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        
         'session_pin'
     ];
 }

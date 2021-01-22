@@ -48,7 +48,7 @@
               </a>
                <a class="nav-link" href="{{url('/trainee')}}">
                 <div class="sb-nav-link-icon"><i class="fa fa-table"></i></div>
-                Trainees
+                Trainee
               </a>
                <a class="nav-link" href="{{url('/overviews')}}">
                 <div class="sb-nav-link-icon"><i class="fa fa-table"></i></div>

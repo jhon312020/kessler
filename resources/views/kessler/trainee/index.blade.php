@@ -3,11 +3,11 @@
   <!-- Content Wrapper. Contains page content -->
  <main>
   <div class="container-fluid">
-    <h1 class="mt-4">Trainees Information</h1>
+    <h1 class="mt-4">Trainee Information</h1>
     <div class="card mb-4">
       <div class="card-header">
         <i class="fa fa-table mr-1"></i>
-        Trainees Information
+        Trainee Information
       </div>
       <br/>
       <a href="{{ route('trainee.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;">Add Trainee</a>

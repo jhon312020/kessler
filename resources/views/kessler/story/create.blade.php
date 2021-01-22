@@ -1,77 +1,33 @@
 @extends('kessler.layouts.master')
 @section('content')
-<!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1></h1>
-            <div>
-              @if ($errors->any())
-                <div class="alert alert-danger">
-                  <ul>
-                      @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                      @endforeach
-                  </ul>
-                </div>
-              @endif
-          </div>
- 
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <!-- left column -->
-          <div class="col-md-20">
-            <!-- general form elements -->
-           <div class="card card-primary">
-            <div class="card-header">
-            <h3 class="card-title">MSMT Story</h3>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-5">
+      <div class="card shadow-lg border-0 rounded-lg mt-5">
+          <div class="card-header"><h3 class="text-center font-weight-light my-4">Add Story</h3></div>
+          <div class="card-body">
+            @if ($errors->any())
+              <div class="alert alert-danger">
+                <ul>
+                  @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                  @endforeach
+                </ul>
               </div>
-              <!-- /.card-header -->
-              <!-- form start -->
-              <form method="post" action="{{ route('story.store') }}">
-          @csrf
-              <div class="card-body">
-              <div class="row">
-              <div class="col-sm-6">
+            @endif
+            <form method="post" action="{{ route('story.store') }}">
+              @csrf
               <div class="form-group">
-              <label for="story">Create Story</label>
-              <textarea class="form-control" name="story" style="margin-left: 100px; margin-right: 50px; height: 300px;" rows="30" cols="150" placeholder="Enter ..."  autofocus></textarea>
-                
+                <label class="small mb-1" for="story">Enter Story</label>
+                <textarea class="form-control py-4" id="story" name="story" style="height: 218px;" rows="30" cols="150" placeholder="Enter Story ..." required  autofocus></textarea>
               </div>
+              <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                <button type="submit" class="btn btn-primary">Add</button>
               </div>
-              </div>
-              </div>
-                <!-- /.card-body -->
-               <div class="card-footer">
-               <button type="submit" class="btn btn-primary">Submit</button>
-               </div>
-               </form>
-               </div>
-               </div>
-          <!--/.col (left) -->
-
-          <!--/.col (right) -->
-        </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
+            </form>
+          </div>
+      </div>
+    </div>
   </div>
-  <!-- /.content-wrapper -->
- 
-<!-- Page specific script -->
-<script>
-$(function () {
-  bsCustomFileInput.init();
-});
-</script>
+</div>
 @endsection

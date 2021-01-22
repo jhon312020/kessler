@@ -12,7 +12,7 @@
     <div class="card mb-4">
       <div class="card-header">
         <i class="fas fa-table mr-1"></i>
-        Overviews
+        Overview
       </div>
       <br/>
       <a href="{{ route('overviews.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;">Add Overview</a>
