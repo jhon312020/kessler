@@ -5,7 +5,7 @@ use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OverviewsController;
-use App\Http\Controllers\TraineeJourneyController;
+use App\Http\Controllers\TraineeController;
 use App\Http\Controllers\InstructionsController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\WordsController;
@@ -31,8 +31,8 @@ Route::get('/logout', [App\Http\Controllers\HomeController::class, 'logout']);
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
 // ---------------------------------------- ./ ADMIN --------------------------------------------- //
-Route::resource('/traineejourney', TraineeJourneyController::class);
-Route::get('/traineejourney/view/{id}', [TraineeJourneyController::class, 'view']);
+Route::resource('/trainee', TraineeController::class);
+Route::get('/trainee/view/{id}', [TraineeController::class, 'view']);
 Route::resource('/overviews', OverviewsController::class);
 Route::resource('/instructions', InstructionsController::class);
 Route::resource('/story', StoryController::class);
