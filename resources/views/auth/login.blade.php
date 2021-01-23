@@ -1,5 +1,4 @@
 @extends('layouts.master')
-
 @section('content')
 <main>
   <div class="container">
@@ -28,7 +27,6 @@
                 <strong>{{ $message }}</strong>
             </span>
             @enderror
-           
             </div>
             <div class="form-group">
             <div class="custom-control custom-checkbox">
@@ -49,5 +47,4 @@
 </div>
 </div>
 </main>
-
 @endsection
