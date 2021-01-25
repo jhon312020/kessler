@@ -47,7 +47,7 @@ class AjaxController extends Controller
             $traineeTransaction['session_pin'] = $trainee['session_pin'];
             $traineeTransaction['time_taken'] = $timeTaken;
             $traineeTransaction['round'] = $trainee['round'];
-            $traineeTransaction['type'] = 'Contextual';
+            $traineeTransaction['type'] = 'contextual';
             $traineeTransaction['answer'] = $answer;
             if ($word['word'] == strtoupper($answer) ) {
               $traineeTransaction['correct_or_wrong'] = 1;
@@ -62,7 +62,7 @@ class AjaxController extends Controller
 
             if ($request->categoryCue) {
               $showAnswer = 1;
-              $traineeTransaction['type'] = 'Categorical';
+              $traineeTransaction['type'] = 'categorical';
               
             }
             TraineeTransaction::insert($traineeTransaction);

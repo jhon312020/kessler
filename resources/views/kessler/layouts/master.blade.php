@@ -42,27 +42,27 @@
         <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
           <div class="sb-sidenav-menu">
             <div class="nav">
-              <a class="nav-link" href="{{url('/dashboard')}}">
+              <a class="nav-link" href="{{url('/dashboard')}}" title="dashboard">
                 <div class="sb-nav-link-icon"><i class="fa fa-tachometer-alt"></i></div>
                 Dashboard
               </a>
-               <a class="nav-link" href="{{url('/trainee')}}">
+               <a class="nav-link" href="{{url('/trainee')}}" title="trainee">
                 <div class="sb-nav-link-icon"><i class="fa fa-table"></i></div>
                 Trainee
               </a>
-               <a class="nav-link" href="{{url('/overviews')}}">
+               <a class="nav-link" href="{{url('/overviews')}}" title="overviews">
                 <div class="sb-nav-link-icon"><i class="fa fa-table"></i></div>
                 Overview
               </a>
-               <a class="nav-link" href="{{url('/instructions')}}">
+               <a class="nav-link" href="{{url('/instructions')}}" title="instructions">
                 <div class="sb-nav-link-icon"><i class="fa fa-table"></i></div>
                 Instruction
               </a>
-               <a class="nav-link" href="{{url('/story')}}">
+               <a class="nav-link" href="{{url('/story')}}" title="story">
                 <div class="sb-nav-link-icon"><i class="fa fa-table"></i></div>
                 Story
               </a>
-               <a class="nav-link" href="{{url('/words')}}">
+               <a class="nav-link" href="{{url('/words')}}" title="words">
                 <div class="sb-nav-link-icon"><i class="fa fa-table"></i></div>
                 Word
               </a>

@@ -20,7 +20,7 @@
               @csrf
               <div class="form-group">
                 <label class="small mb-1" for="session_type">Session Type</label>
-                <input autofocus type="text" class="form-control py-4" name="session_type" id="session_type" placeholder="Enter Session Type" value={{$trainee->session_type}}>
+                <input autofocus type="text" class="form-control py-4" name="session_type" id="session_type" placeholder="Enter Session Type" value="{{$trainee->session_type}}">
               </div>
               <div class="form-group">
                 <label class="small mb-1" for="session_number">Session Number</label>
@@ -31,8 +31,9 @@
                   @endforeach;
                 </select>
               </div>
-              <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+              <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
                 <button type="submit" class="btn btn-primary">Update</button>
+                <a href="{{ url('/trainee')}}" class="ml-2 btn btn-danger" role="button">Cancel</a>
               </div>
             </form>
           </div>

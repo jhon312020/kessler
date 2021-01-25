@@ -43,7 +43,7 @@
                   <form action="{{ route('story.destroy', $story->id)}}" method="post" class="d-inline">
                     @csrf
                     @method('DELETE')
-                    <button class="btn btn-danger" type="submit"><i class="fa fa-trash">&nbsp;</i>Delete</button>
+                    <button class="btn btn-danger" type="submit"><i class="fa fa-trash">&nbsp;</i> Delete</button>
                   </form>
                 </td>
               </tr>

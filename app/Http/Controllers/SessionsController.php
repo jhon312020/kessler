@@ -87,7 +87,7 @@ class SessionsController extends Controller
         $traineeTransaction['session_pin'] = $trainee['session_pin'];
         $traineeTransaction['round'] = $trainee['round'];
         $traineeTransaction['time_taken'] = $timeTaken;
-        $traineeTransaction['type'] = 'Recall';
+        $traineeTransaction['type'] = 'recall';
         TraineeTransaction::insert($traineeTransaction);
         //$story = Story::select('id', 'story')->where('id', $trainee['session_number'])->first();
         //$word = Word::select('id', 'word', 'question')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();

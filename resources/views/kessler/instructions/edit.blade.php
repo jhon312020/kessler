@@ -2,7 +2,7 @@
 @section('content')
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-lg-5">
+    <div class="col-lg-10">
       <div class="card shadow-lg border-0 rounded-lg mt-5">
           <div class="card-header"><h3 class="text-center font-weight-light my-4">Edit Instruction</h3></div>
           <div class="card-body">
@@ -20,10 +20,11 @@
               @csrf
               <div class="form-group">
                 <label class="small mb-1" for="instructions">Update Instruction</label>
-                <textarea class="form-control py-4" name="instructions"  style="height: 218px;" rows="30" cols="150" placeholder="Enter ..." autofocus value={{$instructions->instructions}}></textarea>
+                <textarea class="form-control py-4" name="instructions"  style="height: 218px;" rows="30" cols="150" placeholder="Enter ..." autofocus>{{$instructions->instructions}}</textarea>
               </div>
-              <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+              <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
                 <button type="submit" class="btn btn-primary">Update</button>
+                <a href="{{ url('/instructions')}}" class="ml-2 btn btn-danger" role="button">Cancel</a>
               </div>
             </form>
           </div>

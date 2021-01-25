@@ -20,6 +20,11 @@ class TraineeController extends Controller
       $this->totalSessions = range(1, 10);
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index() {
       $trainees = Trainee::all();
       return view('kessler.trainee.index', compact('trainees'));
@@ -30,7 +35,6 @@ class TraineeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
     public function create() {
       $totalSessions = $this->totalSessions;
       return view('kessler.trainee.create', compact('totalSessions'));
@@ -67,7 +71,6 @@ class TraineeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
     public function show($id) {
         //
     } 
@@ -78,7 +81,6 @@ class TraineeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    
     public function edit($id) {
       $trainee = Trainee::find($id);
       $totalSessions = $this->totalSessions;
@@ -92,7 +94,6 @@ class TraineeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
     public function update(Request $request, $id) {
       $request->validate([
         'session_type'=>'required',
@@ -111,7 +112,6 @@ class TraineeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
     public function destroy($id) {
       $trainee = trainee::find($id);
       $trainee->delete();
@@ -124,21 +124,49 @@ class TraineeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
     public function view($id) {  
       $trainee = Trainee::find($id);
       $storyWords = Word::select('id', 'word')->where('story_id', $trainee['session_number'])->get();
-      $roundOneReport = TraineeTransaction::select('id', 'word_id', 'trainee_id', 'session_pin', 'type', 'answer', 'correct_or_wrong','round','time_taken')->where('trainee_id', $trainee['trainee_id'])->where('session_pin', $trainee['session_pin'])->where('type', '!=', 'Recall')->where('round', '=', '1')->get();
-      //$this->pr($aroundOneReport->toArray());
-      $roundOneReport = $roundOneReport->groupBy('word_id');
+      $this->pr($storyWords->toArray());
+      $roundOneReport = TraineeTransaction::select('id', 'word_id', 'trainee_id', 'session_pin', 'type', 'answer', 'correct_or_wrong','round','time_taken')->where('trainee_id', $trainee['trainee_id'])->where('session_pin', $trainee['session_pin'])->where('round', '=', '1')->get();
+      
+      if ($roundOneReport) {
+        $recallWords = $roundOneReport->shift();
+        //echo $recallWords->answer;
+        $recallAnwers = json_decode($recallWords->answer);
+        $roundOneRecall = explode(' ', $recallAnwers->words);
+        $roundOneRecall = array_unique($roundOneRecall);
+        //$this->pr($roundOneRecall);
+        $allStoryWords = $storyWords->pluck('word')->toArray();
+        // $this->pr($allStoryWords);
+        // $this->pr(array_diff($allStoryWords, $roundOneRecall));
+        // exit;
+        $roundOneTotal['contextual'] = gmdate('i : s', $roundOneReport->where('type', 'contextual')->sum('time_taken'));
+        $roundOneTotal['categorical'] = gmdate('i : s', $roundOneReport->where('type', 'categorical')->sum('time_taken'));
+        $roundOneReport = $roundOneReport->groupBy('word_id');
+      }
+  
      /*$this->pr($roundOneReport->toArray());
       exit;*/
-      $roundTwoReport = TraineeTransaction::select('id', 'word_id', 'trainee_id', 'session_pin', 'type', 'answer', 'correct_or_wrong','round','time_taken')->where('trainee_id', $trainee['trainee_id'])->where('session_pin', $trainee['session_pin'])->where('type', '!=', 'Recall')->where('round', '=', '2')->get();
-      //$this->pr($aroundTwoReport->toArray());
-      $roundTwoReport = $roundTwoReport->groupBy('word_id');
-     /*$this->pr($traineeReport->toArray());
-      exit;*/
-     return view('kessler.trainee.view')->with(compact('roundOneReport', 'roundTwoReport', 'storyWords'));
+      $roundTwoReport = TraineeTransaction::select('id', 'word_id', 'trainee_id', 'session_pin', 'type', 'answer', 'correct_or_wrong','round','time_taken')->where('trainee_id', $trainee['trainee_id'])->where('session_pin', $trainee['session_pin'])->where('round', '=', '2')->get();
+
+      if ($roundTwoReport) {
+        $recallWords = $roundTwoReport->shift();
+        $roundTwoTotal['contextual'] = gmdate('i : s', $roundTwoReport->where('type', 'contextual')->sum('time_taken'));
+        $roundTwoTotal['categorical'] = gmdate('i : s', $roundTwoReport->where('type', 'categorical')->sum('time_taken'));
+        $roundTwoReport = $roundTwoReport->groupBy('word_id');
+      }
+
+      //$this->pr($roundTwoReport->toArray());
+      //exit;
+      return view('kessler.trainee.view')->with(compact('roundOneReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords'));
     }
+
+    // function private _formatTime() {
+    //   if ($roundTotal['contextual']) {
+
+    //   }
+
+    // }
     
 }

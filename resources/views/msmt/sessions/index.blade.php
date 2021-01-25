@@ -10,18 +10,15 @@
       </div> <!-- /.card-body -->
       <div class="card-body">
       	<h1 class="m-0"></h1>
-            <br>
-         @foreach($overviews as $overviews)
-                <ul>
-                    <li>{{ $overviews -> overviews}}</li>
-                   
-                </ul>
-                
-                @endforeach
-       
+        <br/>
+        @foreach($overviews as $overviews)
+          <ul>
+            <li>{{ $overviews -> overviews}}</li>
+          </ul>
+        @endforeach 
       </div>
-        <div class="col-sm-6">
-       <button type="button" class="btn btn-primary text-right" id="session">SUBMIT</button>
+      <div class="col-sm-6">
+        <button type="button" class="btn btn-primary text-right" id="session">SUBMIT</button>
       </div>
     </div>
   </div><!-- /.container-fluid -->
