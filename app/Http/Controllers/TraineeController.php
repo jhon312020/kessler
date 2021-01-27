@@ -127,7 +127,7 @@ class TraineeController extends Controller
     public function view($id) {  
       $trainee = Trainee::find($id);
       $storyWords = Word::select('id', 'word')->where('story_id', $trainee['session_number'])->get();
-      $this->pr($storyWords->toArray());
+      //$this->pr($storyWords->toArray());
       $roundOneReport = TraineeTransaction::select('id', 'word_id', 'trainee_id', 'session_pin', 'type', 'answer', 'correct_or_wrong','round','time_taken')->where('trainee_id', $trainee['trainee_id'])->where('session_pin', $trainee['session_pin'])->where('round', '=', '1')->get();
       
       if ($roundOneReport) {

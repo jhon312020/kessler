@@ -28,6 +28,7 @@
   </div>
     <!-- /.container-fluid -->
 </section>
+
 <section class="page-section text-center d-none" id="jsQuestions">
   <div class="container">
     <!-- Contact Section Heading-->
@@ -78,6 +79,11 @@
     var showedAnswer = 0;
     //var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     $("#jsNext").on('click', function(event) {
+      $(this).prop("disabled", true);
+       $(this).html(
+        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
+      );
+      //confetti.remove();
       $('#jsUserMessage').text('');
       $('#jsUserMessage').removeClass().addClass('alert d-none');
       var answer = $('#answer').val();
@@ -99,6 +105,8 @@
         url: form.attr("action"),
         data: formData,
         success: function(response) {
+          $("#jsNext").prop("disabled", false);
+          $("#jsNext").text("Check");
            if (response.completed) {
             //location.reload();
             console.log(response);
@@ -121,6 +129,8 @@
               $('#jsUserMessage').html(response.answer);
               if (response.is_answer_correct) {
                 $('#jsUserMessage').addClass('alert-success');
+                confetti.start();
+                setTimeout(removeConfetti, 3000);
               } else {
                 $('#jsUserMessage').addClass('alert-danger');
               }
@@ -146,6 +156,9 @@
       $('#answer').focus();
       timer = performance.now();
     });
+    function removeConfetti() {
+      confetti.stop()
+    }
   })
   
 </script>

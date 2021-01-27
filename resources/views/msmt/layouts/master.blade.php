@@ -88,8 +88,13 @@
     <!-- Contact form JS-->
     <script src="{{asset('assets/mail/jqBootstrapValidation.js')}}"></script>
     <script src="{{asset('assets/mail/contact_me.js')}}"></script>
+    <script src="{{asset('js/confetti.min.js')}}"></script>
     <!-- Core theme JS-->
     <script type="text/javascript"> 
+      // $(document).ready( function() {
+      //   startConfetti();
+      // });
+      
     // window.addEventListener('beforeunload', function (e) { 
     //     e.preventDefault();
     //     e.returnValue = ''; 
