@@ -80,9 +80,9 @@ class AjaxController extends Controller
           $question = $word['question'];
           $findWord = $word['word'];
           if ($showAnswer) {
-            $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$word['id']."' id='answer' value='".$answer."' readonly> $iconWrongORRight", $question);
+            $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$word['id']."' id='answer' value='".$answer."' readonly autocomplete='off'> $iconWrongORRight", $question);
           } else {
-            $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$word['id']."' id='answer'>", $question);
+            $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$word['id']."' id='answer' autocomplete='off'>", $question);
           }
           
           $question = str_replace("$$", str_repeat("_", 15), $question);

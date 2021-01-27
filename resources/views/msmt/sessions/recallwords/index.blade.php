@@ -42,8 +42,13 @@
   $(document).ready( function() { // Wait until document is fully parsed
     var timer = performance.now();
     var words = new Array();
+    $(document).on('keypress', '#jsRecallWord', function(event) {
+      if (event.keyCode == 13) {
+        return false;
+      }
+    });
    $(document).on('keyup', '#jsRecallWord', function(event) {
-      if (event.keyCode == 32 ) {
+      if (event.keyCode == 32 || event.keyCode == 13) {
         var typedWord = $('#jsRecallWord').val();
         words.push(typedWord);
         $("#jsRecallWords").append('<div style="display: inline; line-height:3.5em; margin: 5px" class="col alert alert-info alert-dismissible fade show" role="alert" data-word="'+typedWord+'"><strong>'+typedWord+'</strong> <button type="button" class="btn close" data-dismiss="alert" aria-label="Close" data-word="'+typedWord+'"><span aria-hidden="true" data-word="'+typedWord+'">×</span></button></div>');
@@ -54,6 +59,10 @@
     });
     $("#jsSubmit").on('click', function(event) {
       event.preventDefault();
+      $(this).prop("disabled", true);
+      $(this).html(
+        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
+      );
       $('#jsRecallWord').val(words.join(' '));
       var startTime = $("<input>").attr("name", "startTime").attr("type", "hidden").val(timer);
       $('#recallWords').append(startTime);
