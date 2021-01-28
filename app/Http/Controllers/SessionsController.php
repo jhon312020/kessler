@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\TraineeTransaction;
+use App\Models\TraineeStory;
 use App\Models\Trainee;
 use Redirect,Response;
 use Auth;
@@ -55,6 +56,46 @@ class SessionsController extends Controller
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
         $story = Story::select('*')->where('id', $trainee['session_number'])->first(); 
+        return view('msmt.sessions.story')->with('story', $story);
+      } else {
+        return redirect('/');
+      }
+    }
+
+    /**
+     * Story writing by trainee
+     * @return \Illuminate\Http\Response
+     */
+    public function writings(Request $request) {
+       if ($request->session()->has('trainee')) {
+        $trainee = $request->session()->get('trainee'); 
+        $wordStory = Word::select('word')->where('story_id', $trainee['session_number'])->get();
+      return view('msmt.sessions.word')->with('wordStory', $wordStory);
+    }
+  }
+
+    /**
+     * Store by trainee
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function writeup(Request $request) {
+      if ($request->session()->has('trainee')) {
+        $trainee = $request->session()->get('trainee'); 
+        //$wordStory = Word::select('word')->where('story_id', $trainee['session_number'])->get();
+        /*$this->pr($wordStory->toArray());
+        exit();*/
+        $story = $request->get('story');
+        $traineeStory['trainee_id'] = $trainee['trainee_id'];
+        $traineeStory['story_id'] = $trainee['session_number'];
+        $traineeStory['session_pin'] = $trainee['session_pin'];
+        $traineeStory['round'] = $trainee['round'];
+        $traineeStory['story'] = $story;
+        TraineeStory::insert($traineeStory);
+        /*$this->pr($traineeStory);
+        exit();*/
+        $story = TraineeStory::select('story')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->first();
         return view('msmt.sessions.story')->with('story', $story);
       } else {
         return redirect('/');

@@ -44,6 +44,8 @@ Route::resource('/words', WordsController::class);
 Route::post('/index', [SessionsController::class, 'index']);
 Route::get('/', [SessionsController::class, 'index']);
 Route::get('/sessions',[SessionsController::class, 'sessions']);
+Route::get('/writings',[SessionsController::class, 'writings']);
+Route::post('/session',[SessionsController::class, 'writeup']);
 Route::get('/recallwords', [SessionsController::class, 'recall']);
 Route::post('/sessions', [SessionsController::class,'store']);
 Route::post('/next', [AjaxController::class,'store']);

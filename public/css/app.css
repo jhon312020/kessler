@@ -39,6 +39,17 @@
  color: red;
 }
 
+.writeup{
+    resize: none;
+    width: 600px;
+    margin-left: 25px;
+}
+
+.sort{
+    column-count: 5;
+    list-style-type: none;
+}
+
 .transparent-background {
   content: '';
   display: block;
@@ -144,4 +155,3 @@
   50% {
     transform: scale(1.5);
   }
-}
