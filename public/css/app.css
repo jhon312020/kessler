@@ -41,7 +41,8 @@
 
 .writeup{
     resize: none;
-    width: 700px;
+    width: 600px;
+    margin-left: 25px;
 }
 
 .sort{
