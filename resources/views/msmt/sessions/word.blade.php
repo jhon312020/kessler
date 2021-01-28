@@ -49,7 +49,7 @@
             <div class="container">
               <div class="row">
                 <div class="col-lg-8 mx-auto">
-                   <form action="{{ url('wordstostory') }}" method="POST" id="writeup">
+                   <form action="{{ url('session') }}" method="POST" id="writeup">
                    @csrf {{ method_field('post') }}
                     <div class="control-group">
                       <div class="form-group">

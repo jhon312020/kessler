@@ -63,16 +63,27 @@ class SessionsController extends Controller
     }
 
     /**
-     * Write story with words
+     * Story writing by trainee
+     * @return \Illuminate\Http\Response
+     */
+    public function writings(Request $request) {
+       if ($request->session()->has('trainee')) {
+        $trainee = $request->session()->get('trainee'); 
+        $wordStory = Word::select('word')->where('story_id', $trainee['session_number'])->get();
+      return view('msmt.sessions.word')->with('wordStory', $wordStory);
+    }
+  }
+
+    /**
+     * Store by trainee
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function writeup(Request $request) {
-      //return view('msmt.sessions.word');
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
-        $wordStory = Word::select('word')->where('story_id', $trainee['session_number'])->get();
+        //$wordStory = Word::select('word')->where('story_id', $trainee['session_number'])->get();
         /*$this->pr($wordStory->toArray());
         exit();*/
         $story = $request->get('story');
@@ -84,10 +95,11 @@ class SessionsController extends Controller
         TraineeStory::insert($traineeStory);
         /*$this->pr($traineeStory);
         exit();*/
-        return view('msmt.sessions.word')->with('wordStory', $wordStory);
-      } /*else {
+        $story = TraineeStory::select('story')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->first();
+        return view('msmt.sessions.story')->with('story', $story);
+      } else {
         return redirect('/');
-      }*/
+      }
     }
 
     /**
