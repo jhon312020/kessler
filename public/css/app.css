@@ -41,9 +41,10 @@
 
 .writeup{
     resize: none;
+    width: 700px;
 }
 
 .sort{
-    column-count: 2;
+    column-count: 5;
     list-style-type: none;
 }

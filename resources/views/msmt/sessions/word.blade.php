@@ -43,25 +43,39 @@
     </div>
     <!-- Contact Section Form-->
     <div class="row">
-      <div class="col-lg-8 mx-auto">
+      <div class="col">
         <div class="control-group">
           <div class="form-group controls mb-0 pb-2">
             <div class="container">
               <div class="row">
-                  <div class="col-sm">
-                      <ul class="sort">
-                        <li></li>
-                      </ul>
-                </div>
-                <div class="col-sm">
-                      <textarea class="form-control writeup" id="writeup" name="story" rows="15" cols="75" placeholder="Enter Story ..." required  autofocus></textarea>
+                <div class="col-lg-8 mx-auto">
+                   <form action="{{ url('wordstostory') }}" method="POST" id="writeup">
+                   @csrf {{ method_field('post') }}
+                    <div class="control-group">
+                      <div class="form-group">
+                        <div class="col-15">
+                        <ul class="sort">
+                          @foreach($wordStory as $wordStory)
+                            <li>{{$wordStory->word}}</li>
+                          @endforeach
+                        </ul>
+                        </div>    
+                    </div>
+                    <div class="control-group">
+                    <div class="form-group">
+                      <div class="col-10">
+                      <textarea class="form-control writeup" id="writeup" name="story" rows="5" placeholder="Enter Story ..." required  autofocus="on"></textarea>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+                <div class="form-group">
+                  <button class="btn btn-primary btn-xl" id="jsSubmit" type="submit">SUBMIT</button>
+              </div>
+            </form>
+           </div>
           </div>
-          <div class="form-group text-center">
-            <button type="submit" class="btn btn-primary btn-xl">CONTINUE</button>
-          </div>
+         </div>
         </div>
       </div>
     </div>

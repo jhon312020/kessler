@@ -69,19 +69,23 @@ class SessionsController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function writeup(Request $request) {
-      return view('msmt.sessions.word');
-      /*if ($request->session()->has('trainee')) {
+      //return view('msmt.sessions.word');
+      if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
         $wordStory = Word::select('word')->where('story_id', $trainee['session_number'])->get();
+        /*$this->pr($wordStory->toArray());
+        exit();*/
         $story = $request->get('story');
         $traineeStory['trainee_id'] = $trainee['trainee_id'];
         $traineeStory['story_id'] = $trainee['session_number'];
         $traineeStory['session_pin'] = $trainee['session_pin'];
         $traineeStory['round'] = $trainee['round'];
         $traineeStory['story'] = $story;
-        TraineeStory::insert($trainee_story);
+        TraineeStory::insert($traineeStory);
+        /*$this->pr($traineeStory);
+        exit();*/
         return view('msmt.sessions.word')->with('wordStory', $wordStory);
-      } else {
+      } /*else {
         return redirect('/');
       }*/
     }
