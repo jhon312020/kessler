@@ -50,7 +50,7 @@
    $(document).on('keyup', '#jsRecallWord', function(event) {
       if (event.keyCode == 32 || event.keyCode == 13) {
         var typedWord = $('#jsRecallWord').val();
-        words.push(typedWord);
+        words.push(typedWord.trim());
         $("#jsRecallWords").append('<div style="display: inline; line-height:3.5em; margin: 5px" class="col alert alert-info alert-dismissible fade show" role="alert" data-word="'+typedWord+'"><strong>'+typedWord+'</strong> <button type="button" class="btn close" data-dismiss="alert" aria-label="Close" data-word="'+typedWord+'"><span aria-hidden="true" data-word="'+typedWord+'">×</span></button></div>');
         $('#jsRecallWord').val('');
       } else {
