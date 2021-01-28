@@ -6,7 +6,7 @@
 <section class="page-section" id="jsTraineeSession">
   <div class="container">
     <!-- Contact Section Heading-->
-    <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">START SESSION</h2>
+    <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">STORY WRITING</h2>
     <!-- Icon Divider-->
     <div class="divider-custom">
       <div class="divider-custom-line"></div>
@@ -15,7 +15,7 @@
     </div>
       <div class="row">
         <div class="col-lg-8 mx-auto">
-          <p>On the same page below you are going to see a set of 20 words. The words will be capitalized like THIS. Build a story of your own using these words. This story is to help you remember the capitalized words. Try to make a picture of each storyline in your head. Click on START when you are ready.</p>
+          <p>On the same page below you are going to see a set of 20 words. The words will be capitalized like THIS. Build a story of your own using these words. Fit in as many words in a sentence. This story is to help you remember the capitalized words. Try to make a picture of each storyline in your head. Click on START when you are ready.</p>
           <br>
       </div>
     </div>
