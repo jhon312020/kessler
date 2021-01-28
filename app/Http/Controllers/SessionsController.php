@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\TraineeTransaction;
+use App\Models\TraineeStory;
 use App\Models\Trainee;
 use Redirect,Response;
 use Auth;
@@ -59,6 +60,30 @@ class SessionsController extends Controller
       } else {
         return redirect('/');
       }
+    }
+
+    /**
+     * Write story with words
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function writeup(Request $request) {
+      return view('msmt.sessions.word');
+      /*if ($request->session()->has('trainee')) {
+        $trainee = $request->session()->get('trainee'); 
+        $wordStory = Word::select('word')->where('story_id', $trainee['session_number'])->get();
+        $story = $request->get('story');
+        $traineeStory['trainee_id'] = $trainee['trainee_id'];
+        $traineeStory['story_id'] = $trainee['session_number'];
+        $traineeStory['session_pin'] = $trainee['session_pin'];
+        $traineeStory['round'] = $trainee['round'];
+        $traineeStory['story'] = $story;
+        TraineeStory::insert($trainee_story);
+        return view('msmt.sessions.word')->with('wordStory', $wordStory);
+      } else {
+        return redirect('/');
+      }*/
     }
 
     /**

@@ -38,3 +38,12 @@
 .wrong {
  color: red;
 }
+
+.writeup{
+    resize: none;
+}
+
+.sort{
+    column-count: 2;
+    list-style-type: none;
+}
