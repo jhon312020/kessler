@@ -12,9 +12,9 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
+    public function __construct() {
+      $this->middleware('auth');
+      parent::__construct();
     }
 
     /**
@@ -22,15 +22,12 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        return view('kessler.admin.dashboard');
+    public function index() {
+      return view('kessler.admin.dashboard');
     }
 
-      public function logout()
-    {
-        Auth::logout();
-
-        return redirect('/login');
+    public function logout() {
+      Auth::logout();
+      return redirect('/login');
     }
 }

@@ -12,19 +12,18 @@ class InstructionController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
+    public function __construct() {
+      $this->middleware('auth');
+      parent::__construct();
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $instructions = Instructions::all();
-        return view('kessler.instructions.index', compact('instructions'));
+    public function index() {
+      $instructions = Instructions::all();
+      return view('kessler.instructions.index', compact('instructions'));
     }
 
     /**
@@ -32,9 +31,8 @@ class InstructionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        return view('kessler.instructions.create');
+    public function create() {
+      return view('kessler.instructions.create');
     }
 
     /**
@@ -43,17 +41,16 @@ class InstructionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'instructions'=>'required'
-        ]);
-        
-        $instructions = new Instructions([
-            'instructions' => $request->get('instructions')
-        ]);
-        $instructions->save();
-        return redirect('/instructions')->with('success', 'INSTRUCTION SAVED!');
+    public function store(Request $request) {
+      $request->validate([
+        'instructions'=>'required'
+      ]);
+      
+      $instructions = new Instructions([
+        'instructions' => $request->get('instructions')
+      ]);
+      $instructions->save();
+      return redirect('/instructions')->with('success', 'INSTRUCTION SAVED!');
     }
 
     /**
@@ -73,10 +70,9 @@ class InstructionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        $instructions = Instructions::find($id);
-        return view('kessler.instructions.edit', compact('instructions'));
+    public function edit($id) {
+      $instructions = Instructions::find($id);
+      return view('kessler.instructions.edit', compact('instructions'));
     }
 
     /**
@@ -86,15 +82,14 @@ class InstructionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'instructions'=>'required'
-        ]);
-        $instructions = Instructions::find($id);
-        $instructions->instructions = $request->get('instructions');
-        $instructions->save();
-        return redirect('/instructions')->with('success', 'INSTRUCTION UPDATED!');
+    public function update(Request $request, $id) {
+      $request->validate([
+        'instructions'=>'required'
+      ]);
+      $instructions = Instructions::find($id);
+      $instructions->instructions = $request->get('instructions');
+      $instructions->save();
+      return redirect('/instructions')->with('success', 'INSTRUCTION UPDATED!');
     }
 
     /**
@@ -103,10 +98,9 @@ class InstructionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        $instructions = Instructions::find($id);
-        $instructions->delete();
-        return redirect('/instructions')->with('success', 'INSTRUCTION DELETED!');
+    public function destroy($id) {
+      $instructions = Instructions::find($id);
+      $instructions->delete();
+      return redirect('/instructions')->with('success', 'INSTRUCTION DELETED!');
     }
 }

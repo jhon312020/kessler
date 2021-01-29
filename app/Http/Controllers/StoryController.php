@@ -12,19 +12,18 @@ class StoryController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
+    public function __construct() {
+      $this->middleware('auth');
+      parent::__construct();
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $story = Story::all();
-        return view('kessler.story.index', compact('story'));
+    public function index() {
+      $story = Story::all();
+      return view('kessler.story.index', compact('story'));
     }
 
     /**
@@ -32,9 +31,8 @@ class StoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        return view('kessler.story.create');
+    public function create() {
+      return view('kessler.story.create');
     }
 
     /**
@@ -43,17 +41,16 @@ class StoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'story'=>'required'
-        ]);
-        
-        $story = new Story([
-            'story' => $request->get('story')
-        ]);
-        $story->save();
-        return redirect('/story')->with('success', 'STORY SAVED!');
+    public function store(Request $request) {
+      $request->validate([
+        'story'=>'required'
+      ]);
+      
+      $story = new Story([
+        'story' => $request->get('story')
+      ]);
+      $story->save();
+      return redirect('/story')->with('success', 'STORY SAVED!');
     }
 
     /**
@@ -62,8 +59,7 @@ class StoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         //
     }
 
@@ -73,10 +69,9 @@ class StoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        $story = Story::find($id);
-        return view('kessler.story.edit', compact('story'));
+    public function edit($id) {
+      $story = Story::find($id);
+      return view('kessler.story.edit', compact('story'));
     }
 
     /**
@@ -86,15 +81,14 @@ class StoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'story'=>'required'
-        ]);
-        $story = Story::find($id);
-        $story->story = $request->get('story');
-        $story->save();
-        return redirect('/story')->with('success', 'STORY UPDATED!');
+    public function update(Request $request, $id) {
+      $request->validate([
+        'story'=>'required'
+      ]);
+      $story = Story::find($id);
+      $story->story = $request->get('story');
+      $story->save();
+      return redirect('/story')->with('success', 'STORY UPDATED!');
     }
 
     /**
@@ -103,10 +97,9 @@ class StoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        $story = Story::find($id);
-        $story->delete();
-        return redirect('/story')->with('success', 'STORY DELETED!');
+    public function destroy($id) {
+      $story = Story::find($id);
+      $story->delete();
+      return redirect('/story')->with('success', 'STORY DELETED!');
     }
 }

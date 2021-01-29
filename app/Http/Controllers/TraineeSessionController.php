@@ -13,7 +13,7 @@ use App\Models\Story;
 use App\Models\Word;
 use Illuminate\Support\Facades\Validator;
 
-class SessionController extends Controller
+class TraineeSessionController extends Controller
 {
     /**
      * Show the application dashboard.
@@ -215,7 +215,7 @@ class SessionController extends Controller
         //return view('msmt.sessions.questions.cue')->with('question', $question);
         return view('msmt.sessions.questions.cue')->with(compact('question','story'));
       } else {
-        return redirect('home');
+        return redirect('/');
       }
     }
 

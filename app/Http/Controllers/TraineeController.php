@@ -18,6 +18,7 @@ class TraineeController extends Controller
     var $totalSessions = array();
     public function __construct() {
       $this->middleware('auth');
+      parent::__construct();
       $this->totalSessions = range(1, 10);
     }
 

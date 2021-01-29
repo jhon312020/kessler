@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\SessionController;
+use App\Http\Controllers\TraineeSessionController;
+use App\Http\Controllers\StorySessionController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OverviewController;
@@ -38,17 +39,18 @@ Route::resource('/overviews', OverviewController::class);
 Route::resource('/instructions', InstructionController::class);
 Route::resource('/story', StoryController::class);
 Route::resource('/words', WordsController::class);
+Route::resource('/StorySession', StorySessionController::class);
 // ---------------------------------------- ./ ADMIN --------------------------------------------- //
 
 // ---------------------------------------- / SESSIONS /--------------------------------------------- //
-Route::post('/index', [SessionController::class, 'index']);
-Route::get('/index', [SessionController::class, 'index']);
-Route::get('/', [SessionController::class, 'index']);
-Route::get('/sessions',[SessionController::class, 'sessions']);
-Route::get('/writings',[SessionController::class, 'writings']);
-Route::post('/session',[SessionController::class, 'writeup']);
-Route::get('/recallwords', [SessionController::class, 'recall']);
-Route::post('/sessions', [SessionController::class,'store']);
+Route::post('/index', [TraineeSessionController::class, 'index']);
+Route::get('/index', [TraineeSessionController::class, 'index']);
+Route::get('/', [TraineeSessionController::class, 'index']);
+Route::get('/trainee/sessions',[TraineeSessionController::class, 'sessions']);
+Route::get('/writings',[TraineeSessionController::class, 'writings']);
+Route::post('/session',[TraineeSessionController::class, 'writeup']);
+Route::get('/recallwords', [TraineeSessionController::class, 'recall']);
+Route::post('/sessions', [TraineeSessionController::class,'store']);
 Route::post('/next', [AjaxController::class,'store']);
-Route::get('/complete', [SessionController::class,'complete']);
+Route::get('/complete', [TraineeSessionController::class,'complete']);
 // ---------------------------------------- ./ SESSIONS / ----------------------------------------- //

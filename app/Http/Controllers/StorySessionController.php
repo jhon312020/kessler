@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Word;
+use App\Models\StorySession;
 
-class WordsController extends Controller
+class StorySessionController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -22,8 +22,8 @@ class WordsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index() {
-      $words = Word::all();
-      return view('kessler.words.index', compact('words'));
+      $storySessions = StorySession::all();
+      return view('kessler.StorySession.index', compact('storySessions'));
     }
 
     /**
@@ -32,7 +32,7 @@ class WordsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
-      return view('kessler.words.create');
+      return view('kessler.StorySession.create');
     }
 
     /**
@@ -42,18 +42,15 @@ class WordsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        $request->validate([
-          'words'=>'required',
-          'categorical_cue'=>'required'
-        ]);
-        
-        $words = new Word([
-          'words' => $request->get('words'),
-          'contextual_cue' => $request->get('contextual_cue'),
-          'categorical_cue' => $request->get('categorical_cue')
-        ]);
-        $words->save();
-        return redirect('/words')->with('success', 'WORD SAVED!');
+      $request->validate([
+        'name'=>'required'
+      ]);
+      
+      $storySession = new StorySession([
+        'name' => $request->get('name')
+      ]);
+      $storySession->save();
+      return redirect('/StorySession')->with('success', 'Session SAVED!');
     }
 
     /**
@@ -73,8 +70,8 @@ class WordsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-      $words = Word::find($id);
-      return view('kessler.words.edit', compact('words'));
+      $storySession = StorySession::find($id);
+      return view('kessler.StorySession.edit', compact('storySession'));
     }
 
     /**
@@ -86,15 +83,12 @@ class WordsController extends Controller
      */
     public function update(Request $request, $id) {
       $request->validate([
-        'words'=>'required',
-        'categorical_cue'=>'required'
+        'name'=>'required'
       ]);
-      $words = Word::find($id);
-      $words->words = $request->get('words');
-      $words->contextual_cue = $request->get('contextual_cue');
-      $words->categorical_cue = $request->get('categorical_cue');
-      $words->save();
-      return redirect('/words')->with('success', 'WORD UPDATED!');
+      $storySession = StorySession::find($id);
+      $storySession->name = $request->get('name');
+      $storySession->save();
+      return redirect('/StorySession')->with('success', 'Session UPDATED!');
     }
 
     /**
@@ -104,8 +98,8 @@ class WordsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-      $words = Word::find($id);
-      $words->delete();
-      return redirect('/words')->with('success', 'WORD DELETED!');
+        $storySession = StorySession::find($id);
+        $storySession->delete();
+        return redirect('/StorySession')->with('success', 'Session DELETED!');
     }
 }

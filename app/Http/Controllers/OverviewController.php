@@ -13,19 +13,18 @@ class OverviewController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
+    public function __construct() {
+      $this->middleware('auth');
+      parent::__construct();
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
- public function index()
-    {
-        $overviews = Overviews::all();
-        return view('kessler.overviews.index', compact('overviews'));
+    public function index() {
+      $overviews = Overviews::all();
+      return view('kessler.overviews.index', compact('overviews'));
     }
 
     /**
@@ -33,9 +32,8 @@ class OverviewController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        return view('kessler.overviews.create');
+    public function create() {
+      return view('kessler.overviews.create');
     }
 
     /**
@@ -44,17 +42,16 @@ class OverviewController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'overviews'=>'required'
-        ]);
-        
-        $overviews = new Overviews([
-            'overviews' => $request->get('overviews')
-        ]);
-        $overviews->save();
-        return redirect('/overviews')->with('success', 'OVERVIEWS SAVED!');
+    public function store(Request $request) {
+      $request->validate([
+        'overviews'=>'required'
+      ]);
+      
+      $overviews = new Overviews([
+        'overviews' => $request->get('overviews')
+      ]);
+      $overviews->save();
+      return redirect('/overviews')->with('success', 'OVERVIEWS SAVED!');
     }
 
     /**
@@ -63,8 +60,7 @@ class OverviewController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         //
     }
 
@@ -74,10 +70,9 @@ class OverviewController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        $overviews = Overviews::find($id);
-        return view('kessler.overviews.edit', compact('overviews'));
+    public function edit($id) {
+      $overviews = Overviews::find($id);
+      return view('kessler.overviews.edit', compact('overviews'));
     }
 
     /**
@@ -87,15 +82,14 @@ class OverviewController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'overviews'=>'required'
-        ]);
-        $overviews = Overviews::find($id);
-        $overviews->overviews = $request->get('overviews');
-        $overviews->save();
-        return redirect('/overviews')->with('success', 'OVERVIEWS UPDATED!');
+    public function update(Request $request, $id) {
+      $request->validate([
+        'overviews'=>'required'
+      ]);
+      $overviews = Overviews::find($id);
+      $overviews->overviews = $request->get('overviews');
+      $overviews->save();
+      return redirect('/overviews')->with('success', 'OVERVIEWS UPDATED!');
     }
 
     /**
@@ -104,10 +98,9 @@ class OverviewController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        $overviews = Overviews::find($id);
-        $overviews->delete();
-        return redirect('/overviews')->with('success', 'OVERVIEWS DELETED!');
+    public function destroy($id) {
+      $overviews = Overviews::find($id);
+      $overviews->delete();
+      return redirect('/overviews')->with('success', 'OVERVIEWS DELETED!');
     }
 }
