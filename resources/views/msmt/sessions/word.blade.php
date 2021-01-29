@@ -42,8 +42,8 @@
       <div class="divider-custom-line"></div>
     </div>
     <!-- Contact Section Form-->
-  <div class="row">
-    <div class="col-sm">
+    <div class="row">
+     <div class="col-sm">
       <form action="{{ url('session') }}" method="POST" id="writeup">
       @csrf {{ method_field('post') }}
        <ul class="sort">
@@ -55,14 +55,12 @@
       <div class="col-sm">
       <textarea class="form-control writeup" id="writeup" name="story" rows="9" placeholder="Enter Story ..." required  autofocus="on"></textarea>
     </div>
-  </form>
- </div>
-  <div class="row">
    <div class="col-lg-8 mx-auto">
     <div class="form-group text-center"><br><button class="btn btn-primary btn-xl" id="jsSubmit" type="submit">SUBMIT</button>
     </div>
    </div>
- </div>          
+  </form>
+ </div>
 </section>
 
 <script type="text/javascript">
