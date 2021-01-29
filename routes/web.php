@@ -49,8 +49,9 @@ Route::get('/writings',[SessionController::class, 'writings']);
 Route::post('/session',[SessionController::class, 'writeup']);
 Route::get('/recallwords', [SessionController::class, 'recall']);
 Route::post('/sessions', [SessionController::class,'store']);
+Route::post('/session', [SessionController::class,'save']);
+Route::get('/session', [SessionController::class,'save']);
 Route::post('/next', [AjaxController::class,'store']);
 Route::post('/after', [AjaxController::class,'save']);
 Route::get('/complete', [SessionController::class,'complete']);
-
 // ---------------------------------------- ./ SESSIONS / ----------------------------------------- //
