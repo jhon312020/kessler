@@ -90,6 +90,8 @@ class SessionController extends Controller
         $trainee = $request->session()->get('trainee'); 
         $wordStory = Word::select('word')->where('story_id', $trainee['session_number'])->get();
         return view('msmt.sessions.word')->with('wordStory', $wordStory);
+      } else {
+        return redirect('/');
       }
     }
 
@@ -214,7 +216,7 @@ class SessionController extends Controller
         } 
         return view('msmt.sessions.questions.cue')->with('story', $story);
       } else {
-        return redirect('home');
+        return redirect('/');
       }
     }
 
