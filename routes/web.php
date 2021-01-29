@@ -51,5 +51,6 @@ Route::post('/session', [SessionsController::class,'save']);
 Route::get('/session', [SessionsController::class,'save']);
 Route::post('/sessions', [SessionsController::class,'store']);
 Route::post('/next', [AjaxController::class,'store']);
+Route::post('/after', [AjaxController::class,'save']);
 Route::get('/complete', [SessionsController::class,'complete']);
 // ---------------------------------------- ./ SESSIONS / ----------------------------------------- //

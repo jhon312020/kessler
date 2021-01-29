@@ -176,11 +176,10 @@ class SessionsController extends Controller
           $wordID = $word['id'];
           $question = $word['question'];
           $findWord = $word['word'];
-          $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$wordID."' id='answer'>", $question);
-          $question = str_replace("$$", str_repeat("_", 15), $question);
+          $question = str_replace($word['word'], "<input id='answer' class='fill-ups'>", $question);
+          $question = str_replace("<input id='answer' class='fill-ups'>", str_repeat("_", 15), $question);
         } 
-        //return view('msmt.sessions.questions.cue')->with('question', $question);
-        return view('msmt.sessions.questions.cue')->with(compact('question','story'));
+        return view('msmt.sessions.questions.cue')->with('story', $story);
       } else {
         return redirect('home');
       }

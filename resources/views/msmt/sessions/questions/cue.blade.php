@@ -42,13 +42,13 @@
     <!-- Question Section-->
     <div class="row">
       <div class="col-lg-8 mx-auto">
-        <form action="{{ url('next') }}" method="POST" id="jsQuestionForm">
+        <form action="{{ url('after') }}" method="POST" id="jsQuestionForm">
           <div class="control-group">
             <div class="form-group controls mb-0 pb-2" class="answer_list">
               @csrf {{ method_field('post') }}
               <h1 class="m-0"></h1>
               @foreach($story as $story)
-              <p id="question">{{ $story->story }}</p>
+              <p id="question" class="question">{{$story->story}}</p>
               @endforeach    
             </div>
             <div>
@@ -155,6 +155,8 @@
       $('#jsTraineeMessage').slideUp();
       $('#jsTraineeMessage').html('');
       $('#jsQuestions').removeClass('d-none').show();
+      //$("#question").replaceWith(isUpperCase(),"<input>");
+      //$("#question").replace(isuppercase(), "<input>");
       $('#answer').focus();
       timer = performance.now();
     });
@@ -164,4 +166,9 @@
   })
   
 </script>
+<script> 
+    var fillin = document.getElementById("question"); 
+    var str = fillin.innerHTML;
+    fillin.innerHTML = str.replace(/[A-Z0-9]{2,}/g, "<input id='answer' class='fill-ups'>");  
+</script>  
 @endsection
