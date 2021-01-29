@@ -90,6 +90,8 @@ class TraineeSessionController extends Controller
         $trainee = $request->session()->get('trainee'); 
         $wordStory = Word::select('word')->where('story_id', $trainee['session_number'])->get();
         return view('msmt.sessions.word')->with('wordStory', $wordStory);
+      } else {
+        return redirect('/');
       }
     }
 
@@ -207,13 +209,17 @@ class TraineeSessionController extends Controller
         //$this->pr($word->toArray());
         if ($word) {
           $wordID = $word['id'];
-          $question = $word['question'];
           $findWord = $word['word'];
-          $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$wordID."' id='answer'>", $question);
-          $question = str_replace("$$", str_repeat("_", 15), $question);
+          // $this->pr($findWord);
+          // exit();
+          $findWord = str_replace($word['word'], "<input id='answer' class='fill-ups'>", $findWord);
+          // $this->pr($findWord);
+          // exit();
+          $findWord = str_replace("<input id='answer' class='fill-ups'>", str_repeat("_", 15), $findWord);
+          // $this->pr($findWord);
+          // exit();
         } 
-        //return view('msmt.sessions.questions.cue')->with('question', $question);
-        return view('msmt.sessions.questions.cue')->with(compact('question','story'));
+        return view('msmt.sessions.questions.cue')->with('story', $story);
       } else {
         return redirect('/');
       }

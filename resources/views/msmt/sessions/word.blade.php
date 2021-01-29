@@ -43,43 +43,24 @@
     </div>
     <!-- Contact Section Form-->
     <div class="row">
-      <div class="col">
-        <div class="control-group">
-          <div class="form-group controls mb-0 pb-2">
-            <div class="container">
-              <div class="row">
-                <div class="col-lg-8 mx-auto">
-                   <form action="{{ url('session') }}" method="POST" id="writeup">
-                   @csrf {{ method_field('post') }}
-                    <div class="control-group">
-                      <div class="form-group">
-                        <div class="col-15">
-                        <ul class="sort">
-                          @foreach($wordStory as $wordStory)
-                            <li>{{$wordStory->word}}</li>
-                          @endforeach
-                        </ul>
-                        </div>    
-                    </div>
-                    <div class="control-group">
-                    <div class="form-group">
-                      <div class="col-10">
-                      <textarea class="form-control writeup" id="writeup" name="story" rows="5" placeholder="Enter Story ..." required  autofocus="on"></textarea>
-                    </div>
-                  </div>
-                </div>
-              </div>
-                <div class="form-group">
-                  <button class="btn btn-primary btn-xl" id="jsSubmit" type="submit">SUBMIT</button>
-              </div>
-            </form>
-           </div>
-          </div>
-         </div>
-        </div>
+     <div class="col-sm">
+      <form action="{{ url('story') }}" method="POST" id="writeup">
+      @csrf {{ method_field('post') }}
+       <ul class="sort">
+       @foreach($wordStory as $wordStory)
+        <li>{{$wordStory->word}}</li>
+      @endforeach
+       </ul>          
       </div>
+      <div class="col-sm">
+      <textarea class="form-control writeup" id="writeup" name="story" rows="9" placeholder="Enter Story ..." required  autofocus="on"></textarea>
     </div>
-  </div>
+   <div class="col-lg-8 mx-auto">
+    <div class="form-group text-center"><br><button class="btn btn-primary btn-xl" id="jsSubmit" type="submit">SUBMIT</button>
+    </div>
+   </div>
+  </form>
+ </div>
 </section>
 
 <script type="text/javascript">

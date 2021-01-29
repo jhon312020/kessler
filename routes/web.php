@@ -32,7 +32,7 @@ Auth::routes();
 Route::get('/logout', [HomeController::class, 'logout']);
 Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
-// ---------------------------------------- ./ ADMIN --------------------------------------------- //
+// ---------------------------------------- ./ ADMIN ---------------------------------------------------- //
 Route::resource('/trainee', TraineeController::class);
 Route::get('/trainee/view/{id}', [TraineeController::class, 'view']);
 Route::resource('/overviews', OverviewController::class);
@@ -40,6 +40,7 @@ Route::resource('/instructions', InstructionController::class);
 Route::resource('/story', StoryController::class);
 Route::resource('/words', WordsController::class);
 Route::resource('/StorySession', StorySessionController::class);
+
 // ---------------------------------------- ./ ADMIN --------------------------------------------- //
 
 // ---------------------------------------- / SESSIONS /--------------------------------------------- //
@@ -54,3 +55,29 @@ Route::post('/sessions', [TraineeSessionController::class,'store']);
 Route::post('/next', [AjaxController::class,'store']);
 Route::get('/complete', [TraineeSessionController::class,'complete']);
 // ---------------------------------------- ./ SESSIONS / ----------------------------------------- //
+
+// ---------------------------------------- ./ ADMIN ---------------------------------------------------- //
+
+// ---------------------------------------- / SESSIONS PIN /--------------------------------------------- //
+Route::post('/index', [SessionController::class, 'index']);
+Route::get('/index', [SessionController::class, 'index']);
+Route::get('/', [SessionController::class, 'index']);
+// ---------------------------------------- / SESSIONS PIN /--------------------------------------------- //
+
+// ---------------------------------------- / SESSIONS 1-4 /--------------------------------------------- //
+Route::get('/sessions',[SessionController::class, 'sessions']);
+Route::get('/recallwords', [SessionController::class, 'recall']);
+Route::post('/sessions', [SessionController::class,'store']);
+Route::post('/next', [AjaxController::class,'store']);
+Route::get('/complete', [SessionController::class,'complete']);
+// ---------------------------------------- ./ SESSIONS 1-4 / ------------------------------------------- //
+
+// ---------------------------------------- / SESSIONS 5-8 /--------------------------------------------- //
+Route::get('/writings',[SessionController::class, 'writings']);
+Route::post('/story',[SessionController::class, 'writeup']);
+Route::get('/recallwords', [SessionController::class, 'recall']);
+Route::post('/cue', [SessionController::class,'save']);
+Route::get('/cue', [SessionController::class,'save']);
+Route::post('/after', [AjaxController::class,'save']);
+
+// ---------------------------------------- ./ SESSIONS 5-8 /-------------------------------------------- //
