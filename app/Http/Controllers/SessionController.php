@@ -209,10 +209,15 @@ class SessionController extends Controller
         //$this->pr($word->toArray());
         if ($word) {
           $wordID = $word['id'];
-          $question = $word['question'];
           $findWord = $word['word'];
-          $question = str_replace($word['word'], "<input id='answer' class='fill-ups'>", $question);
-          $question = str_replace("<input id='answer' class='fill-ups'>", str_repeat("_", 15), $question);
+          // $this->pr($findWord);
+          // exit();
+          $findWord = str_replace($word['word'], "<input id='answer' class='fill-ups'>", $findWord);
+          // $this->pr($findWord);
+          // exit();
+          $findWord = str_replace("<input id='answer' class='fill-ups'>", str_repeat("_", 15), $findWord);
+          // $this->pr($findWord);
+          // exit();
         } 
         return view('msmt.sessions.questions.cue')->with('story', $story);
       } else {
