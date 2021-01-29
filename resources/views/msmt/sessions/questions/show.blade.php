@@ -32,7 +32,7 @@
 <section class="page-section text-center {{ !$showTraineeMessage? '': 'd-none' }}" id="jsQuestions">
   <div class="container">
     <!-- Contact Section Heading-->
-    <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">QUES</h2>
+    <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">CUES</h2>
     <!-- Icon Divider-->
     <div class="divider-custom">
       <div class="divider-custom-line"></div>
