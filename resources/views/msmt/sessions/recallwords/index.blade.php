@@ -1,6 +1,7 @@
 @extends('msmt.layouts.master')
 @section('content')
 <!-- Content Wrapper. Contains page content -->
+<link href="{{asset('css/app.css')}}" rel="stylesheet" />
 <section class="page-section">
   <div class="container">
     <!-- Contact Section Heading-->
@@ -21,6 +22,11 @@
       </div>
     </div>
     <div class="row">
+      <div class="transparent-background d-none" id="jsLoader">
+        <div class="loader-center">
+          <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+      </div>
       <div class="col-lg-8 mx-auto">
         <form action="{{ url('sessions') }}" method="POST" id="recallWords">
           @csrf {{ method_field('post') }}
@@ -58,11 +64,15 @@
       }
     });
     $("#jsSubmit").on('click', function(event) {
-      event.preventDefault();
+      if ( $('#jsRecallWord').val() != '') {
+        words.push($('#jsRecallWord').val());
+      }
       $(this).prop("disabled", true);
       $(this).html(
         '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
       );
+      event.preventDefault();
+      $("#jsLoader").removeClass('d-none');
       $('#jsRecallWord').val(words.join(' '));
       var startTime = $("<input>").attr("name", "startTime").attr("type", "hidden").val(timer);
       $('#recallWords').append(startTime);

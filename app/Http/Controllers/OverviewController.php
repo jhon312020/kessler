@@ -3,19 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Instructions;
+use App\Models\Overviews;
 
-class InstructionsController extends Controller
+
+class OverviewController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+ public function index()
     {
-        $instructions = Instructions::all();
-        return view('kessler.instructions.index', compact('instructions'));
+        $overviews = Overviews::all();
+        return view('kessler.overviews.index', compact('overviews'));
     }
 
     /**
@@ -25,7 +35,7 @@ class InstructionsController extends Controller
      */
     public function create()
     {
-        return view('kessler.instructions.create');
+        return view('kessler.overviews.create');
     }
 
     /**
@@ -37,14 +47,14 @@ class InstructionsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'instructions'=>'required'
+            'overviews'=>'required'
         ]);
         
-        $instructions = new Instructions([
-            'instructions' => $request->get('instructions')
+        $overviews = new Overviews([
+            'overviews' => $request->get('overviews')
         ]);
-        $instructions->save();
-        return redirect('/instructions')->with('success', 'INSTRUCTION SAVED!');
+        $overviews->save();
+        return redirect('/overviews')->with('success', 'OVERVIEWS SAVED!');
     }
 
     /**
@@ -66,8 +76,8 @@ class InstructionsController extends Controller
      */
     public function edit($id)
     {
-        $instructions = Instructions::find($id);
-        return view('kessler.instructions.edit', compact('instructions'));
+        $overviews = Overviews::find($id);
+        return view('kessler.overviews.edit', compact('overviews'));
     }
 
     /**
@@ -80,12 +90,12 @@ class InstructionsController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'instructions'=>'required'
+            'overviews'=>'required'
         ]);
-        $instructions = Instructions::find($id);
-        $instructions->instructions = $request->get('instructions');
-        $instructions->save();
-        return redirect('/instructions')->with('success', 'INSTRUCTION UPDATED!');
+        $overviews = Overviews::find($id);
+        $overviews->overviews = $request->get('overviews');
+        $overviews->save();
+        return redirect('/overviews')->with('success', 'OVERVIEWS UPDATED!');
     }
 
     /**
@@ -96,8 +106,8 @@ class InstructionsController extends Controller
      */
     public function destroy($id)
     {
-        $instructions = Instructions::find($id);
-        $instructions->delete();
-        return redirect('/instructions')->with('success', 'INSTRUCTION DELETED!');
+        $overviews = Overviews::find($id);
+        $overviews->delete();
+        return redirect('/overviews')->with('success', 'OVERVIEWS DELETED!');
     }
 }

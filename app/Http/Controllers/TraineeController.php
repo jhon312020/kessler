@@ -17,6 +17,7 @@ class TraineeController extends Controller
      */
     var $totalSessions = array();
     public function __construct() {
+      $this->middleware('auth');
       $this->totalSessions = range(1, 10);
     }
 
@@ -55,11 +56,11 @@ class TraineeController extends Controller
       ]);
       $session_pin = mt_rand(100000, 999999);
       $trainee = new trainee([
-          'trainee_id' => $request->get('trainee_id'),
-          'session_type' => $request->get('session_type'),
-          'session_number' => $request->get('session_number'),
-          'session_pin' => $session_pin,
-          'trainer_id' => Auth::id()
+        'trainee_id' => $request->get('trainee_id'),
+        'session_type' => $request->get('session_type'),
+        'session_number' => $request->get('session_number'),
+        'session_pin' => $session_pin,
+        'trainer_id' => Auth::id()
       ]);  
       $trainee->save();
       return redirect('/trainee')->with('success', 'Trainee information has been saved succesfully!');
@@ -134,7 +135,8 @@ class TraineeController extends Controller
       if ($roundOneReport) {
         $recallWords = $roundOneReport->shift();
         $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
-        $roundOneTotal['contextual'] = gmdate('i : s', $roundOneReport->where('type', 'contextual')->sum('time_taken'));
+        $this->pr($roundOneReport->where('type', 'contextual')->sum('time_taken'));
+        echo $roundOneTotal['contextual'] = gmdate('i : s', $roundOneReport->where('type', 'contextual')->sum('time_taken'));
         $roundOneTotal['categorical'] = gmdate('i : s', $roundOneReport->where('type', 'categorical')->sum('time_taken'));
         $roundOneReport = $roundOneReport->groupBy('word_id');
       }

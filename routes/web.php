@@ -2,12 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\SessionsController;
+use App\Http\Controllers\SessionController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\OverviewsController;
+use App\Http\Controllers\OverviewController;
 use App\Http\Controllers\TraineeController;
-use App\Http\Controllers\InstructionsController;
+use App\Http\Controllers\InstructionController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\WordsController;
 
@@ -34,23 +34,23 @@ Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 // ---------------------------------------- ./ ADMIN --------------------------------------------- //
 Route::resource('/trainee', TraineeController::class);
 Route::get('/trainee/view/{id}', [TraineeController::class, 'view']);
-Route::resource('/overviews', OverviewsController::class);
-Route::resource('/instructions', InstructionsController::class);
+Route::resource('/overviews', OverviewController::class);
+Route::resource('/instructions', InstructionController::class);
 Route::resource('/story', StoryController::class);
 Route::resource('/words', WordsController::class);
 // ---------------------------------------- ./ ADMIN --------------------------------------------- //
 
 // ---------------------------------------- / SESSIONS /--------------------------------------------- //
-Route::post('/index', [SessionsController::class, 'index']);
-Route::get('/', [SessionsController::class, 'index']);
-Route::get('/sessions',[SessionsController::class, 'sessions']);
-Route::get('/writings',[SessionsController::class, 'writings']);
-Route::post('/session',[SessionsController::class, 'writeup']);
-Route::get('/recallwords', [SessionsController::class, 'recall']);
-Route::post('/session', [SessionsController::class,'save']);
-Route::get('/session', [SessionsController::class,'save']);
-Route::post('/sessions', [SessionsController::class,'store']);
+Route::post('/index', [SessionController::class, 'index']);
+Route::get('/index', [SessionController::class, 'index']);
+Route::get('/', [SessionController::class, 'index']);
+Route::get('/sessions',[SessionController::class, 'sessions']);
+Route::get('/writings',[SessionController::class, 'writings']);
+Route::post('/session',[SessionController::class, 'writeup']);
+Route::get('/recallwords', [SessionController::class, 'recall']);
+Route::post('/sessions', [SessionController::class,'store']);
 Route::post('/next', [AjaxController::class,'store']);
 Route::post('/after', [AjaxController::class,'save']);
-Route::get('/complete', [SessionsController::class,'complete']);
+Route::get('/complete', [SessionController::class,'complete']);
+
 // ---------------------------------------- ./ SESSIONS / ----------------------------------------- //

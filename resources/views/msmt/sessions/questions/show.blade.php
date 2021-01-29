@@ -3,7 +3,7 @@
   <!-- Content Wrapper. Contains page content -->
 <link href="{{asset('css/app.css')}}" rel="stylesheet" />
          <!-- Main content -->
-<section class="page-section" id="jsTraineeMessage">
+<section class="page-section {{ $showTraineeMessage? '': 'd-none' }}" id="jsTraineeMessage">
   <div class="container">
     <!-- Contact Section Heading-->
     <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">START CUES</h2>
@@ -29,7 +29,7 @@
     <!-- /.container-fluid -->
 </section>
 
-<section class="page-section text-center d-none" id="jsQuestions">
+<section class="page-section text-center {{ !$showTraineeMessage? '': 'd-none' }}" id="jsQuestions">
   <div class="container">
     <!-- Contact Section Heading-->
     <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">QUES</h2>
@@ -67,6 +67,11 @@
 <!-- /.content -->
 <script type="text/javascript">
   $(document).ready( function() { // Wait until document is fully parsed
+    var showTraineeMessage = '{{ $showTraineeMessage }}';
+    var timer = null;
+    if (!showTraineeMessage) {
+      timer = performance.now();
+    }
     $(document).on('keyup', '#answer', function() {
       this.value = this.value.toUpperCase();
     });
@@ -80,7 +85,7 @@
         return event.key;
       }
     });
-    var timer = null;
+
     var categoryCueShowed = 0;
     var showedAnswer = 0;
     //var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
