@@ -129,18 +129,11 @@ class TraineeController extends Controller
       $storyWords = Word::select('id', 'word')->where('story_id', $trainee['session_number'])->get();
       //$this->pr($storyWords->toArray());
       $roundOneReport = TraineeTransaction::select('id', 'word_id', 'trainee_id', 'session_pin', 'type', 'answer', 'correct_or_wrong','round','time_taken')->where('trainee_id', $trainee['trainee_id'])->where('session_pin', $trainee['session_pin'])->where('round', '=', '1')->get();
-      
+      $allStoryWords = $storyWords->pluck('word')->toArray();
+      $recallReport = array();
       if ($roundOneReport) {
         $recallWords = $roundOneReport->shift();
-        //echo $recallWords->answer;
-        $recallAnwers = json_decode($recallWords->answer);
-        $roundOneRecall = explode(' ', $recallAnwers->words);
-        $roundOneRecall = array_unique($roundOneRecall);
-        //$this->pr($roundOneRecall);
-        $allStoryWords = $storyWords->pluck('word')->toArray();
-        // $this->pr($allStoryWords);
-        // $this->pr(array_diff($allStoryWords, $roundOneRecall));
-        // exit;
+        $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
         $roundOneTotal['contextual'] = gmdate('i : s', $roundOneReport->where('type', 'contextual')->sum('time_taken'));
         $roundOneTotal['categorical'] = gmdate('i : s', $roundOneReport->where('type', 'categorical')->sum('time_taken'));
         $roundOneReport = $roundOneReport->groupBy('word_id');
@@ -152,6 +145,7 @@ class TraineeController extends Controller
 
       if ($roundTwoReport) {
         $recallWords = $roundTwoReport->shift();
+        $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
         $roundTwoTotal['contextual'] = gmdate('i : s', $roundTwoReport->where('type', 'contextual')->sum('time_taken'));
         $roundTwoTotal['categorical'] = gmdate('i : s', $roundTwoReport->where('type', 'categorical')->sum('time_taken'));
         $roundTwoReport = $roundTwoReport->groupBy('word_id');
@@ -159,14 +153,38 @@ class TraineeController extends Controller
 
       //$this->pr($roundTwoReport->toArray());
       //exit;
-      return view('kessler.trainee.view')->with(compact('roundOneReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords'));
+      return view('kessler.trainee.view')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords'));
     }
-
-    // function private _formatTime() {
-    //   if ($roundTotal['contextual']) {
-
-    //   }
-
-    // }
+    /**
+     * Private function to generate recall words report for round 1 and round 2.
+     *
+     * @param  object $recallWords
+     * @param  array $allStoryWords
+     * @return \Illuminate\Http\Response
+     */
+    private function _recallReport($recallWords, $allStoryWords) {
+      $recallReport = array();
+      //$this->pr($recallWords->toArray());
+      if ($recallWords) {
+        $timeTaken = $recallWords->time_taken;
+        $recallAnwers = json_decode($recallWords->answer);
+        $recallWords = explode(' ', $recallAnwers->words);
+        $recallWords = array_unique($recallWords);
+        $unFoundWords = array_diff($allStoryWords, $recallWords);
+        $foundWords = array_intersect($allStoryWords, $recallWords);
+        foreach($recallWords as $key=>$recallWord) {
+          if (in_array($recallWord, $foundWords)) {
+            $recallReport['words'][$key] = '<span class="correct"><i class="fa fa-check" aria-hidden="true">&nbsp;</i> '.$recallWord.'</span>';
+          } else {
+            $recallReport['words'][$key] = '<span class="wrong"><i class="fa fa-times" aria-hidden="true">&nbsp;</i> '.$recallWord.'</span>';
+          }
+        }
+        $recallReport['found_count'] = count($foundWords);
+        $recallReport['unfound_count'] = count($allStoryWords) - count($foundWords);
+        $recallReport['words'] = implode(' ', $recallReport['words']).' ('.$timeTaken.' secs)';
+      }
+      //$this->pr($recallReport);
+      return $recallReport;
+    }
     
 }

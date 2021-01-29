@@ -41,7 +41,12 @@
     </div>
     <!-- Question Section-->
     <div class="row">
-      <div class="col-lg-8 mx-auto">
+      <div class="transparent-background d-none" id="jsLoader">
+        <div class="loader-center">
+          <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+      </div>
+      <div class="col-lg-8 mx-auto" id="jsQueContainer">
         <form action="{{ url('next') }}" method="POST" id="jsQuestionForm">
           <div class="control-group">
             <div class="form-group controls mb-0 pb-2" class="answer_list">
@@ -66,6 +71,7 @@
       this.value = this.value.toUpperCase();
     });
     $(document).on("keydown", "form", function(event) { 
+      confetti.remove();
       if (event.key == "Enter") {
         event.preventDefault();
         $("#jsNext").trigger('click');
@@ -79,10 +85,15 @@
     var showedAnswer = 0;
     //var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     $("#jsNext").on('click', function(event) {
+      confetti.remove();
+      $("#jsQueContainer").slideDown();
+      $("#jsLoader").removeClass('d-none');
+      $("#jsNext").text("Check");
       $(this).prop("disabled", true);
-       $(this).html(
-        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
-      );
+
+      // $(this).html(
+      //   '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
+      // );
       //confetti.remove();
       $('#jsUserMessage').text('');
       $('#jsUserMessage').removeClass().addClass('alert d-none');
@@ -105,7 +116,9 @@
         url: form.attr("action"),
         data: formData,
         success: function(response) {
+          $("#jsQueContainer").slideDown();
           $("#jsNext").prop("disabled", false);
+          $("#jsLoader").addClass('d-none');
           $("#jsNext").text("Check");
            if (response.completed) {
             //location.reload();
@@ -120,7 +133,7 @@
             if (response.categorical_cue && !response.show_answer) {
               $('#jsUserMessage').addClass('alert-info');
               $('#jsUserMessage').html(response.categorical_cue);
-              $('#jsUserMessage').removeClass('d-none').show();
+              $('#jsUserMessage').removeClass('d-none');
               categoryCueShowed = 1;
               $('#answer').focus();
             } else if(response.show_answer) {
@@ -131,18 +144,22 @@
                 $('#jsUserMessage').addClass('alert-success');
                 confetti.start();
                 setTimeout(removeConfetti, 3000);
+                $("#jsQueContainer").show("slow");
               } else {
                 $('#jsUserMessage').addClass('alert-danger');
+                $("#jsQueContainer").show("slow");
               }
-              $('#jsUserMessage').removeClass('d-none').show();
+              $('#jsUserMessage').removeClass('d-none');
               $("#jsNext").text("Next");
               $('#jsNext').focus();
+              $("#jsQueContainer").show("slow");
             } else {
               categoryCueShowed = 0;
               showedAnswer = 0;
               $("#jsNext").text("Check");
               $('#answer').focus();
             }
+            
            }
         },
         dataType: 'json'
@@ -157,7 +174,7 @@
       timer = performance.now();
     });
     function removeConfetti() {
-      confetti.stop()
+      confetti.stop();
     }
   })
   
