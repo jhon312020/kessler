@@ -1,7 +1,7 @@
 @extends('msmt.layouts.master')
 @section('content')
   <!-- Content Wrapper. Contains page content -->
-  <link href="{{asset('css/app.css')}}" rel="stylesheet" />
+<link href="{{asset('css/app.css')}}" rel="stylesheet" />
          <!-- Main content -->
 <section class="page-section" id="jsTraineeMessage">
   <div class="container">
