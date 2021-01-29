@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\TraineeTransaction;
 use App\Models\TraineeJourney;
-use Redirect,Response;
+use App\Models\Trainee;
+use Redirect, Response;
 use Auth;
 use DB;
 use App\Models\Story;
@@ -28,6 +29,7 @@ class AjaxController extends Controller
       if ($request->session()->has('trainee')) {
         $timeTaken = (int)(($request->endTime - $request->startTime)/1000);
         $trainee = $request->session()->get('trainee');
+        $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
         $remove = ['_token', '_method', 'endTime', 'startTime', 'categoryCue', 'showedAnswer'];
         $traineeAnswer = array_diff_key($request->all(), array_flip($remove));
         foreach($traineeAnswer as $key=>$answer) {
@@ -77,6 +79,8 @@ class AjaxController extends Controller
         }
         if ($word) {
           //$this->pr($word->toArray());
+          $traineeRecord->session_current_position = $word['id'];
+          $traineeRecord->save();
           $question = $word['question'];
           $findWord = $word['word'];
           if ($showAnswer) {
@@ -95,10 +99,12 @@ class AjaxController extends Controller
           }
           return $response;
         } else if ($wordID == $lastWord->id) {
+          $traineeRecord->session_current_position = null;
           $response['completed'] = true;
           $response['redirectURL'] = url("/complete");
           $request->session()->put('completed', true);
         }
+        $traineeRecord->save();
         return $response;
       } else {
         return $respone;
