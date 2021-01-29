@@ -23,7 +23,7 @@ class StorySessionController extends Controller
      */
     public function index() {
       $storySessions = StorySession::all();
-      return view('kessler.StorySession.index', compact('storySessions'));
+      return view('kessler.storysession.index', compact('storySessions'));
     }
 
     /**
@@ -32,7 +32,7 @@ class StorySessionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
-      return view('kessler.StorySession.create');
+      return view('kessler.storysession.create');
     }
 
     /**
@@ -71,7 +71,7 @@ class StorySessionController extends Controller
      */
     public function edit($id) {
       $storySession = StorySession::find($id);
-      return view('kessler.StorySession.edit', compact('storySession'));
+      return view('kessler.storysession.edit', compact('storySession'));
     }
 
     /**
