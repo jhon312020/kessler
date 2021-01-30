@@ -15,7 +15,7 @@
                 </ul>
               </div>
             @endif
-            <form method="post" action="{{ route('storySession.update', $storySession->id) }}">
+            <form method="post" action="{{ route('StorySession.update', $storySession->id) }}">
               @method('PATCH') 
               @csrf
               <div class="form-group">
@@ -24,7 +24,7 @@
               </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
                 <button type="submit" class="btn btn-primary">Update</button>
-                <a href="{{ url('/storySession')}}" class="ml-2 btn btn-danger" role="button">Cancel</a>
+                <a href="{{ url('/StorySession')}}" class="ml-2 btn btn-danger" role="button">Cancel</a>
               </div>
             </form>
           </div>

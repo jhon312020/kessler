@@ -39,13 +39,12 @@ Route::resource('/overview', OverviewController::class);
 Route::resource('/instruction', InstructionController::class);
 Route::resource('/story', StoryController::class);
 Route::resource('/word', WordController::class);
-Route::resource('/storySession', StorySessionController::class);
+Route::resource('/StorySession', StorySessionController::class);
 
 // ---------------------------------------- ./ ADMIN ----------------------------------------------------------- //
 
 // ---------------------------------------- / SESSIONS PIN /---------------------------------------------------- //
-Route::post('/index', [TraineeSessionController::class, 'index']);
-Route::get('/index', [TraineeSessionController::class, 'index']);
+Route::post('/', [TraineeSessionController::class, 'index']);
 Route::get('/', [TraineeSessionController::class, 'index']);
 // ---------------------------------------- / SESSIONS PIN /---------------------------------------------------- //
 

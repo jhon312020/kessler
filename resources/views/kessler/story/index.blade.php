@@ -11,7 +11,7 @@
     <div class="card mb-4">
       <div class="card-header">
         <i class="fas fa-table mr-1"></i>
-          Stories
+          Story
       </div>
       <br/>
       <a href="{{ route('story.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;">Add Story</a>

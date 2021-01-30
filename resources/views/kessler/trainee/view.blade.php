@@ -51,7 +51,7 @@
               <tr>
                 <td>Recall Words</td>
                 <td>{!! $recallReport[0]['words'] !!}</td>
-                <td>Remeber: {{ $recallReport[0]['found_count'] }} Forgot: {{ $recallReport[0]['unfound_count']  }}</td>
+                <td>Remember: {{ $recallReport[0]['found_count'] }} Forgot: {{ $recallReport[0]['unfound_count']  }}</td>
                 @if ($roundTwoReport->count())
                 <td>{!! $recallReport[1]['words'] !!}</td>
                 <td>Remember: {{ $recallReport[1]['found_count'] }} Forgot: {{ $recallReport[1]['unfound_count']  }}</td>

@@ -11,10 +11,10 @@
     <div class="card mb-4">
       <div class="card-header">
         <i class="fas fa-table mr-1"></i>
-          Sessions
+          Session
       </div>
       <br/>
-      <a href="{{ route('storySession.create') }}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;">Add Session</a>
+      <a href="{{ route('StorySession.create') }}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;">Add Session</a>
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -38,8 +38,8 @@
                 <td>{{$storySession->id}}</td>
                 <td>{{$storySession->name}}</td>
                 <td>
-                  <a href="{{ route('storySession.edit', $storySession->id)}}" class="btn btn-primary" role="button"><i class="fa fa-edit">&nbsp;</i>Edit</a>
-                  <form action="{{ route('storySession.destroy', $storySession->id)}}" method="post" class="d-inline">
+                  <a href="{{ route('StorySession.edit', $storySession->id)}}" class="btn btn-primary" role="button"><i class="fa fa-edit">&nbsp;</i>Edit</a>
+                  <form action="{{ route('StorySession.destroy', $storySession->id)}}" method="post" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button class="btn btn-danger" type="submit"><i class="fa fa-trash">&nbsp;</i> Delete</button>
