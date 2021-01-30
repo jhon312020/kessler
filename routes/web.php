@@ -59,7 +59,7 @@ Route::get('/complete', [TraineeSessionController::class,'complete']);
 // ---------------------------------------- / SESSIONS 5-8 /---------------------------------------------------- //
 Route::get('/writings',[TraineeSessionController::class, 'writings']);
 Route::post('/story',[TraineeSessionController::class, 'writeup']);
-Route::get('/recallwords', [TraineeSessionController::class, 'recollect']);
+Route::get('/recallword', [TraineeSessionController::class, 'recollect']);
 Route::post('/cue', [TraineeSessionController::class,'save']);
 Route::get('/cue', [TraineeSessionController::class,'save']);
 Route::post('/after', [AjaxController::class,'save']);
