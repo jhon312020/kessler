@@ -14,7 +14,7 @@ class Controller extends BaseController
   public function __construct() {
   	$sideMenu = array('dashboard'=>array('name'=>'Dashboard', 'url'=>'/dashboard','icon'=>'fa-tachometer-alt'), 
                       'trainee'=>array('name'=>'Trainee', 'url'=>'/trainee','icon'=>'fa-table'), 
-                      'overviews'=>array('name'=>'Overview', 'url'=>'/dashboard','icon'=>'fa-table'),
+                      'overviews'=>array('name'=>'Overview', 'url'=>'/overviews','icon'=>'fa-table'),
                       'instructions'=>array('name'=>'Instruction', 'url'=>'/instructions','icon'=>'fa-table'),
                       'story'=>array('name'=>'Story', 'url'=>'/story','icon'=>'fa-table'),
                       'words'=>array('name'=>'Word', 'url'=>'/words','icon'=>'fa-table'),

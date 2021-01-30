@@ -117,7 +117,7 @@ class AjaxController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */   
-    public function after(Request $request) {
+    public function save(Request $request) {
       $response['reload'] = true;
       $showAnswer = 0;
       $iconWrongORRight = '<i class="fa fa-times" style="color:#721c24"></i>';
