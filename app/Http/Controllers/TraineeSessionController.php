@@ -85,7 +85,7 @@ class TraineeSessionController extends Controller
      * Story writing by trainee
      * @return \Illuminate\Http\Response
      */
-    public function writings(Request $request) {
+    public function writing(Request $request) {
      if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
         $wordStory = Word::select('word')->where('story_id', $trainee['session_number'])->get();
