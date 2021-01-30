@@ -117,7 +117,7 @@ class TraineeSessionController extends Controller
         /*$this->pr($traineeStory);
         exit();*/
         $story = TraineeStory::select('story')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->first();
-        return view('msmt.sessions.story')->with('story', $story);
+        return view('msmt.sessions.tale')->with('story', $story);
       } else {
         return redirect('/');
       }
@@ -127,14 +127,27 @@ class TraineeSessionController extends Controller
      * On continuation with the story the next step is to recall words from the story
      * @return \Illuminate\Http\Response
      */
-    public function recall(Request $request) {
+    public function remember(Request $request) {
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
         if ($traineeRecord->session_current_position == 'recall' || $traineeRecord->session_current_position == '') {
           $traineeRecord->session_current_position = 'recall';
           $traineeRecord->save();
-          return view('msmt.sessions.recallwords.index');
+          return view('msmt.sessions.recallwords.remember');
+        } 
+      }
+      return redirect('/');
+    }
+
+    public function recollect(Request $request) {
+      if ($request->session()->has('trainee')) {
+        $trainee = $request->session()->get('trainee'); 
+        $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
+        if ($traineeRecord->session_current_position == 'recall' || $traineeRecord->session_current_position == '') {
+          $traineeRecord->session_current_position = 'recall';
+          $traineeRecord->save();
+          return view('msmt.sessions.recallwords.recollect');
         } 
       }
       return redirect('/');
