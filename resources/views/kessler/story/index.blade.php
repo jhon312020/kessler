@@ -1,7 +1,6 @@
 @extends('kessler.layouts.master')
 @section('content')
   <!-- Content Wrapper. Contains page content -->
- <main>
   <div class="container-fluid">
     <h1 class="mt-4">Story</h1>
     <div class="card mb-4">
@@ -61,5 +60,4 @@
       </div>
     </div>
   </div>
-</main>
 @endsection

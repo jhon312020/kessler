@@ -1,12 +1,11 @@
 @extends('kessler.layouts.master')
 @section('content')
   <!-- Content Wrapper. Contains page content -->
- <main>
   <div class="container-fluid">
-    <h1 class="mt-4">Sessions</h1>
+    <h1 class="mt-4">Session</h1>
     <div class="card mb-4">
       <div class="card-body">
-        Create, View, Edit and Remove Sessions
+        Create, View, Edit and Remove Session
       </div>
     </div>
     <div class="card mb-4">
@@ -15,32 +14,32 @@
           Sessions
       </div>
       <br/>
-      <a href="{{ route('StorySession.create') }}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;">Add Session</a>
+      <a href="{{ route('storySession.create') }}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;">Add Session</a>
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
               <tr>
                 <th>S.No</th>
-                <th>Name</th>
+                <th>Session</th>
                 <th width="20%">Actions</th>
               </tr>
             </thead>
             <tfoot>
               <tr>
                 <th>S.No</th>
-                <th>storySession</th>
+                <th>Session</th>
                 <th width="20%">Actions</th>
               </tr>
             </tfoot>
             <tbody>
-            @foreach($storySessions as $storySession)
+            @foreach($storySession as $storySession)
               <tr>
                 <td>{{$storySession->id}}</td>
                 <td>{{$storySession->name}}</td>
                 <td>
-                  <a href="{{ route('StorySession.edit', $storySession->id)}}" class="btn btn-primary" role="button"><i class="fa fa-edit">&nbsp;</i>Edit</a>
-                  <form action="{{ route('StorySession.destroy', $storySession->id)}}" method="post" class="d-inline">
+                  <a href="{{ route('storySession.edit', $storySession->id)}}" class="btn btn-primary" role="button"><i class="fa fa-edit">&nbsp;</i>Edit</a>
+                  <form action="{{ route('storySession.destroy', $storySession->id)}}" method="post" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button class="btn btn-danger" type="submit"><i class="fa fa-trash">&nbsp;</i> Delete</button>
@@ -61,5 +60,4 @@
       </div>
     </div>
   </div>
-</main>
 @endsection

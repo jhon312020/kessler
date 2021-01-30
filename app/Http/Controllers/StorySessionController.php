@@ -22,8 +22,8 @@ class StorySessionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index() {
-      $storySessions = StorySession::all();
-      return view('kessler.storysession.index', compact('storySessions'));
+      $storySession = StorySession::all();
+      return view('kessler.storysession.index', compact('storySession'));
     }
 
     /**
@@ -50,7 +50,7 @@ class StorySessionController extends Controller
         'name' => $request->get('name')
       ]);
       $storySession->save();
-      return redirect('/StorySession')->with('success', 'Session SAVED!');
+      return redirect('/storySession')->with('success', 'Session SAVED!');
     }
 
     /**
@@ -88,7 +88,7 @@ class StorySessionController extends Controller
       $storySession = StorySession::find($id);
       $storySession->name = $request->get('name');
       $storySession->save();
-      return redirect('/StorySession')->with('success', 'Session UPDATED!');
+      return redirect('/storySession')->with('success', 'Session UPDATED!');
     }
 
     /**
@@ -100,6 +100,6 @@ class StorySessionController extends Controller
     public function destroy($id) {
         $storySession = StorySession::find($id);
         $storySession->delete();
-        return redirect('/StorySession')->with('success', 'Session DELETED!');
+        return redirect('/storySession')->with('success', 'Session DELETED!');
     }
 }

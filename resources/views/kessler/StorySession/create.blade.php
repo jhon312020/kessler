@@ -15,7 +15,7 @@
                 </ul>
               </div>
             @endif
-            <form method="post" action="{{ route('StorySession.store') }}">
+            <form method="post" action="{{ route('storySession.store') }}">
               @csrf
               <div class="form-group">
                 <label class="small mb-1" for="name">Enter Name</label>
@@ -23,7 +23,7 @@
               </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
                 <button type="submit" class="btn btn-primary">Add</button>
-                <a href="{{ url('/session')}}" class="ml-2 btn btn-danger" role="button">Cancel</a>
+                <a href="{{ url('/storySession')}}" class="ml-2 btn btn-danger" role="button">Cancel</a>
               </div>
             </form>
           </div>

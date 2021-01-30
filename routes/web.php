@@ -10,7 +10,7 @@ use App\Http\Controllers\OverviewController;
 use App\Http\Controllers\TraineeController;
 use App\Http\Controllers\InstructionController;
 use App\Http\Controllers\StoryController;
-use App\Http\Controllers\WordsController;
+use App\Http\Controllers\WordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,37 +32,36 @@ Auth::routes();
 Route::get('/logout', [HomeController::class, 'logout']);
 Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
-// ---------------------------------------- ./ ADMIN ---------------------------------------------------- //
+// ---------------------------------------- ./ ADMIN ----------------------------------------------------------- //
 Route::resource('/trainee', TraineeController::class);
 Route::get('/trainee/view/{id}', [TraineeController::class, 'view']);
-Route::resource('/overviews', OverviewController::class);
-Route::resource('/instructions', InstructionController::class);
+Route::resource('/overview', OverviewController::class);
+Route::resource('/instruction', InstructionController::class);
 Route::resource('/story', StoryController::class);
-Route::resource('/words', WordsController::class);
-Route::resource('/StorySession', StorySessionController::class);
+Route::resource('/word', WordController::class);
+Route::resource('/storySession', StorySessionController::class);
 
-// ---------------------------------------- ./ ADMIN --------------------------------------------- //
+// ---------------------------------------- ./ ADMIN ----------------------------------------------------------- //
 
-// ---------------------------------------- / SESSIONS PIN /--------------------------------------------- //
+// ---------------------------------------- / SESSIONS PIN /---------------------------------------------------- //
 Route::post('/index', [TraineeSessionController::class, 'index']);
 Route::get('/index', [TraineeSessionController::class, 'index']);
 Route::get('/', [TraineeSessionController::class, 'index']);
-// ---------------------------------------- / SESSIONS PIN /--------------------------------------------- //
+// ---------------------------------------- / SESSIONS PIN /---------------------------------------------------- //
 
-// ---------------------------------------- / SESSIONS 1-4 /--------------------------------------------- //
-Route::get('/trainee/sessions',[TraineeSessionController::class, 'sessions']);
+// ---------------------------------------- / SESSIONS 1-4 /---------------------------------------------------- //
+Route::get('/sessions',[TraineeSessionController::class, 'sessions']);
 Route::get('/recallwords', [TraineeSessionController::class, 'recall']);
 Route::post('/sessions', [TraineeSessionController::class,'store']);
 Route::post('/next', [AjaxController::class,'store']);
 Route::get('/complete', [TraineeSessionController::class,'complete']);
-// ---------------------------------------- ./ SESSIONS 1-4 / ------------------------------------------- //
+// ---------------------------------------- ./ SESSIONS 1-4 / -------------------------------------------------- //
 
-// ---------------------------------------- / SESSIONS 5-8 /--------------------------------------------- //
+// ---------------------------------------- / SESSIONS 5-8 /---------------------------------------------------- //
 Route::get('/writings',[TraineeSessionController::class, 'writings']);
 Route::post('/story',[TraineeSessionController::class, 'writeup']);
 Route::get('/recallwords', [TraineeSessionController::class, 'recall']);
 Route::post('/cue', [TraineeSessionController::class,'save']);
-Route::get('/cue', [TraineeSessionController::class,'save']);
 Route::post('/after', [AjaxController::class,'save']);
-
-// ---------------------------------------- ./ SESSIONS 5-8 /-------------------------------------------- //
+Route::get('/complete', [TraineeSessionController::class,'complete']);
+// ---------------------------------------- ./ SESSIONS 5-8 /--------------------------------------------------- //

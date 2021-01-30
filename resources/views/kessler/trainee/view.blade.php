@@ -2,7 +2,6 @@
 @section('content')
   <!-- Content Wrapper. Contains page content -->
 <link href="{{asset('css/app.css')}}" rel="stylesheet" />
-<main>
   <div class="container-fluid">
     <h1 class="mt-4">Trainee Report</h1>
     <div class="card mb-4">
@@ -26,20 +25,20 @@
                 <th colspan="2">Round 2</th>
                 </tr>
                 <tr align="center">
-                <th width="25%"></th>
-                <th width="25%">Contextual</th>
-                <th width="25%">Categorical</th>
-                <th width="25%">Contextual</th>
-                <th width="25%">Categorical</th>
+                <th width="20%"></th>
+                <th width="20%">Contextual</th>
+                <th width="20%">Categorical</th>
+                <th width="20%">Contextual</th>
+                <th width="20%">Categorical</th>
                 </tr>
             </thead>
             <tfoot>
               <tr align="center">
-                <th width="25%"></th>
-                <th width="25%">Contextual</th>
-                <th width="25%">Categorical</th>
-                <th width="25%">Contextual</th>
-                <th width="25%">Categorical</th>
+                <th width="20%"></th>
+                <th width="20%">Contextual</th>
+                <th width="20%">Categorical</th>
+                <th width="20%">Contextual</th>
+                <th width="20%">Categorical</th>
               </tr>
               <tr align="center">
                 <th>Word</th>
@@ -52,10 +51,10 @@
               <tr>
                 <td>Recall Words</td>
                 <td>{!! $recallReport[0]['words'] !!}</td>
-                <td>Found: {{ $recallReport[0]['found_count'] }} Unfound: {{ $recallReport[0]['unfound_count']  }}</td>
+                <td>Remeber: {{ $recallReport[0]['found_count'] }} Forgot: {{ $recallReport[0]['unfound_count']  }}</td>
                 @if ($roundTwoReport->count())
                 <td>{!! $recallReport[1]['words'] !!}</td>
-                <td>Found: {{ $recallReport[1]['found_count'] }} Unfound: {{ $recallReport[1]['unfound_count']  }}</td>
+                <td>Remember: {{ $recallReport[1]['found_count'] }} Forgot: {{ $recallReport[1]['unfound_count']  }}</td>
                 @else
                 <td></td>
                 <td></td>
@@ -124,5 +123,4 @@
       </div>
     </div>
   </div>
-</main>
 @endsection
