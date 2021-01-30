@@ -61,6 +61,7 @@ Route::get('/writings',[TraineeSessionController::class, 'writings']);
 Route::post('/story',[TraineeSessionController::class, 'writeup']);
 Route::get('/recallwords', [TraineeSessionController::class, 'recall']);
 Route::post('/cue', [TraineeSessionController::class,'save']);
+Route::get('/cue', [TraineeSessionController::class,'save']);
 Route::post('/after', [AjaxController::class,'save']);
 Route::get('/complete', [TraineeSessionController::class,'complete']);
 // ---------------------------------------- ./ SESSIONS 5-8 /--------------------------------------------------- //
