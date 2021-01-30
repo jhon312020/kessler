@@ -3,6 +3,11 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="container-fluid">
     <h1 class="mt-4">Trainee Information</h1>
+     <div class="card mb-4">
+      <div class="card-body">
+        Create, View and Edit Trainee Information
+      </div>
+    </div>
     <div class="card mb-4">
       <div class="card-header">
         <i class="fa fa-table mr-1"></i>
