@@ -18,7 +18,7 @@ class Controller extends BaseController
                       'instruction'=>array('name'=>'Instruction', 'url'=>'/instruction','icon'=>'fa-table'),
                       'story'=>array('name'=>'Story', 'url'=>'/story','icon'=>'fa-table'),
                       'word'=>array('name'=>'Word', 'url'=>'/word','icon'=>'fa-table'),
-                      'storysession'=>array('name'=>'Session', 'url'=>'/StorySession','icon'=>'fa-table'),
+                      'type'=>array('name'=>'Type', 'url'=>'/type','icon'=>'fa-table'),
                     );
   	\View::share('sideMenu', $sideMenu);
   }

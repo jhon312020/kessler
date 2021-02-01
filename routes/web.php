@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TraineeSessionController;
-use App\Http\Controllers\StorySessionController;
+use App\Http\Controllers\TypeController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OverviewController;
@@ -39,7 +39,7 @@ Route::resource('/overview', OverviewController::class);
 Route::resource('/instruction', InstructionController::class);
 Route::resource('/story', StoryController::class);
 Route::resource('/word', WordController::class);
-Route::resource('/StorySession', StorySessionController::class);
+Route::resource('/type', TypeController::class);
 
 // ---------------------------------------- ./ ADMIN ----------------------------------------------------------- //
 
