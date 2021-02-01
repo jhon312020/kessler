@@ -44,7 +44,7 @@
     <!-- Contact Section Form-->
     <div class="row">
      <div class="col-sm">
-      <form action="{{ url('story') }}" method="POST" id="writeup">
+      <form action="{{ url('read') }}" method="POST" id="writeup">
       @csrf {{ method_field('post') }}
        <ul class="sort">
        @foreach($wordStory as $wordStory)

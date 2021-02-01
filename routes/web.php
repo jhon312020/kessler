@@ -43,12 +43,9 @@ Route::resource('/type', TypeController::class);
 
 // ---------------------------------------- ./ ADMIN ----------------------------------------------------------- //
 
-// ---------------------------------------- / SESSIONS PIN /---------------------------------------------------- //
-Route::post('/', [TraineeSessionController::class, 'index']);
-Route::get('/', [TraineeSessionController::class, 'index']);
-// ---------------------------------------- / SESSIONS PIN /---------------------------------------------------- //
-
 // ---------------------------------------- / SESSIONS 1-4 /---------------------------------------------------- //
+Route::post('/index', [TraineeSessionController::class, 'index']);
+Route::get('/index', [TraineeSessionController::class, 'index']);
 Route::get('/sessions',[TraineeSessionController::class, 'sessions']);
 Route::get('/recallwords', [TraineeSessionController::class, 'remember']);
 Route::post('/sessions', [TraineeSessionController::class,'store']);
@@ -57,11 +54,14 @@ Route::get('/complete', [TraineeSessionController::class,'complete']);
 // ---------------------------------------- ./ SESSIONS 1-4 / -------------------------------------------------- //
 
 // ---------------------------------------- / SESSIONS 5-8 /---------------------------------------------------- //
-Route::get('/writing',[TraineeSessionController::class, 'writing']);
-Route::post('/story',[TraineeSessionController::class, 'writeup']);
+
+Route::post('/home', [TraineeSessionController::class, 'home']);
+Route::get('/home', [TraineeSessionController::class, 'home']);
+Route::get('/write',[TraineeSessionController::class, 'writing']);
+Route::post('/read',[TraineeSessionController::class, 'writeup']);
 Route::get('/recallword', [TraineeSessionController::class, 'recollect']);
 Route::post('/cue', [TraineeSessionController::class,'save']);
 Route::get('/cue', [TraineeSessionController::class,'save']);
 Route::post('/after', [AjaxController::class,'save']);
-Route::get('/complete', [TraineeSessionController::class,'complete']);
+Route::get('/finish', [TraineeSessionController::class,'finish']);
 // ---------------------------------------- ./ SESSIONS 5-8 /--------------------------------------------------- //
