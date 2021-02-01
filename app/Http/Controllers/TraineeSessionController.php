@@ -63,7 +63,7 @@ class TraineeSessionController extends Controller
           ]);
 
         if (!$validator->fails()) {
-          $record = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_current_position')->where('session_pin', $request->sessionpin)->where('completed', 0)->first();
+          $record = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_current_position')->where('session_pin', $request->sessionpin)->where('session_number', '>=', 5)->where('completed', 0)->first();
           if ($record) {
             $request->session()->put('trainee', $record);
             return redirect('write');
@@ -119,7 +119,14 @@ class TraineeSessionController extends Controller
      */
     public function writing(Request $request) {
      if ($request->session()->has('trainee')) {
-        $trainee = $request->session()->get('trainee'); 
+        $trainee = $request->session()->get('trainee');
+        $oneWord = Word::select('word')->where('story_id', '=', 7)->where('id', '=', 123)->get();
+        //$this->pr($oneWord->toArray());
+        //exit(); 
+        $sessionEight = Word::select('word')->where('story_id', '=', 8)->get();
+        $result = $sessionEight->toBase()->merge($oneWord);
+        //$this->pr($result->toArray());
+        //exit();
         $wordStory = Word::select('word')->where('story_id', $trainee['session_number'])->get();
         return view('msmt.sessions.word')->with('wordStory', $wordStory);
       } else {
@@ -255,12 +262,12 @@ class TraineeSessionController extends Controller
         if ($word) {
           $wordID = $word['id'];
           $findWord = $word['word'];
-          // $this->pr($findWord);
+           $this->pr($findWord);
+           //exit();
+          $findWord = str_replace($word['word'], "<input id='answer' class='fill-ups' name='answer-".$wordID."'>", $findWord);
+           $this->pr($findWord);
           // exit();
-          $findWord = str_replace($word['word'], "<input id='answer' class='fill-ups'>", $findWord);
-          // $this->pr($findWord);
-          // exit();
-          $findWord = str_replace("<input id='answer' class='fill-ups'>", str_repeat("_", 15), $findWord);
+          $findWord = str_replace("<input id='answer' class='fill-ups' name='answer-".$wordID."'>", str_repeat("_", 15), $findWord);
           // $this->pr($findWord);
           // exit();
         } 

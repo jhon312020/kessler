@@ -2,7 +2,7 @@
 @section('content')
   <!-- Content Wrapper. Contains page content -->
 <link href="{{asset('css/app.css')}}" rel="stylesheet" />
-         <!-- Main content -->
+  <!-- Main content -->
 <section class="page-section" id="jsTraineeMessage">
   <div class="container">
     <!-- Contact Section Heading-->
@@ -169,6 +169,6 @@
 <script> 
     var fillin = document.getElementById("question"); 
     var str = fillin.innerHTML;
-    fillin.innerHTML = str.replace(/[A-Z0-9]{2,}/g, "<input id='answer' class='fill-ups'>");  
+    fillin.innerHTML = str.replace(/[A-Z0-9]{2,}/g, "<input id='answer' class='fill-ups' name'answer'>");  
 </script>  
 @endsection
