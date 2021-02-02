@@ -148,7 +148,7 @@
               if (response.is_answer_correct) {
                 $('#jsUserMessage').addClass('alert-success');
                 confetti.start();
-                setTimeout(removeConfetti, 3000);
+                setTimeout(removeConfetti, 1000);
                 $("#jsQueContainer").show("slow");
               } else {
                 $('#jsUserMessage').addClass('alert-danger');

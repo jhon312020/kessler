@@ -8,9 +8,9 @@
     color: teal;
 }
 
-.form-control {
+/*.form-control {
     width:550px;
-}
+}*/
 
 .button-right {
 	float: right;
@@ -20,9 +20,9 @@
 	float: right;
 }
 
-.form-control{
+/*.form-control{
     width:550px;
-}
+}*/
 
 .fill-ups-error {
 	border-bottom: 1px solid #721c24;
@@ -38,12 +38,16 @@
 .wrong {
  color: red;
 }
+.strikeThrough {
+  color: red;
+  text-decoration: line-through;
+}
 
-.writeup{
+/*.writeup{
     resize: none;
     width: 600px;
     margin-left: 25px;
-}
+}*/
 
 .sort{
     column-count: 2;

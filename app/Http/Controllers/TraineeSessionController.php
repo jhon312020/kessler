@@ -33,10 +33,15 @@ class TraineeSessionController extends Controller
           ]);
 
         if (!$validator->fails()) {
-          $record = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_current_position')->where('session_pin', $request->sessionpin)->where('session_number', '<=', 4)->where('completed', 0)->first();
+          $record = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_current_position')->where('session_pin', $request->sessionpin)->where('completed', 0)->first();
           if ($record) {
             $request->session()->put('trainee', $record);
-            return redirect('sessions');
+            if ($record['session_number'] <= 4) {
+              return redirect('sessions');
+            } else {
+              return redirect('write');
+            }
+            
           } else {
              $validator->errors()->add('sessionpin', 'INVALID PIN! Please contact your trainer..');
           } 
@@ -44,37 +49,6 @@ class TraineeSessionController extends Controller
       } 
       return view('msmt.user.index')->withErrors($validator);
     }
-
-    /**
-     * Show the application dashboard.
-     * Get session pin, validate as required if submitted empty else invalid if wrong pin
-     * After successfully validation of pin the sessions for the trainee starts by on submit button click
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-
-    public function home(Request $request) {
-      $request->session()->forget('trainee');
-      $validator = [];
-       if ($request->isMethod('post')) {
-          $validator = Validator::make($request->all(), [
-            'sessionpin' => 'required'    
-          ]);
-
-        if (!$validator->fails()) {
-          $record = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_current_position')->where('session_pin', $request->sessionpin)->where('session_number', '>=', 5)->where('completed', 0)->first();
-          if ($record) {
-            $request->session()->put('trainee', $record);
-            return redirect('write');
-          } else {
-             $validator->errors()->add('sessionpin', 'INVALID PIN! Please contact your trainer..');
-          } 
-        } 
-      } 
-      return view('msmt.user.home')->withErrors($validator);
-    }
-
 
 
     /**
@@ -120,17 +94,13 @@ class TraineeSessionController extends Controller
     public function writing(Request $request) {
      if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee');
-        $oneWord = Word::select('word')->where('story_id', '=', 7)->where('id', '=', 123)->get();
-        //$this->pr($oneWord->toArray());
-        //exit(); 
-        $sessionEight = Word::select('word')->where('story_id', '=', 8)->get();
-        $result = $sessionEight->toBase()->merge($oneWord);
-        //$this->pr($result->toArray());
-        //exit();
-        $wordStory = Word::select('word')->where('story_id', $trainee['session_number'])->get();
-        return view('msmt.sessions.word')->with('wordStory', $wordStory);
+        $wordStory = Word::where('story_id', $trainee['session_number'])->pluck('word');
+        $allWords = $words = $wordStory->toArray();
+        $allWords = implode(',',$allWords);
+        $words = array_chunk($words, 5, true);
+        return view('msmt.sessions.word', compact('words', 'allWords'));
       } else {
-        return redirect('/home');
+        return redirect('/index');
       }
     }
 
@@ -146,19 +116,35 @@ class TraineeSessionController extends Controller
         //$wordStory = Word::select('word')->where('story_id', $trainee['session_number'])->get();
         /*$this->pr($wordStory->toArray());
         exit();*/
+        $storyWords = Word::where('story_id', $trainee['session_number'])->pluck('word');
         $story = $request->get('story');
+        echo $fullStory = strtolower($story);
+        foreach($storyWords as $word) {
+          echo $searchWord = strtolower($word);
+          $fullStory = str_replace($searchWord, $word, $fullStory);
+        }
+        echo '<br/><br/>';
+        echo $fullStory;
+        echo '<br/><br/>';
+        $sentences = preg_split('/([.?!]+)/', $fullStory, -1,PREG_SPLIT_NO_EMPTY|REG_SPLIT_DELIM_CAPTURE);
+        $newString = '';
+        foreach ($sentences as $key => $sentence) {
+          $newString .= ($key & 1) == 0 ? ucfirst(strtolower(trim($sentence))) : $sentence.' ';
+        }
+        echo trim($newString);
+        //echo ucfirst($fullStory);
         $traineeStory['trainee_id'] = $trainee['trainee_id'];
         $traineeStory['story_id'] = $trainee['session_number'];
         $traineeStory['session_pin'] = $trainee['session_pin'];
         $traineeStory['round'] = $trainee['round'];
         $traineeStory['story'] = $story;
-        TraineeStory::insert($traineeStory);
-        /*$this->pr($traineeStory);
-        exit();*/
+        //TraineeStory::insert($traineeStory);
+        $this->pr($traineeStory);
+        exit();
         $story = TraineeStory::select('story')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->first();
         return view('msmt.sessions.tale')->with('story', $story);
       } else {
-        return redirect('/home');
+        return redirect('/index');
       }
     }
 
@@ -189,7 +175,7 @@ class TraineeSessionController extends Controller
           return view('msmt.sessions.recallwords.recollect');
         } 
       }
-      return redirect('/home');
+      return redirect('/index');
     }
 
     /**
@@ -273,7 +259,7 @@ class TraineeSessionController extends Controller
         } 
         return view('msmt.sessions.questions.cue')->with('story', $story);
       } else {
-        return redirect('/home');
+        return redirect('/index');
       }
     }
 
@@ -328,6 +314,6 @@ class TraineeSessionController extends Controller
       }
       return view('msmt.sessions.questions.complete')->with('round', $round);
     }
-     return redirect('/home');
+     return redirect('/index');
   }
 }
