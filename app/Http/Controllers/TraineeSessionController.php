@@ -33,7 +33,7 @@ class TraineeSessionController extends Controller
           ]);
 
         if (!$validator->fails()) {
-          $record = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_current_position')->where('session_pin', $request->sessionpin)->where('completed', 0)->first();
+          $record = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_current_position')->where('session_pin', $request->sessionpin)->where('session_number', '<=', 4)->where('completed', 0)->first();
           if ($record) {
             $request->session()->put('trainee', $record);
             return redirect('sessions');
