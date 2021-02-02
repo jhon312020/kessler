@@ -35,15 +35,15 @@
       </div>
     </nav>
     <!-- Masthead-->
-    <header class="masthead bg-primary text-white text-center">
-        <div class="container d-flex align-items-center flex-column">
+    <header>
+        <!-- <div class="container d-flex align-items-center flex-column"> -->
             <!-- Masthead Avatar Image-->
-            <img class="masthead-avatar mb-5" src="{{asset('assets/img/logo.svg')}}" alt="" />
+            <!-- <img class="masthead-avatar mb-5" src="{{asset('assets/img/logo.svg')}}" alt="" /> -->
             <!-- Masthead Heading-->
           
-        </div>
+        <!-- </div> -->
     </header>
-
+    <br><br><br><br><br>
     <!-- Contact Section-->
     @yield('content')
     <!-- ./Contact Section-->

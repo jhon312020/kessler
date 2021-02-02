@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Trainee;
 use App\Models\TraineeTransaction;
 use App\Models\Word;
+use App\Models\Type;
 use Auth;
 
 class TraineeController extends Controller
@@ -39,7 +40,8 @@ class TraineeController extends Controller
      */
     public function create() {
       $totalSessions = $this->totalSessions;
-      return view('kessler.trainee.create', compact('totalSessions'));
+      $type = Type::all();
+      return view('kessler.trainee.create', compact('totalSessions','type'));
     }
 
     /**
@@ -85,8 +87,9 @@ class TraineeController extends Controller
      */
     public function edit($id) {
       $trainee = Trainee::find($id);
+      $type = Type::find($id);
       $totalSessions = $this->totalSessions;
-      return view('kessler.trainee.edit', compact('trainee', 'totalSessions'));
+      return view('kessler.trainee.edit', compact('trainee', 'totalSessions','type'));
     } 
 
     /**

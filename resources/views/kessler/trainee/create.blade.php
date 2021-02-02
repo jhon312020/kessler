@@ -22,8 +22,13 @@
               <input type="text" class="form-control py-4" id="trainee_id" name="trainee_id" placeholder="Enter Trainee ID" required>
             </div>
             <div class="form-group">
-              <label class="small mb-1" for="session_type">Session Type</label>
-              <input type="text" class="form-control py-4" id="session_type" name="session_type" placeholder="Enter Session Type" required>
+               <label class="small mb-1" for="session_number">Session Type</label>
+              <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
+                <option selected="selected">Session Type</option>
+                @foreach($type as $type)
+                  <option value="{{ $type }}">{{ $type->type }}</option>
+                @endforeach;
+              </select>
             </div>
             <div class="form-group">
               <label class="small mb-1" for="session_number">Session Number</label>

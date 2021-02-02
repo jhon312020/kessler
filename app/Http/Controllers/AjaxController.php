@@ -80,6 +80,7 @@ class AjaxController extends Controller
         if ($word) {
           //$this->pr($word->toArray());
           $traineeRecord->session_current_position = $word['id'];
+          $traineeRecord->state = 1;
           $traineeRecord->save();
           $question = $word['question'];
           $findWord = $word['word'];
@@ -88,7 +89,6 @@ class AjaxController extends Controller
           } else {
             $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$word['id']."' id='answer' autocomplete='off'>", $question);
           }
-          
           $question = str_replace("$$", str_repeat("_", 15), $question);
           $response['question'] = $question;
           $response['categorical_cue'] = null;
@@ -100,6 +100,7 @@ class AjaxController extends Controller
           return $response;
         } else if ($wordID == $lastWord->id) {
           $traineeRecord->session_current_position = null;
+          $traineeRecord->state = 0;
           $response['completed'] = true;
           $response['redirectURL'] = url("/complete");
           $request->session()->put('completed', true);
@@ -111,7 +112,7 @@ class AjaxController extends Controller
       }
   }
 
-      /**
+    /**
      * Store the recorded list of words
      *
      * @param  \Illuminate\Http\Request  $request

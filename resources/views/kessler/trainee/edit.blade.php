@@ -21,6 +21,13 @@
               <div class="form-group">
                 <label class="small mb-1" for="session_type">Session Type</label>
                 <input autofocus type="text" class="form-control py-4" name="session_type" id="session_type" placeholder="Enter Session Type" value="{{$trainee->session_type}}">
+                                <label class="small mb-1" for="type">Session Type</label>
+                <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
+                  <option selected="selected">Session Type</option>
+                  @foreach($type as $type)
+                   
+                  @endforeach;
+                </select>
               </div>
               <div class="form-group">
                 <label class="small mb-1" for="session_number">Session Number</label>
@@ -30,6 +37,11 @@
                     <option value="{{ $session }}" {{$session==$trainee->session_number?'selected':'' }}>{{ $session }}</option>
                   @endforeach;
                 </select>
+              </div>
+              <div class="form-group d-flex align-items-center float-left mt-4 mb-0">
+              <input type="radio" name="state" id="jsLeft" class="jsLeft" value="left" checked="checked">
+              &emsp;Continue Session&emsp;
+              <input type="radio" name="state" id="jsScratch" class="jsScratch" value="scratch">&emsp;Start from Scratch&emsp;
               </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
                 <button type="submit" class="btn btn-primary">Update</button>
