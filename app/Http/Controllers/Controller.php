@@ -13,12 +13,12 @@ class Controller extends BaseController
 
   public function __construct() {
   	$sideMenu = array('dashboard'=>array('name'=>'Dashboard', 'url'=>'/dashboard','icon'=>'fa-tachometer-alt'), 
-                      'trainee'=>array('name'=>'Trainee', 'url'=>'/trainee','icon'=>'fa-table'), 
+                      'trainee'=>array('name'=>'Trainee Information', 'url'=>'/trainee','icon'=>'fa-table'), 
                       'overview'=>array('name'=>'Overview', 'url'=>'/overview','icon'=>'fa-table'),
                       'instruction'=>array('name'=>'Instruction', 'url'=>'/instruction','icon'=>'fa-table'),
                       'story'=>array('name'=>'Story', 'url'=>'/story','icon'=>'fa-table'),
                       'word'=>array('name'=>'Word', 'url'=>'/word','icon'=>'fa-table'),
-                      'type'=>array('name'=>'Type', 'url'=>'/type','icon'=>'fa-table'),
+                      'type'=>array('name'=>'Session Type', 'url'=>'/type','icon'=>'fa-table'),
                     );
   	\View::share('sideMenu', $sideMenu);
   }
