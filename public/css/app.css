@@ -43,6 +43,12 @@
   text-decoration: line-through;
 }
 
+.page-section {
+  font-size: 24px;
+  line-height: 2em;
+  font-family: robot
+}
+
 /*.writeup{
     resize: none;
     width: 600px;

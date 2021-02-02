@@ -46,7 +46,7 @@
         <div class="control-group">
           <div class="form-group controls mb-0 pb-2" id="time-out">
             @if ($story)
-            <p>{{ $story->story }}</p>
+            <p>{{ $story->updated_story }}</p>
             @endif
           </div>
           <div class="form-group text-center">

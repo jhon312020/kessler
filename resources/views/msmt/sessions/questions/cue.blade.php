@@ -47,9 +47,7 @@
             <div class="form-group controls mb-0 pb-2" class="answer_list">
               @csrf {{ method_field('post') }}
               <h1 class="m-0"></h1>
-              @foreach($story as $story)
-              <p id="question" class="question">{{$story->story}}</p>
-              @endforeach    
+              <p id="question" class="question">{!!$story->updated_story!!}</p> 
             </div>
             <div>
               <div class="alert d-none" role="alert" id="jsUserMessage"></div>
@@ -166,9 +164,4 @@
   })
   
 </script>
-<script> 
-    var fillin = document.getElementById("question"); 
-    var str = fillin.innerHTML;
-    fillin.innerHTML = str.replace(/[A-Z0-9]{2,}/g, "<input id='answer' class='fill-ups' name'answer'>");  
-</script>  
 @endsection

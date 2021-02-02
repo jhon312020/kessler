@@ -30,7 +30,8 @@ class TraineeController extends Controller
      */
     public function index() {
       $trainees = Trainee::all();
-      return view('kessler.trainee.index', compact('trainees'));
+      $types = Type::pluck('type', 'id');
+      return view('kessler.trainee.index', compact('trainees', 'types'));
     }
 
     /**
@@ -40,8 +41,8 @@ class TraineeController extends Controller
      */
     public function create() {
       $totalSessions = $this->totalSessions;
-      $type = Type::all();
-      return view('kessler.trainee.create', compact('totalSessions','type'));
+      $types = Type::all();
+      return view('kessler.trainee.create', compact('totalSessions','types'));
     }
 
     /**
@@ -87,9 +88,9 @@ class TraineeController extends Controller
      */
     public function edit($id) {
       $trainee = Trainee::find($id);
-      $type = Type::find($id);
+      $types = Type::all();
       $totalSessions = $this->totalSessions;
-      return view('kessler.trainee.edit', compact('trainee', 'totalSessions','type'));
+      return view('kessler.trainee.edit', compact('trainee', 'totalSessions','types'));
     } 
 
     /**

@@ -19,13 +19,11 @@
               @method('PATCH') 
               @csrf
               <div class="form-group">
-                <label class="small mb-1" for="session_type">Session Type</label>
-                <input autofocus type="text" class="form-control py-4" name="session_type" id="session_type" placeholder="Enter Session Type" value="{{$trainee->session_type}}">
-                                <label class="small mb-1" for="type">Session Type</label>
+                <label class="small mb-1" for="type">Session Type</label>
                 <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
-                  <option selected="selected">Session Type</option>
-                  @foreach($type as $type)
-                   
+                  <option>Session Type</option>
+                  @foreach($types as $type)
+                    <option value="{{ $type->id }}" {{$trainee->session_type==$type->id?'selected':'' }}>{{ $type->type }}</option>
                   @endforeach;
                 </select>
               </div>

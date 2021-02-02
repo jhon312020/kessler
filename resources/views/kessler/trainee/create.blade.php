@@ -25,8 +25,8 @@
                <label class="small mb-1" for="session_number">Session Type</label>
               <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
                 <option selected="selected">Session Type</option>
-                @foreach($type as $type)
-                  <option value="{{ $type }}">{{ $type->type }}</option>
+                @foreach($types as $type)
+                  <option value="{{ $type->id }}">{{ $type->type }}</option>
                 @endforeach;
               </select>
             </div>
