@@ -48,7 +48,7 @@
           <div class="text-left">
             <span id="timer">
               <span id="time">200</span> SECONDS</span>
-          </div>
+           </div>
             @if ($story)
             <p>{{ $story->story }}</p>
             @endif
