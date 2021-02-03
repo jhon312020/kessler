@@ -35,6 +35,9 @@
               <label>RECALL WORDS</label>
                 <input class="form-control" id="jsRecallWord" name="words" type="text" placeholder="Recall Words" autocomplete="off">
             </div>
+            <div class="p-3 mb-2 bg-info text-white text-center">
+              <span class="">(need to get number here) of 20</span>
+            </div>
             <br/>
           </div>
           <div class="form-group"><button class="btn btn-primary btn-xl" id="jsSubmit" type="submit">SUBMIT</button></div>
