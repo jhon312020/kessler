@@ -56,7 +56,6 @@ Route::get('/complete', [TraineeSessionController::class,'complete']);
 // ---------------------------------------- ./ SESSIONS 1-4 / -------------------------------------------------- //
 
 // ---------------------------------------- / SESSIONS 5-8 /---------------------------------------------------- //
-
 Route::get('/write',[TraineeSessionController::class, 'writing']);
 Route::post('/read',[TraineeSessionController::class, 'writeup']);
 Route::get('/recallword', [TraineeSessionController::class, 'recollect']);
