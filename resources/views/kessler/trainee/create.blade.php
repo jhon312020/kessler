@@ -26,7 +26,7 @@
               <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
                 <option selected="selected">Session Type</option>
                 @foreach($types as $type)
-                  <option value="{{ $type->id }}">{{ $type->type }}</option>
+                  <option value="{{ $type->type }}">{{ $type->type }}</option>
                 @endforeach;
               </select>
             </div>

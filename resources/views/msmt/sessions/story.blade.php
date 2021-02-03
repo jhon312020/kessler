@@ -45,6 +45,10 @@
       <div class="col-lg-8 mx-auto">
         <div class="control-group">
           <div class="form-group controls mb-0 pb-2" id="time-out">
+          <div class="text-left">
+            <span id="timer">
+              <span id="time">200</span> SECONDS</span>
+          </div>
             @if ($story)
             <p>{{ $story->story }}</p>
             @endif
@@ -74,6 +78,19 @@
     //   window.location.replace('/recallwords');
     // });
   })
+    var counter = 200;
+    var interval = setInterval(function() {
+        counter--;
+        // Display 'counter' wherever you want to display it.
+        if (counter <= 0) {
+            clearInterval(interval);
+            $('#timer').html("<h3>Count down complete</h3>");  
+            return;
+        }else{
+          $('#time').text(counter);
+          console.log("Timer --> " + counter);
+        }
+    }, 1000);
 </script>
 {{-- </div> --}}
 @endsection

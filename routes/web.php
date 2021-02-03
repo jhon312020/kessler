@@ -44,8 +44,8 @@ Route::resource('/type', TypeController::class);
 // ---------------------------------------- ./ ADMIN ----------------------------------------------------------- //
 
 // ---------------------------------------- / SESSIONS 1-4 /---------------------------------------------------- //
-Route::get('/', [TraineeSessionController::class, 'index']);
-Route::post('/', [TraineeSessionController::class, 'index']);
+Route::get('/index', [TraineeSessionController::class, 'index']);
+Route::post('/index', [TraineeSessionController::class, 'index']);
 Route::post('/index', [TraineeSessionController::class, 'index']);
 Route::get('/index', [TraineeSessionController::class, 'index']);
 Route::get('/sessions',[TraineeSessionController::class, 'sessions']);
@@ -57,8 +57,6 @@ Route::get('/complete', [TraineeSessionController::class,'complete']);
 
 // ---------------------------------------- / SESSIONS 5-8 /---------------------------------------------------- //
 
-Route::post('/home', [TraineeSessionController::class, 'home']);
-Route::get('/home', [TraineeSessionController::class, 'home']);
 Route::get('/write',[TraineeSessionController::class, 'writing']);
 Route::post('/read',[TraineeSessionController::class, 'writeup']);
 Route::get('/recallword', [TraineeSessionController::class, 'recollect']);

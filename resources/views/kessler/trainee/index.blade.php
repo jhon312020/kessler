@@ -41,7 +41,7 @@
               <tr>
                 <td>{{$trainee->trainee_id}}</td>
                 <td>{{$trainee->session_pin}}</td>
-                <td>{{$types[$trainee->session_type]}}</td>
+                <td>{{$trainee->session_type}}</td>
                 <td>{{$trainee->session_number}}</td>
                 <td>
                   <a href="{{ route('trainee.edit',$trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-edit">&nbsp;</i> Edit</a>
