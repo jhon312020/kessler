@@ -35,8 +35,8 @@
               <label>RECALL WORDS</label>
                 <input class="form-control" id="jsRecallWord" name="words" type="text" placeholder="Recall Words" autocomplete="off">
             </div>
-            <div class="p-3 mb-2 bg-info text-white text-center">
-              <span class="">(need to get number here) of 20</span>
+            <div>
+              <div class="count" id="jsCount"></div>
             </div>
             <br/>
           </div>
@@ -88,5 +88,18 @@
       words.splice(words.indexOf(removeWord), 1);
     });
   })
+      var noOfCounts = 0;
+      $(document).on('keyup', function(e){
+          if (e.which == 13 || e.which == 32){
+            if(noOfCounts<=20){
+              noOfCounts ++;           
+          var total = noOfCounts;
+          $('#jsCount').val(noOfCounts);
+          var total = $('#jsCount').val();
+          $("#jsCount").html('<div class="progress"><div class="progress-bar bg-info text-center" role="progressbar" style="width:100%;" aria-valuenow="'+total+'" aria-valuemin="0" aria-valuemax="20" class="count" id="jsCount">'+total+' of 20</div></div>');
+          $('#jsCount').val('');
+            }
+          }
+        });   
 </script>
 @endsection
