@@ -17,8 +17,8 @@ class TraineeController extends Controller
      * @return \Illuminate\Http\Response
      */
     var $totalSessions = array();
+    var $user = null;
     public function __construct() {
-      $this->middleware('auth');
       parent::__construct();
       $this->totalSessions = range(1, 10);
     }
@@ -28,7 +28,8 @@ class TraineeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index(Request $request) {
+      $request->user()->toArray();
       $trainees = Trainee::all();
       $types = Type::pluck('type', 'id');
       return view('kessler.trainee.index', compact('trainees', 'types'));

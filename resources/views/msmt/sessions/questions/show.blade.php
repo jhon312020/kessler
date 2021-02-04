@@ -91,11 +91,10 @@
     //var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     $("#jsNext").on('click', function(event) {
       confetti.remove();
+      $(this).prop("disabled", true);
       $("#jsQueContainer").slideDown();
       $("#jsLoader").removeClass('d-none');
       $("#jsNext").text("Check");
-      $(this).prop("disabled", true);
-
       // $(this).html(
       //   '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
       // );
@@ -107,6 +106,7 @@
         $('#jsUserMessage').addClass('alert-danger');
         $('#jsUserMessage').text('Please fill the blank!');
         $('#jsUserMessage').removeClass('d-none').show();
+        $("#jsLoader").addClass('d-none');
         $('#answer').addClass('fill-ups-error');
         $('#answer').focus();
         return false;

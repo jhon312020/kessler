@@ -33,13 +33,16 @@ Route::get('/logout', [HomeController::class, 'logout']);
 Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
 // ---------------------------------------- ./ ADMIN ----------------------------------------------------------- //
-Route::resource('/trainee', TraineeController::class);
-Route::get('/trainee/view/{id}', [TraineeController::class, 'view']);
-Route::resource('/overview', OverviewController::class);
-Route::resource('/instruction', InstructionController::class);
-Route::resource('/story', StoryController::class);
-Route::resource('/word', WordController::class);
-Route::resource('/type', TypeController::class);
+Route::group(['middleware' => 'auth'], function() {
+  Route::resource('/trainee', TraineeController::class);
+	Route::get('/trainee/view/{id}', [TraineeController::class, 'view']);
+	Route::resource('/overview', OverviewController::class);
+	Route::resource('/instruction', InstructionController::class);
+	Route::resource('/story', StoryController::class);
+	Route::resource('/word', WordController::class);
+	Route::resource('/type', TypeController::class);
+});
+
 
 // ---------------------------------------- ./ ADMIN ----------------------------------------------------------- //
 

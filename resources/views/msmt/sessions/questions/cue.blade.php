@@ -41,6 +41,11 @@
     </div>
     <!-- Question Section-->
     <div class="row">
+      <div class="transparent-background d-none" id="jsLoader">
+        <div class="loader-center">
+          <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+      </div>
       <div class="col-lg-8 mx-auto">
         <form action="{{ url('after') }}" method="POST" id="jsQuestionForm">
           <div class="control-group">
@@ -79,10 +84,14 @@
     var showedAnswer = 0;
     //var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     $("#jsNext").on('click', function(event) {
+      confetti.remove();
       $(this).prop("disabled", true);
-       $(this).html(
-        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
-      );
+      $("#jsQueContainer").slideDown();
+      $("#jsLoader").removeClass('d-none');
+      $("#jsNext").text("Check");
+      // $(this).html(
+      //   '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
+      // );
       //confetti.remove();
       $('#jsUserMessage').text('');
       $('#jsUserMessage').removeClass().addClass('alert d-none');
@@ -91,6 +100,7 @@
         $('#jsUserMessage').addClass('alert-danger');
         $('#jsUserMessage').text('Please fill the blank!');
         $('#jsUserMessage').removeClass('d-none').show();
+        $("#jsLoader").addClass('d-none');
         $('#answer').addClass('fill-ups-error');
         $('#answer').focus();
         return false;
@@ -105,7 +115,9 @@
         url: form.attr("action"),
         data: formData,
         success: function(response) {
+          $("#jsQueContainer").slideDown();
           $("#jsNext").prop("disabled", false);
+          $("#jsLoader").addClass('d-none');
           $("#jsNext").text("Check");
            if (response.completed) {
             //location.reload();
