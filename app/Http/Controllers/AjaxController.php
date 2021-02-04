@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\TraineeTransaction;
 use App\Models\TraineeJourney;
+use App\Models\TraineeStory;
 use App\Models\Trainee;
 use Redirect, Response;
 use Auth;
@@ -133,9 +134,21 @@ class AjaxController extends Controller
           $wordID = array_pop($wordKey);
           $answer = $answer;
         }
-        $lastWord = Word::select('id')->where('story_id', $trainee['session_number'])->orderBy('id', 'desc')->first();
-        $word = Word::select('id', 'word', 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
-        if ($word) {
+        //$lastWord = Word::select('id')->where('story_id', $trainee['session_number'])->orderBy('id', 'desc')->first();
+        $allStoryWords = Word::select('id', 'word')->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->pluck('word', 'id')->all();
+        $currentWord = Word::select('id', 'word', 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
+        $story = TraineeStory::select('updated_story', 'user_story_words')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->where('round', $trainee['round'])->first();
+        $userStoryWords = array();
+        $totalUsersWords = 0;
+        $userWordKey = 0;
+        $addedInputBox = false;
+        if ($story) {
+          $userStoryWords = json_decode($story->user_story_words);
+          $totalUsersWords = count($userStoryWords);
+          $userWordKey = array_search($currentWord->word, $userStoryWords);
+        }
+        if ($currentWord) {
+          $fillUpWord = $currentWord->word;
           if (!$request->showedAnswer) {
             $traineeTransaction['correct_or_wrong'] = 0;
             $traineeTransaction['round'] = 1;
@@ -147,14 +160,14 @@ class AjaxController extends Controller
             $traineeTransaction['round'] = $trainee['round'];
             $traineeTransaction['type'] = 'contextual';
             $traineeTransaction['answer'] = $answer;
-            if ($word['word'] == strtoupper($answer) ) {
+            if ($currentWord['word'] == strtoupper($answer) ) {
               $traineeTransaction['correct_or_wrong'] = 1;
               $iconWrongORRight = '<i class="fa fa-check" style="color:#155724"></i>';
               $showAnswer = 1;
-              $response['answer'] = 'Wow your answer is correct : '.$word['word'];
+              $response['answer'] = 'Wow your answer is correct : '.$currentWord['word'];
               $response['is_answer_correct'] = 1;
-            } else if($request->categoryCue && $word['word'] != strtoupper($answer)) {
-              $response['answer'] = 'Oops sorry! The Right answer is : '.$word['word'];
+            } else if($request->categoryCue && $currentWord['word'] != strtoupper($answer)) {
+              $response['answer'] = 'Oops sorry! The Right answer is : '.$currentWord['word'];
               $response['is_answer_correct'] = 0;
             }
 
@@ -165,34 +178,47 @@ class AjaxController extends Controller
             }
             TraineeTransaction::insert($traineeTransaction);
           }
-          // if ($word['word'] == strtoupper($answer) || $request->categoryCue) {
-          //   $word = Word::select('id', 'word', 'question')->where('id','>', $wordID)->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->first();
-          // } 
-          if (!$showAnswer && $request->showedAnswer) {
-            $word = Word::select('id', 'word', 'question')->where('id','>', $wordID)->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->first();
+          if (!$showAnswer && $request->showedAnswer) {   
+            if ($userWordKey !== false) {
+              $userWordKey++;
+              if ($userWordKey < $totalUsersWords ) {
+                $fillUpWord = $userStoryWords[$userWordKey];
+              } else {
+                $fillUpWord = '';
+              }
+              
+            }
           } 
-          
         }
-        if ($word) {
-          //$this->pr($word->toArray());
-          $question = $word['question'];
-          $findWord = $word['word'];
-          if ($showAnswer) {
-            $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$word['id']."' id='answer' value='".$answer."' readonly autocomplete='off'> $iconWrongORRight", $question);
-          } else {
-            $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$word['id']."' id='answer' autocomplete='off'>", $question);
+        
+        if ($story && $fillUpWord) {
+          foreach($userStoryWords as $wordKey=>$word) {
+            $findWord = $word;
+            if ($wordKey < $userWordKey) {
+              continue;
+            } else if ($fillUpWord === $word && !$addedInputBox) {
+              $addedInputBox = true;
+              $storyWordID = array_search($word, $allStoryWords);
+              if ($showAnswer) {
+                $story->updated_story = str_replace($findWord, "<input class='fill-ups' name='answer-".$storyWordID."' id='answer' value='".$answer."' readonly autocomplete='off'> $iconWrongORRight", $story->updated_story);
+              } else {
+                $story->updated_story = str_replace($findWord, "<input id='answer' class='fill-ups' name='answer-".$storyWordID."'>", $story->updated_story);
+              }
+            } else {
+              $story->updated_story = str_replace($findWord, str_repeat("_", 15), $story->updated_story);
+            }
           }
-          
-          $question = str_replace("<input id='answer' class='fill-ups'>", str_repeat("_", 15), $question);
-          $response['question'] = $question;
+        }
+        if ($fillUpWord) {
+          $response['updated_story'] = $story->updated_story;
           $response['categorical_cue'] = null;
           $response['reload'] = false;
           $response['show_answer'] = $showAnswer;
-          if ($wordID == $word['id']) {
-            $response['categorical_cue'] = $word['categorical_cue'];
+          if ($fillUpWord === $currentWord['word']) {
+            $response['categorical_cue'] = $currentWord['categorical_cue'];
           }
           return $response;
-        } else if ($wordID == $lastWord->id) {
+        } else if ($userWordKey >= $totalUsersWords) {
           $response['completed'] = true;
           $response['redirectURL'] = url("/complete");
           $request->session()->put('completed', true);

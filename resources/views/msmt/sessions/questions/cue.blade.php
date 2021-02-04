@@ -47,7 +47,7 @@
             <div class="form-group controls mb-0 pb-2" class="answer_list">
               @csrf {{ method_field('post') }}
               <h1 class="m-0"></h1>
-              <p id="question" class="question">{!!$story->updated_story!!}</p> 
+              <p id="story" class="story">{!!$story->updated_story!!}</p> 
             </div>
             <div>
               <div class="alert d-none" role="alert" id="jsUserMessage"></div>
@@ -116,7 +116,7 @@
            } else {
             console.log(response);
             timer = performance.now();
-            $('#question').html(response.question);
+            $('#story').html(response.updated_story);
             if (response.categorical_cue && !response.show_answer) {
               $('#jsUserMessage').addClass('alert-info');
               $('#jsUserMessage').html(response.categorical_cue);
