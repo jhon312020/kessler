@@ -46,9 +46,9 @@
          <div class="text-left">
           <div class="control-group">
            <div class="form-group controls mb-0 pb-2">
-          <span id="timer">
-            <span id="time">200</span> Seconds</span>
-            <button type="button" class="btn btn-link" id="jsHideTimer">HIDE TIMER</button>
+          <span id="timer">TIME REMAINING: 
+            <span id="time">120</span>s</span>
+            <button type="button" class="btn btn-link btn-xl" id="jsHideTimer">HIDE TIMER</button>
          </div>
         </div>
        </div>
@@ -66,7 +66,7 @@
             <div class="col-lg-8 mx-auto">
               <div class="control-group">
                 <div class="form-group controls mb-0 pb-2">
-                  <p>Click on CONTINUE to proceed with cues</p>
+                  <p>Click on CONTINUE <br> to proceed with recall words</p>
                 </div>
               </div>
             </div>
@@ -88,6 +88,7 @@
       setTimeout(function() {
       $('#time-out').fadeOut('fast');
       $('#jsCue').removeClass('d-none').show();
+      $('#jsHide').hide();
       }, 120000); // <-- time in milliseconds
     });
     $('#jsStartSession').on('click', function(event) { 
