@@ -41,20 +41,38 @@
       <div class="divider-custom-line"></div>
     </div>
     <!-- Contact Section Form-->
+    <div class="row time-out" id="jsHide">
+      <div class="col-lg-8 mx-auto">
+         <div class="text-left">
+          <div class="control-group">
+           <div class="form-group controls mb-0 pb-2">
+          <span id="timer">
+            <span id="time">200</span> Seconds</span>
+            <button type="button" class="btn btn-link" id="jsHideTimer">HIDE TIMER</button>
+         </div>
+        </div>
+       </div>
+     </div>
+    </div>
     <div class="row">
       <div class="col-lg-8 mx-auto">
         <div class="control-group">
           <div class="form-group controls mb-0 pb-2" id="time-out">
-           <div class="text-left">
-            <span id="timer">
-              <span id="time">200</span> SECONDS</span>
-            </div>
             @if ($story)
             <p>{{ $story->updated_story }}</p>
             @endif
           </div>
+          <div class="row d-none" id="jsCue">
+            <div class="col-lg-8 mx-auto">
+              <div class="control-group">
+                <div class="form-group controls mb-0 pb-2">
+                  <p>Click on CONTINUE to proceed with cues</p>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="form-group text-center">
-            <a href="{{ url('recallword')}}" class="btn btn-primary btn-xl">CONTINUE</a>
+            <a href="{{ url('recallwords')}}" class="btn btn-primary btn-xl">CONTINUE</a>
           </div>
         </div>
       </div>
@@ -69,6 +87,7 @@
       $('#jsTraineeStory').removeClass('d-none').show();
       setTimeout(function() {
       $('#time-out').fadeOut('fast');
+      $('#jsCue').removeClass('d-none').show();
       }, 120000); // <-- time in milliseconds
     });
     $('#jsStartSession').on('click', function(event) { 
@@ -78,13 +97,18 @@
     //   window.location.replace('/recallwords');
     // });
   })
-    var counter = 200;
+
+$("#jsHideTimer").click(function(){
+  $('#jsHide').hide();
+});
+
+    var counter = 120;
     var interval = setInterval(function() {
         counter--;
         // Display 'counter' wherever you want to display it.
         if (counter <= 0) {
             clearInterval(interval);
-            $('#timer').html("<h3>Count down complete</h3>");  
+            $('#timer').html("<span>Times Up</span>");  
             return;
         }else{
           $('#time').text(counter);

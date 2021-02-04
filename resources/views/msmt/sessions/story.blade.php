@@ -41,13 +41,13 @@
       <div class="divider-custom-line"></div>
     </div>
     <!-- Contact Section Form-->
-    <div class="row time-out">
+    <div class="row time-out" id="jsHide">
       <div class="col-lg-8 mx-auto">
          <div class="text-left">
           <div class="control-group">
            <div class="form-group controls mb-0 pb-2">
           <span id="timer">
-            <span id="time">200</span> SECONDS</span>
+            <span id="time">200</span> Seconds</span>
             <button type="button" class="btn btn-link" id="jsHideTimer">HIDE TIMER</button>
          </div>
         </div>
@@ -61,6 +61,15 @@
             @if ($story)
             <p>{{ $story->story }}</p>
             @endif
+          </div>
+          <div class="row d-none" id="jsCue">
+            <div class="col-lg-8 mx-auto">
+              <div class="control-group">
+                <div class="form-group controls mb-0 pb-2">
+                  <p>Click on CONTINUE to proceed with cues</p>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="form-group text-center">
             <a href="{{ url('recallwords')}}" class="btn btn-primary btn-xl">CONTINUE</a>
@@ -78,6 +87,7 @@
       $('#jsTraineeStory').removeClass('d-none').show();
       setTimeout(function() {
       $('#time-out').fadeOut('fast');
+      $('#jsCue').removeClass('d-none').show();
       }, 120000); // <-- time in milliseconds
     });
     $('#jsStartSession').on('click', function(event) { 
@@ -88,9 +98,9 @@
     // });
   })
 
-  $(document).on('click', '#jsHideSession', function() {
-      $('#timer').removeClass('time-out');
-    });
+$("#jsHideTimer").click(function(){
+  $('#jsHide').hide();
+});
 
     var counter = 120;
     var interval = setInterval(function() {
@@ -98,7 +108,7 @@
         // Display 'counter' wherever you want to display it.
         if (counter <= 0) {
             clearInterval(interval);
-            $('#timer').html("<h3>Count down complete</h3>");  
+            $('#timer').html("<span>Times Up</span>");  
             return;
         }else{
           $('#time').text(counter);
