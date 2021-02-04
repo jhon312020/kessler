@@ -85,6 +85,19 @@
     $(document).on('click', '#jsStartSession', function() {
       $('#jsTraineeSession').slideUp();
       $('#jsTraineeStory').removeClass('d-none').show();
+      var counter = 120;
+      var interval = setInterval(function() {
+         counter--;
+         // Display 'counter' wherever you want to display it.
+         if (counter <= 0) {
+             clearInterval(interval);
+             $('#timer').html("<span>Times Up</span>");  
+             return;
+         }else{
+           $('#time').text(counter);
+           console.log("Timer --> " + counter);
+         }
+      }, 1000);
       setTimeout(function() {
       $('#time-out').fadeOut('fast');
       $('#jsCue').removeClass('d-none').show();
