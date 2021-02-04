@@ -14,7 +14,7 @@
     </div>
     <div class="row">
       <div class="col-lg-8 mx-auto">
-        <p>Now, try to remember as many of the CAPITALIZED words from the story as you can<br> Use the story to help you remember the words</p>
+        <p>Now, try to remember as many of the CAPITALIZED words from the story as you can. Use the story to help you remember the words.</p>
       </div>
     </div>
     <div class="row" >

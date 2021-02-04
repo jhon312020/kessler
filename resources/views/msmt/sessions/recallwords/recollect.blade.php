@@ -14,7 +14,7 @@
     </div>
     <div class="row">
       <div class="col-lg-8 mx-auto">
-        <p>Now, try to remember as many of the CAPITALIZED words from the story as you can<br> Use the story to help you remember the words</p>
+        <p>Now, try to remember as many of the CAPITALIZED words from the story as you can. Use the story to help you remember the words.</p>
       </div>
     </div>
     <div class="row" >
@@ -34,6 +34,9 @@
             <div class="form-group floating-label-form-group controls mb-0 pb-2">
               <label>RECALL WORDS</label>
                 <input class="form-control" id="jsRecallWord" name="words" type="text" placeholder="Recall Words" autocomplete="off">
+            </div>
+            <div class="p-3 mb-2 bg-info text-white text-center">
+              <span class="">(need to get number here) of 20</span>
             </div>
             <br/>
           </div>
