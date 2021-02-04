@@ -41,14 +41,23 @@
       <div class="divider-custom-line"></div>
     </div>
     <!-- Contact Section Form-->
+    <div class="row time-out">
+      <div class="col-lg-8 mx-auto">
+         <div class="text-left">
+          <div class="control-group">
+           <div class="form-group controls mb-0 pb-2">
+          <span id="timer">
+            <span id="time">200</span> SECONDS</span>
+            <button type="button" class="btn btn-link" id="jsHideTimer">HIDE TIMER</button>
+         </div>
+        </div>
+       </div>
+     </div>
+    </div>
     <div class="row">
       <div class="col-lg-8 mx-auto">
         <div class="control-group">
           <div class="form-group controls mb-0 pb-2" id="time-out">
-          <div class="text-left">
-            <span id="timer">
-              <span id="time">200</span> SECONDS</span>
-           </div>
             @if ($story)
             <p>{{ $story->story }}</p>
             @endif
@@ -78,7 +87,12 @@
     //   window.location.replace('/recallwords');
     // });
   })
-    var counter = 200;
+
+  $(document).on('click', '#jsHideSession', function() {
+      $('#timer').removeClass('time-out');
+    });
+
+    var counter = 120;
     var interval = setInterval(function() {
         counter--;
         // Display 'counter' wherever you want to display it.
