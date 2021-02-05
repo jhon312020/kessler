@@ -45,10 +45,22 @@
       <div class="col-lg-8 mx-auto">
          <div class="text-left">
           <div class="control-group">
-           <div class="form-group controls mb-0 pb-2">
-          <span id="timer">TIME REMAINING: 
-            <span id="time">120</span>s</span>
-            <button type="button" class="btn btn-link btn-xl" id="jsHideTimer">HIDE TIMER</button>
+            <div class="form-group controls mb-0 pb-2">
+              <div id="accordion" class="accordion">
+                <div class="card mb-0">
+                 <div class="card-header collapsed" data-toggle="collapse" href="#collapseOne" style="border-bottom: none; background-color: white;">
+                  <a class="card-title">COUNTDOWN TIMER</a>
+                   <button type="button" class="close" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  <span aria-hidden="true" class="float-right d-none" id="close">&times;</span>
+                  <span aria-hidden="true" class="float-right none" id="view">&minus;</span>
+                 </button>
+                </div>
+               <div id="collapseOne" class="card-body collapse" data-parent="#accordion">
+              <span id="timer">TIME REMAINING: 
+             <span id="time">120</span>s</span>
+            </div>
+           </div>
+          </div>
          </div>
         </div>
        </div>
@@ -104,6 +116,18 @@
       $('#jsHide').hide();
       }, 120000); // <-- time in milliseconds
     });
+    // $("[data-toggle=collapse]").click((function(){
+    // $(this).find(".cssRotate").toggleClass("cssPlusToCross")}));
+     $(document).on('click', '#view', function() {
+      $('#close').removeClass('d-none').show();
+      $('#view').hide();
+    });
+
+     $(document).on('click', '#close', function() {
+      $('#view').removeClass('none').show();
+      $('#close').hide();
+    });
+
     $('#jsStartSession').on('click', function(event) { 
         
     });
@@ -111,11 +135,6 @@
     //   window.location.replace('/recallwords');
     // });
   })
-
-$("#jsHideTimer").click(function(){
-  $('#jsHide').hide();
-});
-
  
 </script>
 {{-- </div> --}}
