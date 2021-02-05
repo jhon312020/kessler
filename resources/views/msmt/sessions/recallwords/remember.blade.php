@@ -35,11 +35,14 @@
               <label>RECALL WORDS</label>
                 <input class="form-control" id="jsRecallWord" name="words" type="text" placeholder="Recall Words" autocomplete="off">
             </div>
-            <div>
-              <div class="count" id="jsCount"></div>
-            </div>
             <br/>
           </div>
+          <div class="progress-container">
+              <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" id="jsProgressBar"></div>
+              </div>
+              <div class="text-center text-dark">Total <span id="jsTotalWordCount">0</span>/{{$allWords}}</div>
+            </div>
           <div class="form-group"><button class="btn btn-primary btn-xl" id="jsSubmit" type="submit">SUBMIT</button></div>
         </form>
       </div>
@@ -49,8 +52,12 @@
 
 <script type="text/javascript">
   $(document).ready( function() { // Wait until document is fully parsed
+    
     var timer = performance.now();
     var words = new Array();
+    var allWords = {{ $allWords }};
+    const totalPercentage = 100;
+    const progressWidthIncrementor = totalPercentage / allWords; 
     $(document).on('keypress', '#jsRecallWord', function(event) {
       if (event.keyCode == 13) {
         return false;
@@ -62,10 +69,16 @@
         words.push(typedWord.trim());
         $("#jsRecallWords").append('<div style="display: inline; line-height:3.5em; margin: 5px" class="col alert alert-info alert-dismissible fade show" role="alert" data-word="'+typedWord+'"><strong>'+typedWord+'</strong> <button type="button" class="btn close" data-dismiss="alert" aria-label="Close" data-word="'+typedWord+'"><span aria-hidden="true" data-word="'+typedWord+'">×</span></button></div>');
         $('#jsRecallWord').val('');
+        var countOfUserWords = words.length;
+        console.log(countOfUserWords);
+        $('#jsTotalWordCount').text(countOfUserWords);
+        var progressBarWidth = countOfUserWords * progressWidthIncrementor;
+        $('#jsProgressBar').css('width', progressBarWidth+'%');
       } else {
         this.value = this.value.toUpperCase();
       }
     });
+
     $("#jsSubmit").on('click', function(event) {
       if ( $('#jsRecallWord').val() != '') {
         words.push($('#jsRecallWord').val());
@@ -88,18 +101,7 @@
       words.splice(words.indexOf(removeWord), 1);
     });
   })
-      var noOfCounts = 0;
-      $(document).on('keyup', function(e){
-          if (e.which == 13 || e.which == 32){
-            if(noOfCounts<=20){
-              noOfCounts ++;           
-          var total = noOfCounts;
-          $('#jsCount').val(noOfCounts);
-          var total = $('#jsCount').val();
-          $("#jsCount").html('<div class="progress"><div class="progress-bar bg-info text-center" role="progressbar" style="width:100%;" aria-valuenow="'+total+'" aria-valuemin="0" aria-valuemax="20" class="count" id="jsCount">'+total+' of 20</div></div>');
-          $('#jsCount').val('');
-            }
-          }
-        });   
+     
+  
 </script>
 @endsection
