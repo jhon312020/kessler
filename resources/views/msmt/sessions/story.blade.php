@@ -47,7 +47,7 @@
           <div class="control-group">
             <div class="form-group controls mb-0 pb-2">
               <div id="accordion" class="accordion">
-                <div class="card mb-0 change-sign">
+                <div class="card mb-0">
                  <div class="card-header collapsed" data-toggle="collapse" href="#collapseOne" style="border-bottom: none; background-color: white;">
                   <a class="card-title">COUNTDOWN TIMER</a>
                    <button type="button" class="close" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
