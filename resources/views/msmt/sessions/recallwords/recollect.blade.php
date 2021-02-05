@@ -1,58 +1,53 @@
 @extends('msmt.layouts.master')
+
 @section('content')
-<!-- Content Wrapper. Contains page content -->
-<link href="{{asset('css/app.css')}}" rel="stylesheet" />
-<section class="page-section">
-  <div class="container">
-    <!-- Contact Section Heading-->
-    <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">RECALL WORDS</h2>
-    <!-- Icon Divider-->
-    <div class="divider-custom">
-      <div class="divider-custom-line"></div>
-      <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-      <div class="divider-custom-line"></div>
+<section>
+  <div class="row">
+    <div class="col-lg-12 text-center">
+      <h1 class="heading">RECALL WORDS</h1>
     </div>
-    <div class="row">
-      <div class="col-lg-8 mx-auto">
-        <p>Now, try to remember as many of the CAPITALIZED words from the story as you can. Use the story to help you remember the words.</p>
-      </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+       <p class="mx-auto">Now, try to remember as many of the CAPITALIZED words from the story as you can. Use the story to help you remember the words.</p>
     </div>
-    <div class="row" >
-      <div class="col-lg-8 mx-auto" id="jsRecallWords">
-      </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12" id="jsRecallWords">
     </div>
-    <div class="row">
+  </div>
+  <div class="row">
+    <div class="col-lg-12 text-center">
       <div class="transparent-background d-none" id="jsLoader">
         <div class="loader-center">
           <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
       </div>
-      <div class="col-lg-8 mx-auto">
-        <form action="{{ url('cue') }}" method="POST" id="recallWords">
-          @csrf {{ method_field('post') }}
-          <div class="control-group">
-            <div class="form-group floating-label-form-group controls mb-0 pb-2">
-              <label>RECALL WORDS</label>
-                <input class="form-control" id="jsRecallWord" name="words" type="text" placeholder="Recall Words" autocomplete="off">
-            </div>
-            <br/>
+    </div>
+    <div class="col-lg-12 text-center">
+      <form action="{{ url('cue') }}" method="POST" id="recallWords">
+        @csrf {{ method_field('post') }}
+        <div class="control-group">
+          <div class="form-group floating-label-form-group controls mb-0 pb-2">
+            <label>RECALL WORDS</label>
+              <input class="form-control" id="jsRecallWord" name="words" type="text" placeholder="Recall Words" autocomplete="off">
           </div>
-          <div class="progress-container">
-              <div class="progress">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" id="jsProgressBar"></div>
-              </div>
-              <div class="text-center text-dark">Total <span id="jsTotalWordCount">0</span>/{{$allWords}}</div>
-            </div>
-          <div class="form-group"><button class="btn btn-primary btn-xl" id="jsSubmit" type="submit">SUBMIT</button></div>
-        </form>
-      </div>
+          <br/>
+        </div>
+        <div class="progress-container">
+          <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" id="jsProgressBar"></div>
+          </div>
+          <div class="text-center text-dark">Total <span id="jsTotalWordCount">0</span>/{{$allWords}}</div>
+        </div>
+        <div class="form-group"><button class="btn btn-primary btn-xl" id="jsSubmit" type="submit">SUBMIT</button></div>
+      </form>
     </div>
   </div>
 </section>
 
 <script type="text/javascript">
   $(document).ready( function() { // Wait until document is fully parsed
-    
     var timer = performance.now();
     var words = new Array();
     var allWords = {{ $allWords }};
@@ -101,7 +96,5 @@
       words.splice(words.indexOf(removeWord), 1);
     });
   })
-     
-  
 </script>
 @endsection

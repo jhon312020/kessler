@@ -141,8 +141,8 @@ class TraineeController extends Controller
       if ($roundOneReport) {
         $recallWords = $roundOneReport->shift();
         $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
-        $this->pr($roundOneReport->where('type', 'contextual')->sum('time_taken'));
-        echo $roundOneTotal['contextual'] = gmdate('i : s', $roundOneReport->where('type', 'contextual')->sum('time_taken'));
+        $roundOneReport->where('type', 'contextual')->sum('time_taken');
+        $roundOneTotal['contextual'] = gmdate('i : s', $roundOneReport->where('type', 'contextual')->sum('time_taken'));
         $roundOneTotal['categorical'] = gmdate('i : s', $roundOneReport->where('type', 'categorical')->sum('time_taken'));
         $roundOneReport = $roundOneReport->groupBy('word_id');
       }

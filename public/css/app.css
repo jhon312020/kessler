@@ -1,11 +1,88 @@
+#container {
+  background-color:#f9f9f9;
+  position: absolute;
+  height: 100%;
+  margin:auto;
+  color:#004B85;
+  font-family:Helvetica;
+  text-align: center;
+  font-size:30px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+#header img {
+  height:150px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.heading {
+  padding:50px;
+  color:#004B85;
+  font-family:Helvetica;
+  font-weight: bold;
+  text-align: center; 
+  font-size: 30px;
+}
+.heading2 {
+  padding:5px;
+  color:#BCC82F;
+  font-family:Helvetica;
+  font-weight: bold;
+  text-align: center; 
+  font-size: 30px;
+}
+.form-control {
+  width: 200px;
+  margin:0px auto;
+  border: 1px light grey;
+}
+.btn-primary {
+  background-color: #004B85;
+  border: none;
+  color: white;
+  padding: 10px 50px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-family:Helvetica;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 50px 355px;
+  cursor: pointer;
+  float: auto;
+}
+.btn-primary:hover {
+    color: white;
+    background-color: #004B85;
+    border-color: #004B85;
+}
+.center {
+  display: block;
+  width: 100%;
+}
+#footer {
+  position: relative;
+  width: 100%;
+  z-index: 1;
+  background-color:#f9f9f9;
+  margin: auto;
+  /*background-image: url('./../assets/img/footer.png');*/
+}
+
+/* By JR */
+
 #answer.fill-ups {
-    line-height: 1.2;
-    border: none; 
-    border-bottom: 1px solid #757575;
-    width: 150px;
-    text-align:center;
-    outline-color: blue;
-    color: teal;
+  line-height: 1.2;
+  border: none; 
+  border-bottom: 1px solid #757575;
+  width: 150px;
+  text-align:center;
+  outline-color: blue;
+  color: teal;
 }
 
 /*.form-control {

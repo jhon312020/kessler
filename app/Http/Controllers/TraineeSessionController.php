@@ -77,7 +77,7 @@ class TraineeSessionController extends Controller
               $wordID = $word['id'];
               $question = $word['question'];
               $findWord = $word['word'];
-              $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$wordID."' id='answer'>", $question);
+              $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$wordID."' id='answer' autocomplete='off'>", $question);
               $question = str_replace("$$", str_repeat("_", 15), $question);
               return view('msmt.sessions.questions.show', compact('question', 'showTraineeMessage'));
             }
@@ -142,7 +142,6 @@ class TraineeSessionController extends Controller
         // echo '<br/><br/>';
         // echo $newString;
         // echo '<br/><br/>';
-        
         //echo ucfirst($fullStory);
         $traineeStory['trainee_id'] = $trainee['trainee_id'];
         $traineeStory['story_id'] = $trainee['session_number'];

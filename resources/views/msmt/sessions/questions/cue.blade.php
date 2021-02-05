@@ -1,70 +1,54 @@
 @extends('msmt.layouts.master')
+
 @section('content')
-  <!-- Content Wrapper. Contains page content -->
-<link href="{{asset('css/app.css')}}" rel="stylesheet" />
-  <!-- Main content -->
-<section class="page-section" id="jsTraineeMessage">
-  <div class="container">
-    <!-- Contact Section Heading-->
-    <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">START CUES</h2>
-    <!-- Icon Divider-->
-    <div class="divider-custom">
-      <div class="divider-custom-line"></div>
-      <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-      <div class="divider-custom-line"></div>
-    </div>
-    <div class="row">
-      <div class="col-lg-8 mx-auto">
-        <p>Following the free recall, a contextual cue, and if necessary a categorical cue, is given to facilitate recall for each of the target words. After this is completed, the process is repeated with the same story</p>
-        <br>
-      </div>
-    </div>
-    <!-- Contact Section Form-->
-    <div class="row">
-      <div class="col-lg-8 mx-auto">
-        <div class="form-group text-center"><button class="btn btn-primary btn-xl" id="jsStartSession" type="submit">START</button></div>
-      </div>
+<section id="jsTraineeMessage">
+  <div class="row">
+    <div class="col-lg-12 text-center">
+      <h1 class="heading">START CUES</h1>
     </div>
   </div>
-    <!-- /.container-fluid -->
-</section>
-
-<section class="page-section text-center d-none" id="jsQuestions">
-  <div class="container">
-    <!-- Contact Section Heading-->
-    <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">CUES</h2>
-    <!-- Icon Divider-->
-    <div class="divider-custom">
-      <div class="divider-custom-line"></div>
-      <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-      <div class="divider-custom-line"></div>
+  <div class="row">
+    <div class="col-lg-12">
+       <p class="mx-auto">Following the free recall, a contextual cue, and if necessary a categorical cue, is given to facilitate recall for each of the target words. After this is completed, the process is repeated with the same story</p>
     </div>
-    <!-- Question Section-->
-    <div class="row">
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+       <div class="form-group text-center"><button class="btn btn-primary btn-xl" id="jsStartSession" type="submit">START</button></div>
+    </div>
+  </div>
+</section>
+<section class="text-center d-none" id="jsQuestions">
+  <div class="row">
+    <div class="col-lg-12 text-center">
+      <h1 class="heading">CUES</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 text-center">
       <div class="transparent-background d-none" id="jsLoader">
         <div class="loader-center">
           <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
       </div>
-      <div class="col-lg-8 mx-auto">
-        <form action="{{ url('after') }}" method="POST" id="jsQuestionForm">
-          <div class="control-group">
-            <div class="form-group controls mb-0 pb-2" class="answer_list">
-              @csrf {{ method_field('post') }}
-              <h1 class="m-0"></h1>
-              <p id="story" class="story">{!!$story->updated_story!!}</p> 
-            </div>
-            <div>
-              <div class="alert d-none" role="alert" id="jsUserMessage"></div>
-              <button type="button" id="jsNext" class="btn btn-primary btn-xl float-right">Check</button>
-            </div>     
+    </div>
+    <div class="col-lg-12 text-center" id="jsQueContainer">
+      <form action="{{ url('after') }}" method="POST" id="jsQuestionForm">
+        <div class="control-group">
+          <div class="form-group controls mb-0 pb-2" class="answer_list">
+            @csrf {{ method_field('post') }}
+            <h1 class="m-0"></h1>
+            <p id="story" class="story">{!!$story->updated_story!!}</p> 
           </div>
-        </form>
-      </div>
+          <div>
+            <div class="alert d-none" role="alert" id="jsUserMessage"></div>
+            <button type="button" id="jsNext" class="btn btn-primary btn-xl float-right">Check</button>
+          </div>     
+        </div>
+      </form>
     </div>
   </div>
 </section>
-<!-- /.content -->
 <script type="text/javascript">
   $(document).ready( function() { // Wait until document is fully parsed
     $(document).on('keyup', '#answer', function() {
