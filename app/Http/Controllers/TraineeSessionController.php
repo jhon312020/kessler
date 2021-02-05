@@ -172,7 +172,7 @@ class TraineeSessionController extends Controller
         $wordStory = Word::where('story_id', $trainee['session_number'])->pluck('word');
         $allWords = $words = $wordStory->toArray();
         $allWords = count($allWords);
-        $this->pr($allWords);
+        //$this->pr($allWords);
         //exit();
         if ($traineeRecord->session_current_position == 'recall' || $traineeRecord->session_current_position == '') {
           $traineeRecord->session_current_position = 'recall';
@@ -187,10 +187,14 @@ class TraineeSessionController extends Controller
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
+        $wordStory = Word::where('story_id', $trainee['session_number'])->pluck('word');
+        $allWords = $words = $wordStory->toArray();
+        $allWords = count($allWords);
+        //$this->pr($allWords);
         if ($traineeRecord->session_current_position == 'recall' || $traineeRecord->session_current_position == '') {
           $traineeRecord->session_current_position = 'recall';
           $traineeRecord->save();
-          return view('msmt.sessions.recallwords.recollect');
+          return view('msmt.sessions.recallwords.recollect', compact('allWords','traineeRecord'));
         } 
       }
       return redirect('/index');
