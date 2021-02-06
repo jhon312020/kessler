@@ -13,7 +13,7 @@
   </head>
   <body>
     <!-- Page Content -->
-    <div id="container" class="container">
+    <div id="container" class="container {{ $background ?? 'white-background' }}">
       <div id="header">
         <img src="{{asset('assets/img/logo.png')}}" alt="logo" />
       </div>

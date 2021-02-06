@@ -1,26 +1,31 @@
-#container {
-  background-color:#f9f9f9;
-  position: absolute;
-  height: 100%;
+.grey-background {
+  background-color: #f9f9f9;
+}
+.white-background {
+  background-color: #fff;
+}
+#container { 
+  /*position: absolute;*/
   margin:auto;
   color:#004B85;
   font-family:Helvetica;
   text-align: center;
   font-size:30px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   margin: auto;
+  flex-grow: 1;
+  padding:0px 100px;
+}
+.timer {
+  background-color:#E8E8E8;
 }
 #header img {
-  height:150px;
+  height: 110px;
   display: block;
   margin-left: auto;
   margin-right: auto;
 }
 .heading {
-  padding:50px;
+  padding:10px;
   color:#004B85;
   font-family:Helvetica;
   font-weight: bold;
@@ -35,11 +40,11 @@
   text-align: center; 
   font-size: 30px;
 }
-.form-control {
+/*.form-control {
   width: 200px;
   margin:0px auto;
   border: 1px light grey;
-}
+}*/
 .btn-primary {
   background-color: #004B85;
   border: none;
@@ -51,28 +56,36 @@
   font-family:Helvetica;
   font-size: 20px;
   font-weight: bold;
-  margin: 50px 355px;
-  cursor: pointer;
-  float: auto;
 }
 .btn-primary:hover {
-    color: white;
-    background-color: #004B85;
-    border-color: #004B85;
+  color: white;
+  background-color: #0062cc;
+  border-color: #005cbf;
 }
 .center {
   display: block;
   width: 100%;
 }
 #footer {
-  position: relative;
+  /*position: relative;*/
   width: 100%;
   z-index: 1;
-  background-color:#f9f9f9;
   margin: auto;
+  flex-shrink: 0;
   /*background-image: url('./../assets/img/footer.png');*/
 }
-
+.emboss {
+  font-weight: bold;
+}
+.hide-time a {
+  color: #B8B8B8;
+  font-size: 16px;
+  text-decoration: none;
+  cursor: pointer
+}
+.hide-time a:hover {
+  color: #888888;
+}
 /* By JR */
 
 #answer.fill-ups {
@@ -83,6 +96,7 @@
   text-align:center;
   outline-color: blue;
   color: teal;
+  text-transform: uppercase;
 }
 
 /*.form-control {
@@ -124,6 +138,9 @@
   font-size: 24px;
   line-height: 2em;
   font-family: robot
+}
+.writeup {
+  text-transform: uppercase;
 }
 
 /*.writeup{

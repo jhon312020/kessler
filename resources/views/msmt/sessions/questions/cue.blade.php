@@ -3,51 +3,56 @@
 @section('content')
 <section id="jsTraineeMessage">
   <div class="row">
-    <div class="col-lg-12 text-center">
-      <h1 class="heading">START CUES</h1>
+    <div class="col-lg-8 mx-auto">
+      <h1 class="heading">INSTRUCTIONS</h1>
     </div>
   </div>
   <div class="row">
-    <div class="col-lg-12">
-       <p class="mx-auto">Following the free recall, a contextual cue, and if necessary a categorical cue, is given to facilitate recall for each of the target words. After this is completed, the process is repeated with the same story</p>
+    <div class="col-lg-8 mx-auto text-justify">
+       <p>Following the free recall, a contextual cue, and if necessary a categorical cue, is given to facilitate recall for each of the target words. After this is completed, the process is repeated with the same story</p>
+       <br/>
     </div>
   </div>
   <div class="row">
-    <div class="col-lg-12">
+    <div class="col-lg-8 mx-auto">
        <div class="form-group text-center"><button class="btn btn-primary btn-xl" id="jsStartSession" type="submit">START</button></div>
     </div>
   </div>
 </section>
 <section class="text-center d-none" id="jsQuestions">
   <div class="row">
-    <div class="col-lg-12 text-center">
+    <div class="col-lg-8 mx-auto">
       <h1 class="heading">CUES</h1>
     </div>
   </div>
   <div class="row">
-    <div class="col-lg-12 text-center">
+    <div class="col-lg-8 mx-auto">
       <div class="transparent-background d-none" id="jsLoader">
         <div class="loader-center">
           <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
       </div>
     </div>
-    <div class="col-lg-12 text-center" id="jsQueContainer">
-      <form action="{{ url('after') }}" method="POST" id="jsQuestionForm">
+  </div>
+  <form action="{{ url('after') }}" method="POST" id="jsQuestionForm">
+    <div class="row">
+      <div class="col-lg-10 mx-auto text-justify" id="jsQueContainer">
         <div class="control-group">
           <div class="form-group controls mb-0 pb-2" class="answer_list">
             @csrf {{ method_field('post') }}
             <h1 class="m-0"></h1>
             <p id="story" class="story">{!!$story->updated_story!!}</p> 
-          </div>
-          <div>
-            <div class="alert d-none" role="alert" id="jsUserMessage"></div>
-            <button type="button" id="jsNext" class="btn btn-primary btn-xl float-right">Check</button>
-          </div>     
+          </div>    
         </div>
-      </form>
+      </div>
     </div>
-  </div>
+    <div class="row">
+      <div class="col-lg-8 mx-auto">
+        <div class="alert d-none" role="alert" id="jsUserMessage"></div>
+        <button type="button" id="jsNext" class="btn btn-primary btn-xl float-right">CHECK</button>
+      </div> 
+    </div>
+  </form>
 </section>
 <script type="text/javascript">
   $(document).ready( function() { // Wait until document is fully parsed
@@ -72,7 +77,7 @@
       $(this).prop("disabled", true);
       $("#jsQueContainer").slideDown();
       $("#jsLoader").removeClass('d-none');
-      $("#jsNext").text("Check");
+      $("#jsNext").text("CHECK");
       // $(this).html(
       //   '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
       // );
@@ -102,7 +107,7 @@
           $("#jsQueContainer").slideDown();
           $("#jsNext").prop("disabled", false);
           $("#jsLoader").addClass('d-none');
-          $("#jsNext").text("Check");
+          $("#jsNext").text("CHECK");
            if (response.completed) {
             //location.reload();
             console.log(response);
@@ -131,12 +136,12 @@
                 $('#jsUserMessage').addClass('alert-danger');
               }
               $('#jsUserMessage').removeClass('d-none').show();
-              $("#jsNext").text("Next");
+              $("#jsNext").text("NEXT");
               $('#jsNext').focus();
             } else {
               categoryCueShowed = 0;
               showedAnswer = 0;
-              $("#jsNext").text("Check");
+              $("#jsNext").text("CHECK");
               $('#answer').focus();
             }
            }

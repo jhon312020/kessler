@@ -4,12 +4,13 @@
 <section id="jsTraineeSession">
   <div class="row">
     <div class="col-lg-12 text-center">
-      <h1 class="heading">STORY WRITING</br></h1>
+      <h1 class="heading">INSTRUCTIONS</br></h1>
     </div>
   </div>
   <div class="row">
-    <div class="col-lg-12 mx-auto">
-       <p class="mx-auto">On the same page below you are going to see a set of 20 words. The words will be capitalized like THIS. Build a story of your own using these words. Fit in as many words in a sentence. This story is to help you remember the capitalized words. Try to make a picture of each storyline in your head. Click on START when you are ready.</p>
+    <div class="col-lg-8 mx-auto text-justify">
+       <p>On the same page below you are going to see a set of 20 words. The words will be capitalized like <span class="emboss">THIS</span>. <p>Build a story of your own using these words. Fit in as many words in a sentence. This story is to help you remember the capitalized words. Try to make a picture of each storyline in your head. </p><p>Click on <span class="emboss">START</span> when you are ready.</p>
+       <br/>
     </div>
   </div>
   <div class="row">
@@ -73,8 +74,8 @@
     var wordCount = allWords.length;
     $(document).on("keyup", "form", function(event) { 
       $('#jsWordContainer p').removeClass('strikeThrough');
-      var writeup = $('#jsWriteup').val();
-      $('#jsWriteup').val(writeup.toUpperCase())
+      var writeup = $('#jsWriteup').val().toUpperCase();
+      //$('#jsWriteup').val(writeup.toUpperCase())
       for (counter = 0; counter < wordCount; counter++) {
         if (writeup.indexOf(allWords[counter])!= -1) {
           $('#jsWord-'+counter).addClass('strikeThrough');

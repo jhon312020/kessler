@@ -10,7 +10,6 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
   use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-
   public function __construct() {
   	$sideMenu = array('dashboard'=>array('name'=>'Dashboard', 'url'=>'/dashboard','icon'=>'fa-tachometer-alt'), 
                       'trainee'=>array('name'=>'Trainee Information', 'url'=>'/trainee','icon'=>'fa-table'), 

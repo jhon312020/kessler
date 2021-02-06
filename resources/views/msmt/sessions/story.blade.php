@@ -4,12 +4,13 @@
 <section id="jsTraineeSession">
   <div class="row">
     <div class="col-lg-12 text-center">
-      <h1 class="heading">START SESSION</h1>
+      <h1 class="heading">INSTRUCTIONS</h1>
     </div>
   </div>
   <div class="row">
-    <div class="col-lg-12">
-       <p class="mx-auto">On the same page below you are going to see a story. It will stay on the screen for a set period of time. Certain words in the story will be capitalized like THIS. Use this story to help you remember the capitalized words. Try to make a picture of each storyline in your head. Click on START when you are ready.</p>
+    <div class="col-offset-2 col-lg-8 mx-auto text-justify">
+       <p class="mx-auto">On the same page below you are going to see a story. It will stay on the screen for a set period of time. Certain words in the story will be capitalized like <span class="emboss">THIS</span>. </p><p>Use this story to help you remember the capitalized words. Try to make a picture of each storyline in your head.</p><p> Click on <span class="emboss">START</span> when you are ready.</p>
+       <br/>
     </div>
   </div>
   <div class="row">
@@ -21,50 +22,31 @@
 <section class="text-center d-none" id="jsTraineeStory">
   <div class="row">
     <div class="col-lg-12 text-center">
-      <h1 class="heading text-uppercase">Session Story</h1>
+      <h1 class="heading text-uppercase">Session # {{$trainee['session_number']}} </h1>
     </div>
   </div>
-  <div class="row time-out" id="jsHide">
-    <div class="col-lg-12 mx-auto">
-      <div class="text-left">
-        <div class="control-group">
-          <div class="form-group controls mb-0 pb-2">
-            <div id="accordion" class="accordion">
-              <div class="card mb-0">
-                <div class="card-header collapsed" data-toggle="collapse" href="#collapseOne" style="border-bottom: none; background-color: white;">
-                  <a class="card-title">COUNTDOWN TIMER</a>
-                  <button type="button" class="close" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    <span aria-hidden="true" class="float-right d-none" id="jsClose">&times;</span>
-                    <span aria-hidden="true" class="float-right none" id="jsView">&minus;</span>
-                  </button>
-                </div>
-                <div id="collapseOne" class="card-body collapse" data-parent="#accordion">
-                  <span id="timer">TIME REMAINING: 
-                    <span id="time">120</span>s
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div class="row hide-time">
+    <div class="col-lg-10 mx-auto"><a href="#" id="jsHide">Hide Time</a></div>
+  </div>
+  <div class="row mb-3" id="jsTimeContainer">
+    <div class="col-lg-10 mx-auto timer">
+      <div class="text-center emboss">
+        Time Remaining: <span id="time">120</span>s
       </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-lg-12 mx-auto">
+    <div class="col-lg-10 mx-auto text-justify px-4">
       <div class="control-group">
         <div class="form-group controls mb-0 pb-2" id="time-out">
           @if ($story)
-          <p>{{ $story->story }}</p>
+          <p>{!! $story->story !!}</p>
           @endif
         </div>
         <div class="row d-none" id="jsCue">
-          <div class="col-lg-8 mx-auto">
-            <div class="control-group">
-              <div class="form-group controls mb-0 pb-2">
-                <p>Click on CONTINUE <br> to proceed with recall words</p>
-              </div>
-            </div>
+          <div class="col-lg-8 mx-auto text-center">
+            <p>Click on <span class="emboss">CONTINUE</span> <br> to proceed with recall words</p>
+            <br/>
           </div>
         </div>
         <div class="form-group text-center">
@@ -96,19 +78,19 @@
       setTimeout(function() {
       $('#time-out').fadeOut('fast');
       $('#jsCue').removeClass('d-none').show();
-      $('#jsHide').hide();
+      $('#jsHide').addClass('d-none');
+      $('#jsTimeContainer').addClass('d-none');
       }, 120000); // <-- time in milliseconds
     });
-    // $("[data-toggle=collapse]").click((function(){
-    // $(this).find(".cssRotate").toggleClass("cssPlusToCross")}));
-     $(document).on('click', '#jsView', function() {
-      $('#jsClose').removeClass('d-none').show();
-      $('#jsView').hide();
-    });
 
-     $(document).on('click', '#jsClose', function() {
-      $('#jsView').removeClass('none').show();
-      $('#jsClose').hide();
+    $(document).on('click', '#jsHide', function() {
+      $('#jsTimeContainer').toggleClass('d-none');
+      if ($(this).text() == "Hide Time") {
+        $(this).text("Show Time");
+      } else {
+        $(this).text("Hide Time");
+      }
+      return false;
     });
 
     $('#jsStartSession').on('click', function(event) { 

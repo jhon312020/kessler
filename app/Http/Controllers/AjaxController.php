@@ -42,6 +42,7 @@ class AjaxController extends Controller
         $word = Word::select('id', 'word', 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
         if ($word) {
           if (!$request->showedAnswer) {
+            $answer = strtoupper(trim($answer));
             $traineeTransaction['correct_or_wrong'] = 0;
             $traineeTransaction['round'] = 1;
             $traineeTransaction['trainee_id'] = $trainee['trainee_id'];
@@ -52,13 +53,13 @@ class AjaxController extends Controller
             $traineeTransaction['round'] = $trainee['round'];
             $traineeTransaction['type'] = 'contextual';
             $traineeTransaction['answer'] = $answer;
-            if ($word['word'] == strtoupper($answer) ) {
+            if ($word['word'] == $answer ) {
               $traineeTransaction['correct_or_wrong'] = 1;
               $iconWrongORRight = '<i class="fa fa-check" style="color:#155724"></i>';
               $showAnswer = 1;
               $response['answer'] = 'Wow your answer is correct : '.$word['word'];
               $response['is_answer_correct'] = 1;
-            } else if($request->categoryCue && $word['word'] != strtoupper($answer)) {
+            } else if($request->categoryCue && $word['word'] != $answer) {
               $response['answer'] = 'Oops sorry! The Right answer is : '.$word['word'];
               $response['is_answer_correct'] = 0;
             }
@@ -70,9 +71,6 @@ class AjaxController extends Controller
             }
             TraineeTransaction::insert($traineeTransaction);
           }
-          // if ($word['word'] == strtoupper($answer) || $request->categoryCue) {
-          //   $word = Word::select('id', 'word', 'question')->where('id','>', $wordID)->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->first();
-          // } 
           if (!$showAnswer && $request->showedAnswer) {
             $word = Word::select('id', 'word', 'question')->where('id','>', $wordID)->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->first();
           } 
