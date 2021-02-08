@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Invite;
 use App\Models\User;
 
 class TrainerController extends Controller
@@ -23,8 +25,8 @@ class TrainerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index() {
-      $trainer = User::all();
-      return view('kessler.trainer.index', compact('trainer'));
+      $trainers = User::where('role', 'TA')->get();
+      return view('kessler.trainer.index', compact('trainers'));
     }
 
     /**
@@ -53,7 +55,10 @@ class TrainerController extends Controller
           'email' => $request->get('email'),
           'password' => Hash::make($password)
         ]);
-        $trainer->save();
+        if ($trainer->save()) {
+          $trainer->password = $password;
+          Mail::to($trainer->email)->send(new Invite($trainer));
+        }
         return redirect('/trainer')->with('success', 'TRAINER SAVED!');
     }
 

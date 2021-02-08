@@ -47,8 +47,8 @@ class TraineeSessionController extends Controller
           } 
         } 
       } 
-      $background = $this->background = 'grey-background'; 
-      return view('msmt.user.index', compact('background'))->withErrors($validator);
+      $page  = 'index'; 
+      return view('msmt.user.index', compact('page'))->withErrors($validator);
     }
 
 

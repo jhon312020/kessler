@@ -33,7 +33,7 @@
               </tr>
             </tfoot>
             <tbody>
-            @foreach($trainer as $trainer)
+            @foreach($trainers as $trainer)
               <tr>
                <td>{{$trainer->name}}</td>
                <td>{{$trainer->email}}</td>

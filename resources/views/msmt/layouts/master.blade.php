@@ -13,13 +13,21 @@
   </head>
   <body>
     <!-- Page Content -->
-    <div id="container" class="container {{ $background ?? 'white-background' }}">
+    @isset($page)
+      <div id="container" class="container grey-background">
+    @else
+      <div id="container" class="container white-background">
+    @endisset
       <div id="header">
         <img src="{{asset('assets/img/logo.png')}}" alt="logo" />
       </div>
         @yield('content')
       <div id="footer">
-        <img src="{{asset('assets/img/footer.png')}}" class="center"/>
+        @isset($page)
+          <img src="{{asset('assets/img/footer_grey.png')}}" class="center"/>
+        @else 
+          <img src="{{asset('assets/img/footer_white.png')}}" class="center"/>
+        @endisset
       </div>
     </div>
     <!-- Bootstrap core JavaScript -->

@@ -36,12 +36,12 @@ Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 // ---------------------------------------- ./ ADMIN ----------------------------------------------------------- //
 //Trainer Admin
 Route::group(['middleware' => 'auth'], function() {
-	Route::resource('/trainer', TrainerController::class);
-  	Route::resource('/trainee', TraineeController::class);
+  Route::resource('/trainee', TraineeController::class);
 	Route::get('/trainee/view/{id}', [TraineeController::class, 'view']);
 });
 //Super Admin Role
 Route::group(['middleware' => 'App\Http\Middleware\SuperAdminMiddleware'], function() {
+	Route::resource('/trainer', TrainerController::class);
 	Route::resource('/overview', OverviewController::class);
 	Route::resource('/instruction', InstructionController::class);
 	Route::resource('/story', StoryController::class);
