@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Trainer;
+use App\Models\User;
 
 class TrainerController extends Controller
 {
@@ -23,7 +23,7 @@ class TrainerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index() {
-      $trainer = Trainer::all();
+      $trainer = User::all();
       return view('kessler.trainer.index', compact('trainer'));
     }
 
@@ -49,11 +49,11 @@ class TrainerController extends Controller
           'email'=>'required'
         ]);
         $password = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTVWXYZabcdefghijklmnopqrstvwxyz"), 0, 8);
-        $trainer = new Trainer([
+        $trainer = new User([
           'trainer_id' => $request->get('trainer_id'),
           'name' => $request->get('name'),
           'email' => $request->get('email'),
-          'password' => $password
+          'password' => Hash::make($password)
         ]);
         $trainer->save();
         return redirect('/trainer')->with('success', 'TRAINER SAVED!');
@@ -76,7 +76,7 @@ class TrainerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-      $trainer = Trainer::find($id);
+      $trainer = User::find($id);
       return view('kessler.trainer.edit', compact('trainer'));
     }
 
@@ -91,7 +91,7 @@ class TrainerController extends Controller
       $request->validate([
         'name'=>'required'
       ]);
-      $trainer = Trainer::find($id);
+      $trainer = User::find($id);
       $trainer->name = $request->get('name');
       $trainer->save();
       return redirect('/trainer')->with('success', 'TRAINER UPDATED!');
@@ -104,7 +104,7 @@ class TrainerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-      $trainer = Trainer::find($id);
+      $trainer = User::find($id);
       $trainer->delete();
       return redirect('/trainer')->with('success', 'TRAINER DELETED!');
     }

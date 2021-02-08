@@ -23,7 +23,6 @@
                 <th>Trainer ID</th>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Password</th>
                 <th width="25%">Actions</th>
               </tr>
             </thead>
@@ -32,7 +31,6 @@
                 <th>Trainer ID</th>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Password</th>
                 <th width="25%">Actions</th>
               </tr>
             </tfoot>
@@ -42,7 +40,6 @@
                <td>{{$trainer->trainer_id}}</td>
                <td>{{$trainer->name}}</td>
                <td>{{$trainer->email}}</td>
-               <td>{{$trainer->password}}</td>
                <td>
                 <a href="{{ route('trainer.edit',$trainer->id)}}" class="btn btn-primary"><i class="fa fa-edit">&nbsp;</i> Edit</a>
                 <form action="{{ route('trainer.destroy', $trainer->id)}}" method="post" class="d-inline">
