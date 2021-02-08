@@ -8,7 +8,7 @@
   </div>
   <div class="row">
     <div class="col-lg-6 mx-auto text-justify">
-       <p>You have successfully completed the {{ $round }} round of your session! Please contact your traineer!!!</p>
+       <p>You have successfully completed the {{ $round }} round of your session! Please contact your trainer!!!</p>
        <br/>
     </div>
   </div>
