@@ -30,7 +30,7 @@ class TraineeController extends Controller
      */
     public function index(Request $request) {
       $user = Auth::user();
-      $queryObj = Trainee::select('id', 'trainee_id','session_pin', 'session_type', 'session_number');
+      $queryObj = Trainee::select('id', 'trainee_id','session_pin', 'session_type', 'session_number', 'session_current_position','session_state');
       if ($user->role != "SA") {
         $queryObj = $queryObj->where('trainer_id', $user->id);
       }
@@ -91,11 +91,12 @@ class TraineeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
+    public function edit(Request $request, $id) {
       $trainee = Trainee::find($id);
       $types = Type::all();
       $totalSessions = $this->totalSessions;
-      return view('kessler.trainee.edit', compact('trainee', 'totalSessions','types'));
+      $state = $request->get('state');
+      return view('kessler.trainee.edit', compact('trainee', 'totalSessions','types','state'));
     } 
 
     /**
@@ -113,6 +114,13 @@ class TraineeController extends Controller
       $trainee = Trainee::find($id);
       $trainee->session_type = $request->get('session_type');
       $trainee->session_number = $request->get('session_number');
+      if($trainee->session_state = 'start')  {
+        $trainee->session_current_position = null;
+        $trainee->round = 1;
+        $trainee->completed = 0;
+      } if ($trainee->session_state = 'continue') {
+        $trainee['session_current_position'] = $trainee->session_current_position;
+      }
       $trainee->save();
       return redirect('/trainee')->with('success', 'Trainee information has been updated succesfully!');
     }
