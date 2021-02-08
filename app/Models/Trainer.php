@@ -10,7 +10,6 @@ class Trainer extends Model
     use HasFactory;
 
         protected $fillable = [
-        'trainer_id',
         'name',
         'email',
         'password'

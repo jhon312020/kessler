@@ -18,10 +18,6 @@
             <form method="post" action="{{ route('trainer.store') }}">
               @csrf
               <div class="form-group">
-                <label class="small mb-1" for="trainer_id">Enter Trainee ID</label>
-                <input type="text" class="form-control py-4" id="trainer_id" name="trainer_id" placeholder="Enter Trainee ID" required>
-              </div>
-              <div class="form-group">
                 <label class="small mb-1" for="name">Enter Name</label>
                 <input type="text" class="form-control py-4" id="name" name="name" placeholder="Enter name" required>
               </div>

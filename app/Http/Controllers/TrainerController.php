@@ -44,13 +44,11 @@ class TrainerController extends Controller
      */
     public function store(Request $request) {
         $request->validate([
-          'trainer_id' => 'required',
           'name'=>'required',
           'email'=>'required'
         ]);
         $password = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTVWXYZabcdefghijklmnopqrstvwxyz"), 0, 8);
         $trainer = new User([
-          'trainer_id' => $request->get('trainer_id'),
           'name' => $request->get('name'),
           'email' => $request->get('email'),
           'password' => Hash::make($password)

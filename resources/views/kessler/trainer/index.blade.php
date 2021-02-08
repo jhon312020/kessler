@@ -20,7 +20,6 @@
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
               <tr>
-                <th>Trainer ID</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th width="25%">Actions</th>
@@ -28,7 +27,6 @@
             </thead>
             <tfoot>
               <tr>
-                <th>Trainer ID</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th width="25%">Actions</th>
@@ -37,7 +35,6 @@
             <tbody>
             @foreach($trainer as $trainer)
               <tr>
-               <td>{{$trainer->trainer_id}}</td>
                <td>{{$trainer->name}}</td>
                <td>{{$trainer->email}}</td>
                <td>

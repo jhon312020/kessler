@@ -19,10 +19,6 @@
               @method('PATCH') 
               @csrf
               <div class="form-group">
-                <label class="small mb-1" for="trainer_id">Update Trainee ID</label>
-                <input type="text" class="form-control py-4" name="trainer_id" id="trainer_id" placeholder="Update Trainee ID" value="{{$trainer->trainer_id}}">
-              </div>
-              <div class="form-group">
                 <label class="small mb-1" for="name">Update name</label>
                 <input type="text" class="form-control py-4" name="name" id="name" placeholder="Update name" value="{{$trainer->name}}">
               </div>          
