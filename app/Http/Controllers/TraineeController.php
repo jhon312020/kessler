@@ -29,8 +29,12 @@ class TraineeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request) {
-      $request->user()->toArray();
-      $trainees = Trainee::all();
+      $user = Auth::user();
+      $queryObj = Trainee::select('id', 'trainee_id','session_pin', 'session_type', 'session_number');
+      if ($user->role != "SA") {
+        $queryObj = $queryObj->where('trainer_id', $user->id);
+      }
+      $trainees = $queryObj->get();
       $types = Type::pluck('type', 'id');
       return view('kessler.trainee.index', compact('trainees', 'types'));
     }
@@ -132,31 +136,46 @@ class TraineeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function view($id) {  
+      $user = Auth::user();
+      $trainer_traines = Trainee::where('trainer_id', $user->id)->pluck('id', 'id')->all();
       $trainee = Trainee::find($id);
-      $storyWords = Word::select('id', 'word')->where('story_id', $trainee['session_number'])->get();
-      //$this->pr($storyWords->toArray());
-      $roundOneReport = TraineeTransaction::select('id', 'word_id', 'trainee_id', 'session_pin', 'type', 'answer', 'correct_or_wrong','round','time_taken')->where('trainee_id', $trainee['trainee_id'])->where('session_pin', $trainee['session_pin'])->where('round', '=', '1')->get();
-      $allStoryWords = $storyWords->pluck('word')->toArray();
+      $roundOneReport = array();
+      $roundTwoReport = array();
       $recallReport = array();
-      if ($roundOneReport) {
-        $recallWords = $roundOneReport->shift();
-        $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
-        $roundOneReport->where('type', 'contextual')->sum('time_taken');
-        $roundOneTotal['contextual'] = gmdate('i : s', $roundOneReport->where('type', 'contextual')->sum('time_taken'));
-        $roundOneTotal['categorical'] = gmdate('i : s', $roundOneReport->where('type', 'categorical')->sum('time_taken'));
-        $roundOneReport = $roundOneReport->groupBy('word_id');
-      }
-  
-     /*$this->pr($roundOneReport->toArray());
-      exit;*/
-      $roundTwoReport = TraineeTransaction::select('id', 'word_id', 'trainee_id', 'session_pin', 'type', 'answer', 'correct_or_wrong','round','time_taken')->where('trainee_id', $trainee['trainee_id'])->where('session_pin', $trainee['session_pin'])->where('round', '=', '2')->get();
+      $roundOneTotal = array();
+      $roundTwoTotal = array();
+      $storyWords = array();
 
-      if ($roundTwoReport) {
-        $recallWords = $roundTwoReport->shift();
-        $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
-        $roundTwoTotal['contextual'] = gmdate('i : s', $roundTwoReport->where('type', 'contextual')->sum('time_taken'));
-        $roundTwoTotal['categorical'] = gmdate('i : s', $roundTwoReport->where('type', 'categorical')->sum('time_taken'));
-        $roundTwoReport = $roundTwoReport->groupBy('word_id');
+      if ($trainee && ($user->role == 'SA' || in_array($trainee->id, $trainer_traines))) {
+        $storyWords = Word::select('id', 'word')->where('story_id', $trainee->session_number)->get();
+        //$this->pr($storyWords->toArray());
+        $queryObj = TraineeTransaction::select('id', 'word_id', 'trainee_id', 'session_pin', 'type', 'answer', 'correct_or_wrong','round','time_taken')->where('trainee_id', $trainee->trainee_id)->where('session_pin', $trainee->session_pin);
+        $allStoryWords = $storyWords->pluck('word')->toArray();
+  
+        if ($trainee->round > 1) {
+          $roundOneReport = with(clone $queryObj)->where('round', '=', '1')->get();
+          if ($roundOneReport) {
+            $recallWords = $roundOneReport->shift();
+            $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
+            $roundOneReport->where('type', 'contextual')->sum('time_taken');
+            $roundOneTotal['contextual'] = gmdate('i : s', $roundOneReport->where('type', 'contextual')->sum('time_taken'));
+            $roundOneTotal['categorical'] = gmdate('i : s', $roundOneReport->where('type', 'categorical')->sum('time_taken'));
+            $roundOneReport = $roundOneReport->groupBy('word_id');
+          }
+        }
+       /*$this->pr($roundOneReport->toArray());
+        exit;*/
+        if ($trainee->round > 1 && $trainee->completed == 1 ) {
+          $roundTwoReport = with(clone $queryObj)->where('round', '=', '2')->get();
+
+          if ($roundTwoReport) {
+            $recallWords = $roundTwoReport->shift();
+            $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
+            $roundTwoTotal['contextual'] = gmdate('i : s', $roundTwoReport->where('type', 'contextual')->sum('time_taken'));
+            $roundTwoTotal['categorical'] = gmdate('i : s', $roundTwoReport->where('type', 'categorical')->sum('time_taken'));
+            $roundTwoReport = $roundTwoReport->groupBy('word_id');
+          }
+        }
       }
 
       //$this->pr($roundTwoReport->toArray());

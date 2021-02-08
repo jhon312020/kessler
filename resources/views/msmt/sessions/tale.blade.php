@@ -21,7 +21,7 @@
 <section class="text-center d-none" id="jsTraineeStory">
   <div class="row">
     <div class="col-lg-12 text-center">
-      <h1 class="heading text-uppercase">Session Story</h1>
+      <h1 class="heading text-uppercase">Session # {{$trainee['session_number']}}</h1>
     </div>
   </div>
   <div class="row hide-time">

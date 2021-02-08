@@ -47,12 +47,12 @@
               </tr>
             </tfoot>
             <tbody>
-              @if($roundOneReport->count())
+              @if(count($roundOneReport))
               <tr>
-                <td>Recall Words</td>
+                <td>Recall Words {{ $roundOneReport->count() }}</td>
                 <td>{!! $recallReport[0]['words'] !!}</td>
                 <td>Remember: {{ $recallReport[0]['found_count'] }} Forgot: {{ $recallReport[0]['unfound_count']  }}</td>
-                @if ($roundTwoReport->count())
+                @if (count($roundTwoReport))
                 <td>{!! $recallReport[1]['words'] !!}</td>
                 <td>Remember: {{ $recallReport[1]['found_count'] }} Forgot: {{ $recallReport[1]['unfound_count']  }}</td>
                 @else
@@ -83,7 +83,7 @@
                   @else
                     <td class="type text-center categorical"></td>
                   @endif
-                  @if ($roundTwoReport->count())
+                  @if (count($roundTwoReport))
                     <td class="type text-center {{ $roundTwoReport[$storyWord->id][0]->correct_or_wrong ? 'correct' : 'wrong' }}"> 
                       @if($roundTwoReport[$storyWord->id][0]->correct_or_wrong)
                         <i class="fa fa-check" aria-hidden="true"> </i>
@@ -111,10 +111,17 @@
               @endforeach
               <tr>
                 <th>Total</th>
-                <th>Time taken : {{ $roundOneTotal['contextual'] }}</th>
-                <th>Time taken : {{ $roundOneTotal['categorical'] }}</th>
-                <th>Time taken : {{ $roundTwoTotal['contextual'] }}</th>
-                <th>Time taken : {{ $roundTwoTotal['categorical'] }}</th>
+                @if(count($roundOneReport))
+                  <th>Time taken : {{ $roundOneTotal['contextual'] }}</th>
+                  <th>Time taken : {{ $roundOneTotal['categorical'] }}</th>
+                @endif
+                @if(count($roundTwoTotal))
+                  <th>Time taken : {{ $roundTwoTotal['contextual'] }}</th>
+                  <th>Time taken : {{ $roundTwoTotal['categorical'] }}</th>
+                @else
+                  <th></th>
+                  <th></th>
+                @endif
               </tr>
               @endif
             </tbody>

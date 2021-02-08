@@ -162,7 +162,8 @@ class TraineeSessionController extends Controller
         foreach ($storyWords as $word) {
           $story->updated_story = str_replace($word, "<span class='emboss'>$word</span>", $story->updated_story);
         }
-        return view('msmt.sessions.tale')->with('story', $story);
+
+        return view('msmt.sessions.tale', compact('story', 'trainee'));
       } else {
         return redirect('/index');
       }
