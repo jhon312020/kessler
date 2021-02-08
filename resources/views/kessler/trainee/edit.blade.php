@@ -37,9 +37,9 @@
                 </select>
               </div>
               <div class="form-group d-flex align-items-center float-left mt-4 mb-0">
-              <input type="radio" name="state" id="jsLeft" class="jsLeft" value="left" checked="checked">
+              <input type="radio" name="state" id="jsLeft" class="jsLeft" value="continue" checked="checked">
               &emsp;Continue Session&emsp;
-              <input type="radio" name="state" id="jsScratch" class="jsScratch" value="scratch">&emsp;Start from Scratch&emsp;
+              <input type="radio" name="state" id="jsScratch" class="jsScratch" value="start">&emsp;Start from Scratch&emsp;
               </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
                 <button type="submit" class="btn btn-primary">Update</button>
