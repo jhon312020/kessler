@@ -11,7 +11,8 @@ class Controller extends BaseController
 {
   use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
   public function __construct() {
-  	$sideMenu = array('dashboard'=>array('name'=>'Dashboard', 'url'=>'/dashboard','icon'=>'fa-tachometer-alt'), 
+  	$sideMenu = array('dashboard'=>array('name'=>'Dashboard', 'url'=>'/dashboard','icon'=>'fa-tachometer-alt'),
+                      'client'=>array('name'=>'Client', 'url'=>'/client','icon'=>'fa-table'), 
                       'trainee'=>array('name'=>'Trainee Information', 'url'=>'/trainee','icon'=>'fa-table'), 
                       'overview'=>array('name'=>'Overview', 'url'=>'/overview','icon'=>'fa-table'),
                       'instruction'=>array('name'=>'Instruction', 'url'=>'/instruction','icon'=>'fa-table'),

@@ -11,6 +11,7 @@ use App\Http\Controllers\TraineeController;
 use App\Http\Controllers\InstructionController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\WordController;
+use App\Http\Controllers\ClientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,7 +35,8 @@ Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
 // ---------------------------------------- ./ ADMIN ----------------------------------------------------------- //
 Route::group(['middleware' => 'auth'], function() {
-  Route::resource('/trainee', TraineeController::class);
+	Route::resource('/client', ClientController::class);
+  	Route::resource('/trainee', TraineeController::class);
 	Route::get('/trainee/view/{id}', [TraineeController::class, 'view']);
 	Route::resource('/overview', OverviewController::class);
 	Route::resource('/instruction', InstructionController::class);
