@@ -1,37 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Kessler Fondation</title>
-    <link href="{{asset('css/admin.css')}}" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Kessler Foundation</title>
+    <!-- Bootstrap core CSS -->
+    <link href="{{asset('vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{asset('css/app.css')}}" rel="stylesheet">
+    <script src="{{asset('vendor/jquery/jquery.min.js')}}"></script>
   </head>
-  <body class="bg-primary">
-    <div id="layoutAuthentication">
-      <div id="layoutAuthentication_content">
-        @yield('content')
+  <body>
+    <!-- Page Content -->
+    <div id="container" class="container grey-background">
+      <div id="header">
+        <img src="{{asset('assets/img/logo.png')}}" alt="logo" />
       </div>
-      <div id="layoutAuthentication_footer">
-        <footer class="py-4 bg-light mt-auto">
-          <div class="container-fluid">
-            <div class="d-flex align-items-center justify-content-between small">
-              <div class="text-muted">Copyright &copy; Kessler Foundation 2021</div>
-              <div>
-                <a href="#">Privacy Policy</a>
-                &middot;
-                <a href="#">Terms &amp; Conditions</a>
-              </div>
-            </div>
-          </div>
-        </footer>
+        @yield('content')
+      <div id="footer">
+        <img src="{{asset('assets/img/footer.png')}}" class="center"/>
       </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="{{asset('js/admin.js')}}"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script src="{{asset('vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
   </body>
 </html>
