@@ -42,11 +42,13 @@
         <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
           <div class="sb-sidenav-menu">
             <div class="nav">
-              @foreach($sideMenu as $title=>$menu) 
+              @foreach($sideMenu as $title=>$menu)
+                @if ($menu['role'] == '' || $menu['role'] == Auth::user()->role) 
                 <a class="nav-link" href="{{url($menu['url'])}}" title="{{ $title }}">
                   <div class="sb-nav-link-icon"><i class="fa {{ $menu['icon'] }}"></i></div>
                   {{ $menu['name'] }}
                 </a>
+                @endif
               @endforeach
             </div>
           </div>
