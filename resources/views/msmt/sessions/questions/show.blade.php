@@ -49,7 +49,7 @@
     <div class="row">
       <div class="col-lg-8 mx-auto">
         <div class="alert d-none" role="alert" id="jsUserMessage"></div>
-        <button type="button" id="jsNext" class="btn btn-primary btn-xl">Check</button>
+        <button type="button" id="jsNext" class="btn btn-primary btn-xl">CHECK</button>
       </div>
     </div>
   </form>

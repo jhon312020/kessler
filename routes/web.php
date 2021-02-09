@@ -52,11 +52,11 @@ Route::group(['middleware' => 'App\Http\Middleware\SuperAdminMiddleware'], funct
 // ---------------------------------------- ./ ADMIN ----------------------------------------------------------- //
 
 // ---------------------------------------- / SESSIONS 1-4 /---------------------------------------------------- //
-Route::get('/', [TraineeSessionController::class, 'index']);
+Route::get('/', [TraineeSessionController::class, 'index'])->name('/');
 Route::post('/', [TraineeSessionController::class, 'index']);
-Route::get('/home', [TraineeSessionController::class, 'index']);
+Route::get('/home', [TraineeSessionController::class, 'index'])->name('home');
 Route::post('/home', [TraineeSessionController::class, 'index']);
-Route::post('/index', [TraineeSessionController::class, 'index']);
+Route::post('/index', [TraineeSessionController::class, 'index'])->name('index');;
 Route::get('/index', [TraineeSessionController::class, 'index']);
 Route::get('/sessions',[TraineeSessionController::class, 'sessions']);
 Route::get('/recallwords', [TraineeSessionController::class, 'remember']);
