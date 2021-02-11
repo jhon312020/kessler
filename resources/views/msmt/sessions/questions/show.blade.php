@@ -58,6 +58,11 @@
   $(document).ready( function() { // Wait until document is fully parsed
     var showTraineeMessage = '{{ $showTraineeMessage }}';
     var timer = null;
+    var requestInProcess = false;
+    var categoryCueShowed = 0;
+    var showedAnswer = 0;
+    $('#answer').focus();
+    document.getElementById("answer").focus();
     if (!showTraineeMessage) {
       timer = performance.now();
     }
@@ -68,17 +73,16 @@
       confetti.remove();
       if (event.key == "Enter") {
         event.preventDefault();
-        $("#jsNext").trigger('click');
+        if (!requestInProcess) {
+          $("#jsNext").trigger('click');
+        }
         return false;
       } else {
         return event.key;
       }
     });
-
-    var categoryCueShowed = 0;
-    var showedAnswer = 0;
     //var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-    $("#jsNext").on('click', function(event) {
+    $("#jsNext").on('click touchstart', function(event) {
       confetti.remove();
       $(this).prop("disabled", true);
       $("#jsQueContainer").slideDown();
@@ -98,8 +102,11 @@
         $("#jsLoader").addClass('d-none');
         $('#answer').addClass('fill-ups-error');
         $('#answer').focus();
+        document.getElementById("answer").focus();
+        $(this).prop("disabled", false);
         return false;
       }
+      requestInProcess = true;
       var form = $('#jsQuestionForm');
       var startTime = timer;
       var endTime = performance.now();
@@ -130,6 +137,7 @@
               $('#jsUserMessage').removeClass('d-none');
               categoryCueShowed = 1;
               $('#answer').focus();
+              document.getElementById("answer").focus();
             } else if(response.show_answer) {
               categoryCueShowed = 0;
               showedAnswer = 1;
@@ -146,25 +154,36 @@
               $('#jsUserMessage').removeClass('d-none');
               $("#jsNext").text("NEXT");
               $('#jsNext').focus();
+              document.getElementById("jsNext").focus();
               $("#jsQueContainer").show("slow");
             } else {
               categoryCueShowed = 0;
               showedAnswer = 0;
               $("#jsNext").text("CHECK");
               $('#answer').focus();
+              document.getElementById("answer").focus();
             }
-            
            }
+           requestInProcess = false;
+        },
+        error: function(xhr, textStatus, errorThrown) {
+          $("#jsLoader").addClass('d-none');
+          $('#jsUserMessage').addClass('alert-danger');
+          $('#jsUserMessage').text('Please wait... Request is under process!');
+          $('#jsUserMessage').removeClass('d-none').show();
+          $("#jsNext").prop("disabled", false);
+          requestInProcess = false;
         },
         dataType: 'json'
       });
     });
 
-    $('#jsStartSession').on('click', function(event) { 
+    $('#jsStartSession').on('click touchstart', function(event) { 
       $('#jsTraineeMessage').slideUp();
       $('#jsTraineeMessage').html('');
       $('#jsQuestions').removeClass('d-none').show();
       $('#answer').focus();
+      document.getElementById("answer").focus();
       timer = performance.now();
     });
     function removeConfetti() {

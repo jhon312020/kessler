@@ -11,13 +11,13 @@
     <link href="{{asset('css/app.css')}}" rel="stylesheet">
     <script src="{{asset('vendor/jquery/jquery.min.js')}}"></script>
   </head>
-  <body>
+  @isset($page)
+  <body class="grey-background">
+  @else
+  <body class="white-background">
+  @endisset
     <!-- Page Content -->
-    @isset($page)
-      <div id="container" class="container grey-background">
-    @else
-      <div id="container" class="container white-background">
-    @endisset
+    <div id="container" class="container ">
       <div id="header">
         <img src="{{asset('assets/img/logo.png')}}" alt="logo" />
       </div>

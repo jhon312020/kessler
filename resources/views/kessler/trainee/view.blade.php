@@ -62,7 +62,7 @@
               </tr>
               @foreach($storyWords as $storyWord)
                 <tr>
-                  @if(isset($roundOneReport[$storyWord->id][1]))
+                  @if(isset($roundOneReport[$storyWord->id][0]))
                   <td>{{$storyWord->word}}</td>
                   <td class="type text-center {{ $roundOneReport[$storyWord->id] && $roundOneReport[$storyWord->id][0]->correct_or_wrong ? 'correct' : 'wrong' }}"> 
                     @if($roundOneReport[$storyWord->id][0]->correct_or_wrong)
@@ -82,10 +82,11 @@
                       @else 
                         <i class="fa fa-times" aria-hidden="true"> </i>
                       @endif
-                        {{{  $roundOneReport[$storyWord->id][1]->answer or '' }}} ({{{ $roundOneReport[$storyWord->id][1]->time_taken or ''}}} sec)
+                        {{ $roundOneReport[$storyWord->id][1]->answer ?: '' }} 
+                        ({{{ $roundOneReport[$storyWord->id][1]->time_taken or ''}}} sec)
                     </td> 
                   @else
-                   
+                   <td></td>
                   @endif
                   @if (count($roundTwoReport))
                     @if (isset($roundTwoReport[$storyWord->id])) 
@@ -103,7 +104,7 @@
                             @else 
                               <i class="fa fa-times" aria-hidden="true"> </i>
                             @endif
-                              {{$roundTwoReport[$storyWord->id][1]->answer}} ({{$roundTwoReport[$storyWord->id][1]->time_taken}}sec)
+                              {{$roundTwoReport[$storyWord->id][1]->answer ?: ''}} ({{$roundTwoReport[$storyWord->id][1]->time_taken}}sec)
                           </td> 
                         @else
                           <td class="type text-center categorical"></td>

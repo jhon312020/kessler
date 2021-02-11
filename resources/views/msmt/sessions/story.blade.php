@@ -59,31 +59,31 @@
 
 <script type="text/javascript">
   $(document).ready( function() { 
-    $(document).on('click', '#jsStartSession', function() {
+    $(document).on('click touchstart', '#jsStartSession', function() {
       $('#jsTraineeSession').slideUp();
       $('#jsTraineeStory').removeClass('d-none').show();
       var counter = 120;
       var interval = setInterval(function() {
-         counter--;
+        counter--;
          // Display 'counter' wherever you want to display it.
-         if (counter <= 0) {
-             clearInterval(interval);
-             $('#timer').html("<span>Times Up</span>");  
-             return;
-         }else{
-           $('#time').text(counter);
-           console.log("Timer --> " + counter);
-         }
+        if (counter <= 0) {
+          clearInterval(interval);
+          $('#timer').html("<span>Times Up</span>");  
+          return;
+        } else {
+          $('#time').text(counter);
+          console.log("Timer --> " + counter);
+        }
       }, 1000);
       setTimeout(function() {
-      $('#time-out').fadeOut('fast');
-      $('#jsCue').removeClass('d-none').show();
-      $('#jsHide').addClass('d-none');
-      $('#jsTimeContainer').addClass('d-none');
+        $('#time-out').fadeOut('fast');
+        $('#jsCue').removeClass('d-none').show();
+        $('#jsHide').addClass('d-none');
+        $('#jsTimeContainer').addClass('d-none');
       }, 120000); // <-- time in milliseconds
     });
 
-    $(document).on('click', '#jsHide', function() {
+    $(document).on('click touchstart', '#jsHide', function() {
       $('#jsTimeContainer').toggleClass('d-none');
       if ($(this).text() == "Hide Time") {
         $(this).text("Show Time");
@@ -93,14 +93,13 @@
       return false;
     });
 
-    $('#jsStartSession').on('click', function(event) { 
+    $('#jsStartSession').on('click touchstart', function(event) { 
         
     });
     // $(document).on('click', '#jsContinue', function(event) { 
     //   window.location.replace('/recallwords');
     // });
   })
- 
 </script>
 {{-- </div> --}}
 @endsection

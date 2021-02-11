@@ -76,7 +76,7 @@
       } 
     });
 
-    $("#jsSubmit").on('click', function(event) {
+    $("#jsSubmit").on('click touchstart', function(event) {
       event.preventDefault();
       if ( $('#jsRecallWord').val() != '') {
         words.push($('#jsRecallWord').val().toUpperCase().trim());

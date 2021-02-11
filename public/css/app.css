@@ -1,3 +1,4 @@
+
 .grey-background {
   background-color: #f9f9f9;
 }
@@ -11,7 +12,6 @@
   font-family:Helvetica;
   text-align: center;
   font-size:30px;
-  margin: auto;
   flex-grow: 1;
   padding:0px 100px;
 }

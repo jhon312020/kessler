@@ -272,9 +272,7 @@ class TraineeSessionController extends Controller
         //$story = Story::select('id', 'story')->where('id', $trainee['session_number'])->first();
         //$word = Word::select('id', 'word', 'question')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
         $story = TraineeStory::select('updated_story', 'user_story_words')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->where('round', $trainee['round'])->orderBy('id', 'desc')->first();
-        $sentence_Story = explode('. ',$story->updated_story);
-        // $this->pr($sentence_Story);
-        // $this->pr(json_decode($story->user_story_words));
+        $storySentences = explode('. ',$story->updated_story);
         $allStoryWords = Word::select('id', 'word')->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->pluck('word', 'id')->all();
         if ($story) {
           $userStoryWords = json_decode($story->user_story_words);
@@ -282,19 +280,25 @@ class TraineeSessionController extends Controller
           $userWordKey = 0;
           $fillUpWord = $userStoryWords[0];
         }
-        foreach($userStoryWords as $wordKey=>$word) {
-          $findWord = $word;
-          if ($wordKey < $userWordKey) {
-            continue;
-          } else if ($fillUpWord === $word) {
-            $storyWordID = array_search($word, $allStoryWords);
-            $story->updated_story= str_replace($findWord, "<input id='answer' class='fill-ups' autocomplete='off' name='answer-".$storyWordID."'>", $story->updated_story);
-          } else {
-            $story->updated_story = str_replace($findWord, str_repeat("_", 15), $story->updated_story);
+        $breakParentLoop = false;
+        foreach ($storySentences as $currentSentence) {
+          foreach($userStoryWords as $wordKey=>$word) {
+            $findWord = $word;
+            if ($wordKey < $userWordKey) {
+              continue;
+            } else if ($fillUpWord === $word) {
+              $storyWordID = array_search($word, $allStoryWords);
+              $currentSentence = str_replace($findWord, "<input id='answer' class='fill-ups' autocomplete='off' name='answer-".$storyWordID."'>", $currentSentence);
+              $breakParentLoop = true;
+            } else {
+              $currentSentence = str_replace($findWord, str_repeat("_", 15), $currentSentence);
+            }
+          }
+          if ($breakParentLoop) {
+            break;
           }
         }
-      //exit;
-        return view('msmt.sessions.questions.cue')->with('story', $story);
+        return view('msmt.sessions.questions.cue', compact('story', 'currentSentence'));
       } else {
         return redirect('/index');
       }

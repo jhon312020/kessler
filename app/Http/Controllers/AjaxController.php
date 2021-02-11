@@ -67,17 +67,17 @@ class AjaxController extends Controller
             if ($request->categoryCue) {
               $showAnswer = 1;
               $traineeTransaction['type'] = 'categorical';
-              
             }
             TraineeTransaction::insert($traineeTransaction);
           }
           if (!$showAnswer && $request->showedAnswer) {
             $word = Word::select('id', 'word', 'question')->where('id','>', $wordID)->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->first();
           } 
-          
         }
         if ($word) {
-          //$this->pr($word->toArray());
+          // if ($word['id'] > 2) {
+          //   echo $traineeRecord->session_current_position = $word['id'];
+          // }
           $traineeRecord->session_current_position = $word['id'];
           $traineeRecord->save();
           $question = $word['question'];
@@ -139,6 +139,7 @@ class AjaxController extends Controller
         $totalUsersWords = 0;
         $userWordKey = 0;
         $addedInputBox = false;
+        $storySentences = explode('. ',$story->updated_story);
         if ($story) {
           $userStoryWords = json_decode($story->user_story_words);
           $totalUsersWords = count($userStoryWords);
@@ -189,25 +190,65 @@ class AjaxController extends Controller
         }
         
         if ($story && $fillUpWord) {
-          foreach($userStoryWords as $wordKey=>$word) {
-            $findWord = $word;
-            if ($wordKey < $userWordKey) {
-              continue;
-            } else if ($fillUpWord === $word && !$addedInputBox) {
-              $addedInputBox = true;
-              $storyWordID = array_search($word, $allStoryWords);
-              if ($showAnswer) {
-                $story->updated_story = str_replace($findWord, "<input class='fill-ups' name='answer-".$storyWordID."' id='answer' value='".$answer."' readonly autocomplete='off'> $iconWrongORRight", $story->updated_story);
+          $breakParentLoop = false;
+          $counter =1;
+          $count = 0;
+          
+          foreach ($storySentences as $currentSentence) {
+            //echo $this->pr($userStoryWords);
+            foreach($userStoryWords as $wordKey=>$word) {
+              $findWord = $word;
+              //echo '<br/>'.$findWord;
+              if ($wordKey < $userWordKey) {
+                continue;
+              } else if ($fillUpWord === $word && !$addedInputBox) {
+                $addedInputBox = true;
+                $storyWordID = array_search($word, $allStoryWords);
+                if ($showAnswer) {
+                  $currentSentence = str_replace($findWord, "<input class='fill-ups' name='answer-".$storyWordID."' id='answer' value='".$answer."' readonly autocomplete='off'> $iconWrongORRight", $currentSentence, $count);
+                  //echo '<br/>'.$currentSentence.'<br/>';
+                  //If replacements happens we are breaking the parent loop
+                  if ($count) {
+                    $breakParentLoop = true;
+                  }
+                } else {
+                  $currentSentence = str_replace($findWord, "<input id='answer' class='fill-ups' name='answer-".$storyWordID."'>", $currentSentence, $count);
+                  //If replacements happens we are breaking the parent loop
+                  if ($count) {
+                    $breakParentLoop = true;
+                  }
+                }
+                
               } else {
-                $story->updated_story = str_replace($findWord, "<input id='answer' class='fill-ups' name='answer-".$storyWordID."'>", $story->updated_story);
+                $currentSentence = str_replace($findWord, str_repeat("_", 15), $currentSentence, $count);
               }
-            } else {
-              $story->updated_story = str_replace($findWord, str_repeat("_", 15), $story->updated_story);
             }
+            if ($breakParentLoop) {
+              break;
+            } 
+            $counter++;
           }
         }
+        //echo $currentSentence;
+        //   foreach($userStoryWords as $wordKey=>$word) {
+        //     $findWord = $word;
+        //     if ($wordKey < $userWordKey) {
+        //       continue;
+        //     } else if ($fillUpWord === $word && !$addedInputBox) {
+        //       $addedInputBox = true;
+        //       $storyWordID = array_search($word, $allStoryWords);
+        //       if ($showAnswer) {
+        //         $story->updated_story = str_replace($findWord, "<input class='fill-ups' name='answer-".$storyWordID."' id='answer' value='".$answer."' readonly autocomplete='off'> $iconWrongORRight", $story->updated_story);
+        //       } else {
+        //         $story->updated_story = str_replace($findWord, "<input id='answer' class='fill-ups' name='answer-".$storyWordID."'>", $story->updated_story);
+        //       }
+        //     } else {
+        //       $story->updated_story = str_replace($findWord, str_repeat("_", 15), $story->updated_story);
+        //     }
+        //   }
+        // }
         if ($fillUpWord) {
-          $response['updated_story'] = $story->updated_story;
+          $response['updated_story'] = $currentSentence;
           $response['categorical_cue'] = null;
           $response['reload'] = false;
           $response['show_answer'] = $showAnswer;

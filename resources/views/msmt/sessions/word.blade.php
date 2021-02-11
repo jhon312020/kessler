@@ -82,9 +82,9 @@
       userUsedWordCount = 0;
       //$('#jsWriteup').val(writeup.toUpperCase())
       for (counter = 0; counter < wordCount; counter++) {
-        if (writeup.indexOf(' '+allWords[counter]+' ')!= -1 || writeup.indexOf(' '+allWords[counter]+'.') != -1) {
+        if (writeup.indexOf(' '+allWords[counter]+' ')!= -1 || writeup.indexOf(' '+allWords[counter]+'.') != -1 || writeup.indexOf(' '+allWords[counter]+',') != -1) {
           $('#jsWord-'+counter).addClass('strikeThrough');
-          var regExp = new RegExp(allWords[counter],"gi");
+          var regExp = new RegExp(allWords[counter],"i");
           updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
           userUsedWordCount++;
         } else {
@@ -94,11 +94,11 @@
       }
       $('#jsWriteup').val(updateWriteUp)
     });
-    $(document).on('click', '#jsStartSession', function() {
+    $(document).on('click touchstart', '#jsStartSession', function() {
       $('#jsTraineeSession').slideUp();
       $('#jsTraineeStory').removeClass('d-none').show();
     });
-    $("#jsSubmit").on('click', function(event) {
+    $("#jsSubmit").on('click touchstart', function(event) {
       event.preventDefault();
       $('#jsUserMessage').addClass('d-none');
       $("#jsLoader").removeClass('d-none');
