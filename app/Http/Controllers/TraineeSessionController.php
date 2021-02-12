@@ -118,9 +118,6 @@ class TraineeSessionController extends Controller
     public function writeup(Request $request) {
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
-        //$wordStory = Word::select('word')->where('story_id', $trainee['session_number'])->get();
-        /*$this->pr($wordStory->toArray());
-        exit();*/
         $storyWords = Word::where('story_id', $trainee['session_number'])->pluck('word');
         $story = $request->get('story');
         $fullStory = strtolower($story);
@@ -143,21 +140,15 @@ class TraineeSessionController extends Controller
             }
           }
         }
-        //exit;
-        // echo '<br/><br/>';
-        // echo $newString;
-        // echo '<br/><br/>';
-        //echo ucfirst($fullStory);
         $traineeStory['trainee_id'] = $trainee['trainee_id'];
         $traineeStory['story_id'] = $trainee['session_number'];
         $traineeStory['session_pin'] = $trainee['session_pin'];
         $traineeStory['round'] = $trainee['round'];
         $traineeStory['original_story'] = $story;
         $traineeStory['updated_story'] = $newString;
+        $userStoryWords = array_values(array_unique($userStoryWords));
         $traineeStory['user_story_words'] = json_encode($userStoryWords);
         TraineeStory::insert($traineeStory);
-        //$this->pr($traineeStory);
-        //exit();
         $story = TraineeStory::select('updated_story')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->where('round', $trainee['round'])->orderBy('id', 'desc')->first();
         foreach ($storyWords as $word) {
           $story->updated_story = str_replace($word, "<span class='emboss'>$word</span>", $story->updated_story);
@@ -179,8 +170,6 @@ class TraineeSessionController extends Controller
         $wordStory = Word::where('story_id', $trainee['session_number'])->pluck('word');
         $allWords = $words = $wordStory->toArray();
         $allWords = count($allWords);
-        //$this->pr($allWords);
-        //exit();
         if ($traineeRecord->session_current_position == 'recall' || $traineeRecord->session_current_position == '') {
           $traineeRecord->session_current_position = 'recall';
           $traineeRecord->save();
@@ -228,11 +217,7 @@ class TraineeSessionController extends Controller
         $traineeTransaction['time_taken'] = $timeTaken;
         $traineeTransaction['type'] = 'recall';
         TraineeTransaction::insert($traineeTransaction);
-        //$record = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_completed_position')->where('session_pin', $request->sessionpin)->where('completed', 0)->first();
-        //$story = Story::select('id', 'story')->where('id', $trainee['session_number'])->first();
-        //$word = Word::select('id', 'word', 'question')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
         $word = Word::select('id', 'word', 'question')->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->first();
-        //$this->pr($word->toArray());
         if ($word) {
           $showTraineeMessage = true;
           $traineeRecord->session_current_position = $word['id'];
@@ -269,8 +254,6 @@ class TraineeSessionController extends Controller
         $traineeTransaction['time_taken'] = $timeTaken;
         $traineeTransaction['type'] = 'recall';
         TraineeTransaction::insert($traineeTransaction);
-        //$story = Story::select('id', 'story')->where('id', $trainee['session_number'])->first();
-        //$word = Word::select('id', 'word', 'question')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
         $story = TraineeStory::select('updated_story', 'user_story_words')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->where('round', $trainee['round'])->orderBy('id', 'desc')->first();
         $storySentences = explode('. ',$story->updated_story);
         $allStoryWords = Word::select('id', 'word')->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->pluck('word', 'id')->all();
@@ -283,15 +266,15 @@ class TraineeSessionController extends Controller
         $breakParentLoop = false;
         foreach ($storySentences as $currentSentence) {
           foreach($userStoryWords as $wordKey=>$word) {
-            $findWord = $word;
+            $findWord = '/\b'.$word.'\b/';
             if ($wordKey < $userWordKey) {
               continue;
             } else if ($fillUpWord === $word) {
               $storyWordID = array_search($word, $allStoryWords);
-              $currentSentence = str_replace($findWord, "<input id='answer' class='fill-ups' autocomplete='off' name='answer-".$storyWordID."'>", $currentSentence);
+              $currentSentence = preg_replace($findWord, "<input id='answer' class='fill-ups' autocomplete='off' name='answer-".$storyWordID."'>", $currentSentence, 1);
               $breakParentLoop = true;
             } else {
-              $currentSentence = str_replace($findWord, str_repeat("_", 15), $currentSentence);
+              $currentSentence = preg_replace($findWord, str_repeat("_", 15), $currentSentence, 1);
             }
           }
           if ($breakParentLoop) {

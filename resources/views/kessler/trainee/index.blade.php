@@ -24,7 +24,6 @@
                 <th>Session Pin</th>
                 <th>Session Type</th>
                 <th>Session Number</th>
-                <th>Position</th>
                 <th>State</th>
                 <th width="25%">Actions</th>
               </tr>
@@ -35,7 +34,6 @@
                 <th>Session Pin</th>
                 <th>Session Type</th>
                 <th>Session Number</th>
-                <th>Position</th>
                 <th>State</th>
                 <th width="25%">Actions</th>
               </tr>
@@ -47,7 +45,6 @@
                 <td>{{$trainee->session_pin}}</td>
                 <td>{{$trainee->session_type}}</td>
                 <td>{{$trainee->session_number}}</td>
-                <td>{{$trainee->session_current_position}}</td>
                 <td>{{$trainee->session_state}}</td>
                 <td>
                   <a href="{{ route('trainee.edit',$trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-edit">&nbsp;</i> Edit</a>

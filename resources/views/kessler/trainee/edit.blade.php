@@ -21,7 +21,7 @@
               <div class="form-group">
                 <label class="small mb-1" for="type">Session Type</label>
                 <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
-                  <option>Session Type</option>
+                  <option value= '' >Session Type</option>
                   @foreach($types as $type)
                     <option value="{{ $type->type }}" {{$trainee->session_type==$type->type?'selected':'' }}>{{ $type->type }}</option>
                   @endforeach;
@@ -30,7 +30,7 @@
               <div class="form-group">
                 <label class="small mb-1" for="session_number">Session Number</label>
                 <select class="form-control select2" id="session_number" name="session_number" required placeholder="Select Session Number">
-                  <option selected="selected">Session Number</option>
+                  <option value= ''>Session Number</option>
                   @foreach($totalSessions as $session)
                     <option value="{{ $session }}" {{$session==$trainee->session_number?'selected':'' }}>{{ $session }}</option>
                   @endforeach;

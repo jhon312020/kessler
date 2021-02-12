@@ -142,6 +142,7 @@ class AjaxController extends Controller
         $storySentences = explode('. ',$story->updated_story);
         if ($story) {
           $userStoryWords = json_decode($story->user_story_words);
+          //$userStoryWords = array_values(array_unique($userStoryWords));
           $totalUsersWords = count($userStoryWords);
           $userWordKey = array_search($currentWord->word, $userStoryWords);
         }
@@ -195,32 +196,35 @@ class AjaxController extends Controller
           $count = 0;
           
           foreach ($storySentences as $currentSentence) {
-            //echo $this->pr($userStoryWords);
+            //echo $currentSentence.'--'.$this->pr($userStoryWords);
             foreach($userStoryWords as $wordKey=>$word) {
-              $findWord = $word;
-              //echo '<br/>'.$findWord;
+              $findWord = '/\b'.$word.'\b/';
+              //echo '<br/>'.$findWord.'--'.$wordKey.'--userWordkey--'.$userWordKey.'--fillupword--'.$fillUpWord.'---CurrentWord'.$word;
               if ($wordKey < $userWordKey) {
                 continue;
               } else if ($fillUpWord === $word && !$addedInputBox) {
-                $addedInputBox = true;
                 $storyWordID = array_search($word, $allStoryWords);
+                //echo 'came in';
                 if ($showAnswer) {
-                  $currentSentence = str_replace($findWord, "<input class='fill-ups' name='answer-".$storyWordID."' id='answer' value='".$answer."' readonly autocomplete='off'> $iconWrongORRight", $currentSentence, $count);
+                  $currentSentence = preg_replace($findWord, "<input class='fill-ups' name='answer-".$storyWordID."' id='answer' value='".$answer."' readonly autocomplete='off'> $iconWrongORRight", $currentSentence, 1, $count);
                   //echo '<br/>'.$currentSentence.'<br/>';
                   //If replacements happens we are breaking the parent loop
                   if ($count) {
+                    $addedInputBox = true;
                     $breakParentLoop = true;
                   }
                 } else {
-                  $currentSentence = str_replace($findWord, "<input id='answer' class='fill-ups' name='answer-".$storyWordID."'>", $currentSentence, $count);
+                  
+                  $currentSentence = preg_replace($findWord, "<input id='answer' class='fill-ups' name='answer-".$storyWordID."'>", $currentSentence, 1, $count);
                   //If replacements happens we are breaking the parent loop
                   if ($count) {
                     $breakParentLoop = true;
+                    $addedInputBox = true;
                   }
                 }
                 
               } else {
-                $currentSentence = str_replace($findWord, str_repeat("_", 15), $currentSentence, $count);
+                $currentSentence = preg_replace($findWord, str_repeat("_", 15), $currentSentence, -1, $count);
               }
             }
             if ($breakParentLoop) {
