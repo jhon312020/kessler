@@ -123,7 +123,7 @@
            } else if (response.reload) {
             console.log(response.reload);
            } else {
-            console.log(response);
+            //console.log(response);
             timer = performance.now();
             $('#story').html(response.updated_story);
             if (response.categorical_cue && !response.show_answer) {

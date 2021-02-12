@@ -128,7 +128,9 @@ class TraineeSessionController extends Controller
         }
         foreach($storyWords as $word) {
           $searchWord = strtolower($word);
-          $newString = str_replace($searchWord, $word, $newString);
+          //$newString = str_replace($searchWord, $word, $newString);
+          $findWord = '/\b'.$searchWord.'\b/';
+          $newString = preg_replace($findWord, $word, $newString, 1);
         }
         preg_match_all('/\b([A-Z]+)\b/', $newString, $userWords);
         $storyWords = $storyWords->toArray();
