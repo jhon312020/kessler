@@ -54,7 +54,7 @@
           </div>
           <div class="sb-sidenav-footer">
             <div class="small">Logged in as:</div>
-            Kessler Foundation
+            {{Auth::user()->name}}
           </div>
         </nav>
       </div>
