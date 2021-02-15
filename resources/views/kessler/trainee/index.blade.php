@@ -49,7 +49,9 @@
                 <td>
                   <a href="{{ route('trainee.edit',$trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-edit">&nbsp;</i> Edit</a>
                   <a href="{{ url('trainee/view',$trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-eye">&nbsp;</i> View</a>
+                  @if ($trainee->session_number > "4" && $trainee->session_type == "A")
                   <a href="{{ url('trainee/review',$trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-book">&nbsp;</i> Review</a>
+                  @endif
                   {{-- <form action="{{ route('trainee.destroy', $trainee->id)}}" method="post" class="d-inline">
                     @csrf
                     @method('DELETE')
