@@ -47,10 +47,15 @@
                 <td>{{$trainee->session_number}}</td>
                 <td>{{$trainee->session_state}}</td>
                 <td>
-                  <a href="{{ route('trainee.edit',$trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-edit">&nbsp;</i> Edit</a>
-                  <a href="{{ url('trainee/view',$trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-eye">&nbsp;</i> View</a>
+                  <a href="{{ route('trainee.edit', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-edit">&nbsp;</i> Edit</a>
+                  <a href="{{ url('trainee/view', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-eye">&nbsp;</i> View</a>
                   @if ($trainee->session_number > "4" && $trainee->session_type == "A")
-                  <a href="{{ url('trainee/review',$trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-book">&nbsp;</i> Revise</a>
+                    @php
+                      $traineeCurrentPosition = json_decode($trainee->session_current_position)
+                    @endphp
+                    @if ($traineeCurrentPosition->position == 'review') 
+                      <a href="{{ url('trainee/review', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-book">&nbsp;</i> Review</a>
+                    @endif
                   @endif
                   {{-- <form action="{{ route('trainee.destroy', $trainee->id)}}" method="post" class="d-inline">
                     @csrf
