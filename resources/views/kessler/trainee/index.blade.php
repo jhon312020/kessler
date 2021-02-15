@@ -25,7 +25,7 @@
                 <th>Session Type</th>
                 <th>Session Number</th>
                 <th>State</th>
-                <th width="35%">Actions</th>
+                <th width="30%">Actions</th>
               </tr>
             </thead>
             <tfoot>
@@ -35,7 +35,7 @@
                 <th>Session Type</th>
                 <th>Session Number</th>
                 <th>State</th>
-                <th width="35%">Actions</th>
+                <th width="30%">Actions</th>
               </tr>
             </tfoot>
             <tbody>
