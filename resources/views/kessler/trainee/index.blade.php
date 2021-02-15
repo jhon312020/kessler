@@ -24,9 +24,8 @@
                 <th>Session Pin</th>
                 <th>Session Type</th>
                 <th>Session Number</th>
-                <th>Position</th>
                 <th>State</th>
-                <th width="25%">Actions</th>
+                <th width="35%">Actions</th>
               </tr>
             </thead>
             <tfoot>
@@ -35,9 +34,8 @@
                 <th>Session Pin</th>
                 <th>Session Type</th>
                 <th>Session Number</th>
-                <th>Position</th>
                 <th>State</th>
-                <th width="25%">Actions</th>
+                <th width="35%">Actions</th>
               </tr>
             </tfoot>
             <tbody>
@@ -47,11 +45,11 @@
                 <td>{{$trainee->session_pin}}</td>
                 <td>{{$trainee->session_type}}</td>
                 <td>{{$trainee->session_number}}</td>
-                <td>{{$trainee->session_current_position}}</td>
                 <td>{{$trainee->session_state}}</td>
                 <td>
                   <a href="{{ route('trainee.edit',$trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-edit">&nbsp;</i> Edit</a>
                   <a href="{{ url('trainee/view',$trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-eye">&nbsp;</i> View</a>
+                  <a href="{{ url('trainee/review',$trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-book">&nbsp;</i> Review</a>
                   {{-- <form action="{{ route('trainee.destroy', $trainee->id)}}" method="post" class="d-inline">
                     @csrf
                     @method('DELETE')

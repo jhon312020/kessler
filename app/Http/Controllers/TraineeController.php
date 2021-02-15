@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Trainee;
+use App\Models\TraineeStory;
+use App\Models\Story;
 use App\Models\TraineeTransaction;
 use App\Models\Word;
 use App\Models\Type;
@@ -64,7 +66,7 @@ class TraineeController extends Controller
         'session_number'=>'required'
       ]);
       $session_pin = mt_rand(100000, 999999);
-      $trainee = new trainee([
+      $trainee = new Trainee([
         'trainee_id' => $request->get('trainee_id'),
         'session_type' => $request->get('session_type'),
         'session_number' => $request->get('session_number'),
@@ -190,6 +192,7 @@ class TraineeController extends Controller
       //exit;
       return view('kessler.trainee.view')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords'));
     }
+
     /**
      * Private function to generate recall words report for round 1 and round 2.
      *
@@ -220,6 +223,34 @@ class TraineeController extends Controller
       }
       //$this->pr($recallReport);
       return $recallReport;
+    }
+
+     /**
+     * Review the story of the trainee from session 5 to 8
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function review($id) {
+      $trainee = Trainee::find($id);
+      $traineeStory = TraineeStory::select('id', 'trainee_id', 'story_id', 'session_pin', 'original_story')->where('story_id', $trainee->session_number)->where('session_pin', $trainee->session_pin)->first();
+      //$this->pr($trainee->toArray()); exit();
+      return view('kessler.trainee.review', compact('traineeStory'));
+    }
+
+    /**
+     * Revise trainee story 
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function revise(Request $request, $id) {
+      $traineeStory = TraineeStory::find($id);
+      $traineeStory->updated_story = $request->get('story');
+      $traineeStory->reviewed = 1;
+      $traineeStory->save();
+      return redirect('/trainee')->with('success', 'TRAINEE STORY REVISED!');
     }
     
 }
