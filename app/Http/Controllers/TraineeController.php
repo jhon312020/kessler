@@ -118,6 +118,7 @@ class TraineeController extends Controller
         $trainee->session_current_position = null;
         $trainee->round = 1;
         $trainee->completed = 0;
+        $trainee->session_state = 'start';
       } if ($trainee->session_state = 'continue') {
         $trainee['session_current_position'] = $trainee->session_current_position;
       }
