@@ -85,7 +85,7 @@
       // $(this).html(
       //   '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
       // );
-      if ( confirm("Are you sure you wish to subimt the form?") == true ) {
+      if ( confirm("Are you sure you wish to submit the form?") == true ) {
         $("#jsLoader").removeClass('d-none');
         $('#jsRecallWord').val(words.join(' '));
         var startTime = $("<input>").attr("name", "startTime").attr("type", "hidden").val(timer);
