@@ -59,7 +59,7 @@
 
 <script type="text/javascript">
   $(document).ready( function() { 
-    $(document).on('click', '#jsStartSession', function() {
+    $(document).on('click touchstart', '#jsStartSession', function() {
       $('#jsTraineeSession').slideUp();
       $('#jsTraineeStory').removeClass('d-none').show();
       var counter = 120;
@@ -82,7 +82,7 @@
       $('#jsTimeContainer').addClass('d-none');
       }, 120000); // <-- time in milliseconds
     });
-     $(document).on('click', '#jsHide', function() {
+     $(document).on('click touchstart', '#jsHide', function() {
       $('#jsTimeContainer').toggleClass('d-none');
       if ($(this).text() == "Hide Time") {
         $(this).text("Show Time");
@@ -91,7 +91,7 @@
       }
       return false;
     });
-    $('#jsStartSession').on('click', function(event) { 
+    $('#jsStartSession').on('click touchstart', function(event) { 
         
     });
     // $(document).on('click', '#jsContinue', function(event) { 

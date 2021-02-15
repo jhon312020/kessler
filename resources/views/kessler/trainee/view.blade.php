@@ -62,8 +62,9 @@
               </tr>
               @foreach($storyWords as $storyWord)
                 <tr>
+                  @if(isset($roundOneReport[$storyWord->id][0]))
                   <td>{{$storyWord->word}}</td>
-                  <td class="type text-center {{ $roundOneReport[$storyWord->id][0]->correct_or_wrong ? 'correct' : 'wrong' }}"> 
+                  <td class="type text-center {{ $roundOneReport[$storyWord->id] && $roundOneReport[$storyWord->id][0]->correct_or_wrong ? 'correct' : 'wrong' }}"> 
                     @if($roundOneReport[$storyWord->id][0]->correct_or_wrong)
                       <i class="fa fa-check" aria-hidden="true"> </i>
                     @else 
@@ -71,38 +72,47 @@
                     @endif
                     {{$roundOneReport[$storyWord->id][0]->answer}} ({{ $roundOneReport[$storyWord->id][0]->time_taken}} sec)
                   </td>
+                  @else
+                     <td class="type text-center"></td>
+                  @endif
                   @if(isset($roundOneReport[$storyWord->id][1]))
                     <td class="type text-center categorical {{ $roundOneReport[$storyWord->id][1]->correct_or_wrong ? 'correct' : 'wrong' }}">
                       @if($roundOneReport[$storyWord->id][1]->correct_or_wrong)
                         <i class="fa fa-check" aria-hidden="true"> </i>
-                        @else 
-                          <i class="fa fa-times" aria-hidden="true"> </i>
+                      @else 
+                        <i class="fa fa-times" aria-hidden="true"> </i>
                       @endif
-                        {{$roundOneReport[$storyWord->id][1]->answer}} ({{$roundOneReport[$storyWord->id][1]->time_taken}} sec)
+                        {{ $roundOneReport[$storyWord->id][1]->answer ?: '' }} 
+                        ({{{ $roundOneReport[$storyWord->id][1]->time_taken or ''}}} sec)
                     </td> 
                   @else
-                    <td class="type text-center categorical"></td>
+                   <td></td>
                   @endif
                   @if (count($roundTwoReport))
-                    <td class="type text-center {{ $roundTwoReport[$storyWord->id][0]->correct_or_wrong ? 'correct' : 'wrong' }}"> 
-                      @if($roundTwoReport[$storyWord->id][0]->correct_or_wrong)
-                        <i class="fa fa-check" aria-hidden="true"> </i>
-                        @else 
-                          <i class="fa fa-times" aria-hidden="true"> </i>
-                      @endif
-                          {{$roundTwoReport[$storyWord->id][0]->answer}} ({{ $roundTwoReport[$storyWord->id][0]->time_taken}} sec)</td>
-                      @if (isset($roundTwoReport[$storyWord->id][1]))
-                        <td class="type text-center categorical {{ $roundTwoReport[$storyWord->id][1]->correct_or_wrong ? 'correct' : 'wrong' }}">
-                          @if($roundTwoReport[$storyWord->id][1]->correct_or_wrong)
-                            <i class="fa fa-check" aria-hidden="true"> </i>
+                    @if (isset($roundTwoReport[$storyWord->id])) 
+                      <td class="type text-center {{ $roundTwoReport[$storyWord->id][0]->correct_or_wrong ? 'correct' : 'wrong' }}"> 
+                        @if($roundTwoReport[$storyWord->id][0]->correct_or_wrong)
+                          <i class="fa fa-check" aria-hidden="true"> </i>
                           @else 
                             <i class="fa fa-times" aria-hidden="true"> </i>
-                          @endif
-                            {{$roundTwoReport[$storyWord->id][1]->answer}} ({{$roundTwoReport[$storyWord->id][1]->time_taken}}sec)
-                        </td> 
+                        @endif
+                            {{$roundTwoReport[$storyWord->id][0]->answer}} ({{ $roundTwoReport[$storyWord->id][0]->time_taken}} sec)</td>
+                        @if (isset($roundTwoReport[$storyWord->id][1]))
+                          <td class="type text-center categorical {{ $roundTwoReport[$storyWord->id][1]->correct_or_wrong ? 'correct' : 'wrong' }}">
+                            @if($roundTwoReport[$storyWord->id][1]->correct_or_wrong)
+                              <i class="fa fa-check" aria-hidden="true"> </i>
+                            @else 
+                              <i class="fa fa-times" aria-hidden="true"> </i>
+                            @endif
+                              {{$roundTwoReport[$storyWord->id][1]->answer ?: ''}} ({{$roundTwoReport[$storyWord->id][1]->time_taken}}sec)
+                          </td> 
+                        @else
+                          <td class="type text-center categorical"></td>
+                        @endif
                       @else
-                        <td class="type text-center categorical"></td>
-                      @endif
+                      <td></td>
+                      <td></td>
+                    @endif
                     @else
                     <td></td>
                     <td></td>

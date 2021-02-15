@@ -64,29 +64,29 @@ class TraineeSessionController extends Controller
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
-         if ($traineeRecord->session_current_position == 'recall' || $traineeRecord->session_current_position == '') {
-            $allWords = Word::where('story_id', $trainee['session_number'])->pluck('word');
-            $story = Story::select('story')->where('id', $trainee['session_number'])->first(); 
-            foreach ($allWords as $word) {
-              $story->story = str_replace($word, "<span class='emboss'>$word</span>", $story->story);
-            }
-            return view('msmt.sessions.story',compact('story', 'trainee'));
-         } else {
+        if ($traineeRecord->session_current_position == 'recall' || $traineeRecord->session_current_position == '') {
+          $allWords = Word::where('story_id', $trainee['session_number'])->pluck('word');
+          $story = Story::select('story')->where('id', $trainee['session_number'])->first(); 
+          foreach ($allWords as $word) {
+            $story->story = str_replace($word, "<span class='emboss'>$word</span>", $story->story);
+          }
+          return view('msmt.sessions.story', compact('story', 'trainee'));
+        } else {
           $startWord = Word::select('id', 'word', 'question')->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->first();
           $word = Word::select('id', 'word', 'question')->where('story_id', $trainee['session_number'])->where('id', $traineeRecord->session_current_position)->orderBy('id', 'asc')->first();
-            if ($word) {
-              TraineeTransaction::where('story_id', $trainee['session_number'])->where('word_id', $traineeRecord->session_current_position)->where('round', $traineeRecord->round)->delete();
-              $showTraineeMessage = ($startWord['id']==$word['id'])?true:false;
-              $traineeRecord->session_current_position = $word['id'];
-              $traineeRecord->save();
-              $wordID = $word['id'];
-              $question = $word['question'];
-              $findWord = $word['word'];
-              $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$wordID."' id='answer' autocomplete='off'>", $question);
-              $question = str_replace("$$", str_repeat("_", 15), $question);
-              return view('msmt.sessions.questions.show', compact('question', 'showTraineeMessage'));
-            }
-         }
+          if ($word) {
+            TraineeTransaction::where('story_id', $trainee['session_number'])->where('word_id', $traineeRecord->session_current_position)->where('round', $traineeRecord->round)->delete();
+            $showTraineeMessage = ($startWord['id']==$word['id'])?true:false;
+            $traineeRecord->session_current_position = $word['id'];
+            $traineeRecord->save();
+            $wordID = $word['id'];
+            $question = $word['question'];
+            $findWord = $word['word'];
+            $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$wordID."' id='answer' autocomplete='off'>", $question);
+            $question = str_replace("$$", str_repeat("_", 15), $question);
+            return view('msmt.sessions.questions.show', compact('question', 'showTraineeMessage'));
+          }
+        }
       } else {
         return redirect('/index');
       }
@@ -118,51 +118,43 @@ class TraineeSessionController extends Controller
     public function writeup(Request $request) {
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
-        //$wordStory = Word::select('word')->where('story_id', $trainee['session_number'])->get();
-        /*$this->pr($wordStory->toArray());
-        exit();*/
         $storyWords = Word::where('story_id', $trainee['session_number'])->pluck('word');
         $story = $request->get('story');
         $fullStory = strtolower($story);
-        $sentences = preg_split('/([.?!]+)/', $fullStory, -1,PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
+        $sentences = preg_split('/([.?!]+)/', $fullStory, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
         $newString = '';
         foreach ($sentences as $key => $sentence) {
           $newString .= ($key & 1) == 0 ? ucfirst(strtolower(trim($sentence))) : $sentence.' ';
         }
         foreach($storyWords as $word) {
           $searchWord = strtolower($word);
-          $newString = str_replace($searchWord, $word, $newString);
+          //$newString = str_replace($searchWord, $word, $newString);
+          $findWord = '/\b'.$searchWord.'\b/';
+          $newString = preg_replace($findWord, $word, $newString, 1);
         }
         preg_match_all('/\b([A-Z]+)\b/', $newString, $userWords);
         $storyWords = $storyWords->toArray();
         $userStoryWords = array();
         if ($userWords) {
           foreach($userWords[0] as $word) {
-            if (in_array($word, $storyWords)){
+            if (in_array($word, $storyWords)) {
               $userStoryWords[] = $word;
             }
           }
         }
-        //exit;
-        // echo '<br/><br/>';
-        // echo $newString;
-        // echo '<br/><br/>';
-        //echo ucfirst($fullStory);
         $traineeStory['trainee_id'] = $trainee['trainee_id'];
         $traineeStory['story_id'] = $trainee['session_number'];
         $traineeStory['session_pin'] = $trainee['session_pin'];
         $traineeStory['round'] = $trainee['round'];
         $traineeStory['original_story'] = $story;
         $traineeStory['updated_story'] = $newString;
+        $userStoryWords = array_values(array_unique($userStoryWords));
         $traineeStory['user_story_words'] = json_encode($userStoryWords);
         TraineeStory::insert($traineeStory);
-        //$this->pr($traineeStory);
-        //exit();
-        $story = TraineeStory::select('updated_story')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->where('round', $trainee['round'])->first();
+        $story = TraineeStory::select('updated_story')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->where('round', $trainee['round'])->orderBy('id', 'desc')->first();
         foreach ($storyWords as $word) {
           $story->updated_story = str_replace($word, "<span class='emboss'>$word</span>", $story->updated_story);
         }
-
         return view('msmt.sessions.tale', compact('story', 'trainee'));
       } else {
         return redirect('/index');
@@ -180,8 +172,6 @@ class TraineeSessionController extends Controller
         $wordStory = Word::where('story_id', $trainee['session_number'])->pluck('word');
         $allWords = $words = $wordStory->toArray();
         $allWords = count($allWords);
-        //$this->pr($allWords);
-        //exit();
         if ($traineeRecord->session_current_position == 'recall' || $traineeRecord->session_current_position == '') {
           $traineeRecord->session_current_position = 'recall';
           $traineeRecord->save();
@@ -229,11 +219,7 @@ class TraineeSessionController extends Controller
         $traineeTransaction['time_taken'] = $timeTaken;
         $traineeTransaction['type'] = 'recall';
         TraineeTransaction::insert($traineeTransaction);
-        //$record = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_completed_position')->where('session_pin', $request->sessionpin)->where('completed', 0)->first();
-        //$story = Story::select('id', 'story')->where('id', $trainee['session_number'])->first();
-        //$word = Word::select('id', 'word', 'question')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
         $word = Word::select('id', 'word', 'question')->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->first();
-        //$this->pr($word->toArray());
         if ($word) {
           $showTraineeMessage = true;
           $traineeRecord->session_current_position = $word['id'];
@@ -270,9 +256,8 @@ class TraineeSessionController extends Controller
         $traineeTransaction['time_taken'] = $timeTaken;
         $traineeTransaction['type'] = 'recall';
         TraineeTransaction::insert($traineeTransaction);
-        //$story = Story::select('id', 'story')->where('id', $trainee['session_number'])->first();
-        //$word = Word::select('id', 'word', 'question')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
-        $story = TraineeStory::select('updated_story', 'user_story_words')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->where('round', $trainee['round'])->first();
+        $story = TraineeStory::select('updated_story', 'user_story_words')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->where('round', $trainee['round'])->orderBy('id', 'desc')->first();
+        $storySentences = explode('. ',$story->updated_story);
         $allStoryWords = Word::select('id', 'word')->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->pluck('word', 'id')->all();
         if ($story) {
           $userStoryWords = json_decode($story->user_story_words);
@@ -280,19 +265,25 @@ class TraineeSessionController extends Controller
           $userWordKey = 0;
           $fillUpWord = $userStoryWords[0];
         }
-        foreach($userStoryWords as $wordKey=>$word) {
-          $findWord = $word;
-          if ($wordKey < $userWordKey) {
-            continue;
-          } else if ($fillUpWord === $word) {
-            $storyWordID = array_search($word, $allStoryWords);
-            $story->updated_story= str_replace($findWord, "<input id='answer' class='fill-ups' autocomplete='off' name='answer-".$storyWordID."'>", $story->updated_story);
-          } else {
-            $story->updated_story = str_replace($findWord, str_repeat("_", 15), $story->updated_story);
+        $breakParentLoop = false;
+        foreach ($storySentences as $currentSentence) {
+          foreach($userStoryWords as $wordKey=>$word) {
+            $findWord = '/\b'.$word.'\b/';
+            if ($wordKey < $userWordKey) {
+              continue;
+            } else if ($fillUpWord === $word) {
+              $storyWordID = array_search($word, $allStoryWords);
+              $currentSentence = preg_replace($findWord, "<input id='answer' class='fill-ups' autocomplete='off' name='answer-".$storyWordID."'>", $currentSentence, 1);
+              $breakParentLoop = true;
+            } else {
+              $currentSentence = preg_replace($findWord, str_repeat("_", 15), $currentSentence, 1);
+            }
+          }
+          if ($breakParentLoop) {
+            break;
           }
         }
-      //exit;
-        return view('msmt.sessions.questions.cue')->with('story', $story);
+        return view('msmt.sessions.questions.cue', compact('story', 'currentSentence'));
       } else {
         return redirect('/index');
       }
