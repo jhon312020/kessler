@@ -80,12 +80,13 @@ class TraineeSessionController extends Controller
           foreach ($allWords as $word) {
             $story->story = str_replace($word, "<span class='emboss'>$word</span>", $story->story);
           }
-          return view('msmt.sessions.story', compact('story', 'trainee'));
+          $linkURL = url('recallwords');
+          return view('msmt.sessions.story', compact('story', 'trainee', 'linkURL'));
         } else {
           $startWord = Word::select('id', 'word', 'question')->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->first();
           $word = Word::select('id', 'word', 'question')->where('story_id', $trainee['session_number'])->where('id', $traineeCurrentPosition->word_id)->orderBy('id', 'asc')->first();
           if ($word) {
-            TraineeTransaction::where('story_id', $trainee['session_number'])->where('word_id', $traineeCurrentPosition['word_id'])->where('round', $traineeRecord->round)->delete();
+            TraineeTransaction::where('story_id', $trainee['session_number'])->where('word_id', $traineeCurrentPosition->word_id)->where('round', $traineeRecord->round)->delete();
             $showTraineeMessage = ($startWord['id']==$word['id']) ? true : false;
             $this->traineeCurrentPosition->word_id = $word['id'];
             $this->traineeCurrentPosition->position = 'answer';
@@ -196,13 +197,14 @@ class TraineeSessionController extends Controller
         $trainee = $request->session()->get('trainee');
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
         //$this->pr($trainee);
-        $story = TraineeStory::select('updated_story', 'reviewed')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->where('round', $trainee['round'])->orderBy('id', 'desc')->first();
+        $story = TraineeStory::select('updated_story as story', 'reviewed')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->where('round', $trainee['round'])->orderBy('id', 'desc')->first();
         if ($story && $story['reviewed']) {
           $storyWords = Word::where('story_id', $trainee['session_number'])->pluck('word');
           foreach ($storyWords as $word) {
-            $story->updated_story = str_replace($word, "<span class='emboss'>$word</span>", $story->updated_story);
+            $story->story = str_replace($word, "<span class='emboss'>$word</span>", $story->story);
           }
-          return view('msmt.sessions.story', compact('story', 'trainee'));
+          $linkURL = url('recallword');
+          return view('msmt.sessions.story', compact('story', 'trainee', 'linkURL'));
         } else {
           return view('msmt.sessions.review');
         }
@@ -287,7 +289,8 @@ class TraineeSessionController extends Controller
           $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$wordID."' id='answer' autocomplete='off'>", $question);
           $question = str_replace("$$", str_repeat("_", 15), $question);
         } 
-        return view('msmt.sessions.questions.show', compact('question', 'showTraineeMessage'));
+        $submitURL = url('next');
+        return view('msmt.sessions.questions.show', compact('question', 'showTraineeMessage', 'submitURL'));
       } else {
         return redirect('/index');
       }
