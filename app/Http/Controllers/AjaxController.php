@@ -272,7 +272,7 @@ class AjaxController extends Controller
         // }
         if ($fillUpWord) {
           $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
-          $response['updated_story'] = $currentSentence;
+          $response['question'] = $currentSentence;
           $response['categorical_cue'] = null;
           $response['reload'] = false;
           $response['show_answer'] = $showAnswer;

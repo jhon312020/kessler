@@ -25,18 +25,10 @@
       <h1 class="heading">CUES</br></h1>
     </div>
   </div>
-  <div class="row">
-    <div class="col-lg-8 mx-auto">
-      <div class="transparent-background d-none" id="jsLoader">
-        <div class="loader-center">
-          <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <form action="{{ url('next') }}" method="POST" id="jsQuestionForm">
+  @include('msmt.common.loader')
+  <form action="{{ $submitURL }}" method="POST" id="jsQuestionForm">
     <div class="row">
-      <div class="col-lg-6 mx-auto text-justify" id="jsQueContainer">
+      <div class="col-lg-8 mx-auto text-justify" id="jsQueContainer">
         <div class="control-group">
           <div class="form-group controls mb-0 pb-2" class="answer_list">
             @csrf {{ method_field('post') }}

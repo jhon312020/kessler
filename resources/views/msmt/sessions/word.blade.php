@@ -25,14 +25,8 @@
       <h1 class="heading">Write Your Own Story</br></h1>
     </div>
   </div>
+  @include('msmt.common.loader')
   <div class="row">
-    <div class="col-lg-12">
-      <div class="transparent-background d-none" id="jsLoader">
-        <div class="loader-center">
-          <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-        </div>
-      </div>
-    </div>
     <div class="col-lg-12 mx-auto" id="jsQueContainer">
       <form action="{{ url('read') }}" method="POST" id="jsFormWriteup">
       @csrf {{ method_field('post') }}

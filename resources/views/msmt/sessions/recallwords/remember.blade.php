@@ -12,18 +12,10 @@
        <p class="mx-auto">Now, try to remember as many of the <span class="emboss">CAPITALIZED</span> words from the story as you can. Use the story to help you remember the words.</p>
     </div>
   </div>
-  <div class="row">
-    <div class="col-lg-8 mx-auto">
-      <div class="transparent-background d-none" id="jsLoader">
-        <div class="loader-center">
-          <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
+  @include('msmt.common.loader')
   <div class="row">
     <div class="col-lg-6 mx-auto">
-      <form action="{{ url('sessions') }}" method="POST" id="recallWords">
+      <form action="{{ $submitURL }}" method="POST" id="recallWords">
         @csrf {{ method_field('post') }}
         <div class="control-group">
           <div class="form-group floating-label-form-group controls mb-0 pb-2">
@@ -93,6 +85,8 @@
         var endTime = $("<input>").attr("name", "endTime").attr("type", "hidden").val(performance.now());
         $('#recallWords').append(endTime);
         $("#recallWords").submit();
+      } else {
+        $(this).prop("disabled", false);
       }
     });
     $(document).on('close.bs.alert', ".alert", function (event) {

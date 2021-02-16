@@ -50,7 +50,7 @@
           </div>
         </div>
         <div class="form-group text-center">
-          <a href="{{ url('recallwords')}}" class="btn btn-primary btn-xl">CONTINUE</a>
+          <a href="{{ $linkURL }}" class="btn btn-primary btn-xl">CONTINUE</a>
         </div>
       </div>
     </div>
