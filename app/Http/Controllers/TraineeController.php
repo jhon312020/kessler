@@ -121,8 +121,7 @@ class TraineeController extends Controller
         $trainee->round = 1;
         $trainee->completed = 0;
         $trainee->session_state = 'start';
-      } if ($trainee->session_state = 'continue') {
-        $trainee['session_current_position'] = $trainee->session_current_position;
+        TraineeTransaction::where('story_id', $trainee['session_number'])->where('trainee_id', $trainee['trainee_id'])->where('session_pin', $trainee['session_pin'])->delete();
       }
       $trainee->save();
       return redirect('/trainee')->with('success', 'Trainee information has been updated succesfully!');
