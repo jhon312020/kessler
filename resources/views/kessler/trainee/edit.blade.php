@@ -55,7 +55,7 @@
    $(document).ready( function() { // Wait until document is fully parsed
     $("#jsUpdate").on('click touchstart', function(event) {
       event.preventDefault();
-      if (confirm("Are you sure to continue ?") == true ) {
+      if (confirm("Are you sure to start from scratch ?") == true ) {
            window.location.href = "/trainee";
       }
     });
