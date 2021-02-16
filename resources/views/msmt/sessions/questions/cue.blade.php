@@ -1,7 +1,7 @@
 @extends('msmt.layouts.master')
 
 @section('content')
-<section id="jsTraineeMessage">
+<section class="{{ $showTraineeMessage? '': 'd-none' }}" id="jsTraineeMessage">
   <div class="row">
     <div class="col-lg-8 mx-auto">
       <h1 class="heading">INSTRUCTIONS</h1>
@@ -19,7 +19,7 @@
     </div>
   </div>
 </section>
-<section class="text-center d-none" id="jsQuestions">
+<section class="text-center {{ !$showTraineeMessage? '': 'd-none' }}" id="jsQuestions">
   <div class="row">
     <div class="col-lg-8 mx-auto">
       <h1 class="heading">CUES</h1>
@@ -56,12 +56,16 @@
 </section>
 <script type="text/javascript">
   $(document).ready( function() { // Wait until document is fully parsed
+    var showTraineeMessage = '{{ $showTraineeMessage }}';
     var timer = null;
     var categoryCueShowed = 0;
     var showedAnswer = 0;
     var requestInProcess = false;
     $('#answer').focus();
-    document.getElementById("answer").focus();
+    //document.getElementById("answer").focus();
+    if (!showTraineeMessage) {
+      timer = performance.now();
+    }
     $(document).on('keyup', '#answer', function() {
       this.value = this.value.toUpperCase();
     });

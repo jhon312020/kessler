@@ -19,7 +19,7 @@
     </div>
   </div>
 </section>
-<section class="page-section text-center {{ !$showTraineeMessage? '': 'd-none' }}" id="jsQuestions">
+<section class="text-center {{ !$showTraineeMessage? '': 'd-none' }}" id="jsQuestions">
   <div class="row">
     <div class="col-lg-8 mx-auto">
       <h1 class="heading">CUES</br></h1>
@@ -62,7 +62,7 @@
     var categoryCueShowed = 0;
     var showedAnswer = 0;
     $('#answer').focus();
-    document.getElementById("answer").focus();
+    //document.getElementById("answer").focus();
     if (!showTraineeMessage) {
       timer = performance.now();
     }

@@ -23,6 +23,7 @@ class TraineeController extends Controller
     public function __construct() {
       parent::__construct();
       $this->totalSessions = range(1, 10);
+      $this->traineeCurrentPosition = (object) array('word_id'=>'', 'position'=>'tale', 'user_word_id'=>0, 'sentence'=>0);
     }
 
     /**
@@ -250,8 +251,14 @@ class TraineeController extends Controller
       $traineeStory = TraineeStory::find($id);
       $traineeStory->updated_story = $request->get('story');
       $traineeStory->reviewed = 1;
-      $traineeStory->save();
-      return redirect('/trainee')->with('success', 'TRAINEE STORY REVISED!');
+      if ($traineeStory->save()) {
+        $traineeRecord = Trainee::where('session_pin', $traineeStory->session_pin)->first();
+        if ($traineeRecord) {
+          $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
+          $traineeRecord->save();
+        }
+      }
+      return redirect('/trainee')->with('success', 'Trainee story has been reviewed Successfully!');
     }
     
 }

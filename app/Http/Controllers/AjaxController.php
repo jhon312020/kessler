@@ -23,7 +23,7 @@ class AjaxController extends Controller
      */
     private $traineeCurrentPosition;
     public function __construct() {
-      $this->traineeCurrentPosition = array('word_id'=>'', 'position'=>'', 'user_word_id'=>0, 'sentence'=>0);
+      $this->traineeCurrentPosition = (object) array('word_id'=>'', 'position'=>'', 'user_word_id'=>0, 'sentence'=>0);
     }
     /**
      * Store the recorded list of words
@@ -87,8 +87,8 @@ class AjaxController extends Controller
           // if ($word['id'] > 2) {
           //   echo $traineeRecord->session_current_position = $word['id'];
           // }
-          $this->traineeCurrentPosition['word_id'] = $word['id'];
-          $this->traineeCurrentPosition['position'] = 'answer';
+          $this->traineeCurrentPosition->word_id = $word['id'];
+          $this->traineeCurrentPosition->position = 'answer';
           $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
           $traineeRecord->save();
           $question = $word['question'];
@@ -139,6 +139,7 @@ class AjaxController extends Controller
         $traineeCurrentPosition = json_decode($traineeRecord->session_current_position);
         $remove = ['_token', '_method', 'endTime', 'startTime', 'categoryCue', 'showedAnswer'];
         $traineeAnswer = array_diff_key($request->all(), array_flip($remove));
+        $sentenceKey = 0;
         foreach($traineeAnswer as $key=>$answer) {
           $wordKey = explode('-', $key);
           $wordID = array_pop($wordKey);
@@ -159,7 +160,8 @@ class AjaxController extends Controller
           $totalUsersWords = count($userStoryWords);
           //$userWordKey = array_search($currentWord->word, $userStoryWords);
           $userWordKey = $traineeCurrentPosition->user_word_id ? $traineeCurrentPosition->user_word_id : array_search($currentWord->word, $userStoryWords);
-          $this->traineeCurrentPosition['position'] = 'answer';
+          $sentenceKey = $traineeCurrentPosition->sentence ? $traineeCurrentPosition->sentence : 0;
+          $this->traineeCurrentPosition->position = 'answer';
         }
         if ($currentWord) {
           $fillUpWord = $currentWord->word;
@@ -195,7 +197,7 @@ class AjaxController extends Controller
           if (!$showAnswer && $request->showedAnswer) {   
             if ($userWordKey !== false) {
               $userWordKey++;
-              $this->traineeCurrentPosition['user_word_id'] =  $userWordKey;
+              $this->traineeCurrentPosition->user_word_id =  $userWordKey;
               if ($userWordKey < $totalUsersWords ) {
                 $fillUpWord = $userStoryWords[$userWordKey];
               } else {
@@ -211,16 +213,14 @@ class AjaxController extends Controller
           $counter =1;
           $count = 0;
           $sentenceKey = 0;
-          foreach ($storySentences as $sentenceKey=>$currentSentence) {
+          foreach (array_slice($storySentences, $sentenceKey) as $sentenceKey=>$currentSentence) {
             //echo $currentSentence.'--'.$this->pr($userStoryWords);
-            foreach($userStoryWords as $wordKey=>$word) {
+            foreach(array_slice($userStoryWords, $userWordKey, null, true) as $wordKey=>$word) {
               $findWord = '/\b'.$word.'\b/';
               //echo '<br/>'.$findWord.'--'.$wordKey.'--userWordkey--'.$userWordKey.'--fillupword--'.$fillUpWord.'---CurrentWord'.$word;
-              if ($wordKey < $userWordKey) {
-                continue;
-              } else if ($fillUpWord === $word && !$addedInputBox) {
+              if ($fillUpWord === $word && !$addedInputBox) {
                 $storyWordID = array_search($word, $allStoryWords);
-                $this->traineeCurrentPosition['sentence'] = $sentenceKey;
+                $this->traineeCurrentPosition->sentence = $sentenceKey;
                 //echo 'came in';
                 if ($showAnswer) {
                   $currentSentence = preg_replace($findWord, "<input class='fill-ups' name='answer-".$storyWordID."' id='answer' value='".$answer."' readonly autocomplete='off'> $iconWrongORRight", $currentSentence, 1, $count);
@@ -252,7 +252,6 @@ class AjaxController extends Controller
         }
         //$this->pr($traineeRecord->toArray());
         //$this->pr($this->traineeCurrentPosition);
-        $traineeRecord->save();
         //echo $currentSentence;
         //   foreach($userStoryWords as $wordKey=>$word) {
         //     $findWord = $word;
@@ -280,13 +279,13 @@ class AjaxController extends Controller
           if ($fillUpWord === $currentWord['word']) {
             $response['categorical_cue'] = $currentWord['categorical_cue'];
           }
-          return $response;
         } else if ($userWordKey >= $totalUsersWords) {
           $traineeRecord->session_current_position = null;
           $response['completed'] = true;
           $response['redirectURL'] = url("/complete");
           $request->session()->put('completed', true);
         }
+        $traineeRecord->save();
         return $response;
       } else {
         return $respone;
