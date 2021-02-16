@@ -74,7 +74,7 @@ class TraineeSessionController extends Controller
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
         $traineeCurrentPosition = $traineeRecord->session_current_position?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
-        if ($traineeCurrentPosition->position == 'recall' || $traineeCurrentPosition->position == '') {
+        if ($traineeCurrentPosition || $traineeCurrentPosition->position == 'recall' || $traineeCurrentPosition->position == '') {
           $allWords = Word::where('story_id', $trainee['session_number'])->pluck('word');
           $story = Story::select('story')->where('id', $trainee['session_number'])->first(); 
           foreach ($allWords as $word) {
