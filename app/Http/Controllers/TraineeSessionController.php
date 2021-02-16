@@ -217,7 +217,7 @@ class TraineeSessionController extends Controller
         $allWords = $words = $wordStory->toArray();
         $allWords = count($allWords);
         $traineeCurrentPosition = $traineeRecord->session_current_position?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
-        if ($traineeCurrentPosition->position == 'recall' || $traineeCurrentPosition->position == '') {
+        if ($traineeCurrentPosition || $traineeCurrentPosition->position == 'recall' || $traineeCurrentPosition->position == '') {
           $this->traineeCurrentPosition['position'] = 'recall';
           $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
           $traineeRecord->save();
