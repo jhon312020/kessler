@@ -53,7 +53,7 @@
                     @php
                       $traineeCurrentPosition = json_decode($trainee->session_current_position)
                     @endphp
-                    @if ($traineeCurrentPosition->position == 'review') 
+                    @if ($traineeCurrentPosition && $traineeCurrentPosition->position == 'review') 
                       <a href="{{ url('trainee/review', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-book">&nbsp;</i> Review</a>
                     @endif
                   @endif
