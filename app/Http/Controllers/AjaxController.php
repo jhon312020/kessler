@@ -104,7 +104,8 @@ class AjaxController extends Controller
           $response['reload'] = false;
           $response['show_answer'] = $showAnswer;
           if ($wordID == $word['id']) {
-            $response['categorical_cue'] = $word['categorical_cue'];
+            $response['categorical_cue'] = '<span class="wrong">Your response is incorrect!</span> Try again <br/>"'.$word['categorical_cue'].'"';
+            //$word['categorical_cue'];
           }
           return $response;
         } else if ($wordID == $lastWord->id) {
@@ -277,7 +278,7 @@ class AjaxController extends Controller
           $response['reload'] = false;
           $response['show_answer'] = $showAnswer;
           if ($fillUpWord === $currentWord['word']) {
-            $response['categorical_cue'] = $currentWord['categorical_cue'];
+            $response['categorical_cue'] = '<span class="wrong">Your response is incorrect!</span> Try again <br/> "'.$currentWord['categorical_cue'].'"';
           }
         } else if ($userWordKey >= $totalUsersWords) {
           $traineeRecord->session_current_position = null;

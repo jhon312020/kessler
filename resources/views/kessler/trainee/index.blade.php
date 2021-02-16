@@ -54,7 +54,7 @@
                       $traineeCurrentPosition = json_decode($trainee->session_current_position)
                     @endphp
                     @if ($traineeCurrentPosition && $traineeCurrentPosition->position == 'review') 
-                      <a href="{{ url('trainee/review', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-book">&nbsp;</i> Review</a>
+                      <a href="{{ url('trainee/review', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-book">&nbsp;</i> Approve</a>
                     @endif
                   @endif
                   {{-- <form action="{{ route('trainee.destroy', $trainee->id)}}" method="post" class="d-inline">
