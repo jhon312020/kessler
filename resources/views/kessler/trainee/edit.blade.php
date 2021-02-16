@@ -42,7 +42,7 @@
               <input type="radio" name="state" id="jsScratch" class="jsScratch" value="start">&emsp;Start from Scratch&emsp;
               </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="button" id="jsUpdate" class="btn btn-primary">Update</button>
                 <a href="{{ url('/trainee')}}" class="ml-2 btn btn-danger" role="button">Cancel</a>
               </div>
             </form>
@@ -51,4 +51,14 @@
     </div>
   </div>
 </div>
+<script type="text/javascript">
+   $(document).ready( function() { // Wait until document is fully parsed
+    $("#jsUpdate").on('click touchstart', function(event) {
+      //event.preventDefault();
+      if (confirm("Are you sure to continue ?") == true ) {
+           window.location.href = "/trainee";
+      }
+    });
+   })
+</script>
 @endsection
