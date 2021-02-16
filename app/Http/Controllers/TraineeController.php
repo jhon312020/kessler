@@ -116,7 +116,7 @@ class TraineeController extends Controller
       $trainee = Trainee::find($id);
       $trainee->session_type = $request->get('session_type');
       $trainee->session_number = $request->get('session_number');
-      if($trainee->session_state = 'start')  {
+      if($trainee->session_state == 'start')  {
         $trainee->session_current_position = null;
         $trainee->round = 1;
         $trainee->completed = 0;
@@ -134,7 +134,7 @@ class TraineeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-      $trainee = trainee::find($id);
+      $trainee = Trainee::find($id);
       $trainee->delete();
       return redirect('/trainee')->with('success', 'Trainee has been deleted succesfully!');
     }

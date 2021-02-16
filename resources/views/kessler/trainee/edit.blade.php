@@ -54,7 +54,7 @@
 <script type="text/javascript">
    $(document).ready( function() { // Wait until document is fully parsed
     $("#jsUpdate").on('click touchstart', function(event) {
-      //event.preventDefault();
+      event.preventDefault();
       if (confirm("Are you sure to continue ?") == true ) {
            window.location.href = "/trainee";
       }
