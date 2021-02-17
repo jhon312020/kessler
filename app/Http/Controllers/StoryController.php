@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Story;
+use App\Models\Type;
 
 class StoryController extends Controller
 {
@@ -11,8 +12,11 @@ class StoryController extends Controller
      * Create a new controller instance.
      *
      * @return void
+     * @return \Illuminate\Http\Response
      */
+    var $totalSessions = array();
     public function __construct() {
+      $this->totalSessions = range(1, 10);
       $this->middleware('auth');
       parent::__construct();
     }
@@ -32,7 +36,9 @@ class StoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
-      return view('kessler.story.create');
+      $types = Type::all();
+      $totalSessions = $this->totalSessions;
+      return view('kessler.story.create', compact('totalSessions','types'));
     }
 
     /**
@@ -43,10 +49,14 @@ class StoryController extends Controller
      */
     public function store(Request $request) {
       $request->validate([
-        'story'=>'required'
+        'session_type' => 'required',
+        'session_number' => 'required',
+        'story' => 'required'
       ]);
       
       $story = new Story([
+        'session_type' => $request->get('session_type'),
+        'session_number' => $request->get('session_number'),
         'story' => $request->get('story')
       ]);
       $story->save();
@@ -71,7 +81,9 @@ class StoryController extends Controller
      */
     public function edit($id) {
       $story = Story::find($id);
-      return view('kessler.story.edit', compact('story'));
+      $types = Type::all();
+      $totalSessions = $this->totalSessions;
+      return view('kessler.story.edit', compact('story', 'totalSessions','types'));
     }
 
     /**
@@ -83,9 +95,13 @@ class StoryController extends Controller
      */
     public function update(Request $request, $id) {
       $request->validate([
+        'session_type' => 'required',
+        'session_number' => 'required',
         'story'=>'required'
       ]);
       $story = Story::find($id);
+      $story->session_type = $request->get('session_type');
+      $story->session_number = $request->get('session_number');
       $story->story = $request->get('story');
       $story->save();
       return redirect('/story')->with('success', 'STORY UPDATED!');

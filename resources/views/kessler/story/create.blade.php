@@ -18,6 +18,24 @@
             <form method="post" action="{{ route('story.store') }}">
               @csrf
               <div class="form-group">
+               <label class="small mb-1" for="session_number">Session Type</label>
+              <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
+                <option value= '' selected="selected">Session Type</option>
+                @foreach($types as $type)
+                  <option value="{{ $type->type }}">{{ $type->type }}</option>
+                @endforeach;
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="small mb-1" for="session_number">Session Number</label>
+              <select class="form-control select2" id="session_number" name="session_number" required placeholder="Select Session Number">
+                <option value='' selected="selected">Session Number</option>
+                @foreach($totalSessions as $session)
+                  <option value="{{ $session }}">{{ $session }}</option>
+                @endforeach;
+              </select>
+            </div>
+              <div class="form-group">
                 <label class="small mb-1" for="story">Enter Story</label>
                 <textarea class="form-control py-4" id="story" name="story" style="height: 218px;" rows="30" cols="150" placeholder="Enter Story ..." required  autofocus></textarea>
               </div>

@@ -50,14 +50,17 @@ class WordController extends Controller
      */
     public function store(Request $request) {
         $request->validate([
+          'session_type' => 'required',
+          'story_id' => 'required',
           'word'=>'required',
           'session_type' => 'required',
           'categorical_cue'=>'required'
         ]);
         
         $words = new Word([
-          'word' => $request->get('word'),
           'session_type' => $request->get('session_type'),
+          'story_id' => $request->get('story_id'),
+          'word' => $request->get('word'),
           'contextual_cue' => $request->get('contextual_cue'),
           'categorical_cue' => $request->get('categorical_cue')
         ]);
@@ -101,6 +104,8 @@ class WordController extends Controller
         'categorical_cue'=>'required'
       ]);
       $word = Word::find($id);
+      $word->session_type = $request->get('session_type');
+      $word->story_id = $request->get('story_id');
       $word->word = $request->get('word');
       $word->contextual_cue = $request->get('contextual_cue');
       $word->categorical_cue = $request->get('categorical_cue');

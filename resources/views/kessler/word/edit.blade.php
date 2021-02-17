@@ -28,8 +28,8 @@
                 </select>
               </div>
               <div class="form-group">
-                <label class="small mb-1" for="session_number">Session Number</label>
-                <select class="form-control select2" id="session_number" name="session_number" required placeholder="Select Session Number">
+                <label class="small mb-1" for="story_id">Session Number</label>
+                <select class="form-control select2" id="story_id" name="story_id" required placeholder="Select Session Number">
                   <option value= ''>Session Number</option>
                   @foreach($totalSessions as $session)
                     <option value="{{ $session }}" {{$session==$word->story_id?'selected':'' }}>{{ $session }}</option>

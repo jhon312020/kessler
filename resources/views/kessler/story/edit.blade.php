@@ -19,6 +19,24 @@
               @method('PATCH') 
               @csrf
               <div class="form-group">
+                <label class="small mb-1" for="type">Session Type</label>
+                <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
+                  <option value= '' >Session Type</option>
+                  @foreach($types as $type)
+                    <option value="{{ $type->type }}" {{$story->session_type==$type->type?'selected':'' }}>{{ $type->type }}</option>
+                  @endforeach;
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="small mb-1" for="session_number">Session Number</label>
+                <select class="form-control select2" id="session_number" name="session_number" required placeholder="Select Session Number">
+                  <option value= ''>Session Number</option>
+                  @foreach($totalSessions as $session)
+                    <option value="{{ $session }}" {{$session==$story->session_number?'selected':'' }}>{{ $session }}</option>
+                  @endforeach;
+                </select>
+              </div>
+              <div class="form-group">
                 <label class="small mb-1" for="story">Update Story</label>
                 <textarea class="form-control py-4" name="story"  style="height: 218px;" rows="30" cols="150" placeholder="Enter Story ..." autofocus>{{$story->story}}</textarea>
               </div>
