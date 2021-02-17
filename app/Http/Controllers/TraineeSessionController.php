@@ -409,6 +409,7 @@ class TraineeSessionController extends Controller
    */
   public function finish(Request $request) {
     if ($request->session()->has('completed')) {
+      $sessionNumber = '';
       $request->session()->forget('completed');
       $trainee = $request->session()->get('trainee');
       $traineeObj = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed')->where('id', $trainee->id)->first();
@@ -423,9 +424,10 @@ class TraineeSessionController extends Controller
             $round = 'second';
           break;
         }
+        $sessionNumber = $traineeObj->session_number;
         $traineeObj->save();
       }
-      return view('msmt.sessions.questions.complete')->with('round', $round);
+      return view('msmt.sessions.questions.complete', compact('round', '$sessionNumber'));
     }
      return redirect('/index');
   }

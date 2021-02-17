@@ -29,7 +29,7 @@ class Invite extends Mailable
      */
     public function build()
     {
-        $fromAddress = env('MAIL_FROM_ADDRESS')?env('MAIL_FROM_ADDRESS'):'jr@proisc.com';
+        $fromAddress = env('MAIL_FROM_ADDRESS')?env('MAIL_FROM_ADDRESS'):'bala@pinpointt.com';
         return $this->from($fromAddress)
             ->view('kessler.email.invite')
             ->with([
