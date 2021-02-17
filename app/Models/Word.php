@@ -12,6 +12,7 @@ class Word extends Model
     use SoftDeletes;
 
         protected $fillable = [
+        'story_id',	
         'word',
         'contextual_cue',
         'categorical_cue'

@@ -19,15 +19,6 @@
               @method('PATCH') 
               @csrf
               <div class="form-group">
-                <label class="small mb-1" for="type">Session Type</label>
-                <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
-                  <option value= '' >Session Type</option>
-                  @foreach($types as $type)
-                    <option value="{{ $type->type }}" {{$word->session_type==$type->type?'selected':'' }}>{{ $type->type }}</option>
-                  @endforeach;
-                </select>
-              </div>
-              <div class="form-group">
                 <label class="small mb-1" for="story_id">Session Number</label>
                 <select class="form-control select2" id="story_id" name="story_id" required placeholder="Select Session Number">
                   <option value= ''>Session Number</option>
