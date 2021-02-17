@@ -12,6 +12,8 @@ class Story extends Model
     Use SoftDeletes;
     
     protected $fillable = [
+    	'session_type',
+    	'session_number',
         'story'  
     ];
 }
