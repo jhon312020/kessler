@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Word;
+use App\Models\Type;
 
 class WordController extends Controller
 {
@@ -11,11 +12,15 @@ class WordController extends Controller
      * Create a new controller instance.
      *
      * @return void
+     * @return \Illuminate\Http\Response
      */
+    var $totalSessions = array();
     public function __construct() {
+      $this->totalSessions = range(1, 10);
       $this->middleware('auth');
       parent::__construct();
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -32,7 +37,9 @@ class WordController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
-      return view('kessler.word.create');
+      $types = Type::all();
+      $totalSessions = $this->totalSessions;
+      return view('kessler.word.create', compact('totalSessions','types'));
     }
 
     /**
@@ -44,11 +51,13 @@ class WordController extends Controller
     public function store(Request $request) {
         $request->validate([
           'word'=>'required',
+          'session_type' => 'required',
           'categorical_cue'=>'required'
         ]);
         
         $words = new Word([
           'word' => $request->get('word'),
+          'session_type' => $request->get('session_type'),
           'contextual_cue' => $request->get('contextual_cue'),
           'categorical_cue' => $request->get('categorical_cue')
         ]);
@@ -74,7 +83,9 @@ class WordController extends Controller
      */
     public function edit($id) {
       $word = Word::find($id);
-      return view('kessler.word.edit', compact('word'));
+      $types = Type::all();
+      $totalSessions = $this->totalSessions;
+      return view('kessler.word.edit', compact('word', 'totalSessions','types'));
     }
 
     /**
