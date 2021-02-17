@@ -45,7 +45,7 @@
               </div>
                 <div class="form-group">
                 <label class="small mb-1" for="categorical_cue">Enter Categorical Cue</label>
-                <input type="text" class="form-control py-4" id="categorical_cue" name="categorical_cue" placeholder="Enter Contextual Cue" required>
+                <input type="text" class="form-control py-4" id="categorical_cue" name="categorical_cue" placeholder="Enter Categorical Cue" required>
               </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
                 <button type="submit" class="btn btn-primary">Add</button>

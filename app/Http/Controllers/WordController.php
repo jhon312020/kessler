@@ -100,6 +100,8 @@ class WordController extends Controller
      */
     public function update(Request $request, $id) {
       $request->validate([
+        'session_type' => 'required',
+        'story_id' => 'required',
         'word'=>'required',
         'categorical_cue'=>'required'
       ]);

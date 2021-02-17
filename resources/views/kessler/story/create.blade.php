@@ -18,7 +18,7 @@
             <form method="post" action="{{ route('story.store') }}">
               @csrf
               <div class="form-group">
-               <label class="small mb-1" for="session_number">Session Type</label>
+               <label class="small mb-1" for="session_type">Session Type</label>
               <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
                 <option value= '' selected="selected">Session Type</option>
                 @foreach($types as $type)
