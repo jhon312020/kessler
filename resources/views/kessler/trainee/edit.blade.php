@@ -15,7 +15,7 @@
                 </ul>
               </div>
             @endif
-            <form method="post" action="{{ route('trainee.update', $trainee->id) }}" id="jsTraineeForm">
+            <form method="post" action="{{ route('trainee.update', $trainee->id) }}" id="jsSubmitForm-{{ $trainee->id }}">
               @method('PATCH') 
               @csrf
               <div class="form-group">
@@ -47,7 +47,7 @@
                 </div>
               </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
-                <button type="button" id="jsUpdate" class="btn btn-primary">Update</button>
+                <button class="btn btn-primary jsConfirmButton" type="button" data-value="{{ $trainee->id }}">Update</button>
                 <a href="{{ url('/trainee')}}" class="ml-2 btn btn-danger" role="button">Cancel</a>
               </div>
             </form>
@@ -57,17 +57,4 @@
   </div>
 </div>
 @include('common.confirm')
-<script type="text/javascript">
-   $(document).ready( function() { // Wait until document is fully parsed
-    $("#jsUpdate").on('click touchstart', function(event) {
-      event.preventDefault();
-      $('#jsConfirm').modal('show');
-    });
-    $("#jsConfirmSubmit").on('click touchstart', function(event) {
-      event.preventDefault();
-      $('#jsConfirm').modal('hide');
-      $('#jsTraineeForm').submit();
-    });
-   })
-</script>
 @endsection

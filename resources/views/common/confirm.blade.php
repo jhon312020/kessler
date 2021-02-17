@@ -17,3 +17,19 @@
     </div>
   </div>
 </div>
+<script type="text/javascript">
+  var recordID = '';
+   $(document).ready( function() { // Wait until document is fully parsed
+    $(".jsConfirmButton").on('click touchstart', function(event) {
+      event.preventDefault();
+      recordID = $(this).data('value');
+      console.log('called me '+ recordID);
+      $('#jsConfirm').modal('show');
+    });
+    $("#jsConfirmSubmit").on('click touchstart', function(event) {
+      event.preventDefault();
+      $('#jsConfirm').modal('hide');
+      $('#jsSubmitForm-'+recordID).submit();
+    });
+   })
+</script>

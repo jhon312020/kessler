@@ -35,6 +35,8 @@ class TrainerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
+      echo Hash::make('msmt2021');
+      exit;
       return view('kessler.trainer.create');
     }
 

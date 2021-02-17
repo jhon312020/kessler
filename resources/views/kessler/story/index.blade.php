@@ -39,10 +39,10 @@
                 <td>{{$story->story}}</td>
                 <td>
                   <a href="{{ route('story.edit',$story->id)}}" class="btn btn-primary" role="button"><i class="fa fa-edit">&nbsp;</i>Edit</a>
-                  <form action="{{ route('story.destroy', $story->id)}}" method="post" class="d-inline">
+                  <form action="{{ route('story.destroy', $story->id)}}" method="post" class="d-inline" id="jsSubmitForm-{{ $story->id }}">
                     @csrf
                     @method('DELETE')
-                    <button class="btn btn-danger" type="submit"><i class="fa fa-trash">&nbsp;</i> Delete</button>
+                    <button class="btn btn-danger jsConfirmButton" type="button" data-value="{{ $story->id }}"><i class="fa fa-trash">&nbsp;</i> Delete</button>
                   </form>
                 </td>
               </tr>
@@ -60,4 +60,5 @@
       </div>
     </div>
   </div>
+@include('common.confirm')
 @endsection

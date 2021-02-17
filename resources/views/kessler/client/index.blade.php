@@ -45,10 +45,10 @@
                <td>{{$client->password}}</td>
                <td>
                 <a href="{{ route('client.edit',$client->id)}}" class="btn btn-primary"><i class="fa fa-edit">&nbsp;</i> Edit</a>
-                <form action="{{ route('client.destroy', $client->id)}}" method="post" class="d-inline">
+                <form action="{{ route('client.destroy', $client->id)}}" method="post" class="d-inline" id="jsSubmitForm-{{$client->id}}">
                   @csrf
                   @method('DELETE')
-                  <button class="btn btn-danger" type="submit"><i class="fa fa-trash">&nbsp;</i> Delete</button>
+                  <button class="btn btn-danger jsConfirmButton" type="button" data-value="{{ $client->id }}"><i class="fa fa-trash">&nbsp;</i> Delete</button>
                 </form>
                 </td>
               </tr>
@@ -66,4 +66,5 @@
       </div>
     </div>
   </div>
+@include('common.confirm')
 @endsection
