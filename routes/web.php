@@ -35,7 +35,7 @@ Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 // ---------------------------------------- ./ ADMIN ----------------------------------------------------------- //
 //Trainer Admin
 Route::group(['middleware' => 'auth'], function() {
-  	Route::resource('/trainee', TraineeController::class);
+  Route::resource('/trainee', TraineeController::class);
 	Route::get('/trainee/view/{id}', [TraineeController::class, 'view']);
 	Route::get('/trainee/review/{id}', [TraineeController::class, 'review']);
 	Route::post('/trainee/review/{id}', [TraineeController::class, 'review']);

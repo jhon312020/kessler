@@ -15,7 +15,7 @@
                 </ul>
               </div>
             @endif
-            <form method="post" action="{{ route('trainee.update', $trainee->id) }}">
+            <form method="post" action="{{ route('trainee.update', $trainee->id) }}" id="jsTraineeForm">
               @method('PATCH') 
               @csrf
               <div class="form-group">
@@ -37,9 +37,14 @@
                 </select>
               </div>
               <div class="form-group d-flex align-items-center float-left mt-4 mb-0">
-              <input type="radio" name="state" id="jsLeft" class="jsLeft" value="continue" checked="checked">
-              &emsp;Continue Session&emsp;
-              <input type="radio" name="state" id="jsScratch" class="jsScratch" value="start">&emsp;Start from Scratch&emsp;
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" id="continue" name="state"  value="continue" {{ $trainee->session_state == 'continue'? 'checked':'' }}>
+                  <label class="form-check-label" for="continue">Continue Session</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" id="scratch" name="state"  {{ $trainee->session_state == 'start'? 'checked':''}}  value="start" >
+                  <label class="form-check-label" for="scratch">Start from Scratch</label>
+                </div>
               </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
                 <button type="button" id="jsUpdate" class="btn btn-primary">Update</button>
@@ -51,13 +56,17 @@
     </div>
   </div>
 </div>
+@include('common.confirm')
 <script type="text/javascript">
    $(document).ready( function() { // Wait until document is fully parsed
     $("#jsUpdate").on('click touchstart', function(event) {
       event.preventDefault();
-      if (confirm("Are you sure to start from scratch ?") == true ) {
-           window.location.href = "/trainee";
-      }
+      $('#jsConfirm').modal('show');
+    });
+    $("#jsConfirmSubmit").on('click touchstart', function(event) {
+      event.preventDefault();
+      $('#jsConfirm').modal('hide');
+      $('#jsTraineeForm').submit();
     });
    })
 </script>

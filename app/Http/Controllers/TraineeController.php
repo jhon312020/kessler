@@ -117,12 +117,16 @@ class TraineeController extends Controller
       $trainee = Trainee::find($id);
       $trainee->session_type = $request->get('session_type');
       $trainee->session_number = $request->get('session_number');
-      if($trainee->session_state == 'start')  {
+      $trainee->session_state = $request->get('state');
+      if ($trainee->session_state === 'start')  {
         $trainee->session_current_position = null;
         $trainee->round = 1;
         $trainee->completed = 0;
-        $trainee->session_state = 'start';
+        //$trainee->session_state = 'start';
         TraineeTransaction::where('story_id', $trainee['session_number'])->where('trainee_id', $trainee['trainee_id'])->where('session_pin', $trainee['session_pin'])->delete();
+        if ( $trainee['session_number'] > 4 &&  $trainee['session_number'] < 9) {
+          TraineeStory::where('story_id', $trainee['session_number'])->where('trainee_id', $trainee['trainee_id'])->where('session_pin', $trainee['session_pin'])->delete();
+        }
       }
       $trainee->save();
       return redirect('/trainee')->with('success', 'Trainee information has been updated succesfully!');

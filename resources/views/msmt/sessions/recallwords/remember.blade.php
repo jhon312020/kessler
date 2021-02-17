@@ -43,7 +43,7 @@
     </div>
   </div>
 </section>
-
+@include('common.confirm')
 <script type="text/javascript">
   $(document).ready( function() { // Wait until document is fully parsed
     
@@ -70,25 +70,14 @@
 
     $("#jsSubmit").on('click touchstart', function(event) {
       event.preventDefault();
-      if ( $('#jsRecallWord').val() != '') {
-        words.push($('#jsRecallWord').val().toUpperCase().trim());
-      }
-      $(this).prop("disabled", true);
-      // $(this).html(
-      //   '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
-      // );
-      if ( confirm("Are you sure you wish to submit the form?") == true ) {
-        $("#jsLoader").removeClass('d-none');
-        $('#jsRecallWord').val(words.join(' '));
-        var startTime = $("<input>").attr("name", "startTime").attr("type", "hidden").val(timer);
-        $('#recallWords').append(startTime);
-        var endTime = $("<input>").attr("name", "endTime").attr("type", "hidden").val(performance.now());
-        $('#recallWords').append(endTime);
-        $("#recallWords").submit();
-      } else {
-        $(this).prop("disabled", false);
-      }
+      $('#jsConfirm').modal('show');
     });
+    $("#jsConfirmSubmit").on('click touchstart', function(event) {
+      event.preventDefault();
+      $('#jsConfirm').modal('hide');
+      recallWordsSubmit();
+    });
+    
     $(document).on('close.bs.alert', ".alert", function (event) {
       var removeWord = $(event.currentTarget).data('word');
       words.splice(words.indexOf(removeWord), 1);
@@ -114,6 +103,19 @@
       $('#jsTotalWordCount').text(countOfUserWords);
       var progressBarWidth = countOfUserWords * progressWidthIncrementor;
       $('#jsProgressBar').css('width', progressBarWidth+'%');
+    }
+    function recallWordsSubmit() {
+      $("#jsSubmit").attr('disabled', true);
+      if ( $('#jsRecallWord').val() != '') {
+        words.push($('#jsRecallWord').val().toUpperCase().trim());
+      }
+      $("#jsLoader").removeClass('d-none');
+      $('#jsRecallWord').val(words.join(' '));
+      var startTime = $("<input>").attr("name", "startTime").attr("type", "hidden").val(timer);
+      $('#recallWords').append(startTime);
+      var endTime = $("<input>").attr("name", "endTime").attr("type", "hidden").val(performance.now());
+      $('#recallWords').append(endTime);
+      $("#recallWords").submit();
     }
   })
      
