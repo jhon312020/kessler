@@ -22,6 +22,14 @@ class Controller extends BaseController
               );
 
   	\View::share('sideMenu', $sideMenu);
+
+  $sidesubMenu = array('shopping'=>array('name'=>'Shopping', 'url'=>'/shopping', 'icon'=>'fa-table', 'role'=>'SA'), 
+                  'to-do'=>array('name'=>'To-Do', 'url'=>'/todo','icon'=>'fa-table','role'=>'SA'),
+                  'direction'=>array('name'=>'Direction', 'url'=>'/direction','icon'=>'fa-table', 'role'=>'SA'),
+              );
+
+    \View::share('sidesubMenu', $sidesubMenu);
+  
   }
   
   function pr($data) {

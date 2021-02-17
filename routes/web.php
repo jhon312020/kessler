@@ -6,12 +6,15 @@ use App\Http\Controllers\TraineeSessionController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\OverviewController;
 use App\Http\Controllers\TraineeController;
+use App\Http\Controllers\TrainerController;
+use App\Http\Controllers\OverviewController;
 use App\Http\Controllers\InstructionController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\WordController;
-use App\Http\Controllers\TrainerController;
+use App\Http\Controllers\ShoppingController;
+use App\Http\Controllers\DirectionController;
+use App\Http\Controllers\ToDoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +52,9 @@ Route::group(['middleware' => 'App\Http\Middleware\SuperAdminMiddleware'], funct
 	Route::resource('/story', StoryController::class);
 	Route::resource('/word', WordController::class);
 	Route::resource('/type', TypeController::class);
+	Route::resource('/shopping', ShoppingController::class);
+	Route::resource('/direction', DirectionController::class);
+	Route::resource('/todo', ToDoController::class);
 });
 
 // ---------------------------------------- ./ ADMIN ----------------------------------------------------------- //

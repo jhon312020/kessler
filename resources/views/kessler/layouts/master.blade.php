@@ -51,6 +51,22 @@
                 </a>
                 @endif
               @endforeach
+               <a class="nav-link collapsed"  data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>Booster Session
+                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+              </a>
+              <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                <nav class="sb-sidenav-menu-nested nav">
+                  @foreach($sidesubMenu as $titles=>$menu)
+              @if ($menu['role'] == '' || $menu['role'] == Auth::user()->role) 
+              <a class="nav-link" href="{{url($menu['url'])}}" title="{{ $title }}">
+                <div class="sb-nav-link-icon"><i class="fa {{ $menu['icon'] }}"></i></div>
+                {{ $menu['name'] }}
+              </a>
+              @endif
+            @endforeach
+                </nav>
+              </div>
             </div>
           </div>
           <div class="sb-sidenav-footer">
