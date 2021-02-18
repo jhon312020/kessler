@@ -47,7 +47,7 @@ Route::group(['middleware' => 'auth'], function() {
 //Super Admin Role
 Route::group(['middleware' => 'App\Http\Middleware\SuperAdminMiddleware'], function() {
 	Route::resource('/trainer', TrainerController::class);
-	Route::get('/trainer', TrainerController::class, 'status');
+	//Route::get('/trainer', TrainerController::class, 'status');
 	Route::resource('/overview', OverviewController::class);
 	Route::resource('/instruction', InstructionController::class);
 	Route::resource('/story', StoryController::class);
