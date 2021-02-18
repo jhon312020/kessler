@@ -38,7 +38,7 @@
                 <td>{{$story->id}}</td>
                 <td>{{$story->story}}</td>
                 <td>
-                  <a href="{{ route('story.edit',$story->id)}}" class="btn btn-primary" role="button"><i class="fa fa-edit">&nbsp;</i>Edit</a>
+                  <a href="{{ route('story.edit',$story->id)}}" class="btn btn-primary" role="button"><i class="fa fa-edit">&nbsp;</i> Edit</a>
                   <form action="{{ route('story.destroy', $story->id)}}" method="post" class="d-inline" id="jsSubmitForm-{{ $story->id }}">
                     @csrf
                     @method('DELETE')

@@ -409,28 +409,28 @@ class TraineeSessionController extends Controller
    * On completting the session story the user is redirected to completion page.
    * @return \Illuminate\Http\Response
    */
-  public function finish(Request $request) {
-    if ($request->session()->has('completed')) {
-      $sessionNumber = '';
-      $request->session()->forget('completed');
-      $trainee = $request->session()->get('trainee');
-      $traineeObj = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed')->where('id', $trainee->id)->first();
-      if ($traineeObj) {
-        switch($traineeObj->round) {
-          case 1:
-            $traineeObj->round = 2;
-            $round = 'first';
-          break;
-          case 2:
-            $traineeObj->completed = 1;
-            $round = 'second';
-          break;
-        }
-        $sessionNumber = $traineeObj->session_number;
-        $traineeObj->save();
-      }
-      return view('msmt.sessions.questions.complete', compact('round', 'sessionNumber'));
-    }
-     return redirect('/index');
-  }
+  // public function finish(Request $request) {
+  //   if ($request->session()->has('completed')) {
+  //     $sessionNumber = '';
+  //     $request->session()->forget('completed');
+  //     $trainee = $request->session()->get('trainee');
+  //     $traineeObj = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed')->where('id', $trainee->id)->first();
+  //     if ($traineeObj) {
+  //       switch($traineeObj->round) {
+  //         case 1:
+  //           $traineeObj->round = 2;
+  //           $round = 'first';
+  //         break;
+  //         case 2:
+  //           $traineeObj->completed = 1;
+  //           $round = 'second';
+  //         break;
+  //       }
+  //       $sessionNumber = $traineeObj->session_number;
+  //       $traineeObj->save();
+  //     }
+  //     return view('msmt.sessions.questions.complete', compact('round', 'sessionNumber'));
+  //   }
+  //    return redirect('/index');
+  // }
 }
