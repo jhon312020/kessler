@@ -12,7 +12,7 @@ class ToDo extends Model
     use SoftDeletes;
 
         protected $fillable = [
-        'story_id',	
+        'session_type',	
         'todo',
         'contextual_cue',
         'categorical_cue'

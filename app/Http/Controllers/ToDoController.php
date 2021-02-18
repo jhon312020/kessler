@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ToDo;
+use App\Models\Type;
 
 class ToDoController extends Controller
 {
@@ -36,8 +37,9 @@ class ToDoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
+      $types = Type::all();
       $totalSessions = $this->totalSessions;
-      return view('kessler.todo.create', compact('totalSessions'));
+      return view('kessler.todo.create', compact('totalSessions','types'));
     }
 
     /**
@@ -48,13 +50,13 @@ class ToDoController extends Controller
      */
     public function store(Request $request) {
         $request->validate([
-          'story_id' => 'required',
+          'session_type' => 'required',
           'todo'=>'required',
           'categorical_cue'=>'required'
         ]);
         
         $todos = new ToDo([
-          'story_id' => $request->get('story_id'),
+          'session_type' => $request->get('session_type'),
           'todo' => $request->get('todo'),
           'categorical_cue' => $request->get('categorical_cue')
         ]);
@@ -80,8 +82,9 @@ class ToDoController extends Controller
      */
     public function edit($id) {
       $todo = ToDo::find($id);
+      $types = Type::all();
       $totalSessions = $this->totalSessions;
-      return view('kessler.todo.edit', compact('todo', 'totalSessions'));
+      return view('kessler.todo.edit', compact('todo', 'totalSessions','types'));
     }
 
     /**
@@ -93,12 +96,12 @@ class ToDoController extends Controller
      */
     public function update(Request $request, $id) {
       $request->validate([
-        'story_id' => 'required',
+        'session_type' => 'required',
         'todo'=>'required',
         'categorical_cue'=>'required'
       ]);
       $todo = ToDo::find($id);
-      $todo->story_id = $request->get('story_id');
+      $todo->session_type = $request->get('session_type');
       $todo->todo = $request->get('todo');
       $todo->categorical_cue = $request->get('categorical_cue');
       $todo->save();
