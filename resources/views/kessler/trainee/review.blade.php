@@ -4,7 +4,7 @@
   <div class="row justify-content-center">
     <div class="col-lg-12">
       <div class="card shadow-lg border-0 rounded-lg mt-5">
-          <div class="card-header"><h3 class="text-center font-weight-light my-4">Review Story</h3></div>
+          <div class="card-header"><h3 class="text-center font-weight-light my-4">Approve Story</h3></div>
           <div class="card-body">
           @if ($errors->any())
               <div class="alert alert-danger">
@@ -19,11 +19,11 @@
               @method('POST') 
               @csrf
               <div class="form-group">
-                <label class="small mb-1" for="story">Review Story</label>
+                <label class="small mb-1" for="story">Approve Story</label>
                 <textarea class="form-control py-4" name="story"  style="height: 218px;" rows="30" cols="150" placeholder="Enter Story ..." autofocus>{{$traineeStory->original_story}}</textarea>
               </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
-                <button type="submit" class="btn btn-primary">Review</button>
+                <button type="submit" class="btn btn-primary">Approve</button>
                 <a href="{{ url('/trainee')}}" class="ml-2 btn btn-danger" role="button">Cancel</a>
               </div>
             </form>
