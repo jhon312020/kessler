@@ -111,4 +111,22 @@ class TrainerController extends Controller
       $trainer->delete();
       return redirect('/trainer')->with('success', 'TRAINER DELETED!');
     }
+
+    /**
+     * Status set to Active/Inactive
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+
+     public function status(Request $request, $id)
+    {
+        $trainer = User::find($id);
+        $trainer->status = $request->get('status');
+        if ($trainer->status == 'inactive')  {
+          $trainer->status = 0;
+        }
+        $trainer->save();
+        return view('kessler.trainer.index', compact('trainer'));
+    }
 }

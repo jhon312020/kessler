@@ -1,6 +1,8 @@
 @extends('kessler.layouts.master')
 @section('content')
   <!-- Content Wrapper. Contains page content -->
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+ <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
   <div class="container-fluid">
     <h1 class="mt-4">Trainer</h1>
     <div class="card mb-4">
@@ -23,6 +25,7 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th width="25%">Actions</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tfoot>
@@ -30,6 +33,7 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th width="25%">Actions</th>
+                <th>Status</th>
               </tr>
             </tfoot>
             <tbody>
@@ -45,6 +49,9 @@
                   <button class="btn btn-danger jsConfirmButton" type="button" data-value="{{ $trainer->id }}"><i class="fa fa-trash">&nbsp;</i> Delete</button>
                 </form>
                 </td>
+                <td>
+                  <input data-id="{{$trainer->id}}" name="status" value="1" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $trainer->status ? 'checked' : '' }}>
+               </td>
               </tr>
             @endforeach
             </tbody>
