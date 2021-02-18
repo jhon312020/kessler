@@ -45,28 +45,29 @@
             <div class="nav">
               @foreach($sideMenu as $title=>$menu)
                 @if ($menu['role'] == '' || $menu['role'] == Auth::user()->role) 
-                <a class="nav-link" href="{{url($menu['url'])}}" title="{{ $title }}">
-                  <div class="sb-nav-link-icon"><i class="fa {{ $menu['icon'] }}"></i></div>
-                  {{ $menu['name'] }}
-                </a>
+                  @if (array_key_exists('subitems', $menu))
+                    <a class="nav-link collapsed"  data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts" title="{{$title}}">
+                      <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>{{$title}}
+                      <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                      <nav class="sb-sidenav-menu-nested nav">
+                        @foreach($menu['subitems'] as $subtitle=>$submenu)
+                          <a class="nav-link" href="{{url($submenu['url'])}}" title="{{ $subtitle }}">
+                            <div class="sb-nav-link-icon"><i class="fa {{ $submenu['icon'] }}"></i></div>
+                            {{ $submenu['name'] }}
+                          </a>
+                        @endforeach 
+                      </nav>
+                    </div>
+                  @else
+                     <a class="nav-link" href="{{url($menu['url'])}}" title="{{ $title }}">
+                      <div class="sb-nav-link-icon"><i class="fa {{ $menu['icon'] }}"></i></div>
+                      {{ $menu['name'] }}
+                    </a>
+                  @endif
                 @endif
               @endforeach
-               <a class="nav-link collapsed"  data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>Booster Session
-                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-              </a>
-              <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
-                <nav class="sb-sidenav-menu-nested nav">
-                  @foreach($sidesubMenu as $titles=>$menu)
-              @if ($menu['role'] == '' || $menu['role'] == Auth::user()->role) 
-              <a class="nav-link" href="{{url($menu['url'])}}" title="{{ $title }}">
-                <div class="sb-nav-link-icon"><i class="fa {{ $menu['icon'] }}"></i></div>
-                {{ $menu['name'] }}
-              </a>
-              @endif
-            @endforeach
-                </nav>
-              </div>
             </div>
           </div>
           <div class="sb-sidenav-footer">
