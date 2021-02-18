@@ -25,7 +25,7 @@
                 <th>Session Type</th>
                 <th>Session Number</th>
                 <th>State</th>
-                <th width="32%">Actions</th>
+                <th width="45%">Actions</th>
               </tr>
             </thead>
             <tfoot>
@@ -35,7 +35,7 @@
                 <th>Session Type</th>
                 <th>Session Number</th>
                 <th>State</th>
-                <th width="32%">Actions</th>
+                <th width="45%">Actions</th>
               </tr>
             </tfoot>
             <tbody>
@@ -54,14 +54,14 @@
                       $traineeCurrentPosition = json_decode($trainee->session_current_position)
                     @endphp
                     @if ($traineeCurrentPosition && $traineeCurrentPosition->position == 'review') 
-                      <a href="{{ url('trainee/review', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-book">&nbsp;</i> Approve</a>
+                      <a href="{{ url('trainee/approve', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-book">&nbsp;</i> Approve</a>
                     @endif
                   @endif
-                  {{-- <form action="{{ route('trainee.destroy', $trainee->id)}}" method="post" class="d-inline">
+                  <form action="{{ route('trainee.destroy', $trainee->id)}}" method="post" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button class="btn btn-danger" type="submit"><i class="fa fa-trash">&nbsp;</i> Delete</button>
-                  </form> --}}
+                  </form>
                 </td>
               </tr>
                @endforeach

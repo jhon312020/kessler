@@ -15,7 +15,7 @@
                 </ul>
               </div>
             @endif            
-            <form method="post" action="{{url('/trainee/revise/'.$traineeStory->id)}}">
+            <form method="post" action="{{url('/trainee/approve/'.$traineeStory->id)}}">
               @method('POST') 
               @csrf
               <div class="form-group">
