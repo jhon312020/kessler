@@ -34,5 +34,10 @@
     
     <script src="{{asset('vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('js/confetti.min.js')}}"></script>
+    <script type='text/javascript'>
+      if ( window.history.replaceState ) {
+          window.history.replaceState( null, null, window.location.href );
+      }
+  </script>
   </body>
 </html>

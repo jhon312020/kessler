@@ -38,11 +38,11 @@
                 <td>{{$type->id}}</td>
                 <td>{{$type->type}}</td>
                 <td>
-                  <a href="{{ route('type.edit', $type->id)}}" class="btn btn-primary" role="button"><i class="fa fa-edit">&nbsp;</i>Edit</a>
+                  <a href="{{ route('type.edit', $type->id)}}" class="btn btn-primary" role="button"><i class="fa fa-edit">&nbsp;</i> Edit</a>
                   <form action="{{ route('type.destroy', $type->id)}}" method="post" class="d-inline" id="jsSubmitForm-{{ $type->id }}">
                     @csrf
                     @method('DELETE')
-                    <button class="btn btn-danger jsConfirmButton" type="button" data-value="{{ $type->id }}"><i class="fa fa-trash">&nbsp;</i>Delete</button>
+                    <button class="btn btn-danger jsConfirmButton" type="button" data-value="{{ $type->id }}"><i class="fa fa-trash">&nbsp;</i> Delete</button>
                   </form>
                 </td>
               </tr>

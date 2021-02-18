@@ -81,5 +81,5 @@ Route::get('/recallword', [TraineeSessionController::class, 'recollect']);
 Route::post('/cue', [TraineeSessionController::class,'save']);
 Route::get('/cue', [TraineeSessionController::class,'cue']);
 Route::post('/after', [AjaxController::class,'save']);
-Route::get('/finish', [TraineeSessionController::class,'finish']);
+//Route::get('/finish', [TraineeSessionController::class,'finish']);
 // ---------------------------------------- ./ SESSIONS 5-8 /--------------------------------------------------- //
