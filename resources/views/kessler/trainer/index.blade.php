@@ -49,9 +49,15 @@
                   <button class="btn btn-danger jsConfirmButton" type="button" data-value="{{ $trainer->id }}"><i class="fa fa-trash">&nbsp;</i> Delete</button>
                 </form>
                 </td>
+                
+                  
                 <td>
-                  <input data-id="{{$trainer->id}}" id="jsStatus" name="status" value="1" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $trainer->status ? 'checked' : '' }}>
+                  <form action="{{route('trainer.status',$trainer->id)}}" method="post" class="d-inline" id="jsStatusForm-{{$trainer->id}}">
+                  @csrf
+                  <input data-id="{{$trainer->id}}" id="jsStatus" name="status" value="{{$trainer->status}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $trainer->status ? 'checked' : '' }}>
+                  </form>
                </td>
+               
               </tr>
             @endforeach
             </tbody>
@@ -68,31 +74,18 @@
     </div>
   </div>
 <script type="text/javascript">
-  $(document).ready(function() { // Wait until document is fully parsed
-    //$(function() {
-    $('#jsStatus').on('change', function() {   
-        if($(this).prop("checked") == true) {
-          alert('Toggle: ' + $(this).prop('checked'));
-        } else {
-          alert('Toggle: ' + $(this).prop('checked'));
-        }
-        var status = $(this).prop('checked') == true ? 1 : 0; 
-        var id = $(this).data('id'); 
-        $.ajaxSetup({
-            headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-          }); 
-         $.ajax({
-            type: "POST",
-            url: '/trainee',
-            data: {'status': status, 'id': id},
-            success: function(data) {
-              console.log(data.success)
-            }
-        });
-      });
-   })
+  $(document).ready( function() { // Wait until document is fully parsed
+    $('#jsStatus').on('change', function() {
+      var currentVal = $(this).val();
+      console.log(currentVal);
+      if (currentVal) {
+        $(this).val(1);
+      } else {
+        $(this).val(0);
+      }
+      $('#jsStatusForm-'+$(this).data('id')).submit();
+  }); 
+ })
 </script>
 @include('common.confirm')
 @endsection

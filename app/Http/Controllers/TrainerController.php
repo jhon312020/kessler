@@ -119,14 +119,13 @@ class TrainerController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     public function status(Request $request, $id)
-    {
-        $trainer = User::find($id);
-        $trainer->status = $request->get('status');
-        if ($trainer->status == '0') {
-          $trainer->status = 0;
-        } 
-        $trainer->save();
-        return view('kessler.trainer.index', compact('trainer'));
+    public function status(Request $request, $id) {
+      $trainer = User::find($id);
+      $trainer->status = $request->get('status');
+      if ($trainer->status == 0) {
+        $trainer->status = 0;
+      } 
+      $trainer->save();
+      return redirect('/trainer')->with('success', 'TRAINER STATUS UPDATED!');
     }
 }
