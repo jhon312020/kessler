@@ -123,9 +123,9 @@ class TrainerController extends Controller
     {
         $trainer = User::find($id);
         $trainer->status = $request->get('status');
-        if ($trainer->status == 'inactive')  {
+        if ($trainer->status == '0') {
           $trainer->status = 0;
-        }
+        } 
         $trainer->save();
         return view('kessler.trainer.index', compact('trainer'));
     }

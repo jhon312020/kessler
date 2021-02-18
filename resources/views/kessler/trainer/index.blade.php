@@ -50,7 +50,7 @@
                 </form>
                 </td>
                 <td>
-                  <input data-id="{{$trainer->id}}" name="status" value="1" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $trainer->status ? 'checked' : '' }}>
+                  <input data-id="{{$trainer->id}}" id="jsStatus" name="status" value="1" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $trainer->status ? 'checked' : '' }}>
                </td>
               </tr>
             @endforeach
@@ -67,5 +67,32 @@
       </div>
     </div>
   </div>
+<script type="text/javascript">
+  $(document).ready(function() { // Wait until document is fully parsed
+    //$(function() {
+    $('#jsStatus').on('change', function() {   
+        if($(this).prop("checked") == true) {
+          alert('Toggle: ' + $(this).prop('checked'));
+        } else {
+          alert('Toggle: ' + $(this).prop('checked'));
+        }
+        var status = $(this).prop('checked') == true ? 1 : 0; 
+        var id = $(this).data('id'); 
+        $.ajaxSetup({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+          }); 
+         $.ajax({
+            type: "POST",
+            url: '/trainee',
+            data: {'status': status, 'id': id},
+            success: function(data) {
+              console.log(data.success)
+            }
+        });
+      });
+   })
+</script>
 @include('common.confirm')
 @endsection
