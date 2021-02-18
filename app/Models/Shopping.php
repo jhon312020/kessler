@@ -12,7 +12,7 @@ class Shopping extends Model
     use SoftDeletes;
 
         protected $fillable = [
-        'story_id',	
+		'session_type',        	
         'item',
         'contextual_cue',
         'categorical_cue'

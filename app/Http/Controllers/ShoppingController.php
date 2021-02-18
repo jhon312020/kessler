@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Shopping;
+use App\Models\Type;
 
 class ShoppingController extends Controller
 {
@@ -27,7 +28,8 @@ class ShoppingController extends Controller
      */
     public function index() {
       $shopping = Shopping::all();
-      return view('kessler.shopping.index', compact('shopping'));
+      $types = Type::pluck('type', 'id');
+      return view('kessler.shopping.index', compact('shopping', 'types'));
     }
 
     /**
@@ -37,7 +39,8 @@ class ShoppingController extends Controller
      */
     public function create() {
       $totalSessions = $this->totalSessions;
-      return view('kessler.shopping.create', compact('totalSessions'));
+      $types = Type::all();
+      return view('kessler.shopping.create', compact('totalSessions', 'types'));
     }
 
     /**
@@ -48,13 +51,14 @@ class ShoppingController extends Controller
      */
     public function store(Request $request) {
         $request->validate([
-          'story_id' => 'required',
+          'session_type'=>'required',
           'item'=>'required',
           'categorical_cue'=>'required'
         ]);
         
         $shoppings = new Shopping([
           'story_id' => $request->get('story_id'),
+          'session_type' => $request->get('session_type'),
           'item' => $request->get('item'),
           'categorical_cue' => $request->get('categorical_cue')
         ]);
@@ -81,7 +85,8 @@ class ShoppingController extends Controller
     public function edit($id) {
       $shopping = Shopping::find($id);
       $totalSessions = $this->totalSessions;
-      return view('kessler.shopping.edit', compact('shopping', 'totalSessions'));
+      $types = Type::all();
+      return view('kessler.shopping.edit', compact('shopping', 'totalSessions', 'types'));
     }
 
     /**
@@ -93,11 +98,12 @@ class ShoppingController extends Controller
      */
     public function update(Request $request, $id) {
       $request->validate([
-        'story_id' => 'required',
+        'session_type'=>'required',
         'item'=>'required',
         'categorical_cue'=>'required'
       ]);
       $shopping = Shopping::find($id);
+      $shopping->session_type = $request->get('session_type');
       $shopping->story_id = $request->get('story_id');
       $shopping->item = $request->get('item');
       $shopping->categorical_cue = $request->get('categorical_cue');
