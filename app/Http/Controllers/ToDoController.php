@@ -12,11 +12,8 @@ class ToDoController extends Controller
      * Create a new controller instance.
      *
      * @return void
-     * @return \Illuminate\Http\Response
      */
-    var $totalSessions = array();
     public function __construct() {
-      $this->totalSessions = range(1, 10);
       $this->middleware('auth');
       parent::__construct();
     }
@@ -38,8 +35,7 @@ class ToDoController extends Controller
      */
     public function create() {
       $types = Type::all();
-      $totalSessions = $this->totalSessions;
-      return view('kessler.todo.create', compact('totalSessions','types'));
+      return view('kessler.todo.create', compact('types'));
     }
 
     /**
@@ -61,7 +57,7 @@ class ToDoController extends Controller
           'categorical_cue' => $request->get('categorical_cue')
         ]);
         $todos->save();
-        return redirect('/todo')->with('success', 'todo SAVED!');
+        return redirect('/todo')->with('success', 'To-Do SAVED!');
     }
 
     /**
@@ -83,8 +79,7 @@ class ToDoController extends Controller
     public function edit($id) {
       $todo = ToDo::find($id);
       $types = Type::all();
-      $totalSessions = $this->totalSessions;
-      return view('kessler.todo.edit', compact('todo', 'totalSessions','types'));
+      return view('kessler.todo.edit', compact('todo','types'));
     }
 
     /**
@@ -105,7 +100,7 @@ class ToDoController extends Controller
       $todo->todo = $request->get('todo');
       $todo->categorical_cue = $request->get('categorical_cue');
       $todo->save();
-      return redirect('/todo')->with('success', 'todo UPDATED!');
+      return redirect('/todo')->with('success', 'To-Do UPDATED!');
     }
 
     /**
@@ -117,6 +112,6 @@ class ToDoController extends Controller
     public function destroy($id) {
       $todo = ToDo::find($id);
       $todo->delete();
-      return redirect('/todo')->with('success', 'todo DELETED!');
+      return redirect('/todo')->with('success', 'To-Do DELETED!');
     }
 }

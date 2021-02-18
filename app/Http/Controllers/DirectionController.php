@@ -12,11 +12,8 @@ class DirectionController extends Controller
      * Create a new controller instance.
      *
      * @return void
-     * @return \Illuminate\Http\Response
      */
-    var $totalSessions = array();
     public function __construct() {
-      $this->totalSessions = range(1, 10);
       $this->middleware('auth');
       parent::__construct();
     }
@@ -39,8 +36,7 @@ class DirectionController extends Controller
      */
     public function create() {
       $types = Type::all();
-      $totalSessions = $this->totalSessions;
-      return view('kessler.direction.create', compact('totalSessions','types'));
+      return view('kessler.direction.create', compact('types'));
     }
 
     /**
@@ -62,7 +58,7 @@ class DirectionController extends Controller
           'categorical_cue' => $request->get('categorical_cue')
         ]);
         $directions->save();
-        return redirect('/direction')->with('success', 'direction SAVED!');
+        return redirect('/direction')->with('success', 'Direction SAVED!');
     }
 
     /**
@@ -84,8 +80,7 @@ class DirectionController extends Controller
     public function edit($id) {
       $direction = Direction::find($id);
       $types = Type::all();
-      $totalSessions = $this->totalSessions;
-      return view('kessler.direction.edit', compact('direction', 'totalSessions','types'));
+      return view('kessler.direction.edit', compact('direction','types'));
     }
 
     /**
@@ -106,7 +101,7 @@ class DirectionController extends Controller
       $direction->direction = $request->get('direction');
       $direction->categorical_cue = $request->get('categorical_cue');
       $direction->save();
-      return redirect('/direction')->with('success', 'direction UPDATED!');
+      return redirect('/direction')->with('success', 'Direction UPDATED!');
     }
 
     /**
@@ -118,6 +113,6 @@ class DirectionController extends Controller
     public function destroy($id) {
       $direction = Direction::find($id);
       $direction->delete();
-      return redirect('/direction')->with('success', 'direction DELETED!');
+      return redirect('/direction')->with('success', 'Direction DELETED!');
     }
 }

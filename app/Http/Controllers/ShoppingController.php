@@ -12,11 +12,8 @@ class ShoppingController extends Controller
      * Create a new controller instance.
      *
      * @return void
-     * @return \Illuminate\Http\Response
      */
-    var $totalSessions = array();
     public function __construct() {
-      $this->totalSessions = range(1, 10);
       $this->middleware('auth');
       parent::__construct();
     }
@@ -38,9 +35,8 @@ class ShoppingController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
-      $totalSessions = $this->totalSessions;
       $types = Type::all();
-      return view('kessler.shopping.create', compact('totalSessions', 'types'));
+      return view('kessler.shopping.create', compact('types'));
     }
 
     /**
@@ -63,7 +59,7 @@ class ShoppingController extends Controller
           'categorical_cue' => $request->get('categorical_cue')
         ]);
         $shoppings->save();
-        return redirect('/shopping')->with('success', 'shopping SAVED!');
+        return redirect('/shopping')->with('success', 'Shopping Item SAVED!');
     }
 
     /**
@@ -84,9 +80,8 @@ class ShoppingController extends Controller
      */
     public function edit($id) {
       $shopping = Shopping::find($id);
-      $totalSessions = $this->totalSessions;
       $types = Type::all();
-      return view('kessler.shopping.edit', compact('shopping', 'totalSessions', 'types'));
+      return view('kessler.shopping.edit', compact('shopping', 'types'));
     }
 
     /**
@@ -108,7 +103,7 @@ class ShoppingController extends Controller
       $shopping->item = $request->get('item');
       $shopping->categorical_cue = $request->get('categorical_cue');
       $shopping->save();
-      return redirect('/shopping')->with('success', 'shopping UPDATED!');
+      return redirect('/shopping')->with('success', 'Shopping Item UPDATED!');
     }
 
     /**
@@ -120,6 +115,6 @@ class ShoppingController extends Controller
     public function destroy($id) {
       $shopping = Shopping::find($id);
       $shopping->delete();
-      return redirect('/shopping')->with('success', 'shopping DELETED!');
+      return redirect('/shopping')->with('success', 'Shopping Item DELETED!');
     }
 }
