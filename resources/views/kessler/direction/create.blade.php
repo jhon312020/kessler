@@ -18,14 +18,14 @@
             <form method="post" action="{{ route('direction.store') }}">
               @csrf
               <div class="form-group">
-                <label class="small mb-1" for="story_id">Session Number</label>
-                <select class="form-control select2" id="story_id" name="story_id" required placeholder="Select Session Number">
-                  <option value='' selected="selected">Session Number</option>
-                  @foreach($totalSessions as $session)
-                    <option value="{{ $session }}">{{ $session }}</option>
-                  @endforeach;
-                </select>
-              </div>
+               <label class="small mb-1" for="session_type">Session Type</label>
+              <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
+                <option value= '' selected="selected">Session Type</option>
+                @foreach($types as $type)
+                  <option value="{{ $type->type }}">{{ $type->type }}</option>
+                @endforeach;
+              </select>
+            </div>
               <div class="form-group">
                 <label class="small mb-1" for="direction">Enter Direction</label>
                 <input type="text" class="form-control py-4" id="direction" name="direction" placeholder="Enter Direction" required>

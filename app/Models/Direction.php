@@ -12,7 +12,7 @@ class Direction extends Model
     use SoftDeletes;
 
         protected $fillable = [
-        'story_id',	
+        'session_type',	
         'direction',
         'contextual_cue',
         'categorical_cue'

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Direction;
+use App\Models\Type;
 
 class DirectionController extends Controller
 {
@@ -27,7 +28,8 @@ class DirectionController extends Controller
      */
     public function index() {
       $direction = Direction::all();
-      return view('kessler.direction.index', compact('direction'));
+      $types = Type::all();
+      return view('kessler.direction.index', compact('direction','types'));
     }
 
     /**
@@ -36,8 +38,9 @@ class DirectionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
+      $types = Type::all();
       $totalSessions = $this->totalSessions;
-      return view('kessler.direction.create', compact('totalSessions'));
+      return view('kessler.direction.create', compact('totalSessions','types'));
     }
 
     /**
@@ -48,13 +51,13 @@ class DirectionController extends Controller
      */
     public function store(Request $request) {
         $request->validate([
-          'story_id' => 'required',
+          'session_type' => 'required',
           'direction'=>'required',
           'categorical_cue'=>'required'
         ]);
         
         $directions = new Direction([
-          'story_id' => $request->get('story_id'),
+          'session_type' => $request->get('session_type'),
           'direction' => $request->get('direction'),
           'categorical_cue' => $request->get('categorical_cue')
         ]);
@@ -80,8 +83,9 @@ class DirectionController extends Controller
      */
     public function edit($id) {
       $direction = Direction::find($id);
+      $types = Type::all();
       $totalSessions = $this->totalSessions;
-      return view('kessler.direction.edit', compact('direction', 'totalSessions'));
+      return view('kessler.direction.edit', compact('direction', 'totalSessions','types'));
     }
 
     /**
@@ -93,12 +97,12 @@ class DirectionController extends Controller
      */
     public function update(Request $request, $id) {
       $request->validate([
-        'story_id' => 'required',
+        'session_type' => 'required',
         'direction'=>'required',
         'categorical_cue'=>'required'
       ]);
       $direction = Direction::find($id);
-      $direction->story_id = $request->get('story_id');
+      $direction->session_type = $request->get('session_type');
       $direction->direction = $request->get('direction');
       $direction->categorical_cue = $request->get('categorical_cue');
       $direction->save();
