@@ -240,7 +240,7 @@ class TraineeController extends Controller
       $trainee = Trainee::find($id);
       $traineeStory = TraineeStory::select('id', 'trainee_id', 'story_id', 'session_pin', 'original_story','round')->where('story_id', $trainee->session_number)->where('session_pin', $trainee->session_pin)->where('round', $trainee->round)->first();
       //$this->pr($trainee->toArray()); exit();
-      return view('kessler.trainee.review', compact('traineeStory'));
+      return view('kessler.trainee.approve', compact('traineeStory'));
     }
 
     /**

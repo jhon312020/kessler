@@ -40,9 +40,9 @@ Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 Route::group(['middleware' => 'auth'], function() {
   Route::resource('/trainee', TraineeController::class);
 	Route::get('/trainee/view/{id}', [TraineeController::class, 'view']);
-	Route::get('/trainee/review/{id}', [TraineeController::class, 'review']);
-	Route::post('/trainee/review/{id}', [TraineeController::class, 'review']);
-	Route::post('/trainee/revise/{id}', [TraineeController::class, 'revise']);
+	Route::get('/trainee/approve/{id}', [TraineeController::class, 'review']);
+	Route::post('/trainee/approve/{id}', [TraineeController::class, 'review']);
+	Route::post('/trainee/approve/{id}', [TraineeController::class, 'revise']);
 });
 //Super Admin Role
 Route::group(['middleware' => 'App\Http\Middleware\SuperAdminMiddleware'], function() {
