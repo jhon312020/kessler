@@ -22,8 +22,8 @@
                 <textarea class="form-control py-4" id="overview" name="overview" style="height: 218px;" rows="30" cols="150" placeholder="Enter Overview ..." required  autofocus></textarea>
               </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
-                <button type="submit" class="ml-2 btn btn-primary">Add</button>
-                <a href="{{ url('/overview')}}" class="btn btn-danger" role="button">Cancel</a>
+                <button type="submit" class="btn btn-primary">Add</button>
+                <a href="{{ url('/overview')}}" class="ml-2 btn btn-danger" role="button">Cancel</a>
               </div>
             </form>
           </div>
