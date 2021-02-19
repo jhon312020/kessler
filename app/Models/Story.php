@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Story extends Model
 {
     use HasFactory;
-    Use SoftDeletes;
+    use SoftDeletes;
     
     protected $fillable = [
     	'session_type',
