@@ -22,14 +22,14 @@
               <tr>
                 <th>S.No</th>
                 <th>Story</th>
-                <th width="20%">Actions</th>
+                <th width="25%">Actions</th>
               </tr>
             </thead>
             <tfoot>
               <tr>
                 <th>S.No</th>
                 <th>Story</th>
-                <th width="20%">Actions</th>
+                <th width="25%">Actions</th>
               </tr>
             </tfoot>
             <tbody>
