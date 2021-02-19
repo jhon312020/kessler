@@ -53,13 +53,13 @@ class LoginController extends Controller
     {
         // Get the user details from database and check if user is exist and active.
         $user = User::where('email',$request->email)->first();
-        if( $user && !$user->status){
+        if($user && !$user->status) {
             throw ValidationException::withMessages([$this->username() => __('Your account is inactive. Please contact your administrator')]);
         }
 
         // Then, validate input.
         return $request->validate([
-            $this->username() => 'reqßuired|string',
+            $this->username() => 'required|string',
             'password' => 'required|string',
         ]);
     }
