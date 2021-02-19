@@ -30,12 +30,23 @@
                 @endforeach;
               </select>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="jsSessionNumber">
               <label class="small mb-1" for="session_number">Session Number</label>
               <select class="form-control select2" id="session_number" name="session_number" required placeholder="Select Session Number">
                 <option value='' selected="selected">Session Number</option>
                 @foreach($totalSessions as $session)
                   <option value="{{ $session }}">{{ $session }}</option>
+                @endforeach;
+              </select>
+            </div>
+            <div class="form-group d-none" id="jsBooster">
+               <label class="small mb-1" for="booster">Booster Session</label>
+              <select class="form-control select2" id="category" name="category" required placeholder="Select Booster Session">
+                <option value= '' selected="selected">Booster Session</option>
+                @foreach($booster as $booster)
+                @if($type->type = 'A')
+                  <option value="{{ $booster->category }}">{{ $booster->category }}</option>
+                @endif
                 @endforeach;
               </select>
             </div>
@@ -49,4 +60,16 @@
     </div>
   </div>
 </div>
+<script type="text/javascript">
+$(document).ready( function() { // Wait until document is fully parsed
+  $('#jsSessionNumber').on('change', function() {
+    //alert("WORKS");
+    if (($("#session_type option:selected").val() == "A") && ($("#session_number option:selected").val() == "9") || ($("#session_number option:selected").val() == "10")) {
+    $('#jsBooster').removeClass('d-none').show();
+     } else {
+      $('#jsBooster').addClass('d-none');
+     }
+   }); 
+  })
+</script>
 @endsection
