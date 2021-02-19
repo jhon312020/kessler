@@ -19,6 +19,10 @@
               @method('PATCH') 
               @csrf
               <div class="form-group">
+                <label class="small mb-1" for="trainee_id">Trainee ID</label>
+                <input type="text" class="form-control py-4" name="trainee_id" id="trainee_id" placeholder="Trainee ID" value="{{$trainee->trainee_id}}" readonly="true">
+              </div>
+              {{-- <div class="form-group">
                 <label class="small mb-1" for="type">Session Type</label>
                 <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
                   <option value= '' >Session Type</option>
@@ -35,7 +39,7 @@
                     <option value="{{ $session }}" {{$session==$trainee->session_number?'selected':'' }}>{{ $session }}</option>
                   @endforeach;
                 </select>
-              </div>
+              </div> --}}
               <div class="form-group d-flex align-items-center float-left mt-4 mb-0">
                 <div class="form-check form-check-inline">
                   <input class="form-check-input" type="radio" id="continue" name="state"  value="continue" {{ $trainee->session_state == 'continue'? 'checked':'' }}>
