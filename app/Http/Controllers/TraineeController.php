@@ -97,12 +97,12 @@ class TraineeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request, $id) {
-      $trainee = Trainee::find($id);
-      $types = Type::all();
-      $booster = Booster::all();
-      $totalSessions = $this->totalSessions;
+       $trainee = Trainee::find($id);
+      // $types = Type::all();
+      // $booster = Booster::all();
+      // $totalSessions = $this->totalSessions;
       $state = $request->get('state');
-      return view('kessler.trainee.edit', compact('trainee', 'totalSessions','types','state','booster'));
+      return view('kessler.trainee.edit', compact('trainee','state'));
     } 
 
     /**
@@ -114,12 +114,9 @@ class TraineeController extends Controller
      */
     public function update(Request $request, $id) {
       $request->validate([
-        'session_type'=>'required',
-        'session_number'=>'required'
+        'state'=>'required'
       ]);
       $trainee = Trainee::find($id);
-      $trainee->session_type = $request->get('session_type');
-      $trainee->session_number = $request->get('session_number');
       $trainee->session_state = $request->get('state');
       if ($trainee->session_state === 'start')  {
         $trainee->session_current_position = null;
