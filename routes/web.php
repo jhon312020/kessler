@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TraineeSessionController;
+use App\Http\Controllers\BoosterController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\AdminController;
@@ -55,6 +56,7 @@ Route::group(['middleware' => 'App\Http\Middleware\SuperAdminMiddleware'], funct
 	Route::resource('/story', StoryController::class);
 	Route::resource('/word', WordController::class);
 	Route::resource('/type', TypeController::class);
+	Route::resource('/booster', BoosterController::class);
 	Route::resource('/quiz', QuizController::class);
 	Route::resource('/shopping', ShoppingController::class);
 	Route::resource('/direction', DirectionController::class);
