@@ -25,7 +25,7 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th width="25%">Actions</th>
-                <th>Status</th>
+                <!-- <th>Status</th> -->
               </tr>
             </thead>
             <tfoot>
@@ -33,7 +33,7 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th width="25%">Actions</th>
-                <th>Status</th>
+                <!-- <th>Status</th> -->
               </tr>
             </tfoot>
             <tbody>
@@ -43,18 +43,22 @@
                <td>{{$trainer->email}}</td>
                <td>
                 <a href="{{ route('trainer.edit',$trainer->id)}}" class="btn btn-primary"><i class="fa fa-edit">&nbsp;</i> Edit</a>
-                <form action="{{ route('trainer.destroy', $trainer->id)}}" method="post" class="d-inline" id="jsSubmitForm-{{ $trainer->id }}">
+               {{--  <form action="{{ route('trainer.destroy', $trainer->id)}}" method="post" class="d-inline" id="jsSubmitForm-{{ $trainer->id }}">
                   @csrf
                   @method('DELETE')
                   <button class="btn btn-danger jsConfirmButton" type="button" data-value="{{ $trainer->id }}"><i class="fa fa-trash">&nbsp;</i> Delete</button>
+                </form> --}}
+                <form action="{{route('trainer.status',$trainer->id)}}" method="post" class="d-inline" id="jsStatusForm-{{$trainer->id}}">
+                  @csrf
+                  <input data-id="{{$trainer->id}}" id="jsStatus" name="status" value="{{$trainer->status}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $trainer->status ? 'checked' : '' }}>
                 </form>
                 </td>                                  
-                <td>
+               {{-- <td>
                   <form action="{{route('trainer.status',$trainer->id)}}" method="post" class="d-inline" id="jsStatusForm-{{$trainer->id}}">
                   @csrf
                   <input data-id="{{$trainer->id}}" id="jsStatus" name="status" value="{{$trainer->status}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $trainer->status ? 'checked' : '' }}>
                   </form>
-               </td>               
+               </td> --}}               
               </tr>
             @endforeach
             </tbody>
