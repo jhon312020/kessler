@@ -12,6 +12,7 @@ use App\Http\Controllers\OverviewController;
 use App\Http\Controllers\InstructionController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\WordController;
+use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ShoppingController;
 use App\Http\Controllers\DirectionController;
 use App\Http\Controllers\ToDoController;
@@ -54,6 +55,7 @@ Route::group(['middleware' => 'App\Http\Middleware\SuperAdminMiddleware'], funct
 	Route::resource('/story', StoryController::class);
 	Route::resource('/word', WordController::class);
 	Route::resource('/type', TypeController::class);
+	Route::resource('/quiz', QuizController::class);
 	Route::resource('/shopping', ShoppingController::class);
 	Route::resource('/direction', DirectionController::class);
 	Route::resource('/todo', ToDoController::class);
