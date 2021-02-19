@@ -2,16 +2,16 @@
 @section('content')
   <!-- Content Wrapper. Contains page content -->
   <div class="container-fluid">
-    <h1 class="mt-4">Session booster</h1>
+    <h1 class="mt-4">Booster Session</h1>
     <div class="card mb-4">
       <div class="card-body">
-        Create, View, Edit and Remove Session booster
+        Create, View, Edit and Remove Booster Session 
       </div>
     </div>
     <div class="card mb-4">
       <div class="card-header">
         <i class="fas fa-table mr-1"></i>
-          Session booster
+          Booster Session 
       </div>
       <br/>
       <a href="{{ route('booster.create') }}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;">Add Booster Session</a>
