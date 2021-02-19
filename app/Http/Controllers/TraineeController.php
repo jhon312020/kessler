@@ -9,6 +9,7 @@ use App\Models\Story;
 use App\Models\TraineeTransaction;
 use App\Models\Word;
 use App\Models\Type;
+use App\Models\Booster;
 use Auth;
 
 class TraineeController extends Controller
@@ -50,7 +51,8 @@ class TraineeController extends Controller
     public function create() {
       $totalSessions = $this->totalSessions;
       $types = Type::all();
-      return view('kessler.trainee.create', compact('totalSessions','types'));
+      $booster = Booster::all();
+      return view('kessler.trainee.create', compact('totalSessions','types','booster'));
     }
 
     /**
@@ -97,9 +99,10 @@ class TraineeController extends Controller
     public function edit(Request $request, $id) {
       $trainee = Trainee::find($id);
       $types = Type::all();
+      $booster = Booster::all();
       $totalSessions = $this->totalSessions;
       $state = $request->get('state');
-      return view('kessler.trainee.edit', compact('trainee', 'totalSessions','types','state'));
+      return view('kessler.trainee.edit', compact('trainee', 'totalSessions','types','state','booster'));
     } 
 
     /**
