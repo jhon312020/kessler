@@ -7,6 +7,8 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
+use App\Models\User;
+
 class LoginController extends Controller
 {
     /*
@@ -40,16 +42,25 @@ class LoginController extends Controller
     }
 
     /**
-     * Get the needed authorization credentials from the request.
+     * Validate the user login request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
-    protected function credentials(Request $request)
+    protected function validateLogin(Request $request)
     {
-        $credentials = $request->only($this->username(), 'password');
-        $credentials['status'] = 1;
-        return $credentials;
-        //return ['email' => $request->{$this->username()}, 'password' => $request->password, 'status' => 1];
+        // Get the user details from database and check if user is exist and active.
+        $user = User::where('email',$request->email)->first();
+        if( $user && !$user->status){
+            throw ValidationException::withMessages([$this->username() => __('Your account is inactive. Please contact your administrator')]);
+        }
+
+        // Then, validate input.
+        return $request->validate([
+            $this->username() => 'reqßuired|string',
+            'password' => 'required|string',
+        ]);
     }
 }
