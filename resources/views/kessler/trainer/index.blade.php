@@ -48,16 +48,13 @@
                   @method('DELETE')
                   <button class="btn btn-danger jsConfirmButton" type="button" data-value="{{ $trainer->id }}"><i class="fa fa-trash">&nbsp;</i> Delete</button>
                 </form>
-                </td>
-                
-                  
+                </td>                                  
                 <td>
                   <form action="{{route('trainer.status',$trainer->id)}}" method="post" class="d-inline" id="jsStatusForm-{{$trainer->id}}">
                   @csrf
                   <input data-id="{{$trainer->id}}" id="jsStatus" name="status" value="{{$trainer->status}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $trainer->status ? 'checked' : '' }}>
                   </form>
-               </td>
-               
+               </td>               
               </tr>
             @endforeach
             </tbody>
