@@ -34,7 +34,7 @@ class TraineeController extends Controller
      */
     public function index(Request $request) {
       $user = Auth::user();
-      $queryObj = Trainee::select('id', 'trainee_id','session_pin', 'session_type', 'session_number', 'session_current_position','session_state');
+      $queryObj = Trainee::select('id', 'trainee_id','session_pin', 'session_type', 'session_number', 'session_current_position','session_state','completed');
       if ($user->role != "SA") {
         $queryObj = $queryObj->where('trainer_id', $user->id);
       }

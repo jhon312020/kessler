@@ -47,7 +47,9 @@
                 <td>{{$trainee->session_number}}</td>
                 <td>{{$trainee->session_state}}</td>
                 <td>
+                   @if ($trainee->completed == "0")
                   <a href="{{ route('trainee.edit', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-edit">&nbsp;</i> Edit</a>
+                   @endif
                   <a href="{{ url('trainee/view', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-eye">&nbsp;</i> View</a>
                   @if ($trainee->session_number > "4" && $trainee->session_type == "A")
                     @php
@@ -60,7 +62,9 @@
                   <form action="{{ route('trainee.destroy', $trainee->id)}}" method="post" class="d-inline">
                     @csrf
                     @method('DELETE')
+                    @if ($trainee->completed == "0")
                     <button class="btn btn-danger" type="submit"><i class="fa fa-trash">&nbsp;</i> Delete</button>
+                    @endif
                   </form>
                 </td>
               </tr>
