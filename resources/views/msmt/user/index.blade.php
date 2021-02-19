@@ -9,7 +9,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-lg-4 mx-auto">
+    <div class="col-md-6 col-lg-4 mx-auto">
       <form action="{{ url('/index') }}" method="POST">
         @csrf {{ method_field('post') }}
         <div class="control-group">

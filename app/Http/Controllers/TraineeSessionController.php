@@ -346,6 +346,9 @@ class TraineeSessionController extends Controller
       $allStoryWords = Word::select('id', 'word')->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->pluck('word', 'id')->all();
       if ($story && $traineeRecord) {
         $traineeCurrentPosition = json_decode($traineeRecord->session_current_position);
+        if (!$traineeCurrentPosition) {
+          return redirect('/index');
+        }
         $userStoryWords = json_decode($story->user_story_words);
         $totalUsersWords = count($userStoryWords);
         $userWordKey = $traineeCurrentPosition->user_word_id;
@@ -381,7 +384,7 @@ class TraineeSessionController extends Controller
    * @return \Illuminate\Http\Response
    */
   public function complete(Request $request) {
-    if ($request->session()->has('completed')) {
+    if ($request->session()->has('completed') || 1) {
       $sessionNumber = '';
       $request->session()->forget('completed');
       $trainee = $request->session()->get('trainee');
