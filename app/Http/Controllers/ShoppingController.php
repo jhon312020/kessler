@@ -99,7 +99,6 @@ class ShoppingController extends Controller
       ]);
       $shopping = Shopping::find($id);
       $shopping->session_type = $request->get('session_type');
-      $shopping->story_id = $request->get('story_id');
       $shopping->item = $request->get('item');
       $shopping->categorical_cue = $request->get('categorical_cue');
       $shopping->save();
