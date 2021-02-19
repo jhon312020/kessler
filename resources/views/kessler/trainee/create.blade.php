@@ -21,7 +21,7 @@
               <label class="small mb-1" for="trainee_id">Trainee ID</label>
               <input type="text" class="form-control py-4" id="trainee_id" name="trainee_id" placeholder="Enter Trainee ID" required>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="jsSessionType">
                <label class="small mb-1" for="session_number">Session Type</label>
               <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
                 <option value= '' selected="selected">Session Type</option>
@@ -62,14 +62,13 @@
 </div>
 <script type="text/javascript">
 $(document).ready( function() { // Wait until document is fully parsed
-  $('#jsSessionNumber').on('change', function() {
-    //alert("WORKS");
-    if (($("#session_type option:selected").val() == "A") && ($("#session_number option:selected").val() == "9") || ($("#session_number option:selected").val() == "10")) {
+  $('#jsSessionNumber, #jsSessionType').on('change', function() {
+    if (($("#session_type option:selected").val() == "A") && (($("#session_number option:selected").val() == "9") || ($("#session_number option:selected").val() == "10"))) {
     $('#jsBooster').removeClass('d-none').show();
      } else {
       $('#jsBooster').addClass('d-none');
      }
-   }); 
+   });
   })
 </script>
 @endsection
