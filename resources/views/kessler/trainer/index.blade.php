@@ -1,6 +1,7 @@
 @extends('kessler.layouts.master')
 @section('content')
   <!-- Content Wrapper. Contains page content -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
   <div class="container-fluid">
@@ -49,7 +50,7 @@
                   <button class="btn btn-danger jsConfirmButton" type="button" data-value="{{ $trainer->id }}"><i class="fa fa-trash">&nbsp;</i> Delete</button>
                 </form> --}}
                 <form action="{{route('trainer.status',$trainer->id)}}" method="post" class="d-inline" id="jsStatusForm-{{$trainer->id}}">
-                  @csrf
+                  @csrf {{ method_field('post') }}
                   <input data-id="{{$trainer->id}}" id="jsStatus" name="status" value="{{$trainer->status}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $trainer->status ? 'checked' : '' }}>
                 </form>
                 </td>                                  
@@ -75,7 +76,7 @@
     </div>
   </div>
 <script type="text/javascript">
-  $(document).ready( function() { // Wait until document is fully parsed
+  $(document).ready( function() { // Wait until document is fully parse
     $('#jsStatus').on('change', function() {
       var currentVal = $(this).val();
       console.log(currentVal);
@@ -85,7 +86,24 @@
         $(this).val(0);
       }
       $('#jsStatusForm-'+$(this).data('id')).submit();
-  }); 
+
+      /* THROUGH AJAX */
+      // var status = $(this).prop('checked') == true ? 1 : 0; 
+      // var id = $(this).data('id'); 
+      //  $.ajaxSetup({
+      //     headers: {
+      //       'X-XSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      //     }
+      //   });  
+      //   $.ajax({
+      //       type: "POST",
+      //       url:  "/trainer/status/"+id+"",
+      //       data: {'status': status, 'id': id},
+      //       success: function(response){
+      //          console.log(data.success)
+      //       }
+      //   });
+    }) 
  })
 </script>
 @include('common.confirm')
