@@ -50,6 +50,15 @@
                 @endforeach;
               </select>
             </div>
+             <div class="form-group d-none" id="jsBoosterRange">
+              <label class="small mb-1" for="booster_range">Booster Range</label>
+              <select class="form-control select2" id="booster_range" name="booster_range" required placeholder="Select Session Number">
+                <option value='' selected="selected">Select Range</option>
+                @foreach($boosterRange as $range)
+                  <option value="{{ $range }}">{{ $range }}</option>
+                @endforeach;
+              </select>
+            </div>
             <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
               <button type="submit" class="btn btn-primary">Add</button>
               <a href="{{ url('/trainee')}}" class="ml-2 btn btn-danger" role="button">Cancel</a>
@@ -65,8 +74,10 @@ $(document).ready( function() { // Wait until document is fully parsed
   $('#jsSessionNumber, #jsSessionType').on('change', function() {
     if (($("#session_type option:selected").val() == "A") && (($("#session_number option:selected").val() == "9") || ($("#session_number option:selected").val() == "10"))) {
     $('#jsBooster').removeClass('d-none').show();
+    $('#jsBoosterRange').removeClass('d-none').show();
      } else {
       $('#jsBooster').addClass('d-none');
+      $('#jsBoosterRange').addClass('d-none');
      }
    });
   })

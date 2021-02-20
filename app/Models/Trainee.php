@@ -17,6 +17,7 @@ class Trainee extends Model
         'session_type',
         'session_number',
         'booster_category',
+        'booster_range',
         'session_pin'
     ];
 }

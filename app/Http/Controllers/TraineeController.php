@@ -20,10 +20,12 @@ class TraineeController extends Controller
      * @return \Illuminate\Http\Response
      */
     var $totalSessions = array();
+    var $boosterRange = array();
     var $user = null;
     public function __construct() {
       parent::__construct();
       $this->totalSessions = range(1, 10);
+      $this->boosterRange = range(1, 3);
       $this->traineeCurrentPosition = (object) array('word_id'=>'', 'position'=>'tale', 'user_word_id'=>0, 'sentence'=>0);
     }
 
@@ -50,9 +52,10 @@ class TraineeController extends Controller
      */
     public function create() {
       $totalSessions = $this->totalSessions;
+      $boosterRange = $this->boosterRange;
       $types = Type::all();
       $booster = Booster::all();
-      return view('kessler.trainee.create', compact('totalSessions','types','booster'));
+      return view('kessler.trainee.create', compact('totalSessions', 'boosterRange' ,'types','booster'));
     }
 
     /**
@@ -74,6 +77,7 @@ class TraineeController extends Controller
         'session_type' => $request->get('session_type'),
         'session_number' => $request->get('session_number'),
         'booster_category' => $request->get('booster_category'),
+        'booster_range' => $request->get('booster_range'),
         'session_pin' => $session_pin,
         'trainer_id' => Auth::id()
       ]);  
