@@ -55,26 +55,50 @@ class LoginController extends Controller
     //     //return ['email' => $request->{$this->username()}, 'password' => $request->password, 'status' => 1];
     // }
 
+    // /**
+    //  * Validate the user login request.
+    //  *
+    //  * @param  \Illuminate\Http\Request  $request
+    //  * @return void
+    //  *
+    //  * @throws \Illuminate\Validation\ValidationException
+    //  */
+    // protected function validateLogin(Request $request)
+    // {
+    //     // Get the user details from database and check if user is exist and active.
+    //     $user = User::where('email',$request->email)->first();
+    //     if($user && !$user->status) {
+    //         throw ValidationException::withMessages([$this->username() => __('Inactive Account.  Please Contact Your Administrator')]);
+    //     }
+
+    //     // Then, validate input.
+    //     return $request->validate([
+    //         $this->username() => 'required|string',
+    //         'password' => 'required|string',
+    //     ]);
+    // }
+
     /**
-     * Validate the user login request.
+     * The user has been authenticated.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return void
-     *
-     * @throws \Illuminate\Validation\ValidationException
+     * @param  mixed  $user
+     * @return mixed
      */
-    protected function validateLogin(Request $request)
+    protected function authenticated(Request $request, $user)
     {
-        // Get the user details from database and check if user is exist and active.
-        $user = User::where('email',$request->email)->first();
-        if($user && !$user->status) {
-            throw ValidationException::withMessages([$this->username() => __('Your account is inactive. Please contact your administrator')]);
+        if ($user->status == 0) {
+        $message = 'Inactive Account.  Please Contact Your Administrator';
+        // Log the user out.
+        $this->logout($request);
+        // Return them to the log in form.
+        return redirect()->back()
+            ->withInput($request->only($this->username(), 'remember'))
+            ->withErrors([
+                // This is where we are providing the error message.
+                $this->username() => $message,
+            ]);
         }
-
-        // Then, validate input.
-        return $request->validate([
-            $this->username() => 'required|string',
-            'password' => 'required|string',
-        ]);
     }
+
 }
