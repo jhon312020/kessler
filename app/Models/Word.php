@@ -14,6 +14,7 @@ class Word extends Model
         protected $fillable = [
         'story_id',	
         'word',
+        'question',
         'contextual_cue',
         'categorical_cue'
     ];
