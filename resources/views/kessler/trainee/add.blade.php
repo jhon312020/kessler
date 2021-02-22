@@ -52,7 +52,7 @@
             </div>
              <div class="form-group d-none" id="jsBoosterRange">
               <label class="small mb-1" for="booster_range">Booster Range</label>
-              <select class="form-control select2" id="booster_range" name="booster_range" required placeholder="Select Session Number">
+              <select class="form-control select2" id="booster_range" name="booster_range" placeholder="Select Session Number">
                 <option value='' selected="selected">Select Range</option>
                 @foreach($boosterRange as $range)
                   <option value="{{ $range }}">{{ $range }}</option>
@@ -60,7 +60,7 @@
               </select>
             </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
-                <button class="btn btn-primary jsConfirmButton" type="button" data-value="{{ $trainee->id }}">Add</button>
+                <button type="submit" class="btn btn-primary">Add</button>
                 <a href="{{ url('/trainee')}}" class="ml-2 btn btn-danger" role="button">Cancel</a>
               </div>
             </form>
@@ -82,5 +82,4 @@ $(document).ready( function() { // Wait until document is fully parsed
    });
   })
 </script>
-@include('common.confirm')
 @endsection
