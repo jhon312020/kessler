@@ -162,7 +162,7 @@ class TraineeSessionController extends Controller
           $findWord = '/\b'.$searchWord.'\b/';
           $newString = preg_replace($findWord, $word, $newString, 1);
         }
-        preg_match_all('/\b([A-Z]+)\b/', $newString, $userWords);
+        preg_match_all('/\b([A-Z-]+)\b/', $newString, $userWords);
         $storyWords = $storyWords->toArray();
         $userStoryWords = array();
         if ($userWords) {
@@ -391,7 +391,7 @@ class TraineeSessionController extends Controller
    * @return \Illuminate\Http\Response
    */
   public function complete(Request $request) {
-    if ($request->session()->has('completed') || 1) {
+    if ($request->session()->has('completed')) {
       $sessionNumber = '';
       $request->session()->forget('completed');
       $trainee = $request->session()->get('trainee');

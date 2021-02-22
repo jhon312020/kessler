@@ -167,8 +167,8 @@ class TraineeController extends Controller
       $storyWords = array();
 
       if ($trainee && ($user->role == 'SA' || in_array($trainee->id, $trainer_traines))) {
-        $storyWords = Word::select('id', 'word')->where('story_id', $trainee->session_number)->get();
-        //$this->pr($storyWords->toArray());
+        //$storyWords = Word::select('id', 'word')->where('story_id', $trainee->session_number)->get();
+        $storyWords = $this->getWordAndIDObj($trainee);
         $queryObj = TraineeTransaction::select('id', 'word_id', 'trainee_id', 'session_pin', 'type', 'answer', 'correct_or_wrong','round','time_taken')->where('trainee_id', $trainee->trainee_id)->where('session_pin', $trainee->session_pin);
         $allStoryWords = $storyWords->pluck('word')->toArray();
   

@@ -62,8 +62,8 @@
               </tr>
               @foreach($storyWords as $storyWord)
                 <tr>
-                  @if(isset($roundOneReport[$storyWord->id][0]))
                   <td>{{$storyWord->word}}</td>
+                  @if(isset($roundOneReport[$storyWord->id][0]))
                   <td class="type text-center {{ $roundOneReport[$storyWord->id] && $roundOneReport[$storyWord->id][0]->correct_or_wrong ? 'correct' : 'wrong' }}"> 
                     @if($roundOneReport[$storyWord->id][0]->correct_or_wrong)
                       <i class="fa fa-check" aria-hidden="true"> </i>

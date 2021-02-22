@@ -91,4 +91,20 @@ class Controller extends BaseController
     }
     return $wordObj;
   }
+
+  /**
+   * Get the words for story building, based on the 
+   * trainee session details
+   *
+   * @param  $trainee
+   * @return array
+   */
+  function getWordAndIDObj($traineeObj) {
+    if ($traineeObj->session_number < $this->boosterSession) {
+      $wordObj = Word::select('id', 'word')->where('story_id', $traineeObj->session_number)->get();
+    } else {
+      $wordObj = Task::select('id', 'task as word')->where('booster_id', $traineeObj->booster_id)->where('booster_range', $traineeObj->booster_range)->get();
+    }
+    return $wordObj;
+  }
 }
