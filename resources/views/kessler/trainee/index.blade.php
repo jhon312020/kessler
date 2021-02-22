@@ -66,6 +66,7 @@
                     <button class="btn btn-danger" type="submit"><i class="fa fa-trash">&nbsp;</i> Delete</button>
                     @endif
                   </form>
+                   <a href="{{ route('trainee.add', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-edit">&nbsp;</i> Add</a>
                 </td>
               </tr>
                @endforeach

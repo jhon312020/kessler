@@ -38,7 +38,7 @@
             @foreach($todo as $todo)
               <tr>
                <td>{{$todo->id}}</td>
-               <td>{{$todo->todo}}</td>
+               <td>{{$todo->task}}</td>
                <td>{{$todo->categorical_cue}}</td>
                <td>
                 <a href="{{ route('todo.edit',$todo->id)}}" class="btn btn-primary"><i class="fa fa-edit">&nbsp;</i> Edit</a>

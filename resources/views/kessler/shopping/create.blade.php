@@ -17,22 +17,22 @@
             @endif
             <form method="post" action="{{ route('shopping.store') }}">
               @csrf
-            <div class="form-group">
-               <label class="small mb-1" for="session_number">Session Type</label>
-              <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
-                <option value= '' selected="selected">Session Type</option>
-                @foreach($types as $type)
-                  <option value="{{ $type->type }}">{{ $type->type }}</option>
+             {{--  <div class="form-group">
+               <label class="small mb-1" for="booster_range">Booster Range</label>
+              <select class="form-control select2" id="booster_range" name="booster_range" required placeholder="Select Booster Range">
+                <option value= '' selected="selected">Booster Range</option>
+                @foreach($boosterRange as $range)
+                  <option value="{{ $range }}">{{ $range }}</option>
                 @endforeach;
               </select>
-            </div>
+            </div> --}}
               <div class="form-group">
                 <label class="small mb-1" for="item">Enter Item</label>
                 <input type="text" class="form-control py-4" id="item" name="item" placeholder="Enter Item" required>
               </div>
                 <div class="form-group">
                 <label class="small mb-1" for="categorical_cue">Enter Categorical Cue</label>
-                <input type="text" class="form-control py-4" id="categorical_cue" name="categorical_cue" placeholder="Enter Categorical Cue" required>
+                <input type="text" class="form-control py-4" id="categorical_cue" name="categorical_cue" placeholder="Enter Categorical Cue">
               </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
                 <button type="submit" class="btn btn-primary">Add</button>

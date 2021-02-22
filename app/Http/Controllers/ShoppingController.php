@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Shopping;
+// use App\Models\Shopping;
+use App\Models\Task;
 use App\Models\Type;
 
 class ShoppingController extends Controller
@@ -13,8 +14,10 @@ class ShoppingController extends Controller
      *
      * @return void
      */
+    var $boosterRange = array();
     public function __construct() {
       $this->middleware('auth');
+      $this->boosterRange = range(1, 3);
       parent::__construct();
     }
 
@@ -24,7 +27,7 @@ class ShoppingController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index() {
-      $shopping = Shopping::all();
+      $shopping = Task::where('booster_id','2')->get();
       $types = Type::pluck('type', 'id');
       return view('kessler.shopping.index', compact('shopping', 'types'));
     }
@@ -35,8 +38,9 @@ class ShoppingController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
-      $types = Type::all();
-      return view('kessler.shopping.create', compact('types'));
+      $types = Task::all();
+      $boosterRange = $this->boosterRange;
+      return view('kessler.shopping.create', compact('types', 'boosterRange'));
     }
 
     /**
@@ -47,15 +51,16 @@ class ShoppingController extends Controller
      */
     public function store(Request $request) {
         $request->validate([
-          'session_type'=>'required',
-          'item'=>'required',
-          'categorical_cue'=>'required'
+          // 'booster_range'=>'required',
+          'item'=>'required'
+         // 'categorical_cue'=>'required'
         ]);
-        
-        $shoppings = new Shopping([
-          'story_id' => $request->get('story_id'),
-          'session_type' => $request->get('session_type'),
-          'item' => $request->get('item'),
+        $booster_id = 2;
+        $booster_range = 3;
+        $shoppings = new Task([
+          'booster_id' => $booster_id,
+          'booster_range' => $booster_range,
+          'task' => $request->get('item'),
           'categorical_cue' => $request->get('categorical_cue')
         ]);
         $shoppings->save();
@@ -79,7 +84,7 @@ class ShoppingController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-      $shopping = Shopping::find($id);
+      $shopping = Task::find($id);
       $types = Type::all();
       return view('kessler.shopping.edit', compact('shopping', 'types'));
     }
@@ -93,13 +98,13 @@ class ShoppingController extends Controller
      */
     public function update(Request $request, $id) {
       $request->validate([
-        'session_type'=>'required',
-        'item'=>'required',
-        'categorical_cue'=>'required'
+       // 'booster_range'=>'required',
+        'item'=>'required'
+        //'categorical_cue'=>'required'
       ]);
-      $shopping = Shopping::find($id);
-      $shopping->session_type = $request->get('session_type');
-      $shopping->item = $request->get('item');
+      $shopping = Task::find($id);
+     // $shopping->booster_range = $request->get('booster_range');
+      $shopping->task = $request->get('item');
       $shopping->categorical_cue = $request->get('categorical_cue');
       $shopping->save();
       return redirect('/shopping')->with('success', 'Shopping Item UPDATED!');
@@ -112,7 +117,7 @@ class ShoppingController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-      $shopping = Shopping::find($id);
+      $shopping = Task::find($id);
       $shopping->delete();
       return redirect('/shopping')->with('success', 'Shopping Item DELETED!');
     }

@@ -38,7 +38,7 @@
             @foreach($direction as $direction)
               <tr>
                <td>{{$direction->id}}</td>
-               <td>{{$direction->direction}}</td>
+               <td>{{$direction->task}}</td>
                <td>{{$direction->categorical_cue}}</td>
                <td>
                 <a href="{{ route('direction.edit',$direction->id)}}" class="btn btn-primary"><i class="fa fa-edit">&nbsp;</i> Edit</a>
