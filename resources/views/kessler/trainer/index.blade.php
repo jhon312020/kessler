@@ -51,7 +51,7 @@
                 </form> --}}
                 <form action="{{route('trainer.status',$trainer->id)}}" method="post" class="d-inline" id="jsStatusForm-{{$trainer->id}}">
                   @csrf {{ method_field('post') }}
-                  <input data-id="{{$trainer->id}}" id="jsStatus" name="status" value="{{$trainer->status}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $trainer->status ? 'checked' : '' }}>
+                  <input data-id="{{$trainer->id}}" name="status" value="{{$trainer->status}}" class="toggle-class jsStatus" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $trainer->status ? 'checked' : '' }}>
                 </form>
                 </td>                                  
                {{-- <td>
@@ -79,14 +79,13 @@
   $(document).ready( function() { // Wait until document is fully parse
     $('.jsStatus').on('change', function() {
       var currentVal = $(this).val();
-      console.log(currentVal);
       if (currentVal) {
         $(this).val(1);
       } else {
         $(this).val(0);
       }
       $('#jsStatusForm-'+$(this).data('id')).submit();
-    }) 
+    }); 
  })
 </script>
 @include('common.confirm')
