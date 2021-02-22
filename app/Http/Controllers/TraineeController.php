@@ -268,5 +268,19 @@ class TraineeController extends Controller
       }
       return redirect('/trainee')->with('success', 'Trainee story has been reviewed Successfully!');
     }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function add(Request $request, $id) {
+      $trainee = Trainee::find($id);
+      $totalSessions = $this->totalSessions;
+      $boosterRange = $this->boosterRange;
+      $types = Type::all();
+      $booster = Booster::all();
+      return view('kessler.trainee.add', compact('trainee', 'totalSessions', 'boosterRange' ,'types','booster'));
+    }
     
 }
