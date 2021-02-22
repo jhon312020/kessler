@@ -19,17 +19,8 @@
               @method('PATCH') 
               @csrf
               <div class="form-group">
-                <label class="small mb-1" for="type">Session Type</label>
-                <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
-                  <option value= '' >Session Type</option>
-                  @foreach($types as $type)
-                    <option value="{{ $type->type }}" {{$todo->session_type==$type->type?'selected':'' }}>{{ $type->type }}</option>
-                  @endforeach;
-                </select>
-              </div>
-              <div class="form-group">
                 <label class="small mb-1" for="todo">Update To-Do</label>
-                <input type="text" class="form-control py-4" name="todo" id="todo" placeholder="Enter To-Do" value="{{$todo->todo}}">
+                <input type="text" class="form-control py-4" name="todo" id="todo" placeholder="Enter To-Do" value="{{$todo->task}}">
               </div>
               <div class="form-group">
                 <label class="small mb-1" for="categorical_cue">Update Categorical Cue</label>
