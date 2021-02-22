@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Direction;
+//use App\Models\Direction;
+use App\Models\Task;
 use App\Models\Type;
 
 class DirectionController extends Controller
@@ -13,8 +14,10 @@ class DirectionController extends Controller
      *
      * @return void
      */
+    var $boosterRange = array();
     public function __construct() {
       $this->middleware('auth');
+      $this->boosterRange = range(1, 3);
       parent::__construct();
     }
 
@@ -24,7 +27,7 @@ class DirectionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index() {
-      $direction = Direction::all();
+      $direction = Task::where('booster_id','1')->get();
       $types = Type::all();
       return view('kessler.direction.index', compact('direction','types'));
     }
@@ -36,7 +39,8 @@ class DirectionController extends Controller
      */
     public function create() {
       $types = Type::all();
-      return view('kessler.direction.create', compact('types'));
+      $boosterRange = $this->boosterRange;
+      return view('kessler.direction.create', compact('types', 'boosterRange'));
     }
 
     /**
@@ -47,14 +51,15 @@ class DirectionController extends Controller
      */
     public function store(Request $request) {
         $request->validate([
-          'session_type' => 'required',
+          'booster_range'=>'required',
           'direction'=>'required',
           'categorical_cue'=>'required'
         ]);
-        
-        $directions = new Direction([
-          'session_type' => $request->get('session_type'),
-          'direction' => $request->get('direction'),
+        $booster_id = 1;
+        $directions = new Task([
+          'booster_id' => $booster_id,
+          'booster_range' => $request->get('booster_range'),
+          'task' => $request->get('direction'),
           'categorical_cue' => $request->get('categorical_cue')
         ]);
         $directions->save();
@@ -78,7 +83,7 @@ class DirectionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-      $direction = Direction::find($id);
+      $direction = Task::find($id);
       $types = Type::all();
       return view('kessler.direction.edit', compact('direction','types'));
     }
@@ -92,13 +97,11 @@ class DirectionController extends Controller
      */
     public function update(Request $request, $id) {
       $request->validate([
-        'session_type' => 'required',
         'direction'=>'required',
         'categorical_cue'=>'required'
       ]);
-      $direction = Direction::find($id);
-      $direction->session_type = $request->get('session_type');
-      $direction->direction = $request->get('direction');
+      $direction = Task::find($id);
+      $direction->task = $request->get('direction');
       $direction->categorical_cue = $request->get('categorical_cue');
       $direction->save();
       return redirect('/direction')->with('success', 'Direction UPDATED!');
@@ -111,7 +114,7 @@ class DirectionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-      $direction = Direction::find($id);
+      $direction = Task::find($id);
       $direction->delete();
       return redirect('/direction')->with('success', 'Direction DELETED!');
     }
