@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-//use App\Models\Shopping;
-use App\Models\Shopping;
+// use App\Models\Shopping;
 use App\Models\Task;
 use App\Models\Type;
 
@@ -60,7 +59,7 @@ class ShoppingController extends Controller
         $shoppings = new Task([
           'booster_id' => $booster_id,
           'booster_range' => $request->get('booster_range'),
-          'item' => $request->get('item'),
+          'task' => $request->get('item'),
           'categorical_cue' => $request->get('categorical_cue')
         ]);
         $shoppings->save();
@@ -104,7 +103,7 @@ class ShoppingController extends Controller
       ]);
       $shopping = Task::find($id);
      // $shopping->booster_range = $request->get('booster_range');
-      $shopping->item = $request->get('item');
+      $shopping->task = $request->get('item');
       $shopping->categorical_cue = $request->get('categorical_cue');
       $shopping->save();
       return redirect('/shopping')->with('success', 'Shopping Item UPDATED!');
