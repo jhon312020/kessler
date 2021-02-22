@@ -17,12 +17,12 @@
             @endif
             <form method="post" action="{{ route('shopping.store') }}">
               @csrf
-            <div class="form-group">
-               <label class="small mb-1" for="session_number">Session Type</label>
-              <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
-                <option value= '' selected="selected">Session Type</option>
-                @foreach($types as $type)
-                  <option value="{{ $type->type }}">{{ $type->type }}</option>
+              <div class="form-group">
+               <label class="small mb-1" for="booster_range">Booster Range</label>
+              <select class="form-control select2" id="booster_range" name="booster_range" required placeholder="Select Booster Range">
+                <option value= '' selected="selected">Booster Range</option>
+                @foreach($boosterRange as $range)
+                  <option value="{{ $range }}">{{ $range }}</option>
                 @endforeach;
               </select>
             </div>

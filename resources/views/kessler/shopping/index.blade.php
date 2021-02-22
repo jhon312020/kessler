@@ -38,7 +38,7 @@
             @foreach($shopping as $shopping)
               <tr>
                <td>{{$shopping->id}}</td>
-               <td>{{$shopping->item}}</td>
+               <td>{{$shopping->task}}</td>
                <td>{{$shopping->categorical_cue}}</td>
                <td>
                 <a href="{{ route('shopping.edit',$shopping->id)}}" class="btn btn-primary"><i class="fa fa-edit">&nbsp;</i> Edit</a>
