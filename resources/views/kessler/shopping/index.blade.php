@@ -20,7 +20,7 @@
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
               <tr>
-                <th>S.No</th>
+                <!-- <th>S.No</th> -->
                 <th width="25%">Item</th>
                 <th width="25%">Categorical Cue</th>
                 <th width="25%">Actions</th>
@@ -28,7 +28,7 @@
             </thead>
             <tfoot>
               <tr>
-                <th>S.No</th>
+                <!-- <th>S.No</th> -->
                 <th width="25%">Item</th>
                 <th width="25%">Categorical Cue</th>
                 <th width="25%">Actions</th>
@@ -37,7 +37,7 @@
             <tbody>
             @foreach($shopping as $shopping)
               <tr>
-               <td>{{$shopping->id}}</td>
+               <!-- <td>{{$shopping->id}}</td> -->
                <td>{{$shopping->task}}</td>
                <td>{{$shopping->categorical_cue}}</td>
                <td>

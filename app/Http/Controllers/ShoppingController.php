@@ -51,14 +51,15 @@ class ShoppingController extends Controller
      */
     public function store(Request $request) {
         $request->validate([
-          'booster_range'=>'required',
-          'item'=>'required',
-          'categorical_cue'=>'required'
+          // 'booster_range'=>'required',
+          'item'=>'required'
+         // 'categorical_cue'=>'required'
         ]);
         $booster_id = 2;
+        $booster_range = 3;
         $shoppings = new Task([
           'booster_id' => $booster_id,
-          'booster_range' => $request->get('booster_range'),
+          'booster_range' => $booster_range,
           'task' => $request->get('item'),
           'categorical_cue' => $request->get('categorical_cue')
         ]);
@@ -98,8 +99,8 @@ class ShoppingController extends Controller
     public function update(Request $request, $id) {
       $request->validate([
        // 'booster_range'=>'required',
-        'item'=>'required',
-        'categorical_cue'=>'required'
+        'item'=>'required'
+        //'categorical_cue'=>'required'
       ]);
       $shopping = Task::find($id);
      // $shopping->booster_range = $request->get('booster_range');
