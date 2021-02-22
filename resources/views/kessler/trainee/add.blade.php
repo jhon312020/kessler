@@ -41,11 +41,11 @@
             </div>
             <div class="form-group d-none" id="jsBooster">
                <label class="small mb-1" for="booster">Booster Session</label>
-              <select class="form-control select2" id="booster_category" name="booster_category" placeholder="Select Booster Session">
+              <select class="form-control select2" id="booster_id" name="booster_id" placeholder="Select Booster Session">
                 <option value= '' selected="selected">Booster Session</option>
                 @foreach($booster as $booster)
                 @if($type->type = 'A')
-                  <option value="{{ $booster->category }}">{{ $booster->category }}</option>
+                  <option value="{{ $booster->id }}">{{ $booster->category }}</option>
                 @endif
                 @endforeach;
               </select>

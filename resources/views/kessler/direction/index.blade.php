@@ -20,7 +20,7 @@
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
               <tr>
-                <th>S.No</th>
+                <!-- <th>S.No</th> -->
                 <th width="25%">Direction</th>
                 <th width="25%">Categorical Cue</th>
                 <th width="25%">Actions</th>
@@ -28,7 +28,7 @@
             </thead>
             <tfoot>
               <tr>
-                <th>S.No</th>
+                <!-- <th>S.No</th> -->
                 <th width="25%">direction</th>
                 <th width="25%">Categorical Cue</th>
                 <th width="25%">Actions</th>
@@ -37,7 +37,7 @@
             <tbody>
             @foreach($direction as $direction)
               <tr>
-               <td>{{$direction->id}}</td>
+               <!-- <td>{{$direction->id}}</td> -->
                <td>{{$direction->task}}</td>
                <td>{{$direction->categorical_cue}}</td>
                <td>

@@ -51,14 +51,15 @@ class DirectionController extends Controller
      */
     public function store(Request $request) {
         $request->validate([
-          'booster_range'=>'required',
-          'direction'=>'required',
-          'categorical_cue'=>'required'
+          //'booster_range'=>'required',
+          'direction'=>'required'
+         // 'categorical_cue'=>'required'
         ]);
         $booster_id = 1;
+        $booster_range = 3;
         $directions = new Task([
           'booster_id' => $booster_id,
-          'booster_range' => $request->get('booster_range'),
+          'booster_range' => $booster_range,
           'task' => $request->get('direction'),
           'categorical_cue' => $request->get('categorical_cue')
         ]);
@@ -97,8 +98,8 @@ class DirectionController extends Controller
      */
     public function update(Request $request, $id) {
       $request->validate([
-        'direction'=>'required',
-        'categorical_cue'=>'required'
+        'direction'=>'required'
+        //'categorical_cue'=>'required'
       ]);
       $direction = Task::find($id);
       $direction->task = $request->get('direction');

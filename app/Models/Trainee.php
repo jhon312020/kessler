@@ -16,7 +16,7 @@ class Trainee extends Model
         'trainer_id',
         'session_type',
         'session_number',
-        'booster_category',
+        'booster_id',
         'booster_range',
         'session_pin'
     ];

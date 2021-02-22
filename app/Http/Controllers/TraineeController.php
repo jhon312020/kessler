@@ -76,7 +76,7 @@ class TraineeController extends Controller
         'trainee_id' => $request->get('trainee_id'),
         'session_type' => $request->get('session_type'),
         'session_number' => $request->get('session_number'),
-        'booster_category' => $request->get('booster_category'),
+        'booster_id' => $request->get('booster_id'),
         'booster_range' => $request->get('booster_range'),
         'session_pin' => $session_pin,
         'trainer_id' => Auth::id()
