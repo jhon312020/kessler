@@ -23,7 +23,7 @@ class Controller extends BaseController
                 'type'=>array('name'=>'Session Type', 'url'=>'/type','icon'=>'fa-table', 'role'=>'SA'),
                 'booster'=>array('name'=>'Booster Category', 'url'=>'/booster','icon'=>'fa-table', 'role'=>'SA'),
                 'quiz'=>array('name'=>'Quiz', 'url'=>'/quiz','icon'=>'fa-table', 'role'=>'SA'),
-                'Booster Section'=>array('name'=>'Booster Session', 'url'=>'#', 'icon'=>'fa-columns', 'role'=>'SA', 'subitems'=>array('shopping'=>array('name'=>'Shopping', 'url'=>'/shopping', 'icon'=>'fa-table', 'role'=>'SA',), 'todo'=>array('name'=>'To-Do', 'url'=>'/todo','icon'=>'fa-table','role'=>'SA'), 'direction'=>array('name'=>'Direction', 'url'=>'/direction','icon'=>'fa-table', 'role'=>'SA')))
+                'Booster Section'=>array('name'=>'Booster Session', 'url'=>'#', 'icon'=>'fa-columns', 'role'=>'SA', 'subitems'=>array('direction'=>array('name'=>'Direction', 'url'=>'/direction', 'icon'=>'fa-table', 'role'=>'SA',), 'shopping'=>array('name'=>'Shopping', 'url'=>'/shopping','icon'=>'fa-table','role'=>'SA'), 'to-do'=>array('name'=>'To-Do', 'url'=>'/todo','icon'=>'fa-table', 'role'=>'SA')))
               );
 
   	\View::share('sideMenu', $sideMenu);
