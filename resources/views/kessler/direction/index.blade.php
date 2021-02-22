@@ -29,7 +29,7 @@
             <tfoot>
               <tr>
                 <!-- <th>S.No</th> -->
-                <th width="25%">direction</th>
+                <th width="25%">Direction</th>
                 <th width="25%">Categorical Cue</th>
                 <th width="25%">Actions</th>
               </tr>
