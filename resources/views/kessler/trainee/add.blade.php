@@ -15,8 +15,7 @@
                 </ul>
               </div>
             @endif
-            <form method="post" action="{{ route('trainee.add', $trainee->id) }}" id="jsSubmitForm-{{ $trainee->id }}">
-              @method('PATCH') 
+            <form method="post" action="{{ route('trainee.store') }}" id="jsSubmitForm-{{ $trainee->id }}">
               @csrf
               <div class="form-group">
                 <label class="small mb-1" for="trainee_id">Trainee ID</label>
