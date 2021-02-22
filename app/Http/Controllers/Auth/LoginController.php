@@ -41,43 +41,6 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    // /**
-    //  * Get the needed authorization credentials from the request.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return array
-    //  */
-    // protected function credentials(Request $request)
-    // {
-    //     $credentials = $request->only($this->username(), 'password');
-    //     $credentials['status'] = 1;
-    //     return $credentials;
-    //     //return ['email' => $request->{$this->username()}, 'password' => $request->password, 'status' => 1];
-    // }
-
-    // /**
-    //  * Validate the user login request.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return void
-    //  *
-    //  * @throws \Illuminate\Validation\ValidationException
-    //  */
-    // protected function validateLogin(Request $request)
-    // {
-    //     // Get the user details from database and check if user is exist and active.
-    //     $user = User::where('email',$request->email)->first();
-    //     if($user && !$user->status) {
-    //         throw ValidationException::withMessages([$this->username() => __('Inactive Account.  Please Contact Your Administrator')]);
-    //     }
-
-    //     // Then, validate input.
-    //     return $request->validate([
-    //         $this->username() => 'required|string',
-    //         'password' => 'required|string',
-    //     ]);
-    // }
-
     /**
      * The user has been authenticated.
      *
@@ -89,13 +52,10 @@ class LoginController extends Controller
     {
         if ($user->status == 0) {
         $message = 'Inactive Account.  Please Contact Your Administrator';
-        // Log the user out.
         $this->logout($request);
-        // Return them to the log in form.
         return redirect()->back()
             ->withInput($request->only($this->username(), 'remember'))
             ->withErrors([
-                // This is where we are providing the error message.
                 $this->username() => $message,
             ]);
         }
