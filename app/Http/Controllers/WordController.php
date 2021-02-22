@@ -101,7 +101,6 @@ class WordController extends Controller
       $word = Word::find($id);
       $word->story_id = $request->get('story_id');
       $word->word = $request->get('word');
-      $word->question = $request->get('question');
       $word->contextual_cue = $request->get('contextual_cue');
       $word->categorical_cue = $request->get('categorical_cue');
       $word->save();

@@ -36,10 +36,6 @@
                 <input type="text" class="form-control py-4" name="contextual_cue" id="contextual_cue" placeholder="Enter Contextual Cue" value="{{$word->contextual_cue}}">
               </div>
               <div class="form-group">
-                <label class="small mb-1" for="question">Update Question</label>
-                <input type="text" class="form-control py-4" name="question" id="question" placeholder="Enter Question" value="{{$word->question}}">
-              </div>
-              <div class="form-group">
                 <label class="small mb-1" for="categorical_cue">Update Categorical Cue</label>
                 <input type="text" class="form-control py-4" name="categorical_cue" id="categorical_cue" placeholder="Enter Categorical Cue" value="{{$word->categorical_cue}}">
               </div>             
