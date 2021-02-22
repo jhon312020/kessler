@@ -57,7 +57,7 @@
                {{-- <td>
                   <form action="{{route('trainer.status',$trainer->id)}}" method="post" class="d-inline" id="jsStatusForm-{{$trainer->id}}">
                   @csrf
-                  <input data-id="{{$trainer->id}}" id="jsStatus" name="status" value="{{$trainer->status}}" class="toggle-class status" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $trainer->status ? 'checked' : '' }}>
+                  <input data-id="{{$trainer->id}}" name="status" value="{{$trainer->status}}" class="toggle-class jsStatus" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $trainer->status ? 'checked' : '' }}>
                   </form>
                </td> --}}               
               </tr>
@@ -77,7 +77,7 @@
   </div>
 <script type="text/javascript">
   $(document).ready( function() { // Wait until document is fully parse
-    $('#jsStatus').on('change', function() {
+    $('.jsStatus').on('change', function() {
       var currentVal = $(this).val();
       console.log(currentVal);
       if (currentVal) {
@@ -86,33 +86,6 @@
         $(this).val(0);
       }
       $('#jsStatusForm-'+$(this).data('id')).submit();
-
-      /* THROUGH AJAX */
-      /*var status = $(this).prop('checked') == true ? 1 : 0; 
-      var id = $(this).data('id'); 
-      console.log(id);
-      console.log(status);
-       $.ajaxSetup({
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-        });  
-        $.ajax({
-            type: "POST",
-            url:  "/trainer/status/"+id+"",
-            data: {'status': status, 'id': id},
-            success: function(response){
-               //console.log(response)
-               console.log('id',id)
-               console.log('status',status)
-               if (status == 1) {
-                //console.log("works"); // Conditions enters in after checking through console alert "works"
-                    $('.status-'+id).html('Inactive');
-                } else {
-                    $('.status-'+id).html('Active');
-                }
-            }
-        });*/
     }) 
  })
 </script>
