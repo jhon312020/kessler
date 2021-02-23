@@ -13,6 +13,7 @@
       <div class="card-header">
         <i class="fas fa-table mr-1"></i>
           Trainee Report
+      <a href="{{ url('/trainee')}}" class="btn btn-info btn-sm float-right" role="button">BACK</a>
       </div>
       <br>
       <div class="card-body">
