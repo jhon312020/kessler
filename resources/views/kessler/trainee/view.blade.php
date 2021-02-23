@@ -23,13 +23,13 @@
                 <th>Word</th>
                 <th colspan="2">Round 1</th>
                 <th colspan="2">Round 2</th>
-                </tr>
+                </tr>                
                 <tr align="center">
                 <th width="20%"></th>
-                <th width="20%">Contextual</th>
-                <th width="20%">Categorical</th>
-                <th width="20%">Contextual</th>
-                <th width="20%">Categorical</th>
+                <th width="20%">Words</th>
+                <th width="20%">Recall</th>
+                <th width="20%">Words</th>
+                <th width="20%">Recall</th>
                 </tr>
             </thead>
             <tfoot>
@@ -46,20 +46,30 @@
                 <th colspan="2">Round 2</th>
               </tr>
             </tfoot>
+
             <tbody>
               @if(count($roundOneReport))
               <tr>
                 <td>Recall Words {{ $roundOneReport->count() }}</td>
                 <td>{!! $recallReport[0]['words'] !!}</td>
-                <td>Remember: {{ $recallReport[0]['found_count'] }} Forgot: {{ $recallReport[0]['unfound_count']  }}</td>
+                <td>Remember: {{ $recallReport[0]['found_count'] }} <br> Forgot: {{ $recallReport[0]['unfound_count']  }}</td>
                 @if (count($roundTwoReport))
                 <td>{!! $recallReport[1]['words'] !!}</td>
-                <td>Remember: {{ $recallReport[1]['found_count'] }} Forgot: {{ $recallReport[1]['unfound_count']  }}</td>
+                <td>Remember: {{ $recallReport[1]['found_count'] }} <br> Forgot: {{ $recallReport[1]['unfound_count']  }}</td>
                 @else
                 <td></td>
                 <td></td>
                 @endif
               </tr>
+              <thead>
+              <tr align="center">
+                <th width="20%"></th>
+                <th width="20%">Contextual</th>
+                <th width="20%">Categorical</th>
+                <th width="20%">Contextual</th>
+                <th width="20%">Categorical</th>
+                </tr>
+              </thead>
               @foreach($storyWords as $storyWord)
                 <tr>
                   <td>{{$storyWord->word}}</td>
