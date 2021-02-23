@@ -129,7 +129,7 @@ class TraineeController extends Controller
         $trainee->completed = 0;
         //$trainee->session_state = 'start';
         TraineeTransaction::where('story_id', $trainee['session_number'])->where('trainee_id', $trainee['trainee_id'])->where('session_pin', $trainee['session_pin'])->delete();
-        if ( $trainee['session_number'] > 4 &&  $trainee['session_number'] < 9) {
+        if ( $trainee['session_number'] > 4 &&  $trainee['session_number'] < 11) {
           TraineeStory::where('story_id', $trainee['session_number'])->where('trainee_id', $trainee['trainee_id'])->where('session_pin', $trainee['session_pin'])->delete();
         }
       }
