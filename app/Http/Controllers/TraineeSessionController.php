@@ -117,8 +117,10 @@ class TraineeSessionController extends Controller
         //$this->pr($trainee);
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
         $traineeCurrentPosition = $traineeRecord->session_current_position !== null?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
-        $wordStory = $this->getWords($trainee);
+        $wordStory = $this->getWords($traineeRecord);
+        //$this->pr($traineeRecord);
         $allWords = $words = $wordStory->toArray();
+        //$this->pr($allWords);
         if ($traineeCurrentPosition->position === 'review' || $traineeCurrentPosition->position === 'tale' ) {
           return redirect('/review');
         } else if ($traineeCurrentPosition->position === 'recall' ) {
