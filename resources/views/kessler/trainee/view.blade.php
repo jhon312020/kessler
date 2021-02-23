@@ -1,7 +1,7 @@
 @extends('kessler.layouts.master')
 @section('content')
   <!-- Content Wrapper. Contains page content -->
-<link href="{{asset('css/app.css')}}" rel="stylesheet" />
+<link href="{{asset('css/style.css')}}" rel="stylesheet" />
   <div class="container-fluid">
     <h1 class="mt-4">Trainee Report</h1>
     <div class="card mb-4">
@@ -13,7 +13,7 @@
       <div class="card-header">
         <i class="fas fa-table mr-1"></i>
           Trainee Report
-      <a href="{{ url('/trainee')}}" class="btn btn-info btn-sm float-right" role="button">BACK</a>
+      <a href="{{ url('/trainee')}}" class="btn btn-primary float-right" role="button"><i class="fas fa-step-backward"></i> BACK</a>
       </div>
       <br>
       <div class="card-body">

@@ -51,8 +51,8 @@
                 </div>
               </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
-                <button class="btn btn-primary jsConfirmButton" type="button" data-value="{{ $trainee->id }}">Update</button>
-                <a href="{{ url('/trainee')}}" class="ml-2 btn btn-danger" role="button">Cancel</a>
+                <button class="btn btn-primary jsConfirmButton" type="button" data-value="{{ $trainee->id }}"><i class="fas fa-sync">&nbsp;</i> Update</button>
+                <a href="{{ url('/trainee')}}" class="ml-2 btn btn-danger" role="button"><i class="fas fa-times">&nbsp;</i> Cancel</a>
               </div>
             </form>
           </div>
