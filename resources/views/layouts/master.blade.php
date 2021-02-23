@@ -13,15 +13,16 @@
   </head>
   <body>
     <!-- Page Content -->
-    <div id="container" class="container grey-background">
+    <div id="container" class="container grey-background" style="padding-bottom: 0px;">
       <div id="header">
         <img src="{{asset('assets/img/logo.png')}}" alt="logo" />
       </div>
         @yield('content')
-      <div id="footer">
+      <div id="footer1">
         <img src="{{asset('assets/img/footer.png')}}" class="center"/>
       </div>
     </div>
+   
     <!-- Bootstrap core JavaScript -->
     <script src="{{asset('vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
   </body>

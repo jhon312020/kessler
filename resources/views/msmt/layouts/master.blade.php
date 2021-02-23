@@ -19,9 +19,9 @@
     <script src="{{asset('vendor/jquery/jquery.min.js')}}"></script>
   </head>
   @isset($page)
-    <body class="grey-background">
+    <body class="main-body grey-background">
   @else
-    <body class="white-background">
+    <body class="main-body white-background">
   @endisset
     <main role="main" class="container">
       <div id="header">
