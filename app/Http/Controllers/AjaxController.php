@@ -160,13 +160,17 @@ class AjaxController extends Controller
         $userWordKey = 0;
         $addedInputBox = false;
         $storySentences = explode('. ',$story->updated_story);
+        $sentenceKey = 0;
         if ($story) {
           $userStoryWords = json_decode($story->user_story_words);
           //$userStoryWords = array_values(array_unique($userStoryWords));
           $totalUsersWords = count($userStoryWords);
           //$userWordKey = array_search($currentWord->word, $userStoryWords);
-          $userWordKey = $traineeCurrentPosition->user_word_id ? $traineeCurrentPosition->user_word_id : array_search($currentWord->word, $userStoryWords);
-          $sentenceKey = $traineeCurrentPosition->sentence ? $traineeCurrentPosition->sentence : 0;
+          if ($traineeCurrentPosition) {
+            $userWordKey = $traineeCurrentPosition->user_word_id ? $traineeCurrentPosition->user_word_id : array_search($currentWord->word, $userStoryWords);
+            $sentenceKey = $traineeCurrentPosition->sentence ? $traineeCurrentPosition->sentence : 0;
+          }
+          
           $this->traineeCurrentPosition->position = 'answer';
         }
         if ($currentWord) {

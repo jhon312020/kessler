@@ -49,7 +49,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-6 mx-auto">
+        <div class="col-lg-8 mx-auto">
           <div class="form-group text-center">
             <br/>
             <div class="alert d-none" role="alert" id="jsUserMessage"></div>
