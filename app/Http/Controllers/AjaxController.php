@@ -99,9 +99,9 @@ class AjaxController extends Controller
             $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$word['id']."' id='answer' autocomplete='off'>", $question);
           }
           $question = str_replace("$$", str_repeat("_", 15), $question);
-          $pattern = '/(\w+) (\d+), (\d+)/i';
-          $replacement = '${1}1,$3';
-          echo preg_replace($pattern, $replacement, $string);
+          //$pattern = '/(\w+) (\d+), (\d+)/i';
+          //$replacement = '${1}1,$3';
+         //echo preg_replace($pattern, $replacement, $string);
           $response['question'] = $question;
           $response['categorical_cue'] = null;
           $response['reload'] = false;
