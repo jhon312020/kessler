@@ -86,7 +86,7 @@
       //confetti.remove();
       $('#jsUserMessage').text('');
       $('#jsUserMessage').removeClass().addClass('alert d-none');
-      var answer = $('#answer').val();
+      var answer = $('#answer').val().toUpperCase();
       if (answer == '') {
         $('#jsUserMessage').addClass('alert-danger');
         $('#jsUserMessage').text('Please fill the blank!');
@@ -99,6 +99,7 @@
         return false;
       }
       requestInProcess = true;
+      $('#answer').val(answer);
       var form = $('#jsQuestionForm');
       var startTime = timer;
       var endTime = performance.now();
