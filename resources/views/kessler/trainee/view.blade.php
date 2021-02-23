@@ -23,13 +23,13 @@
                 <th>Word</th>
                 <th colspan="2">Round 1</th>
                 <th colspan="2">Round 2</th>
-                </tr>
+                </tr>                
                 <tr align="center">
                 <th width="20%"></th>
-                <th width="20%">Contextual</th>
-                <th width="20%">Categorical</th>
-                <th width="20%">Contextual</th>
-                <th width="20%">Categorical</th>
+                <th width="20%">Words</th>
+                <th width="20%">Recall</th>
+                <th width="20%">Words</th>
+                <th width="20%">Recall</th>
                 </tr>
             </thead>
             <tfoot>
@@ -46,6 +46,7 @@
                 <th colspan="2">Round 2</th>
               </tr>
             </tfoot>
+
             <tbody>
               @if(count($roundOneReport))
               <tr>
@@ -60,6 +61,15 @@
                 <td></td>
                 @endif
               </tr>
+              <thead>
+              <tr align="center">
+                <th width="20%"></th>
+                <th width="20%">Contextual</th>
+                <th width="20%">Categorical</th>
+                <th width="20%">Contextual</th>
+                <th width="20%">Categorical</th>
+                </tr>
+              </thead>
               @foreach($storyWords as $storyWord)
                 <tr>
                   <td>{{$storyWord->word}}</td>
