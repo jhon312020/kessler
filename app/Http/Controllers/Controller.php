@@ -69,7 +69,7 @@ class Controller extends BaseController
    */
   function getWordAndID($trainee) {
     if ($trainee['session_number'] < $this->boosterSession) {
-      $wordObj = Word::select('id', 'word')->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->pluck('word', 'id')->all();
+      $wordObj = Word::select('id', 'word')->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->pluck('word', 'id');
     } else {
       $wordObj = Task::where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->pluck('task as word', 'id');
     }
