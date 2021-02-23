@@ -59,12 +59,11 @@
                       <a href="{{ url('trainee/approve', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-book">&nbsp;</i> Approve</a>
                     @endif
                   @endif
-                  <form action="{{ route('trainee.destroy', $trainee->id)}}" method="post" class="d-inline">
+                  <form action="{{ route('trainee.destroy', $trainee->id)}}" method="post" class="d-inline" id="jsSubmitForm-{{ $trainee->id }}">
                     @csrf
                     @method('DELETE')
                     @if ($trainee->completed == 0)
-                    <button class="btn btn-danger" type="submit"><i class="fa fa-trash">&nbsp;</i> Delete</button>
-                    @endif
+                    <button class="btn btn-danger jsConfirmButton" type="button" data-value="{{ $trainee->id }}"><i class="fa fa-trash">&nbsp;</i> Delete</button>                    @endif
                   </form>
                    <a href="{{ route('trainee.add', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-edit">&nbsp;</i> Add</a>
                 </td>
@@ -83,4 +82,5 @@
       </div>
     </div>
   </div>
+@include('common.confirm')
 @endsection
