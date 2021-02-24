@@ -120,6 +120,17 @@
   text-transform: uppercase;
 }
 
+.categorical.correct {
+ color: orange;
+}
+
+.correct {
+ color: green;
+}
+
+.wrong {
+ color: #721c24;
+}
 /*.form-control {
     width:550px;
 }*/
