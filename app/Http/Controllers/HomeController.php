@@ -26,20 +26,19 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index(Request $request) {
-      $kessler = User::where('role', 'SA')->get();
-      //$this->pr($kessler->toArray()); //exit();
-      $user = Auth::user();
-      $trainerID = Trainee::select('trainer_id')->where('trainer_id', $user->id)->get();
+      $kessler = Auth::user();
+      //$this->pr($user->toArray()); exit();
+      $trainerID = Trainee::select('trainer_id')->where('trainer_id', $kessler->id)->get();
       //$this->pr($trainerID->toArray()); exit();
       $trainer = User::where('role', 'TA')->get();
       //$this->pr($trainer->toArray()); exit();
       $trainerCount = $trainer->count();
-      $trainee = Trainee::where('trainer_id', $user->id)->get();
+      $trainee = Trainee::where('trainer_id', $kessler->id)->get();
       //$this->pr($trainee->toArray()); exit();
       $traineeCount = $trainee->count();
-      $traineeInProgress = Trainee::where('completed', 0)->where('trainer_id', $user->id)->get();
+      $traineeInProgress = Trainee::where('completed', 0)->where('trainer_id', $kessler->id)->get();
       $traineeInProgressCount = $traineeInProgress->count();
-      $traineeCompleted = Trainee::where('completed', 1)->where('trainer_id', $user->id)->get();
+      $traineeCompleted = Trainee::where('completed', 1)->where('trainer_id', $kessler->id)->get();
       $traineeCompletedCount = $traineeCompleted->count();
       return view('kessler.admin.dashboard',compact('kessler','trainer','trainerCount','trainee','traineeCount', 'traineeInProgressCount', 'traineeCompletedCount'));
     }
