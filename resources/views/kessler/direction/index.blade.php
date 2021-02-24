@@ -14,7 +14,7 @@
         Direction
       </div>
       <br/>
-      <a href="{{ route('direction.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;">Add Direction</a>
+      <a href="{{ route('direction.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;"><i class="fas fa-plus">&nbsp;</i> Add Direction</a>
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

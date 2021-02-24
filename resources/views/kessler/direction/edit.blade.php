@@ -27,8 +27,8 @@
                 <input type="text" class="form-control py-4" name="categorical_cue" id="categorical_cue" placeholder="Enter Categorical Cue" value="{{$direction->categorical_cue}}">
               </div>             
               <div class="form-group d-flex align-directions-center float-right mt-4 mb-0">
-                <button type="submit" class="btn btn-primary">Update</button>
-                <a href="{{ url('/direction')}}" class="ml-2 btn btn-danger" role="button">Cancel</a>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-sync">&nbsp;</i> Update</button>
+                <a href="{{ url('/direction')}}" class="ml-2 btn btn-danger" role="button"><i class="fas fa-times">&nbsp;</i> Cancel</a>
               </div>
             </form>
           </div>
