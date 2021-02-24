@@ -45,7 +45,13 @@
                 <td>{{$trainee->session_pin}}</td>
                 <td>{{$trainee->session_type}}</td>
                 <td>{{$trainee->session_number}}</td>
+                @if($trainee->session_state === "start")
                 <td>{{$trainee->session_state}}</td>
+                @elseif($trainee->completed === 1)
+                <td>completed</td>
+                @elseif($trainee->session_state === "continue")
+                <td>{{$trainee->session_state}}</td>
+                @endif
                 <td>
                    <a href="{{ route('trainee.add', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-plus">&nbsp;</i> Add</a>
                    @if ($trainee->completed == 0)
