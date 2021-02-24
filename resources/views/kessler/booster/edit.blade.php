@@ -23,8 +23,8 @@
                  <input booster='text' class="form-control py-4" id="category" name="category" placeholder="Enter booster session" required  autofocus value="{{$booster->category}}"/>
               </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
-                <button booster="submit" class="btn btn-primary">Update</button>
-                <a href="{{ url('/booster')}}" class="ml-2 btn btn-danger" role="button">Cancel</a>
+                <button booster="submit" class="btn btn-primary"><i class="fas fa-sync">&nbsp;</i> Update</button>
+                <a href="{{ url('/booster')}}" class="ml-2 btn btn-danger" role="button"><i class="fas fa-times">&nbsp;</i> Cancel</a>
               </div>
             </form>
           </div>
