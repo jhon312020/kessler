@@ -403,6 +403,8 @@ class TraineeSessionController extends Controller
   public function complete(Request $request) {
     if ($request->session()->has('completed')) {
       $sessionNumber = '';
+      $round = 'first';
+      $homeURL = url('index');
       $request->session()->forget('completed');
       $trainee = $request->session()->get('trainee');
       $traineeObj = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed')->where('id', $trainee->id)->first();
@@ -420,7 +422,7 @@ class TraineeSessionController extends Controller
         $sessionNumber = $traineeObj->session_number;
         $traineeObj->save();
       }
-      return view('msmt.sessions.questions.complete', compact('round', 'sessionNumber'));
+      return view('msmt.sessions.questions.complete', compact('round', 'sessionNumber', 'homeURL'));
     }
      return redirect('/index');
   }

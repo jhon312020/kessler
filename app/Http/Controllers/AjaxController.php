@@ -169,6 +169,8 @@ class AjaxController extends Controller
           if ($traineeCurrentPosition) {
             $userWordKey = $traineeCurrentPosition->user_word_id ? $traineeCurrentPosition->user_word_id : array_search($currentWord->word, $userStoryWords);
             $sentenceKey = $traineeCurrentPosition->sentence ? $traineeCurrentPosition->sentence : 0;
+            $this->traineeCurrentPosition->user_word_id =  $userWordKey;
+            $this->traineeCurrentPosition->sentence =  $sentenceKey;
           }
           
           $this->traineeCurrentPosition->position = 'answer';
