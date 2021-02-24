@@ -20,7 +20,7 @@
               @csrf
               <div class="form-group">
                 <label class="small mb-1" for="type">Session Type</label>
-                <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
+                <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type" readonly="true">
                   <option value= '' >Session Type</option>
                   @foreach($types as $type)
                     <option value="{{ $type->type }}" {{$story->session_type==$type->type?'selected':'' }}>{{ $type->type }}</option>
@@ -29,7 +29,7 @@
               </div>
               <div class="form-group">
                 <label class="small mb-1" for="session_number">Session Number</label>
-                <select class="form-control select2" id="session_number" name="session_number" required placeholder="Select Session Number">
+                <select class="form-control select2" id="session_number" name="session_number" required placeholder="Select Session Number" readonly="true">
                   <option value= ''>Session Number</option>
                   @foreach($totalSessions as $session)
                     <option value="{{ $session }}" {{$session==$story->session_number?'selected':'' }}>{{ $session }}</option>
@@ -41,8 +41,8 @@
                 <textarea class="form-control py-4" name="story"  style="height: 218px;" rows="30" cols="150" placeholder="Enter Story ..." autofocus>{{$story->story}}</textarea>
               </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
-                <button type="submit" class="btn btn-primary">Update</button>
-                <a href="{{ url('/story')}}" class="ml-2 btn btn-danger" role="button">Cancel</a>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-sync">&nbsp;</i> Update</button>
+                <a href="{{ url('/story')}}" class="ml-2 btn btn-danger" role="button"><i class="fas fa-times">&nbsp;</i> Cancel</a>
               </div>
             </form>
           </div>

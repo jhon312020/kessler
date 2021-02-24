@@ -30,8 +30,8 @@
                 <input type="password" class="form-control py-4" id="password" name="password" placeholder="Enter Password" required>
               </div> -->
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
-                <button type="submit" class="btn btn-primary">Add</button>
-                <a href="{{ url('/trainer')}}" class="ml-2 btn btn-danger" role="button">Cancel</a>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-plus">&nbsp;</i> Add</button>
+                <a href="{{ url('/trainer')}}" class="ml-2 btn btn-danger" role="button"><i class="fas fa-times">&nbsp;</i> Cancel</a>
               </div>
             </form>
           </div>

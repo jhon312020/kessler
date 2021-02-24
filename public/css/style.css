@@ -1,0 +1,11 @@
+.categorical.correct {
+ color: orange;
+}
+
+.correct {
+ color: green;
+}
+
+.wrong {
+ color: #721c24;
+}

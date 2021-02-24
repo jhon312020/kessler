@@ -108,7 +108,6 @@
 .hide-time a:hover {
   color: #888888;
 }
-/* By JR */
 
 #answer.fill-ups {
   line-height: 1.2;
@@ -140,17 +139,7 @@
 .fill-ups-error {
 	border-bottom: 1px solid #721c24;
 }
-.categorical.correct{
- color: orange;
-}
 
-.correct {
- color: green;
-}
-
-.wrong {
- color: #721c24;
-}
 .strikeThrough {
   color: red;
   text-decoration: line-through;

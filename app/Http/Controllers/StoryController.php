@@ -95,13 +95,13 @@ class StoryController extends Controller
      */
     public function update(Request $request, $id) {
       $request->validate([
-        'session_type' => 'required',
-        'session_number' => 'required',
+       // 'session_type' => 'required',
+       // 'session_number' => 'required',
         'story'=>'required'
       ]);
       $story = Story::find($id);
-      $story->session_type = $request->get('session_type');
-      $story->session_number = $request->get('session_number');
+     // $story->session_type = $request->get('session_type');
+     // $story->session_number = $request->get('session_number');
       $story->story = $request->get('story');
       $story->save();
       return redirect('/story')->with('success', 'STORY UPDATED!');
