@@ -47,6 +47,7 @@
                 <td>{{$trainee->session_number}}</td>
                 <td>{{$trainee->session_state}}</td>
                 <td>
+                   <a href="{{ route('trainee.add', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-plus">&nbsp;</i> Add</a>
                    @if ($trainee->completed == 0)
                   <a href="{{ route('trainee.edit', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-edit">&nbsp;</i> Edit</a>
                    @endif
@@ -66,7 +67,6 @@
                     <button class="btn btn-danger jsConfirmButton" type="button" data-value="{{ $trainee->id }}"><i class="fa fa-trash">&nbsp;</i> Delete</button>                    
                     @endif
                   </form>
-                   <a href="{{ route('trainee.add', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-plus">&nbsp;</i> Add</a>
                 </td>
               </tr>
                @endforeach

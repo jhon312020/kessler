@@ -114,25 +114,28 @@ class TraineeSessionController extends Controller
     public function writing(Request $request) {
      if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee');
-        //$this->pr($trainee);
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
-        $traineeCurrentPosition = $traineeRecord->session_current_position !== null?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
-        $wordStory = $this->getWords($traineeRecord);
-        //$this->pr($traineeRecord);
-        $allWords = $words = $wordStory->toArray();
-        //$this->pr($allWords);
-        if ($traineeCurrentPosition->position === 'review' || $traineeCurrentPosition->position === 'tale' ) {
-          return redirect('/review');
-        } else if ($traineeCurrentPosition->position === 'recall' ) {
-          $allWords = count($allWords);
-          $submitURL = url('cue');
-          return view('msmt.sessions.recallwords.remember', compact('allWords','traineeRecord', 'submitURL'));
-        } else if ($traineeCurrentPosition->position === 'answer') {
-          return redirect('/cue');
+        if ($traineeRecord) {
+          $traineeCurrentPosition = $traineeRecord->session_current_position !== null?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
+          $wordStory = $this->getWords($traineeRecord);
+          //$this->pr($traineeRecord);
+          $allWords = $words = $wordStory->toArray();
+          //$this->pr($allWords);
+          if ($traineeCurrentPosition->position === 'review' || $traineeCurrentPosition->position === 'tale' ) {
+            return redirect('/review');
+          } else if ($traineeCurrentPosition->position === 'recall' ) {
+            $allWords = count($allWords);
+            $submitURL = url('cue');
+            return view('msmt.sessions.recallwords.remember', compact('allWords','traineeRecord', 'submitURL'));
+          } else if ($traineeCurrentPosition->position === 'answer') {
+            return redirect('/cue');
+          } else {
+            $allWords = implode(',',$allWords);
+            $words = array_chunk($words, 5, true);
+            return view('msmt.sessions.word', compact('words', 'allWords'));
+          }
         } else {
-          $allWords = implode(',',$allWords);
-          $words = array_chunk($words, 5, true);
-          return view('msmt.sessions.word', compact('words', 'allWords'));
+          return redirect('/index');
         }
       } else {
         return redirect('/index');
@@ -161,19 +164,24 @@ class TraineeSessionController extends Controller
         foreach($storyWords as $word) {
           $searchWord = strtolower($word);
           //$newString = str_replace($searchWord, $word, $newString);
-          $findWord = '/\b'.$searchWord.'\b/';
+          $findWord = '/\b'.$searchWord.'\b/i';
           $newString = preg_replace($findWord, $word, $newString, 1);
         }
+        //echo $newString;
         preg_match_all('/\b([A-Z-]+)\b/', $newString, $userWords);
         $storyWords = $storyWords->toArray();
         $userStoryWords = array();
         if ($userWords) {
           foreach($userWords[0] as $word) {
+            $word = strtoupper($word);
             if (in_array($word, $storyWords)) {
               $userStoryWords[] = $word;
             }
           }
         }
+        // $this->pr($userWords);
+        // $this->pr($userStoryWords);
+        // exit;
         $traineeStory['trainee_id'] = $trainee['trainee_id'];
         $traineeStory['story_id'] = $trainee['session_number'];
         $traineeStory['session_pin'] = $trainee['session_pin'];
