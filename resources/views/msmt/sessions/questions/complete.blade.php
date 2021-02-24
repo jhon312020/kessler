@@ -15,7 +15,8 @@
   <div class="row">
     <div class="col-lg-6 mx-auto">
       <br/>
-      <a href="{{ url('/index') }}" class="btn btn-primary btn-xl" id="jsHome" type="submit">HOME</a>
+      {{-- <a href="{{ url('/index') }}" class="btn btn-primary btn-xl" id="jsHome" type="submit" role="button">HOME</a> --}}
+      <button onClick="window.location.href = '{{ $homeURL }}'" class="btn btn-primary btn-xl" id="jsHome" type="button" role="button">HOME</button>
     </div>
   </div>
 </section>

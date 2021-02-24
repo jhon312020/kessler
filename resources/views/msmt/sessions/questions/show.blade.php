@@ -4,7 +4,7 @@
 <section class="{{ $showTraineeMessage? '': 'd-none' }}" id="jsTraineeMessage">
   <div class="row">
     <div class="col-lg-8 mx-auto">
-      <h1 class="heading">INSTRUCTIONS</br></h1>
+      <h1 class="heading">INSTRUCTIONS<br/></h1>
     </div>
   </div>
   <div class="row">
@@ -22,11 +22,11 @@
 <section class="text-center {{ !$showTraineeMessage? '': 'd-none' }}" id="jsQuestions">
   <div class="row">
     <div class="col-lg-8 mx-auto">
-      <h1 class="heading">CUES</br></h1>
+      <h1 class="heading">CUES<br/></h1>
     </div>
   </div>
   @include('msmt.common.loader')
-  <form action="{{ $submitURL }}" method="POST" id="jsQuestionForm">
+  <form action="{{ $submitURL }}" method="POST" id="jsQuestionForm" onsubmit="return false">
     <div class="row">
       <div class="col-lg-8 mx-auto text-justify" id="jsQueContainer">
         <div class="control-group">
@@ -62,8 +62,13 @@
       //this.value = this.value.toUpperCase();
     });
     $(document).on("keydown", "form", function(event) { 
-      confetti.remove();
-      if (event.key == "Enter") {
+      //window.confetti.remove();
+      var key;
+      if (window.event)
+        key = window.event.keyCode;
+      else 
+        key = event.which;
+      if (key == 13) {
         event.preventDefault();
         if (!requestInProcess) {
           $("#jsNext").trigger('click');
@@ -75,7 +80,7 @@
     });
     //var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     $("#jsNext").on('click touchstart', function(event) {
-      confetti.remove();
+      //window.confetti.remove();
       $(this).prop("disabled", true);
       $("#jsQueContainer").slideDown();
       $("#jsLoader").removeClass('d-none');
@@ -137,8 +142,8 @@
               $('#jsUserMessage').html(response.answer);
               if (response.is_answer_correct) {
                 $('#jsUserMessage').addClass('alert-success');
-                confetti.start();
-                setTimeout(removeConfetti, 1000);
+                //window.confetti.start();
+                //setTimeout(removeConfetti, 1000);
                 $("#jsQueContainer").show("slow");
               } else {
                 $('#jsUserMessage').addClass('alert-danger');
@@ -180,7 +185,7 @@
       timer = performance.now();
     });
     function removeConfetti() {
-      confetti.stop();
+      //window.confetti.stop();
     }
   })
   
