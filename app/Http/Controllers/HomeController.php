@@ -28,7 +28,7 @@ class HomeController extends Controller
     public function index(Request $request) {
       $kessler = Auth::user();
       //$this->pr($kessler->toArray()); exit();
-      $kesslerTrainee = Trainee::all();
+      $kesslerTrainee = Trainee::distinct('trainee_id')->where('trainer_id', $kessler->id)->get();
       //$this->pr($kesslerTrainee->toArray()); exit();
       $kesslerTraineeCount = $kesslerTrainee->count();
       //$this->pr($kesslerTraineeCount); //exit();
