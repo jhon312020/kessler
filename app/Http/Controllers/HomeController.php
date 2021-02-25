@@ -33,9 +33,9 @@ class HomeController extends Controller
       $trainer = User::where('role', 'TA')->get();
       //$this->pr($trainer->toArray()); exit();
       $trainerCount = $trainer->count();
-      //$this->pr($trainee->toArray()); exit();
-      $trainee = Trainee::where('trainer_id', $kessler->id)->get();
       //$this->pr($trainerCount->toArray()); exit();
+      $trainee = Trainee::where('trainer_id', $kessler->id)->get();
+      //$this->pr($trainee->toArray()); exit();
       $traineeCount = $trainee->count();
       //$this->pr($traineeCount->toArray()); exit();
       $traineeInProgress = Trainee::where('completed', 0)->where('trainer_id', $kessler->id)->get();
