@@ -27,19 +27,25 @@ class HomeController extends Controller
      */
     public function index(Request $request) {
       $kessler = Auth::user();
-      //$this->pr($user->toArray()); exit();
+      //$this->pr($kessler->toArray()); exit();
       $trainerID = Trainee::select('trainer_id')->where('trainer_id', $kessler->id)->get();
       //$this->pr($trainerID->toArray()); exit();
       $trainer = User::where('role', 'TA')->get();
       //$this->pr($trainer->toArray()); exit();
       $trainerCount = $trainer->count();
-      $trainee = Trainee::where('trainer_id', $kessler->id)->get();
       //$this->pr($trainee->toArray()); exit();
+      $trainee = Trainee::where('trainer_id', $kessler->id)->get();
+      //$this->pr($trainerCount->toArray()); exit();
       $traineeCount = $trainee->count();
+      //$this->pr($traineeCount->toArray()); exit();
       $traineeInProgress = Trainee::where('completed', 0)->where('trainer_id', $kessler->id)->get();
+      //$this->pr($traineeInProgress->toArray()); exit();
       $traineeInProgressCount = $traineeInProgress->count();
+      //$this->pr($traineeInProgressCount->toArray()); exit();
       $traineeCompleted = Trainee::where('completed', 1)->where('trainer_id', $kessler->id)->get();
+      //$this->pr($traineeCompleted->toArray()); exit();
       $traineeCompletedCount = $traineeCompleted->count();
+      //$this->pr($traineeCompletedCount->toArray()); exit();
       return view('kessler.admin.dashboard',compact('kessler','trainer','trainerCount','trainee','traineeCount', 'traineeInProgressCount', 'traineeCompletedCount'));
     }
 
