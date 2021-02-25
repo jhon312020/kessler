@@ -282,5 +282,15 @@ class TraineeController extends Controller
       $booster = Booster::all();
       return view('kessler.trainee.add', compact('trainee', 'totalSessions', 'boosterRange' ,'types','booster'));
     }
+
+    /**
+     * Graph report of trainee session
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function report(Request $request, $id) {
+      return view('kessler.trainee.report');
+    }
+
     
 }
