@@ -45,11 +45,9 @@
                 <td>{{$trainee->session_pin}}</td>
                 <td>{{$trainee->session_type}}</td>
                 <td>{{$trainee->session_number}}</td>
-                @if($trainee->session_state === "start")
-                <td>{{$trainee->session_state}}</td>
-                @elseif($trainee->completed === 1)
+                @if($trainee->completed === 1)
                 <td>completed</td>
-                @elseif($trainee->session_state === "continue")
+                @else
                 <td>{{$trainee->session_state}}</td>
                 @endif
                 <td>
