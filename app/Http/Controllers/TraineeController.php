@@ -294,13 +294,25 @@ class TraineeController extends Controller
       $traineeID = $traineeReport->trainee_id;
       $sessionNumber = $traineeReport->session_number;
       $round = $traineeReport->round;
-      $recallRoundOne = TraineeTransaction::select('type as recall','answer')->where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 1)->where('type', 'recall')->get();
+      $recallRoundOne = TraineeTransaction::select('trainee_id','story_id','type','answer')->where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 1)->where('type', 'recall')->get();
       //$this->pr($recallRoundOne->toArray()); exit();
-      $recallRoundOneCount = $recallRoundOne->count();
+      //$recallRoundOneCount = $recallRoundOne->count();
       //$this->pr($recallRoundOneCount); exit();
+      $recallRoundOneCountJSON = json_decode($recallRoundOne);
+      //$recallwords = explode(' ', $recallRoundOneCountJSON);
+       $this->pr($recallRoundOneCountJSON); exit();
+      //$words = explode(' ', $recallRoundOneCountJSON->words);
+      //$this->pr($words); exit();
+      //echo $recallRoundOneCountJSON->words;
+      
+      /*$personJSON = '{"name":"Johny Carson","title":"CTO"}';
+      $person = json_decode($personJSON);
+      echo $person->name; // Johny Carson */
+
       /* $recallReport = array();
        $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
        $this->pr($recallReport[]); exit();*/
+
       $contextualRoundOne = TraineeTransaction::select('type as contextual','answer')->where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 1)->where('type', 'contextual')->get();
       //$this->pr($contextualRoundOne->toArray()); exit();
       $contextualRoundOneCount = $contextualRoundOne->count();
