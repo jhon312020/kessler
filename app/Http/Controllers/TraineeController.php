@@ -288,7 +288,7 @@ class TraineeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function report(Request $request, $id) {
+    public function report($id) {
       $trainee = Trainee::find($id);
       $traineeReport = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed')->where('id', $trainee->id)->first();
       $traineeID = $traineeReport->trainee_id;
@@ -298,9 +298,12 @@ class TraineeController extends Controller
       //$this->pr($recallRoundOne->toArray()); exit();
       //$recallRoundOneCount = $recallRoundOne->count();
       //$this->pr($recallRoundOneCount); exit();
+      //$roundOneReport = array();
       $recallRoundOneCountJSON = json_decode($recallRoundOne);
+      //$recallWords = $roundTwoReport->shift();
+      //$recallRoundOneCountJSON = $this->_recallReport($recallWords, $allStoryWords);
       //$recallwords = explode(' ', $recallRoundOneCountJSON);
-       $this->pr($recallRoundOneCountJSON); exit();
+       //$this->pr($recallRoundOneCountJSON); exit();
       //$words = explode(' ', $recallRoundOneCountJSON->words);
       //$this->pr($words); exit();
       //echo $recallRoundOneCountJSON->words;
@@ -313,17 +316,15 @@ class TraineeController extends Controller
        $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
        $this->pr($recallReport[]); exit();*/
 
-      $contextualRoundOne = TraineeTransaction::select('type as contextual','answer')->where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 1)->where('type', 'contextual')->get();
+      /*$contextualRoundOne = TraineeTransaction::select('type as contextual','answer')->where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 1)->where('type', 'contextual')->get();*/
       //$this->pr($contextualRoundOne->toArray()); exit();
-      $contextualRoundOneCount = $contextualRoundOne->count();
+      //$contextualRoundOneCount = $contextualRoundOne->count();
       //$this->pr($contextualRoundOneCount); exit();
 
       $categoricalRoundOne = TraineeTransaction::select('type as contextual','answer')->where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 1)->where('type', 'categorical')->get();
       // $this->pr($categoricalRoundOne->toArray()); exit();
       $categoricalRoundOneCount = $categoricalRoundOne->count();
       //$this->pr($categoricalRoundOneCount); exit();
-      return view('kessler.trainee.report', compact('sessionNumber','traineeID','round','recallRoundOneCount','contextualRoundOneCount','categoricalRoundOneCount'));
+      return view('kessler.trainee.report', compact('sessionNumber','traineeID','round','categoricalRoundOneCount'));
     }
-
-    
 }

@@ -4,6 +4,7 @@ Chart.defaults.global.defaultFontColor = '#292b2c';
 
 // Pie Chart Example
 var ctx = document.getElementById("myPieChart");
+//var categorical = '{{ $categoricalRoundOneCount }}';
 var myPieChart = new Chart(ctx, {
   type: 'pie',
   data: {
