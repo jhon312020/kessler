@@ -44,6 +44,7 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('/trainee/view/{id}', [TraineeController::class, 'view']);
 	Route::post('/trainee/add/{id}', [TraineeController::class, 'add'])->name('trainee.add');
 	Route::get('/trainee/add/{id}', [TraineeController::class, 'add']);
+	Route::get('/trainee/report/{id}', [TraineeController::class, 'report']);
 	Route::get('/trainee/approve/{id}', [TraineeController::class, 'review']);
 	Route::post('/trainee/approve/{id}', [TraineeController::class, 'review']);
 	Route::post('/trainee/approve/{id}', [TraineeController::class, 'revise']);

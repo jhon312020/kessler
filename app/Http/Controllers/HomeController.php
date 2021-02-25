@@ -28,7 +28,7 @@ class HomeController extends Controller
     public function index(Request $request) {
       $kessler = Auth::user();
       //$this->pr($kessler->toArray()); exit();
-      $kesslerTrainee = Trainee::all();
+      $kesslerTrainee = Trainee::select('trainee_id')->distinct('trainee_id')->get();
       //$this->pr($kesslerTrainee->toArray()); exit();
       $kesslerTraineeCount = $kesslerTrainee->count();
       //$this->pr($kesslerTraineeCount); //exit();
@@ -54,9 +54,9 @@ class HomeController extends Controller
       //$this->pr($trainerActiveCount); exit();
       $trainerInActiveCount = $trainerInActive->count();
       //$this->pr($trainerInActiveCount); exit();
-      $trainee = Trainee::where('trainer_id', $kessler->id)->get();
+      $trainee = Trainee::select('trainee_id')->distinct('trainee_id')->where('trainer_id', $kessler->id)->get();
       //$this->pr($trainee->toArray()); exit();
-      $traineeCount = $trainee->count();
+      $traineeCount = $trainee->count('trainee_id');
       //$this->pr($traineeCount); exit();
       $traineeInProgress = Trainee::where('completed', 0)->where('trainer_id', $kessler->id)->get();
       //$this->pr($traineeInProgress->toArray()); exit();
