@@ -11,8 +11,8 @@
         <div class="col-xl-3 col-md-6">
             <div class="card bg-success text-white mb-4">
                 @if($traineeCount)
-                <div class="card-body">Trainee :&emsp;{{$traineeCount}} 
-                  <br> In Progress :&emsp;{{$traineeInProgressCount}} <br> Completed :&emsp;{{$traineeCompletedCount}}
+                <div class="card-body">No of Trainees :&emsp;{{$traineeCount}} 
+                  <br>Session In Progress :&emsp;{{$traineeInProgressCount}} <br>Session Completed :&emsp;{{$traineeCompletedCount}}
                 </div>
                 @endif
                 <div class="card-footer d-flex align-items-center justify-content-between">
@@ -26,8 +26,8 @@
         <div class="col-xl-3 col-md-6">
             <div class="card bg-success text-white mb-4">
                 @if($kesslerTraineeCount)
-                <div class="card-body">Trainee :&emsp;{{$kesslerTraineeCount}} 
-                  <br> In Progress :&emsp;{{$kesslerInProgressCount}} <br> Completed :&emsp;{{$kesslerCompletedCount}}
+                <div class="card-body">No of Trainees :&emsp;{{$kesslerTraineeCount}} 
+                  <br>Sessions In Progress :&emsp;{{$kesslerInProgressCount}} <br>Sessions Completed :&emsp;{{$kesslerCompletedCount}}
                 </div>
                 @endif
                 <div class="card-footer d-flex align-items-center justify-content-between">
@@ -41,8 +41,8 @@
         <div class="col-xl-3 col-md-6">
             <div class="card bg-primary text-white mb-4">
                 @if($trainerCount)
-                <div class="card-body">Trainer :&emsp;{{$trainerCount}}
-                <br> Active :&emsp;{{$trainerActiveCount}} <br> Inactive :&emsp;{{$trainerInActiveCount}}
+                <div class="card-body">No of Trainers :&emsp;{{$trainerCount}}
+                <br>No of Active :&emsp;{{$trainerActiveCount}} <br>No of Inactive :&emsp;{{$trainerInActiveCount}}
                 </div>
                 @endif
                 <div class="card-footer d-flex align-items-center justify-content-between">
