@@ -289,7 +289,28 @@ class TraineeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function report(Request $request, $id) {
-      return view('kessler.trainee.report');
+      $trainee = Trainee::find($id);
+      $traineeReport = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed')->where('id', $trainee->id)->first();
+      $traineeID = $traineeReport->trainee_id;
+      $sessionNumber = $traineeReport->session_number;
+      $round = $traineeReport->round;
+      $recallRoundOne = TraineeTransaction::select('type as recall','answer')->where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 1)->where('type', 'recall')->get();
+      //$this->pr($recallRoundOne->toArray()); exit();
+      $recallRoundOneCount = $recallRoundOne->count();
+      //$this->pr($recallRoundOneCount); exit();
+      /* $recallReport = array();
+       $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
+       $this->pr($recallReport[]); exit();*/
+      $contextualRoundOne = TraineeTransaction::select('type as contextual','answer')->where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 1)->where('type', 'contextual')->get();
+      //$this->pr($contextualRoundOne->toArray()); exit();
+      $contextualRoundOneCount = $contextualRoundOne->count();
+      //$this->pr($contextualRoundOneCount); exit();
+
+      $categoricalRoundOne = TraineeTransaction::select('type as contextual','answer')->where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 1)->where('type', 'categorical')->get();
+      // $this->pr($categoricalRoundOne->toArray()); exit();
+      $categoricalRoundOneCount = $categoricalRoundOne->count();
+      //$this->pr($categoricalRoundOneCount); exit();
+      return view('kessler.trainee.report', compact('sessionNumber','traineeID','round','recallRoundOneCount','contextualRoundOneCount','categoricalRoundOneCount'));
     }
 
     

@@ -59,7 +59,7 @@
                    @endif
                   <a href="{{ url('trainee/view', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-eye">&nbsp;</i> View</a>
                   @if ($trainee->completed == 1)
-                  <a href="{{ url('trainee/report', $trainee->id)}}" class="btn btn-primary" role="button"><i class="far fa-sticky-note"></i></i>&nbsp;</i> Report</a>
+                  <a href="{{ url('trainee/report', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-chart-pie">&nbsp;</i> Report</a>
                   @endif 
                   @if ($trainee->session_number > 4 && $trainee->session_type == "A")
                     @php
