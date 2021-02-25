@@ -34,6 +34,14 @@ class HomeController extends Controller
       //$this->pr($trainer->toArray()); exit();
       $trainerCount = $trainer->count();
       //$this->pr($trainerCount->toArray()); exit();
+      $trainerActive = User::where('role', 'TA')->where('status', 1)->get();
+      //$this->pr($trainerActive->toArray()); exit();
+      $trainerInActive = User::where('role', 'TA')->where('status', 0)->get();
+      //$this->pr($trainerInActive->toArray()); exit();
+      $trainerActiveCount = $trainerActive->count();
+      //$this->pr($trainerActiveCount); exit();
+      $trainerInActiveCount = $trainerInActive->count();
+      //$this->pr($trainerInActiveCount); exit();
       $trainee = Trainee::where('trainer_id', $kessler->id)->get();
       //$this->pr($trainee->toArray()); exit();
       $traineeCount = $trainee->count();
@@ -46,7 +54,7 @@ class HomeController extends Controller
       //$this->pr($traineeCompleted->toArray()); exit();
       $traineeCompletedCount = $traineeCompleted->count();
       //$this->pr($traineeCompletedCount->toArray()); exit();
-      return view('kessler.admin.dashboard',compact('kessler','trainer','trainerCount','trainee','traineeCount', 'traineeInProgressCount', 'traineeCompletedCount'));
+      return view('kessler.admin.dashboard',compact('kessler','trainer','trainerCount','trainerActiveCount', 'trainerInActiveCount','trainee','traineeCount', 'traineeInProgressCount', 'traineeCompletedCount'));
     }
 
     public function logout() {
