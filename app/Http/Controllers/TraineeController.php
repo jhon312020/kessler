@@ -177,10 +177,30 @@ class TraineeController extends Controller
           if ($roundOneReport) {
             $recallWords = $roundOneReport->shift();
             $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
-            $roundOneReport->where('type', 'contextual')->sum('time_taken');
-            $roundOneTotal['contextual'] = gmdate('i : s', $roundOneReport->where('type', 'contextual')->sum('time_taken'));
-            $roundOneTotal['categorical'] = gmdate('i : s', $roundOneReport->where('type', 'categorical')->sum('time_taken'));
-            $roundOneReport = $roundOneReport->groupBy('word_id');
+            //$roundOneReport->where('type', 'contextual')->sum('time_taken');
+            $roundOneReport = $roundOneReport->groupBy('word_id', 'type');
+            //$this->pr($roundOneReport->toArray());
+            // $contextual = $roundOneReport->map(function ($item, $key) {
+            //   return ["total" => $item->where('type', 'contextual')->sum('time_taken')];
+            // });
+            $contextual = $this->_totalTime( $roundOneReport, 'contextual');
+            $categorical = $this->_totalTime( $roundOneReport, 'categorical');
+            //exit;
+            //$contextual = $contextual->sum('total');
+            // $categorical = $roundOneReport->map(function ($item, $key) {
+            //   return ["total" => $item->where('type', 'contextual')->sum('time_taken')];
+            // });
+            // $roundOneTotal['contextual'] = gmdate('i : s', $roundOneReport->where('type', 'contextual')->sum('time_taken'));
+            // $roundOneTotal['categorical'] = gmdate('i : s', $roundOneReport->where('type', 'categorical')->sum('time_taken'));
+            $roundOneTotal['contextual'] = gmdate('i : s', $contextual);
+            $roundOneTotal['categorical'] = gmdate('i : s', $categorical);
+            //$this->pr($roundOneReport->toArray());
+            //exit;
+            
+            //$roundOneReport = $roundOneReport->map('array_values', $roundOneReport->toArray());
+            $roundOneReport = collect(array_map('array_values', $roundOneReport->toArray()));
+            //$this->pr($roundOneReport);
+            //exit;
           }
         }
        /*$this->pr($roundOneReport->toArray());
@@ -191,9 +211,15 @@ class TraineeController extends Controller
           if ($roundTwoReport) {
             $recallWords = $roundTwoReport->shift();
             $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
-            $roundTwoTotal['contextual'] = gmdate('i : s', $roundTwoReport->where('type', 'contextual')->sum('time_taken'));
-            $roundTwoTotal['categorical'] = gmdate('i : s', $roundTwoReport->where('type', 'categorical')->sum('time_taken'));
-            $roundTwoReport = $roundTwoReport->groupBy('word_id');
+            $roundTwoReport = $roundTwoReport->groupBy('word_id', 'type');
+            $contextual = $this->_totalTime( $roundTwoReport, 'contextual');
+            $categorical = $this->_totalTime( $roundTwoReport, 'categorical');
+            //$roundTwoTotal['contextual'] = gmdate('i : s', $roundTwoReport->where('type', 'contextual')->sum('time_taken'));
+            //$roundTwoTotal['categorical'] = gmdate('i : s', $roundTwoReport->where('type', 'categorical')->sum('time_taken'));
+            $roundTwoTotal['contextual'] = gmdate('i : s', $contextual);
+            $roundTwoTotal['categorical'] = gmdate('i : s', $categorical);
+            
+            $roundTwoReport = collect(array_map('array_values', $roundTwoReport->toArray()));
           }
         }
       }
@@ -229,11 +255,20 @@ class TraineeController extends Controller
         }
         $recallReport['found_count'] = count($foundWords);
         $recallReport['unfound_count'] = count($allStoryWords) - count($foundWords);
-        $recallReport['words'] = implode(' ', $recallReport['words']).' ('.$timeTaken.' secs)';
+        $recallReport['words'] = implode(' ', $recallReport['words']).' ('.gmdate('i : s', $timeTaken).' secs)';
       }
       //$this->pr($recallReport);
       return $recallReport;
     }
+
+    private function _totalTime($roundOneReport, $type) {
+      $total = 0;
+      $contextual = $roundOneReport->map(function ($item, $key) use ($type) {
+        return ["total" => $item->where('type', "$type")->sum('time_taken')];
+      });
+      return $total = $contextual->sum('total');
+    }
+    
 
      /**
      * Review the story of the trainee from session 5 to 8
@@ -257,16 +292,57 @@ class TraineeController extends Controller
      */
     public function revise(Request $request, $id) {
       $traineeStory = TraineeStory::find($id);
-      $traineeStory->updated_story = $request->get('story');
-      $traineeStory->reviewed = 1;
-      if ($traineeStory->save()) {
-        $traineeRecord = Trainee::where('session_pin', $traineeStory->session_pin)->first();
-        if ($traineeRecord) {
-          $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
-          $traineeRecord->save();
+      //$this->pr($traineeStory->toArray());
+      if ($traineeStory) {
+        $traineeObj = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'booster_id', 'booster_range')->where('trainee_id', $traineeStory->trainee_id)->where('session_pin', $traineeStory->session_pin)->first();
+        //$this->pr($traineeObj->toArray());
+        // exit;
+        $storyWords = $this->getWordAndIDObj($traineeObj);
+        $storyWords = $storyWords->pluck('word', 'id');
+        //$this->pr($storyWords);
+        $story = $request->get('story');
+        $fullStory = strtolower($story);
+        $sentences = preg_split('/([.?!]+)/', $fullStory, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+        $newString = '';
+        foreach ($sentences as $key => $sentence) {
+          $newString .= ($key & 1) == 0 ? ucfirst(strtolower(trim($sentence))) : $sentence.' ';
         }
+        foreach($storyWords as $word) {
+          $searchWord = strtolower($word);
+          //$newString = str_replace($searchWord, $word, $newString);
+          $findWord = '/\b'.$searchWord.'\b/i';
+          $newString = preg_replace($findWord, $word, $newString, 1);
+        }
+        //echo $newString;
+        preg_match_all('/\b([A-Z-]+)\b/', $newString, $userWords);
+        $storyWords = $storyWords->toArray();
+        $userStoryWords = array();
+        if ($userWords) {
+          foreach($userWords[0] as $word) {
+            $word = strtoupper($word);
+            if (in_array($word, $storyWords)) {
+              $userStoryWords[] = $word;
+            }
+          }
+        }
+        //$this->pr($userStoryWords);
+        //exit;
+        $traineeStory->updated_story = $newString;
+        $traineeStory->user_story_words = $userStoryWords;
+        // $this->pr($traineeStory->toArray());
+        // exit;
+        $traineeStory->reviewed = 1;
+        if ($traineeStory->save()) {
+          $traineeRecord = Trainee::where('session_pin', $traineeStory->session_pin)->first();
+          if ($traineeRecord) {
+            $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
+            $traineeRecord->save();
+          }
+        }
+        return redirect('/trainee')->with('success', 'Trainee story has been reviewed Successfully!');
+      } else {
+        redirect('/trainee')->with('error', 'Invalid request!');
       }
-      return redirect('/trainee')->with('success', 'Trainee story has been reviewed Successfully!');
     }
 
     /**

@@ -76,7 +76,7 @@
       userUsedWordCount = 0;
       //$('#jsWriteup').val(writeup.toUpperCase())
       for (counter = 0; counter < wordCount; counter++) {
-        if (writeup.indexOf(' '+allWords[counter]+' ')!= -1 || writeup.indexOf(' '+allWords[counter]+'.') != -1 || writeup.indexOf(' '+allWords[counter]+',') != -1) {
+        if (writeup.indexOf(' '+allWords[counter]+' ')!= -1 || writeup.indexOf(' '+allWords[counter]+'.') != -1 || writeup.indexOf(' '+allWords[counter]+',') != -1  || writeup.indexOf(allWords[counter]+' ')!= -1 ) {
           $('#jsWord-'+counter).addClass('strikeThrough');
           var regExp = new RegExp(allWords[counter],"i");
           updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
