@@ -370,44 +370,39 @@ class TraineeController extends Controller
       $traineeID = $traineeReport->trainee_id;
       $sessionNumber = $traineeReport->session_number;
       $round = $traineeReport->round;
-      $recallRoundOne = TraineeTransaction::select('answer')->where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 1)->where('type', 'recall')->first();
-      $storyWords = $this->getWordAndIDObj($trainee);
-      $allStoryWords = $storyWords->pluck('word')->toArray();
-      //$this->pr($recallRoundOne->toArray()); exit();
-       $recallRoundOneCount = array();
-       $recallRoundOneCount = $this->_recallReport($recallRoundOne, $allStoryWords);
-       //$this->pr($recallReport); exit();
-      $contextualRoundOne = TraineeTransaction::select('type as contextual','answer')->where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 1)->where('correct_or_wrong', 1)->where('type', 'contextual')->get();
-      //$this->pr($contextualRoundOne->toArray()); exit();
-      $contextualRoundOneCount = $contextualRoundOne->count();
-      // $this->pr($contextualRoundOneCount); exit();
-      $categoricalRoundOne = TraineeTransaction::select('type as categorical','answer')->where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 1)->where('correct_or_wrong', 1)->where('type', 'categorical')->get();
-      // $this->pr($categoricalRoundOne->toArray()); exit();
-      $categoricalRoundOneCount = $categoricalRoundOne->count();
-     // $this->pr($categoricalRoundOneCount); exit();
-     $recallRoundTwo = TraineeTransaction::select('answer')->where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 2)->where('type', 'recall')->first();
-      $storyWords = $this->getWordAndIDObj($trainee);
-      $allStoryWords = $storyWords->pluck('word')->toArray();
-      //$this->pr($recallRoundTwo->toArray()); exit();
-       $recallRoundTwoCount = array();
-       $recallRoundTwoCount = $this->_recallReport($recallRoundTwo, $allStoryWords);
-       //$this->pr($recallRoundTwoCount); exit();
-      $contextualRoundTwo = TraineeTransaction::select('type as contextual','answer')->where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 2)->where('correct_or_wrong', 1)->where('type', 'contextual')->get();
-      //$this->pr($contextualRoundTwo->toArray()); exit();
-      $contextualRoundTwoCount = $contextualRoundTwo->count();
-      //$this->pr($contextualRoundTwoCount); exit();
-      $categoricalRoundTwo = TraineeTransaction::select('type as contextual','answer')->where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 2)->where('correct_or_wrong', 1)->where('type', 'categorical')->get();
-      // $this->pr($categoricalRoundTwo->toArray()); exit();
-      $categoricalRoundTwoCount = $categoricalRoundTwo->count();
-      //$this->pr($categoricalRoundTwoCount); exit();
-      $roundOneTotal = TraineeTransaction::where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 1)->sum('time_taken');
-       // $this->pr($roundOneTotal);
-       $roundOneTotalTime = gmdate('i : s', $roundOneTotal);
-      // $this->pr($roundOneTotalTime); exit();
-      $roundTwoTotal = TraineeTransaction::where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 2)->sum('time_taken');
-      //$this->pr($roundTwoTotal);
-       $roundTwoTotalTime = gmdate('i : s', $roundTwoTotal);
-      // $this->pr($roundTwoTotalTime); exit();
+      $queryObj = TraineeTransaction::select('id', 'word_id', 'trainee_id', 'session_pin', 'type', 'answer', 'correct_or_wrong','round','time_taken')->where('trainee_id', $trainee->trainee_id)->where('session_pin', $trainee->session_pin);
+      if ($trainee->round > 1) {
+          $roundOneReport = with(clone $queryObj)->where('round', '=', '1')->get();
+          if ($roundOneReport) {
+            $recallRoundOne = $roundOneReport->where('type','recall')->first();
+            $storyWords = $this->getWordAndIDObj($trainee);
+            $allStoryWords = $storyWords->pluck('word')->toArray();
+            $recallRoundOneCount = array();
+            $recallRoundOneCount = $this->_recallReport($recallRoundOne, $allStoryWords);
+            $contextualRoundOne = $roundOneReport->where('type', 'contextual')->where('correct_or_wrong', 1);
+            $contextualRoundOneCount = $contextualRoundOne->count();
+            $categoricalRoundOne = $roundOneReport->where('type', 'categorical')->where('correct_or_wrong', 1);
+            $categoricalRoundOneCount = $categoricalRoundOne->count();
+            $roundOneTotal = $roundOneReport->sum('time_taken');
+            $roundOneTotalTime = gmdate('i : s', $roundOneTotal);
+          }
+        }
+      if ($trainee->round > 1 && $trainee->completed == 1 ) {
+          $roundTwoReport = with(clone $queryObj)->where('round', '=', '2')->get();
+          if ($roundTwoReport) {
+            $recallRoundTwo = $roundTwoReport->where('type','recall')->first();
+            $storyWords = $this->getWordAndIDObj($trainee);
+            $allStoryWords = $storyWords->pluck('word')->toArray();
+            $recallRoundTwoCount = array();
+            $recallRoundTwoCount = $this->_recallReport($recallRoundTwo, $allStoryWords);
+            $contextualRoundTwo= $roundTwoReport->where('type', 'contextual')->where('correct_or_wrong', 1);
+            $contextualRoundTwoCount = $contextualRoundTwo->count();
+            $categoricalRoundTwo = $roundTwoReport->where('type', 'categorical')->where('correct_or_wrong', 1);
+            $categoricalRoundTwoCount = $categoricalRoundTwo->count();
+            $roundTwoTotal = $roundOneReport->sum('time_taken');
+            $roundTwoTotalTime = gmdate('i : s', $roundTwoTotal);
+          }
+        }
       return view('kessler.trainee.report', compact('sessionNumber','traineeID', 'contextualRoundOneCount','categoricalRoundOneCount', 'recallRoundOneCount','contextualRoundTwoCount','categoricalRoundTwoCount', 'recallRoundTwoCount', 'roundOneTotalTime', 'roundTwoTotalTime'));
     }
 }
