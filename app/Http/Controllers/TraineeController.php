@@ -261,12 +261,12 @@ class TraineeController extends Controller
       return $recallReport;
     }
 
-    private function _totalTime($roundOneReport, $type) {
+    private function _totalTime($roundReport, $type) {
       $total = 0;
-      $contextual = $roundOneReport->map(function ($item, $key) use ($type) {
+      $collectionObj = $roundReport->map(function ($item, $key) use ($type) {
         return ["total" => $item->where('type', "$type")->sum('time_taken')];
       });
-      return $total = $contextual->sum('total');
+      return $total = $collectionObj->sum('total');
     }
     
 
@@ -384,7 +384,7 @@ class TraineeController extends Controller
             $categoricalRoundOne = $roundOneReport->where('type', 'categorical')->where('correct_or_wrong', 1);
             $categoricalRoundOneCount = $categoricalRoundOne->count();
             $roundOneTotal = $roundOneReport->sum('time_taken');
-            $roundOneTotalTime = gmdate('i : s', $roundOneTotal);
+            $roundOneTotalTime = gmdate('i', $roundOneTotal)." mins : ".gmdate('s', $roundOneTotal)." sec";
           }
         }
       if ($trainee->round > 1 && $trainee->completed == 1 ) {
@@ -395,12 +395,12 @@ class TraineeController extends Controller
             $allStoryWords = $storyWords->pluck('word')->toArray();
             $recallRoundTwoCount = array();
             $recallRoundTwoCount = $this->_recallReport($recallRoundTwo, $allStoryWords);
-            $contextualRoundTwo= $roundTwoReport->where('type', 'contextual')->where('correct_or_wrong', 1);
+            $contextualRoundTwo = $roundTwoReport->where('type', 'contextual')->where('correct_or_wrong', 1);
             $contextualRoundTwoCount = $contextualRoundTwo->count();
             $categoricalRoundTwo = $roundTwoReport->where('type', 'categorical')->where('correct_or_wrong', 1);
             $categoricalRoundTwoCount = $categoricalRoundTwo->count();
             $roundTwoTotal = $roundTwoReport->sum('time_taken');
-            $roundTwoTotalTime = gmdate('i : s', $roundTwoTotal);
+            $roundTwoTotalTime = gmdate('i', $roundTwoTotal)." mins : ".gmdate('s', $roundTwoTotal)." sec";
           }
         }
       return view('kessler.trainee.report', compact('sessionNumber','traineeID', 'contextualRoundOneCount','categoricalRoundOneCount', 'recallRoundOneCount','contextualRoundTwoCount','categoricalRoundTwoCount', 'recallRoundTwoCount', 'roundOneTotalTime', 'roundTwoTotalTime'));
