@@ -399,7 +399,7 @@ class TraineeController extends Controller
             $contextualRoundTwoCount = $contextualRoundTwo->count();
             $categoricalRoundTwo = $roundTwoReport->where('type', 'categorical')->where('correct_or_wrong', 1);
             $categoricalRoundTwoCount = $categoricalRoundTwo->count();
-            $roundTwoTotal = $roundOneReport->sum('time_taken');
+            $roundTwoTotal = $roundTwoReport->sum('time_taken');
             $roundTwoTotalTime = gmdate('i : s', $roundTwoTotal);
           }
         }
