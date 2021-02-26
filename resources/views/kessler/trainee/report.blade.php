@@ -6,7 +6,7 @@
     <h1 class="mt-4">Trainee Graphical Report</h1>
     <div class="card mb-4">
     <div class="card-body">
-      Graphical report of the trainee during there session
+      Trainee ID : {{ $traineeID }} &emsp; Session Number : {{ $sessionNumber }}
     </div>
     </div>
     <div class="card mb-4">
@@ -24,7 +24,7 @@
 	            Round One
 	            </div>
 	            <div class="card-body"><canvas id="jsPieChartOne" width="100%" height="50"></canvas></div>
-	            <div class="card-footer small text-muted text-center">Graphical Report for Session {{ $sessionNumber }} by {{ $traineeID }} in {{ $roundOneTotalTime }}</div>
+	            <div class="card-footer small text-muted text-center">Time Taken : {{ $roundOneTotalTime }}</div>
 	        </div>
 	   	  </div>
         <div class="col-lg-6">
@@ -34,7 +34,7 @@
               Round Two
               </div>
               <div class="card-body"><canvas id="jsPieChartTwo" width="100%" height="50"></canvas></div>
-              <div class="card-footer small text-muted text-center">Graphical Report for Session {{ $sessionNumber }} by {{ $traineeID }} in {{ $roundTwoTotalTime }}</div>
+              <div class="card-footer small text-muted text-center">Time Taken : {{ $roundTwoTotalTime }}</div>
           </div>
         </div>
      </div>  
