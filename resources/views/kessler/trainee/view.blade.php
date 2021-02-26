@@ -6,7 +6,7 @@
     <h1 class="mt-4">Trainee Report</h1>
     <div class="card mb-4">
     <div class="card-body">
-      View the report of the trainee during there session
+       Trainee ID : {{ $traineeID }} &emsp; Session Number : {{ $sessionNumber }}
     </div>
     </div>
     <div class="card mb-4">

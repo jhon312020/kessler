@@ -166,6 +166,10 @@ class TraineeController extends Controller
       $roundTwoTotal = array();
       $storyWords = array();
 
+      $traineeReport = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed')->where('id', $trainee->id)->first();
+      $traineeID = $traineeReport->trainee_id;
+      $sessionNumber = $traineeReport->session_number;
+
       if ($trainee && ($user->role == 'SA' || in_array($trainee->id, $trainer_traines))) {
         //$storyWords = Word::select('id', 'word')->where('story_id', $trainee->session_number)->get();
         $storyWords = $this->getWordAndIDObj($trainee);
@@ -226,7 +230,7 @@ class TraineeController extends Controller
 
       //$this->pr($roundTwoReport->toArray());
       //exit;
-      return view('kessler.trainee.view')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords'));
+      return view('kessler.trainee.view')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords','traineeID','sessionNumber'));
     }
 
     /**
@@ -255,7 +259,7 @@ class TraineeController extends Controller
         }
         $recallReport['found_count'] = count($foundWords);
         $recallReport['unfound_count'] = count($allStoryWords) - count($foundWords);
-        $recallReport['words'] = implode(' ', $recallReport['words']).' ('.gmdate('i : s', $timeTaken).' secs)';
+        $recallReport['words'] = implode(' ', $recallReport['words']).' ('.gmdate('i : s', $timeTaken).' sec)';
       }
       //$this->pr($recallReport);
       return $recallReport;
