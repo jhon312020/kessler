@@ -24,7 +24,7 @@
 	            Round One
 	            </div>
 	            <div class="card-body"><canvas id="jsPieChartOne" width="100%" height="50"></canvas></div>
-	            <div class="card-footer small text-muted text-center">Report Graph for Session {{ $sessionNumber }} by {{ $traineeID }}</div>
+	            <div class="card-footer small text-muted text-center">Graphical Report for Session {{ $sessionNumber }} by {{ $traineeID }} in {{ $roundOneTotalTime }}</div>
 	        </div>
 	   	  </div>
         <div class="col-lg-6">
@@ -34,7 +34,7 @@
               Round Two
               </div>
               <div class="card-body"><canvas id="jsPieChartTwo" width="100%" height="50"></canvas></div>
-              <div class="card-footer small text-muted text-center">Report Graph for Session {{ $sessionNumber }} by {{ $traineeID }}</div>
+              <div class="card-footer small text-muted text-center">Graphical Report for Session {{ $sessionNumber }} by {{ $traineeID }} in {{ $roundTwoTotalTime }}</div>
           </div>
         </div>
      </div>  
@@ -45,7 +45,7 @@
     var recallRoundOneCount = {{ $recallRoundOneCount['found_count'] }};
     var contextualRoundOneCount = {{ $contextualRoundOneCount }};
     var categoricalRoundOneCount = {{ $categoricalRoundOneCount }};
-    var ctx = document.getElementById("jsPieChartOne");
+    var ctx = $("#jsPieChartOne");
     var PieChartOne = new Chart(ctx, {
     type: 'pie',
     data: {
@@ -59,13 +59,13 @@
     var recallRoundTwoCount = {{ $recallRoundTwoCount['found_count'] }};
     var contextualRoundTwoCount = {{ $contextualRoundTwoCount }};
     var categoricalRoundTwoCount = {{ $categoricalRoundTwoCount }};
-    var ctx = document.getElementById("jsPieChartTwo");
+    var ctx = $("#jsPieChartTwo");
     var PieChartTwo = new Chart(ctx, {
     type: 'pie',
     data: {
         labels: ["Recall", "Contextual", "Categorical"],
         datasets: [{
-          data: [recallRoundTwoCount, contextualRoundTwoCount, recallRoundTwoCount],
+          data: [recallRoundTwoCount, contextualRoundTwoCount, categoricalRoundTwoCount],
           backgroundColor: ['#dc3545', '#ffc107', '#28a745'],
         }],
       },

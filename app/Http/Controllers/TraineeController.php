@@ -395,11 +395,19 @@ class TraineeController extends Controller
       $contextualRoundTwo = TraineeTransaction::select('type as contextual','answer')->where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 2)->where('correct_or_wrong', 1)->where('type', 'contextual')->get();
       //$this->pr($contextualRoundTwo->toArray()); exit();
       $contextualRoundTwoCount = $contextualRoundTwo->count();
-      $this->pr($contextualRoundTwoCount); //exit();
+      //$this->pr($contextualRoundTwoCount); exit();
       $categoricalRoundTwo = TraineeTransaction::select('type as contextual','answer')->where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 2)->where('correct_or_wrong', 1)->where('type', 'categorical')->get();
       // $this->pr($categoricalRoundTwo->toArray()); exit();
       $categoricalRoundTwoCount = $categoricalRoundTwo->count();
       //$this->pr($categoricalRoundTwoCount); exit();
-      return view('kessler.trainee.report', compact('sessionNumber','traineeID','round', 'contextualRoundOneCount','categoricalRoundOneCount', 'recallRoundOneCount','contextualRoundTwoCount','categoricalRoundTwoCount', 'recallRoundTwoCount'));
+      $roundOneTotal = TraineeTransaction::where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 1)->sum('time_taken');
+       // $this->pr($roundOneTotal);
+       $roundOneTotalTime = gmdate('i : s', $roundOneTotal);
+      // $this->pr($roundOneTotalTime); exit();
+      $roundTwoTotal = TraineeTransaction::where('trainee_id', $traineeReport->trainee_id)->where('session_pin', $traineeReport->session_pin)->where('story_id', $traineeReport->session_number)->where('round', 2)->sum('time_taken');
+      //$this->pr($roundTwoTotal);
+       $roundTwoTotalTime = gmdate('i : s', $roundTwoTotal);
+      // $this->pr($roundTwoTotalTime); exit();
+      return view('kessler.trainee.report', compact('sessionNumber','traineeID', 'contextualRoundOneCount','categoricalRoundOneCount', 'recallRoundOneCount','contextualRoundTwoCount','categoricalRoundTwoCount', 'recallRoundTwoCount', 'roundOneTotalTime', 'roundTwoTotalTime'));
     }
 }
