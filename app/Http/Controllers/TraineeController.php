@@ -175,12 +175,14 @@ class TraineeController extends Controller
         $storyWords = $this->getWordAndIDObj($trainee);
         $queryObj = TraineeTransaction::select('id', 'word_id', 'trainee_id', 'session_pin', 'type', 'answer', 'correct_or_wrong','round','time_taken')->where('trainee_id', $trainee->trainee_id)->where('session_pin', $trainee->session_pin);
         $allStoryWords = $storyWords->pluck('word')->toArray();
-  
+        $timeOverall = with(clone $queryObj);
+        $overallTotal = $timeOverall->sum('time_taken');
+        $sessionTime = gmdate('i : s', $overallTotal).' sec';
+        // $this->pr($sessionTime); exit();
         if ($trainee->round > 1) {
           $roundOneReport = with(clone $queryObj)->where('round', '=', '1')->get();
           if ($roundOneReport) {
-             $roundOneTime = $roundOneReport->sum('time_taken');
-             // $this->pr($roundTwoTime); exit();
+            $roundOneTime = $roundOneReport->sum('time_taken');
             $roundOneTimeTaken = gmdate('i : s', $roundOneTime).' sec';
 
             $recallWords = $roundOneReport->shift();
@@ -237,7 +239,7 @@ class TraineeController extends Controller
 
       //$this->pr($roundTwoReport->toArray());
       //exit;
-      return view('kessler.trainee.view')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords','traineeID','sessionNumber','roundOneTimeTaken', 'roundTwoTimeTaken'));
+      return view('kessler.trainee.view')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords','traineeID','sessionNumber','roundOneTimeTaken', 'roundTwoTimeTaken', 'sessionTime'));
     }
 
     /**

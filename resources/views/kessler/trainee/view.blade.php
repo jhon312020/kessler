@@ -18,7 +18,7 @@
       <br>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <table class="table table-bordered"  width="100%" cellspacing="0">
             <thead>
               <tr align="center">
                 <th>Word</th>
@@ -131,23 +131,27 @@
                 </tr>
               @endforeach
               <tr>
-                <th>Total</th>
+                <th>Total Time</th>
                 @if(count($roundOneReport))
-                  <th>Time taken : {{ $roundOneTotal['contextual'] }}</th>
-                  <th>Time taken : {{ $roundOneTotal['categorical'] }}</th>
+                  <th class="text-center">{{ $roundOneTotal['contextual'] }}</th>
+                  <th class="text-center">{{ $roundOneTotal['categorical'] }}</th>
                 @endif
                 @if(count($roundTwoTotal))
-                  <th>Time taken : {{ $roundTwoTotal['contextual'] }}</th>
-                  <th>Time taken : {{ $roundTwoTotal['categorical'] }}</th>
+                  <th class="text-center">{{ $roundTwoTotal['contextual'] }}</th>
+                  <th class="text-center">{{ $roundTwoTotal['categorical'] }}</th>
                 @else
                   <th></th>
                   <th></th>
                 @endif
               </tr>
               <tr>
-                <th>Overall time taken</th>
+                <th>Overall Time</th>
                 <th class="text-center" colspan="2">{{ $roundOneTimeTaken }}</th>
                 <th class="text-center" colspan="2">{{ $roundTwoTimeTaken }}</th>
+              </tr>
+              <tr>
+                <th>Session Total Time</th>
+                <th class="text-center" colspan="4">{{ $sessionTime }}</th>
               </tr>
               @endif
             </tbody>

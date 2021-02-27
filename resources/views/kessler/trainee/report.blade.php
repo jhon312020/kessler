@@ -85,10 +85,10 @@
     var PieChart = new Chart(ctx, {
     type: 'pie',
     data: {
-        labels: ["Contextual", "Categorical"],
+        labels:  ["Recall", "Contextual", "Categorical"],
         datasets: [{
-          data: [contextualOverallCount, categoricalOverallCount],
-          backgroundColor: [ '#ffc107', '#28a745'],
+          data: [20, contextualOverallCount, categoricalOverallCount],
+          backgroundColor: ['#dc3545', '#ffc107', '#28a745'],
         }],
       },
     });
