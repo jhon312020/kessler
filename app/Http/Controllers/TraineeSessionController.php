@@ -92,7 +92,7 @@ class TraineeSessionController extends Controller
             $this->traineeCurrentPosition->word_id = $word['id'];
             $this->traineeCurrentPosition->position = 'answer';
             $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
-            $traineeRecord->state = 'continue';
+            $traineeRecord->session_state = 'continue';
             $traineeRecord->save();
             $wordID = $word['id'];
             $question = $word['question'];
@@ -194,7 +194,7 @@ class TraineeSessionController extends Controller
         $this->traineeCurrentPosition->position = 'review';
         if (TraineeStory::insert($traineeStory)) {
           $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
-          $traineeRecord->state = 'continue';
+          $traineeRecord->session_state = 'continue';
           $traineeRecord->save();
         }
         return redirect('/review');
@@ -244,7 +244,7 @@ class TraineeSessionController extends Controller
         if ($traineeCurrentPosition->position === 'recall' || $traineeCurrentPosition->position === '') {
            $this->traineeCurrentPosition->position = 'recall';
           $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
-          $traineeRecord->state = 'continue';
+          $traineeRecord->session_state = 'continue';
           $traineeRecord->save();
           $submitURL = url('sessions');
           return view('msmt.sessions.recallwords.remember', compact('allWords','traineeRecord', 'submitURL'));
@@ -301,7 +301,7 @@ class TraineeSessionController extends Controller
           $this->traineeCurrentPosition->word_id = $word['id'];
           $this->traineeCurrentPosition->position = 'question';
           $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
-          $traineeRecord->state = 'continue';
+          $traineeRecord->session_state = 'continue';
           $traineeRecord->save();
           $wordID = $word['id'];
           $question = $word['question'];
@@ -342,7 +342,7 @@ class TraineeSessionController extends Controller
             $this->traineeCurrentPosition->user_word_id = 0;
             $this->traineeCurrentPosition->sentence = 0;
             $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
-            $traineeRecord->state = 'continue';
+            $traineeRecord->session_state = 'continue';
             $traineeRecord->save();
           }
         }
