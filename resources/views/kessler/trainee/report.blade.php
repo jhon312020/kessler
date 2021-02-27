@@ -82,7 +82,7 @@
     var contextualOverallCount = {{ $contextualOverallCount }};
     var categoricalOverallCount = {{ $categoricalOverallCount }};
     var ctx = $("#jsPieChart");
-    var PieChartTwo = new Chart(ctx, {
+    var PieChart = new Chart(ctx, {
     type: 'pie',
     data: {
         labels: ["Contextual", "Categorical"],
