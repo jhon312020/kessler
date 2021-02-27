@@ -4,15 +4,14 @@
 <link href="{{asset('css/style.css')}}" rel="stylesheet" />
   <div class="container-fluid">
     <h1 class="mt-4">Trainee Graphical Report</h1>
-    <div class="card mb-4">
+    <!-- <div class="card mb-4">
     <div class="card-body">
-      Trainee ID : {{ $traineeID }} &emsp; Session Number : {{ $sessionNumber }}
+      Trainee ID : &emsp; Session Number :
     </div>
-    </div>
+    </div> -->
     <div class="card mb-4">
       <div class="card-header">
-        <i class="fas fa-table mr-1"></i>
-          Trainee Graphical Report
+        <i class="fas fa-table mr-1"></i> Trainee ID : {{ $traineeID }} &emsp; Session Number : {{ $sessionNumber }}
       <a href="{{ url('/trainee')}}" class="btn btn-primary float-right" role="button"><i class="fas fa-step-backward"></i> BACK</a>
       </div>
       <br>
@@ -35,6 +34,16 @@
               </div>
               <div class="card-body"><canvas id="jsPieChartTwo" width="100%" height="50"></canvas></div>
               <div class="card-footer small text-muted text-center">Time Taken : {{ $roundTwoTotalTime }}</div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card mb-4">
+              <div class="card-header">
+                  <i class="fas fa-chart-pie mr-1"></i>
+              Overall Report
+              </div>
+              <div class="card-body"><canvas id="jsPieChart" width="100%" height="50"></canvas></div>
+              <div class="card-footer small text-muted text-center">Time Taken : {{ $overallTotalTime }}</div>
           </div>
         </div>
      </div>  
@@ -67,6 +76,19 @@
         datasets: [{
           data: [recallRoundTwoCount, contextualRoundTwoCount, categoricalRoundTwoCount],
           backgroundColor: ['#dc3545', '#ffc107', '#28a745'],
+        }],
+      },
+    });
+    var contextualOverallCount = {{ $contextualOverallCount }};
+    var categoricalOverallCount = {{ $categoricalOverallCount }};
+    var ctx = $("#jsPieChart");
+    var PieChartTwo = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: ["Contextual", "Categorical"],
+        datasets: [{
+          data: [contextualOverallCount, categoricalOverallCount],
+          backgroundColor: [ '#ffc107', '#28a745'],
         }],
       },
     });

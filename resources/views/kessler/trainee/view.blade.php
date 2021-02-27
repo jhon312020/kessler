@@ -4,15 +4,15 @@
 <link href="{{asset('css/style.css')}}" rel="stylesheet" />
   <div class="container-fluid">
     <h1 class="mt-4">Trainee Report</h1>
-    <div class="card mb-4">
+    <!-- <div class="card mb-4">
     <div class="card-body">
-       Trainee ID : {{ $traineeID }} &emsp; Session Number : {{ $sessionNumber }}
+       Trainee ID: &emsp; Session Number :
     </div>
-    </div>
+    </div> -->
     <div class="card mb-4">
       <div class="card-header">
-        <i class="fas fa-table mr-1"></i>
-          Trainee Report
+<!--    <i class="fas fa-table mr-1"></i> Trainee Report <br> -->
+        <i class="fas fa-table mr-1"></i> Trainee ID : {{ $traineeID }} &emsp; Session Number : {{ $sessionNumber }}
       <a href="{{ url('/trainee')}}" class="btn btn-primary float-right" role="button"><i class="fas fa-step-backward"></i> BACK</a>
       </div>
       <br>
