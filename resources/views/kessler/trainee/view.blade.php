@@ -144,6 +144,11 @@
                   <th></th>
                 @endif
               </tr>
+              <tr>
+                <th>Overall time taken</th>
+                <th class="text-center" colspan="2">{{ $roundOneTimeTaken }}</th>
+                <th class="text-center" colspan="2">{{ $roundTwoTimeTaken }}</th>
+              </tr>
               @endif
             </tbody>
           </table>

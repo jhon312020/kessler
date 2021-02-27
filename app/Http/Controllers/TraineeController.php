@@ -179,6 +179,10 @@ class TraineeController extends Controller
         if ($trainee->round > 1) {
           $roundOneReport = with(clone $queryObj)->where('round', '=', '1')->get();
           if ($roundOneReport) {
+             $roundOneTime = $roundOneReport->sum('time_taken');
+             // $this->pr($roundTwoTime); exit();
+            $roundOneTimeTaken = gmdate('i : s', $roundOneTime).' sec';
+
             $recallWords = $roundOneReport->shift();
             $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
             //$roundOneReport->where('type', 'contextual')->sum('time_taken');
@@ -196,12 +200,13 @@ class TraineeController extends Controller
             // });
             // $roundOneTotal['contextual'] = gmdate('i : s', $roundOneReport->where('type', 'contextual')->sum('time_taken'));
             // $roundOneTotal['categorical'] = gmdate('i : s', $roundOneReport->where('type', 'categorical')->sum('time_taken'));
-            $roundOneTotal['contextual'] = gmdate('i : s', $contextual);
-            $roundOneTotal['categorical'] = gmdate('i : s', $categorical);
+            $roundOneTotal['contextual'] = gmdate('i : s', $contextual).' sec';
+            $roundOneTotal['categorical'] = gmdate('i : s', $categorical).' sec';
             //$this->pr($roundOneReport->toArray());
             //exit;
             
             //$roundOneReport = $roundOneReport->map('array_values', $roundOneReport->toArray());
+
             $roundOneReport = collect(array_map('array_values', $roundOneReport->toArray()));
             //$this->pr($roundOneReport);
             //exit;
@@ -211,8 +216,10 @@ class TraineeController extends Controller
         exit;*/
         if ($trainee->round > 1 && $trainee->completed == 1 ) {
           $roundTwoReport = with(clone $queryObj)->where('round', '=', '2')->get();
-
           if ($roundTwoReport) {
+            $roundTwoTime = $roundTwoReport->sum('time_taken');
+            // $this->pr($roundTwoTime); exit();
+            $roundTwoTimeTaken = gmdate('i : s', $roundTwoTime).' sec';
             $recallWords = $roundTwoReport->shift();
             $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
             $roundTwoReport = $roundTwoReport->groupBy('word_id', 'type');
@@ -220,17 +227,17 @@ class TraineeController extends Controller
             $categorical = $this->_totalTime( $roundTwoReport, 'categorical');
             //$roundTwoTotal['contextual'] = gmdate('i : s', $roundTwoReport->where('type', 'contextual')->sum('time_taken'));
             //$roundTwoTotal['categorical'] = gmdate('i : s', $roundTwoReport->where('type', 'categorical')->sum('time_taken'));
-            $roundTwoTotal['contextual'] = gmdate('i : s', $contextual);
-            $roundTwoTotal['categorical'] = gmdate('i : s', $categorical);
-            
-            $roundTwoReport = collect(array_map('array_values', $roundTwoReport->toArray()));
+             $roundTwoTotal['contextual'] = gmdate('i : s', $contextual).' sec';
+             $roundTwoTotal['categorical'] = gmdate('i : s', $categorical).' sec';
+             
+             $roundTwoReport = collect(array_map('array_values', $roundTwoReport->toArray()));
           }
         }
       }
 
       //$this->pr($roundTwoReport->toArray());
       //exit;
-      return view('kessler.trainee.view')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords','traineeID','sessionNumber'));
+      return view('kessler.trainee.view')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords','traineeID','sessionNumber','roundOneTimeTaken', 'roundTwoTimeTaken'));
     }
 
     /**
