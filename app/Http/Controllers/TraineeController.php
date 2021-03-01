@@ -165,7 +165,8 @@ class TraineeController extends Controller
       $roundOneTotal = array();
       $roundTwoTotal = array();
       $storyWords = array();
-
+      $roundOneTimeTaken = 0;
+      $roundTwoTimeTaken = 0;
       $traineeReport = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed')->where('id', $trainee->id)->first();
       $traineeID = $traineeReport->trainee_id;
       $sessionNumber = $traineeReport->session_number;
@@ -239,7 +240,7 @@ class TraineeController extends Controller
 
       //$this->pr($roundTwoReport->toArray());
       //exit;
-      return view('kessler.trainee.view')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords','traineeID','sessionNumber','roundOneTimeTaken', 'roundTwoTimeTaken', 'sessionTime'));
+      return view('kessler.trainee.view')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords','traineeID','sessionNumber', 'roundOneTimeTaken', 'roundTwoTimeTaken', 'sessionTime'));
     }
 
     /**
