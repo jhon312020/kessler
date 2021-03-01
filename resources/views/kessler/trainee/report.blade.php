@@ -79,6 +79,7 @@
         }],
       },
     });
+    var recallOverallCount = {{ $recallOverallCount }};
     var contextualOverallCount = {{ $contextualOverallCount }};
     var categoricalOverallCount = {{ $categoricalOverallCount }};
     var ctx = $("#jsPieChart");
@@ -87,7 +88,7 @@
     data: {
         labels:  ["Recall", "Contextual", "Categorical"],
         datasets: [{
-          data: [20, contextualOverallCount, categoricalOverallCount],
+          data: [recallOverallCount, contextualOverallCount, categoricalOverallCount],
           backgroundColor: ['#dc3545', '#ffc107', '#28a745'],
         }],
       },

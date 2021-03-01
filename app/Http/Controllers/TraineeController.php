@@ -416,6 +416,17 @@ class TraineeController extends Controller
             $roundTwoTotalTime = gmdate('i', $roundTwoTotal)." mins : ".gmdate('s', $roundTwoTotal)." sec";
           }
         }
+            $recallWordsData = with(clone $queryObj)->where('type', 'recall')->get();
+            $storyWords = $this->getWordAndIDObj($trainee);
+            $allStoryWords = $storyWords->pluck('word')->toArray();
+            $recallRoundOneCount = array();
+            $recallRoundOneCount = $this->_recallReport($recallRoundOne, $allStoryWords);
+            $recallRoundTwoCount = array();
+            $recallRoundTwoCount = $this->_recallReport($recallRoundTwo, $allStoryWords);
+            $recallOverallCount = $recallRoundOneCount['found_count'] + $recallRoundTwoCount['found_count'];
+            // $this->pr($recallRoundOneCount); 
+            // $this->pr($recallRoundTwoCount); 
+            // $this->pr($recallOverallCount);  exit();
             $overallReport = with(clone $queryObj)->where('correct_or_wrong', '=', '1')->get();
             $contextualOverall = $overallReport->where('type', 'contextual')->where('correct_or_wrong', 1);
             $contextualOverallCount = $contextualOverall->count();
@@ -424,6 +435,6 @@ class TraineeController extends Controller
             $timeOverall = with(clone $queryObj);
             $overallTotal = $timeOverall->sum('time_taken');
             $overallTotalTime = gmdate('i', $overallTotal)." mins : ".gmdate('s', $overallTotal)." sec";
-            return view('kessler.trainee.report', compact('sessionNumber','traineeID', 'contextualRoundOneCount','categoricalRoundOneCount', 'recallRoundOneCount','contextualRoundTwoCount','categoricalRoundTwoCount', 'recallRoundTwoCount', 'contextualOverallCount', 'categoricalOverallCount', 'roundOneTotalTime', 'roundTwoTotalTime', 'overallTotalTime'));
+            return view('kessler.trainee.report', compact('sessionNumber','traineeID', 'contextualRoundOneCount','categoricalRoundOneCount', 'recallRoundOneCount','contextualRoundTwoCount','categoricalRoundTwoCount', 'recallRoundTwoCount', 'recallOverallCount', 'contextualOverallCount', 'categoricalOverallCount', 'roundOneTotalTime', 'roundTwoTotalTime', 'overallTotalTime'));
     }
 }
