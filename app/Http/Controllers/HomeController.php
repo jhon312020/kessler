@@ -28,15 +28,20 @@ class HomeController extends Controller
     public function index(Request $request) {
       $kessler = Auth::user();
       //$this->pr($kessler->toArray()); exit();
+      $active = User::where('role', 'TA')->where('status', 1);
+      $inactive = User::where('role', 'TA')->where('status', 0);
+      $complete = Trainee::where('completed', 1);
+      $incomplete = Trainee::where('completed', 0); 
+
       $kesslerTrainee = Trainee::select('trainee_id')->distinct('trainee_id')->get();
       //$this->pr($kesslerTrainee->toArray()); exit();
       $kesslerTraineeCount = $kesslerTrainee->count();
       //$this->pr($kesslerTraineeCount); //exit();
-      $kesslerInProgress = Trainee::where('completed', 0)->get();
+      $kesslerInProgress = $incomplete->get();
       //$this->pr($kesslerInProgress->toArray()); exit();
       $kesslerInProgressCount = $kesslerInProgress->count();
       //$this->pr($kesslerInProgressCount); //exit();
-      $kesslerCompleted = Trainee::where('completed', 1)->get();
+      $kesslerCompleted = $complete->get();
       //$this->pr($kesslerInProgress->toArray()); exit();
       $kesslerCompletedCount = $kesslerCompleted->count();
       //$this->pr($kesslerCompletedCount); exit();
@@ -46,9 +51,9 @@ class HomeController extends Controller
       //$this->pr($trainer->toArray()); exit();
       $trainerCount = $trainer->count();
       //$this->pr($trainerCount); exit();
-      $trainerActive = User::where('role', 'TA')->where('status', 1)->get();
+      $trainerActive = $active->get();
       //$this->pr($trainerActive->toArray()); exit();
-      $trainerInActive = User::where('role', 'TA')->where('status', 0)->get();
+      $trainerInActive = $inactive->get();
       //$this->pr($trainerInActive->toArray()); exit();
       $trainerActiveCount = $trainerActive->count();
       //$this->pr($trainerActiveCount); exit();
@@ -58,11 +63,11 @@ class HomeController extends Controller
       //$this->pr($trainee->toArray()); exit();
       $traineeCount = $trainee->count('trainee_id');
       //$this->pr($traineeCount); exit();
-      $traineeInProgress = Trainee::where('completed', 0)->where('trainer_id', $kessler->id)->get();
+      $traineeInProgress = $incomplete->where('trainer_id', $kessler->id)->get();
       //$this->pr($traineeInProgress->toArray()); exit();
       $traineeInProgressCount = $traineeInProgress->count();
       //$this->pr($traineeInProgressCount); exit();
-      $traineeCompleted = Trainee::where('completed', 1)->where('trainer_id', $kessler->id)->get();
+      $traineeCompleted = $complete->where('trainer_id', $kessler->id)->get();
       //$this->pr($traineeCompleted->toArray()); exit();
       $traineeCompletedCount = $traineeCompleted->count();
       //$this->pr($traineeCompletedCount); exit();

@@ -12,7 +12,7 @@
             <div class="card bg-success text-white mb-4">
                 @if($traineeCount)
                 <div class="card-body">No of Trainees :&emsp;{{$traineeCount}} 
-                  <br>Session In Progress :&emsp;{{$traineeInProgressCount}} <br>Session Completed :&emsp;{{$traineeCompletedCount}}
+                  <br>Session In Progress :&emsp;{{$traineeInProgressCount}} <br>Session Completed :&emsp;{{$traineeCompletedCount}} 
                 </div>
                 @endif
                 <div class="card-footer d-flex align-items-center justify-content-between">
@@ -27,7 +27,8 @@
             <div class="card bg-success text-white mb-4">
                 @if($kesslerTraineeCount)
                 <div class="card-body">No of Trainees :&emsp;{{$kesslerTraineeCount}} 
-                  <br>Sessions In Progress :&emsp;{{$kesslerInProgressCount}} <br>Sessions Completed :&emsp;{{$kesslerCompletedCount}}
+                  <br>Sessions In Progress :&emsp;{{$kesslerInProgressCount}} <br>Sessions Completed :&emsp;{{$kesslerCompletedCount}} <br>
+                  {{Auth::user()->name}} has 
                 </div>
                 @endif
                 <div class="card-footer d-flex align-items-center justify-content-between">
