@@ -40,7 +40,7 @@ class TraineeController extends Controller
       if ($user->role != "SA") {
         $queryObj = $queryObj->where('trainer_id', $user->id);
       }
-      $trainees = $queryObj->get();
+      $trainees = $queryObj->orderBy('id', 'desc')->get();
       $types = Type::pluck('type', 'id');
       return view('kessler.trainee.index', compact('trainees', 'types'));
     }
