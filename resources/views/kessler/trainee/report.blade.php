@@ -70,10 +70,9 @@
                 color: 'black',
                 labels: {
                     render: 'value',
-                    fontSize: 42,
+                    fontSize: 14,
                     fontStyle: 'bold',
-                    fontColor: '#000',
-                    fontFamily: '"Lucida Console", Monaco, monospace'
+                    fontColor: '#000'
                     }
                   }
                 }
@@ -98,10 +97,9 @@
                 color: 'black',
                 labels: {
                     render: 'value',
-                    fontSize: 42,
+                    fontSize: 14,
                     fontStyle: 'bold',
-                    fontColor: '#000',
-                    fontFamily: '"Lucida Console", Monaco, monospace'
+                    fontColor: '#000'
                     }
                   }
                 }
@@ -126,10 +124,9 @@
                 color: 'black',
                 labels: {
                     render: 'value',
-                    fontSize: 42,
+                    fontSize: 14,
                     fontStyle: 'bold',
-                    fontColor: '#000',
-                    fontFamily: '"Lucida Console", Monaco, monospace'
+                    fontColor: '#000'
                     }
                   }
                 }
