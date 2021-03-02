@@ -26,6 +26,8 @@ class TraineeSessionController extends Controller
     private $traineeCurrentPosition;
     public function __construct() {
       $this->traineeCurrentPosition = (object)array('word_id'=>'', 'position'=>'', 'user_word_id'=>'', 'sentence'=>'');
+      $this->sessionStartTime = (object)array('roundOne'=>'', 'roundTwo'=>'');
+      $this->sessionEndTime = (object)array('roundOne'=>'', 'roundTwo'=>'');
     }
     /**
      * Show the application dashboard.
@@ -42,13 +44,19 @@ class TraineeSessionController extends Controller
           $validator = Validator::make($request->all(), [
             'sessionpin' => 'required'    
           ]);
-
         if (!$validator->fails()) {
           $record = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_current_position', 'session_start_time', 'booster_id', 'booster_range')->where('session_pin', $request->sessionpin)->where('completed', 0)->first();
           if ($record) {
-            if($record->completed === 0) {
-              $record->session_start_time = now();
+            $sessionStartTime = $record->session_start_time? json_decode($record->session_start_time): $this->sessionStartTime;
+            switch($record->round) {
+              case 1:
+                $sessionStartTime->roundOne = now();
+              break;
+              case 2:
+                $sessionStartTime->roundTwo = now();
+              break;
             }
+            $record->session_start_time = json_encode($sessionStartTime);
             $record->save(); 
             $request->session()->put('trainee', $record);
             if ($record['session_number'] <= 4) {
@@ -418,18 +426,21 @@ class TraineeSessionController extends Controller
       $trainee = $request->session()->get('trainee');
       $traineeObj = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_end_time')->where('id', $trainee->id)->first();
       if ($traineeObj) {
+        $sessionEndTime = $traineeObj->session_end_time?json_decode($traineeObj->session_end_time):$this->sessionEndTime;
         switch($traineeObj->round) {
           case 1:
             $traineeObj->round = 2;
+            $sessionEndTime->roundOne = now();
             $round = 'first';
           break;
           case 2:
             $traineeObj->completed = 1;
-            $traineeObj->session_end_time = now();
+            $sessionEndTime->roundTwo = now();
             $round = 'second';
           break;
         }
         $sessionNumber = $traineeObj->session_number;
+        $traineeObj->session_end_time = json_encode($sessionEndTime);
         $traineeObj->save();
       }
       return view('msmt.sessions.questions.complete', compact('round', 'sessionNumber', 'homeURL'));
