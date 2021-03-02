@@ -64,6 +64,20 @@
           backgroundColor: ['#dc3545', '#ffc107', '#28a745'],
         }],
       },
+    options: {
+        plugins: {
+            datalabels: {
+                color: 'black',
+                labels: {
+                    render: 'value',
+                    fontSize: 42,
+                    fontStyle: 'bold',
+                    fontColor: '#000',
+                    fontFamily: '"Lucida Console", Monaco, monospace'
+                    }
+                  }
+                }
+            }
     });
     var recallRoundTwoCount = {{ $recallRoundTwoCount['found_count'] }};
     var contextualRoundTwoCount = {{ $contextualRoundTwoCount }};
@@ -78,6 +92,20 @@
           backgroundColor: ['#dc3545', '#ffc107', '#28a745'],
         }],
       },
+    options: {
+        plugins: {
+            datalabels: {
+                color: 'black',
+                labels: {
+                    render: 'value',
+                    fontSize: 42,
+                    fontStyle: 'bold',
+                    fontColor: '#000',
+                    fontFamily: '"Lucida Console", Monaco, monospace'
+                    }
+                  }
+                }
+            }
     });
     var recallOverallCount = {{ $recallOverallCount }};
     var contextualOverallCount = {{ $contextualOverallCount }};
@@ -92,6 +120,20 @@
           backgroundColor: ['#dc3545', '#ffc107', '#28a745'],
         }],
       },
+    options: {
+      plugins: {
+                datalabels: {
+                color: 'black',
+                labels: {
+                    render: 'value',
+                    fontSize: 42,
+                    fontStyle: 'bold',
+                    fontColor: '#000',
+                    fontFamily: '"Lucida Console", Monaco, monospace'
+                    }
+                  }
+                }
+            }
     });
   });
 </script>
