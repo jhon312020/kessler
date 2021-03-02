@@ -8,7 +8,7 @@
     </ol>
     <div class="row">
          @if($kessler->role === "TA")
-        <div class="col-xl-3 col-md-6">
+        <div class="col-xl-4 col-md-6">
             <div class="card bg-success text-white mb-4">
                 @if($traineeCount)
                 <div class="card-body">No of Trainees :&emsp;{{$traineeCount}} 
@@ -23,7 +23,7 @@
         </div>
         @endif
         @if($kessler->role === "SA") 
-        <div class="col-xl-3 col-md-6">
+        <div class="col-xl-4 col-md-6">
             <div class="card bg-success text-white mb-4">
                 @if($kesslerTraineeCount)
                 <div class="card-body">No of Trainees :&emsp;{{$kesslerTraineeCount}} 
@@ -38,7 +38,7 @@
         </div>
         @endif
         @if($kessler->role === "SA") 
-        <div class="col-xl-3 col-md-6">
+        <div class="col-xl-4 col-md-6">
             <div class="card bg-primary text-white mb-4">
                 @if($trainerCount)
                 <div class="card-body">No of Trainers :&emsp;{{$trainerCount}}
