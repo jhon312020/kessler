@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Models\TraineeTransaction;
 use App\Models\TraineeStory;
 use App\Models\Trainee;
@@ -43,15 +44,18 @@ class TraineeSessionController extends Controller
           ]);
 
         if (!$validator->fails()) {
-          $record = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_current_position', 'booster_id', 'booster_range')->where('session_pin', $request->sessionpin)->where('completed', 0)->first();
+          $record = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_current_position', 'session_start_time', 'booster_id', 'booster_range')->where('session_pin', $request->sessionpin)->where('completed', 0)->first();
           if ($record) {
+            if($record->completed === 0) {
+              $record->session_start_time = now();
+            }
+            $record->save(); 
             $request->session()->put('trainee', $record);
             if ($record['session_number'] <= 4) {
               return redirect('sessions');
             } else {
               return redirect('write');
             }
-            
           } else {
              $validator->errors()->add('sessionpin', 'INVALID PIN! Please contact your trainer..');
           } 
@@ -412,7 +416,7 @@ class TraineeSessionController extends Controller
       $homeURL = url('index');
       $request->session()->forget('completed');
       $trainee = $request->session()->get('trainee');
-      $traineeObj = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed')->where('id', $trainee->id)->first();
+      $traineeObj = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_end_time')->where('id', $trainee->id)->first();
       if ($traineeObj) {
         switch($traineeObj->round) {
           case 1:
@@ -421,6 +425,7 @@ class TraineeSessionController extends Controller
           break;
           case 2:
             $traineeObj->completed = 1;
+            $traineeObj->session_end_time = now();
             $round = 'second';
           break;
         }
