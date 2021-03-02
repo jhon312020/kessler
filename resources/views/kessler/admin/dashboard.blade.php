@@ -28,7 +28,9 @@
                 @if($kesslerTraineeCount)
                 <div class="card-body">No of Trainees :&emsp;{{$kesslerTraineeCount}} 
                   <br>Sessions In Progress :&emsp;{{$kesslerInProgressCount}} <br>Sessions Completed :&emsp;{{$kesslerCompletedCount}} <br>
-                  {{Auth::user()->name}} has 
+                 @foreach($users as $user)
+                    {{$user->name}} has {{$traineeCount}} trainees <br>
+                @endforeach
                 </div>
                 @endif
                 <div class="card-footer d-flex align-items-center justify-content-between">

@@ -26,13 +26,13 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index(Request $request) {
+      $users = User::all();
       $kessler = Auth::user();
       //$this->pr($kessler->toArray()); exit();
       $active = User::where('role', 'TA')->where('status', 1);
       $inactive = User::where('role', 'TA')->where('status', 0);
       $complete = Trainee::where('completed', 1);
       $incomplete = Trainee::where('completed', 0); 
-
       $kesslerTrainee = Trainee::select('trainee_id')->distinct('trainee_id')->get();
       //$this->pr($kesslerTrainee->toArray()); exit();
       $kesslerTraineeCount = $kesslerTrainee->count();
@@ -71,7 +71,7 @@ class HomeController extends Controller
       //$this->pr($traineeCompleted->toArray()); exit();
       $traineeCompletedCount = $traineeCompleted->count();
       //$this->pr($traineeCompletedCount); exit();
-      return view('kessler.admin.dashboard',compact('kessler','kesslerTraineeCount','kesslerInProgressCount', 'kesslerCompletedCount', 'trainer','trainerCount','trainerActiveCount', 'trainerInActiveCount','trainee','traineeCount', 'traineeInProgressCount', 'traineeCompletedCount'));
+      return view('kessler.admin.dashboard',compact('kessler','kesslerTraineeCount','kesslerInProgressCount', 'kesslerCompletedCount', 'trainer','trainerCount','trainerActiveCount', 'trainerInActiveCount','trainee','traineeCount', 'traineeInProgressCount', 'traineeCompletedCount', 'users'));
     }
 
     public function logout() {
