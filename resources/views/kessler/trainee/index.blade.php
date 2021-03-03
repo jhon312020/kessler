@@ -3,18 +3,40 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="container-fluid">
     <h1 class="mt-4">Trainee Information</h1>
-     <div class="card mb-4">
+   <!--   <div class="card mb-4">
       <div class="card-body">
         Create, View and Edit Trainee Information
       </div>
-    </div>
+    </div> -->
     <div class="card mb-4">
       <div class="card-header">
         <i class="fa fa-table mr-1"></i>
-        Trainee Information
+        Trainee Information  <a href="{{ route('trainee.create')}}" class="btn btn-primary btn-block bg-gradient-primary float-right" style="width: fit-content; margin-left: 25px;"><i class="fas fa-plus">&nbsp;</i> Add Trainee</a>
       </div>
-      <br/>
-      <a href="{{ route('trainee.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;"><i class="fas fa-plus">&nbsp;</i> Add Trainee</a>
+      <div class="card-body">
+      <form>
+        <div class="form-group">
+          <label for="search">Search by Date and Trainee ID</label>
+        <div class="form-row align-items-center">
+          <div class="col-sm-3 my-1">
+            <label class="sr-only" for="inlineFormInputName">Start Date</label>
+            <input type="date" data-date-format="YYYY-MM-DD" class="form-control" id="start_date" name="start_date" placeholder="Choose start date">
+          </div>
+          <div class="col-sm-3 my-1">
+              <label class="sr-only" for="inlineFormInputName">Trainee ID</label>
+              <select class="form-control" id="trainee_id" name="trainee_id" placeholder="Jane Doe">
+                <option value= '' selected="selected">Trainee ID</option>              @foreach($uniqueTrainees as $trainee)
+                <option value="{{ $trainee->trainee_id }}">{{ $trainee->trainee_id }}</option>
+                @endforeach;
+              </select>
+          </div>
+          <div class="col-auto my-1">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+      </div>
+      </div>
+    </form>   
+    </div>
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -34,7 +56,7 @@
                 <th>Session Pin</th>
                 <th>Session Type</th>
                 <th>Session Number</th>
-                <th>State</th>
+                <th>Start Date</th>
                 <th width="50%">Actions</th>
               </tr>
             </tfoot>
@@ -90,5 +112,13 @@
       </div>
     </div>
   </div>
+<script type="text/javascript">
+  $(document).ready( function() { // Wait until document is fully parse
+        $("#to").datepicker({ 
+          dateFormat: 'yy-mm-dd' 
+        });
+    });
+</script>
+
 @include('common.confirm')
 @endsection
