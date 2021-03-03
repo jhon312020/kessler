@@ -29,7 +29,9 @@
                 <div class="card-body">No of Trainees :&emsp;{{$kesslerTraineeCount}} 
                   <br>Sessions In Progress :&emsp;{{$kesslerInProgressCount}} <br>Sessions Completed :&emsp;{{$kesslerCompletedCount}} <br>
                  @foreach($users as $user)
+                  @if(isset($traineeTrainer[$user->id]))
                     {{$user->name}} has {{ $traineeTrainer[$user->id] }} trainees <br>
+                  @endif
                 @endforeach
                 </div>
                 @endif
