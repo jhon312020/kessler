@@ -114,12 +114,12 @@
   </div>
 <script type="text/javascript">
 $(document).ready(function() {     
-  $("#start_date").datepicker({          
-      format: 'yyyy-mm-dd', //can also use format: 'dd-mm-yyyy' 
-      autoclose: true
+  $("#start_date").datepicker({        
+      format: 'yyyy-mm-dd',
+      autoclose: true,
+      todayHighlight: true,
   });      
 });  
 </script> 
-
 @include('common.confirm')
 @endsection
