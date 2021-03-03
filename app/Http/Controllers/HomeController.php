@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Models\User;
 use App\Models\Trainee;
-
+use DB;
 class HomeController extends Controller
 {
     /**
@@ -71,7 +71,12 @@ class HomeController extends Controller
       //$this->pr($traineeCompleted->toArray()); exit();
       $traineeCompletedCount = $traineeCompleted->count();
       //$this->pr($traineeCompletedCount); exit();
-      return view('kessler.admin.dashboard',compact('kessler','kesslerTraineeCount','kesslerInProgressCount', 'kesslerCompletedCount', 'trainer','trainerCount','trainerActiveCount', 'trainerInActiveCount','trainee','traineeCount', 'traineeInProgressCount', 'traineeCompletedCount', 'users'));
+      //$traineeTrainer = Trainee::select('trainer_id',DB::raw('count(trainee_id) AS trainee'))->groupBy('trainer_id')->get();
+      //$traineeTrainer = $traineeTrainer->groupBy('trainer_id');
+      //echo $traineeTrainer[1][0]->trainee;
+      $traineeTrainer = Trainee::select('trainer_id',DB::raw('count(trainee_id) AS trainee'))->groupBy('trainer_id')->pluck('trainee', 'trainer_id');
+      //$this->pr($traineeTrainer->toArray()); //exit();
+      return view('kessler.admin.dashboard',compact('kessler','kesslerTraineeCount','kesslerInProgressCount', 'kesslerCompletedCount', 'trainer','trainerCount','trainerActiveCount', 'trainerInActiveCount','trainee','traineeCount', 'traineeInProgressCount', 'traineeCompletedCount', 'users', 'traineeTrainer'));
     }
 
     public function logout() {
