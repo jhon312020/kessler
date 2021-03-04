@@ -50,7 +50,7 @@ class TraineeController extends Controller
       }
       $trainees = $queryObj->orderBy('id', 'desc')->get();
       $uniqueKesslerTrainees = Trainee::distinct('trainee_id')->orderBy('trainer_id', 'asc')->get();
-      $uniqueTrainerTrainees = Trainee::distinct('trainee_id')->where('trainer_id', $user->id)->orderBy('trainer_id', 'asc')->get();
+      $uniqueTrainerTrainees = Trainee::distinct('trainee_id')->where('trainer_id', $user->id)->get();
       $types = Type::pluck('type', 'id');
       return view('kessler.trainee.index', compact('user', 'trainees', 'types', 'uniqueKesslerTrainees', 'uniqueTrainerTrainees'));
     }
