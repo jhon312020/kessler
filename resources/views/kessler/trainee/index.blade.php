@@ -23,14 +23,26 @@
             <label class="sr-only" for="date">Date</label>
             <input type="text" class="form-control" id="date" name="date" autocomplete="off" placeholder="From Date">
           </div>
+          @if($user->role === "SA")
           <div class="col-sm-3 my-1">
               <label class="sr-only" for="trainee_id">Trainee ID</label>
               <select class="form-control" id="trainee_id" name="trainee_id" autocomplete="off" placeholder="Jane Doe">
-                <option value= '' selected="selected">Trainee ID</option>              @foreach($uniqueTrainees as $trainee)
+                <option value= '' selected="selected">Trainee ID</option>              @foreach($uniqueKesslerTrainees as $trainee)
                 <option value="{{ $trainee->trainee_id }}">{{ $trainee->trainee_id }}</option>
                 @endforeach;
               </select>
           </div>
+          @endif
+          @if($user->role === "TA")
+          <div class="col-sm-3 my-1">
+              <label class="sr-only" for="trainee_id">Trainee ID</label>
+              <select class="form-control" id="trainee_id" name="trainee_id" autocomplete="off" placeholder="Jane Doe">
+                <option value= '' selected="selected">Trainee ID</option>              @foreach($uniqueTrainerTrainees as $trainee)
+                <option value="{{ $trainee->trainee_id }}">{{ $trainee->trainee_id }}</option>
+                @endforeach;
+              </select>
+          </div>
+          @endif
           <div class="col-auto my-1">
             <button type="submit" class="btn btn-primary" id="jsSearch">Submit</button>
           </div>
