@@ -134,6 +134,8 @@ class TraineeController extends Controller
       $trainee = Trainee::find($id);
       $trainee->session_state = $request->get('state');
       if ($trainee->session_state === 'start')  {
+        $trainee->session_start_time = null;
+        $trainee->session_end_time = null;
         $trainee->session_current_position = null;
         $trainee->round = 1;
         $trainee->completed = 0;
