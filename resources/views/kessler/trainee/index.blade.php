@@ -59,7 +59,9 @@
                 <th>Session Pin</th>
                 <th>Session Type</th>
                 <th>Session Number</th>
-                <th>Start time</th>
+                <!-- <th>Session Start Time</th>
+                <th>Session End Time</th> -->
+                <th>State</th>
                 <th width="50%">Actions</th>
               </tr>
             </thead>
@@ -69,6 +71,8 @@
                 <th>Session Pin</th>
                 <th>Session Type</th>
                 <th>Session Number</th>
+                <!-- <th>Session Start Time</th>
+                <th>Session End Time</th> -->
                 <th>State</th>
                 <th width="50%">Actions</th>
               </tr>
@@ -80,6 +84,8 @@
                 <td>{{$trainee->session_pin}}</td>
                 <td>{{$trainee->session_type}}</td>
                 <td>{{$trainee->session_number}}</td>
+                {{-- <td>{{$trainee->session_start_time}}</td>
+                <td>{{$trainee->session_end_time}}</td> --}}
                 @if($trainee->completed === 1)
                 <td>completed</td>
                 @else
