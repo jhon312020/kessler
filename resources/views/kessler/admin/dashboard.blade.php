@@ -10,11 +10,11 @@
          @if($kessler->role === "TA")
         <div class="col-xl-4 col-md-6">
             <div class="card bg-success text-white mb-4">
-                @if($traineeCount)
+                @isset($traineeCount)
                 <div class="card-body">No of Trainees :&emsp;{{$traineeCount}} 
                   <br>Session In Progress :&emsp;{{$traineeInProgressCount}} <br>Session Completed :&emsp;{{$traineeCompletedCount}} 
                 </div>
-                @endif
+                @endisset
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href="{{ url('/trainee')}}">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -26,10 +26,10 @@
         <div class="col-xl-4 col-md-6">
           <div id="viewMoreAccordion">
             <div class="card bg-success text-white mb-4">
-            @if($kesslerTraineeCount)
+            @isset($kesslerTraineeCount)
              <div class="card-body">No of Trainees :&emsp;{{$kesslerTraineeCount}}                <br>Sessions In Progress :&emsp;{{$kesslerInProgressCount}} <br>Sessions Completed :&emsp;{{$kesslerCompletedCount}} <br>
              </div>
-            @endif      
+            @endisset     
               <div class="card-header" id="viewMore">
                 <h6 class="mb-0">
                   <button class="btn btn-link small text-white" data-toggle="collapse" data-target="#viewMoreCollapseOne" aria-expanded="false" aria-controls="viewMoreCollapseOne">View More</button>
@@ -54,11 +54,11 @@
         @if($kessler->role === "SA") 
         <div class="col-xl-4 col-md-6">
             <div class="card bg-primary text-white mb-4">
-                @if($trainerCount)
+                @isset($trainerCount)
                 <div class="card-body">No of Trainers :&emsp;{{$trainerCount}}
                 <br>No of Active :&emsp;{{$trainerActiveCount}} <br>No of Inactive :&emsp;{{$trainerInActiveCount}}
                 </div>
-                @endif
+                @endisset
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href="{{ url('/trainer')}}">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
