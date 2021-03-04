@@ -30,7 +30,7 @@
              <div class="card-body">No of Trainees :&emsp;{{$kesslerTraineeCount}}                <br>Sessions In Progress :&emsp;{{$kesslerInProgressCount}} <br>Sessions Completed :&emsp;{{$kesslerCompletedCount}} <br>
              </div>
             @endif      
-              <div class="card-header h-25" id="viewMore">
+              <div class="card-header" id="viewMore">
                 <h6 class="mb-0">
                   <button class="btn btn-link small text-white" data-toggle="collapse" data-target="#viewMoreCollapseOne" aria-expanded="false" aria-controls="viewMoreCollapseOne">View More</button>
                 </h6>
