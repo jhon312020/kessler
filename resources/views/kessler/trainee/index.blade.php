@@ -59,8 +59,8 @@
                 <th>Session Pin</th>
                 <th>Session Type</th>
                 <th>Session Number</th>
-                <!-- <th>Session Start Time</th>
-                <th>Session End Time</th> -->
+                <th>Session Start Time</th>
+                <th>Session End Time</th>
                 <th>State</th>
                 <th width="50%">Actions</th>
               </tr>
@@ -71,8 +71,8 @@
                 <th>Session Pin</th>
                 <th>Session Type</th>
                 <th>Session Number</th>
-                <!-- <th>Session Start Time</th>
-                <th>Session End Time</th> -->
+                <th>Session Start Time</th>
+                <th>Session End Time</th>
                 <th>State</th>
                 <th width="50%">Actions</th>
               </tr>
@@ -84,35 +84,55 @@
                 <td>{{$trainee->session_pin}}</td>
                 <td>{{$trainee->session_type}}</td>
                 <td>{{$trainee->session_number}}</td>
-                {{-- <td>{{$trainee->session_start_time}}</td>
-                <td>{{$trainee->session_end_time}}</td> --}}
+                 @php
+                   $sessionStartTime = isset($trainee->session_start_time)?json_decode($trainee->session_start_time): null;
+                @endphp
+                @if ($sessionStartTime) 
+                <td>{{date('Y/m/d h:i a', strtotime($sessionStartTime->roundOne))}}</td>
+                @else
+                <td></td>
+                @endif
+                @php
+                  $sessionEndTime = json_decode($trainee->session_end_time)
+                @endphp
+                @if ($sessionEndTime)
+                <td>
+                  @if($sessionEndTime->roundTwo)
+                  {{date('Y/m/d h:i a', strtotime($sessionEndTime->roundTwo))}}
+                  @elseif($sessionEndTime->roundOne)
+                  {{date('Y/m/d h:i a', strtotime($sessionEndTime->roundOne))}}
+                  @endif
+                </td>
+                @else
+                <td></td>
+                @endif 
                 @if($trainee->completed === 1)
                 <td>completed</td>
                 @else
                 <td>{{$trainee->session_state}}</td>
                 @endif
                 <td>
-                   <a href="{{ route('trainee.add', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-plus">&nbsp;</i> Add</a>
+                   <a href="{{ route('trainee.add', $trainee->id)}}" class="btn btn-primary" role="button" title="Add"><i class="fas fa-plus" title="Add">&nbsp;</i></a>
                    @if ($trainee->completed == 0)
-                  <a href="{{ route('trainee.edit', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-edit">&nbsp;</i> Edit</a>
+                  <a href="{{ route('trainee.edit', $trainee->id)}}" class="btn btn-primary" role="button" title="Edit"><i class="fas fa-edit" title="Edit">&nbsp;</i></a>
                    @endif
-                  <a href="{{ url('trainee/view', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-eye">&nbsp;</i> View</a>
+                  <a href="{{ url('trainee/view', $trainee->id)}}" class="btn btn-primary" role="button" title="View"><i class="fas fa-eye" title="View">&nbsp;</i> </a>
                   @if ($trainee->completed == 1)
-                  <a href="{{ url('trainee/report', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-chart-pie">&nbsp;</i> Report</a>
+                  <a href="{{ url('trainee/report', $trainee->id)}}" class="btn btn-primary" role="button" title="Report"><i class="fas fa-chart-pie" title="Report">&nbsp;</i> </a>
                   @endif 
                   @if ($trainee->session_number > 4 && $trainee->session_type == "A")
                     @php
                       $traineeCurrentPosition = json_decode($trainee->session_current_position)
                     @endphp
                     @if ($traineeCurrentPosition && $traineeCurrentPosition->position == 'review') 
-                      <a href="{{ url('trainee/approve', $trainee->id)}}" class="btn btn-primary" role="button"><i class="fas fa-book">&nbsp;</i> Approve</a>
+                      <a href="{{ url('trainee/approve', $trainee->id)}}" class="btn btn-primary" role="button" title="Approve"><i class="fas fa-book" title="Approve">&nbsp;</i></a>
                     @endif
                   @endif
                   <form action="{{ route('trainee.destroy', $trainee->id)}}" method="post" class="d-inline" id="jsSubmitForm-{{ $trainee->id }}">
                     @csrf
                     @method('DELETE')
                     @if ($trainee->completed == 0)
-                    <button class="btn btn-danger jsConfirmButton" type="button" data-value="{{ $trainee->id }}"><i class="fa fa-trash">&nbsp;</i> Delete</button>         
+                    <button class="btn btn-danger jsConfirmButton" type="button" data-value="{{ $trainee->id }}" title="Delete"><i class="fa fa-trash" title="Delete">&nbsp;</i> </button>         
                     @endif
                   </form>
                 </td>
