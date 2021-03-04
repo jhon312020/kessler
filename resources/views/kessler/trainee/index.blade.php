@@ -21,11 +21,11 @@
         <div class="form-row align-items-center">
           <div class="col-sm-3 my-1">
             <label class="sr-only" for="date">Date</label>
-            <input type="text" class="form-control" id="date" name="date" placeholder="From Date">
+            <input type="text" class="form-control" id="date" name="date" autocomplete="off" placeholder="From Date">
           </div>
           <div class="col-sm-3 my-1">
               <label class="sr-only" for="trainee_id">Trainee ID</label>
-              <select class="form-control" id="trainee_id" name="trainee_id" placeholder="Jane Doe">
+              <select class="form-control" id="trainee_id" name="trainee_id" autocomplete="off" placeholder="Jane Doe">
                 <option value= '' selected="selected">Trainee ID</option>              @foreach($uniqueTrainees as $trainee)
                 <option value="{{ $trainee->trainee_id }}">{{ $trainee->trainee_id }}</option>
                 @endforeach;
