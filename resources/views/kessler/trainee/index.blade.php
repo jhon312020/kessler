@@ -36,7 +36,7 @@
           @if($user->role === "TA")
           <div class="col-sm-3 my-1">
               <label class="sr-only" for="trainee_id">Trainee ID</label>
-              <select class="form-control" id="trainee_id" name="trainee_id" autocomplete="off" placeholder="Trainer ID">
+              <select class="form-control" id="trainee_id" name="trainee_id" autocomplete="off" placeholder="Trainee ID">
                 <option value= '' selected="selected">Trainee ID</option>              @foreach($uniqueTrainerTrainees as $trainee)
                 <option value="{{ $trainee->trainee_id }}">{{ $trainee->trainee_id }}</option>
                 @endforeach;
