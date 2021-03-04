@@ -38,7 +38,7 @@
               <label class="sr-only" for="trainee_id">Trainee ID</label>
               <select class="form-control" id="trainee_id" name="trainee_id" autocomplete="off" placeholder="Trainee ID">
                 <option value= '' selected="selected">Trainee ID</option>              @foreach($uniqueTrainerTrainees as $trainee)
-                <option value="{{ $trainee->trainee_id }}">{{ $trainee->trainee_id }}</option>
+                <option value="{{ $trainee->trainee_id }}" @if(old('trainee_id')  == $trainee->trainee_id) selected="selected" @endif>{{ $trainee->trainee_id }}</option>
                 @endforeach;
               </select>
           </div>
