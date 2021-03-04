@@ -21,7 +21,7 @@
         <div class="form-row align-items-center">
           <div class="col-sm-3 my-1">
             <label class="sr-only" for="date">Date</label>
-            <input type="text" class="form-control" id="date" name="date" autocomplete="off" placeholder="From Date">
+            <input type="text" class="form-control" id="date" name="date" autocomplete="off" placeholder="Date">
           </div>
           @if($user->role === "SA")
           <div class="col-sm-3 my-1">
