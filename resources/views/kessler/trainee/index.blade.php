@@ -14,13 +14,14 @@
         Trainee Information  <a href="{{ route('trainee.create')}}" class="btn btn-primary btn-block bg-gradient-primary float-right" style="width: fit-content; margin-left: 25px;"><i class="fas fa-plus">&nbsp;</i> Add Trainee</a>
       </div>
       <div class="card-body">
-      <form>
+      <form method="get" action="{{ url('/trainee') }}">
+      @csrf
         <div class="form-group">
           <label for="search">Search by Date and Trainee ID</label>
         <div class="form-row align-items-center">
           <div class="col-sm-3 my-1">
             <label class="sr-only" for="date">Date</label>
-            <input type="text" class="form-control" id="start_date" name="start_date" placeholder="Date">
+            <input type="text" class="form-control" id="date" name="date" placeholder="From Date">
           </div>
           <div class="col-sm-3 my-1">
               <label class="sr-only" for="trainee_id">Trainee ID</label>
@@ -31,7 +32,7 @@
               </select>
           </div>
           <div class="col-auto my-1">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary" id="jsSearch">Submit</button>
           </div>
       </div>
       </div>
@@ -46,7 +47,7 @@
                 <th>Session Pin</th>
                 <th>Session Type</th>
                 <th>Session Number</th>
-                <th>State</th>
+                <th>Start time</th>
                 <th width="50%">Actions</th>
               </tr>
             </thead>
@@ -56,7 +57,7 @@
                 <th>Session Pin</th>
                 <th>Session Type</th>
                 <th>Session Number</th>
-                <th>Start Date</th>
+                <th>State</th>
                 <th width="50%">Actions</th>
               </tr>
             </tfoot>
@@ -114,11 +115,11 @@
   </div>
 <script type="text/javascript">
 $(document).ready(function() {     
-  $("#start_date").datepicker({        
+  $("#date").datepicker({        
       format: 'yyyy-mm-dd',
       autoclose: true,
       todayHighlight: true,
-  });      
+  });     
 });  
 </script> 
 @include('common.confirm')
