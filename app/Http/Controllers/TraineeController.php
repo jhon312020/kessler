@@ -37,7 +37,9 @@ class TraineeController extends Controller
     public function index(Request $request) {
       $user = Auth::user();
       $trainee_id = null;
+      $oldDate = null;
       $trainee_id = $request->get('trainee_id');
+      $oldDate = $request->get('oldDate');
       $date = $request->get('date');
       $queryObj = Trainee::select('id', 'trainee_id','session_pin', 'session_type', 'session_number', 'session_current_position', 'session_start_time', 'session_end_time', 'session_state','completed', 'created_at');
       if ($user->role != "SA") {
@@ -54,7 +56,7 @@ class TraineeController extends Controller
       }
       $trainees = $queryObj->orderBy('id', 'desc')->get();
       $types = Type::pluck('type', 'id');
-      return view('kessler.trainee.index', compact('user', 'trainees', 'types', 'traineesOfTrainer', 'trainee_id'));
+      return view('kessler.trainee.index', compact('user', 'trainees', 'types', 'traineesOfTrainer', 'trainee_id', 'oldDate'));
     }
 
     /**

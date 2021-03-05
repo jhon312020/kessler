@@ -14,14 +14,14 @@
         View Details of Trainee Information  <a href="{{ route('trainee.create')}}" class="btn btn-primary btn-block bg-gradient-primary float-right" style="width: fit-content; margin-left: 25px;"><i class="fas fa-plus">&nbsp;</i> Add Trainee</a>
       </div>
       <div class="card-body">
-      <form method="get" action="{{ url('/trainee') }}">
+      <form method="get" action="{{ url('/trainee') }}" id="jsSearchForm">
       @csrf
         <div class="form-group">
           <label for="search">Search by Date and Trainee ID</label>
         <div class="form-row align-items-center">
           <div class="col-sm-3 my-1">
             <label class="sr-only" for="date">Date</label>
-            <input type="text" class="form-control" id="date" name="date" autocomplete="off" placeholder="Date">
+            <input type="text" class="form-control" id="date" name="date" autocomplete="off" placeholder="Date" value="{{ (isset($oldDate)) ? $oldDate : '' }}">
           </div>
           <div class="col-sm-3 my-1">
               <label class="sr-only" for="trainee_id">Trainee ID</label>
@@ -31,6 +31,7 @@
                 @endforeach;
               </select>
           </div>
+          <input type="hidden" name="oldDate" id="oldDate" value="">
           <div class="col-auto my-1">
             <button type="submit" class="btn btn-primary" id="jsSearch">Submit</button>
           </div>
@@ -140,7 +141,12 @@
     </div>
   </div>
 <script type="text/javascript">
-$(document).ready(function() {     
+$(document).ready(function() {
+ $("#jsSearch").on('click', function() {
+  var date = $("#date").val();
+  $("#oldDate").val(date);
+  $("#jsSearchForm").submit();
+  });
   $("#date").datepicker({        
       format: 'yyyy-mm-dd',
       autoclose: true,
