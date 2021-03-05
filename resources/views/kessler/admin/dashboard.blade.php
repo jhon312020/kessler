@@ -33,7 +33,7 @@
                <div class="card-body">
                 @foreach($users as $user)
                   @if(isset($traineeTrainer[$user->id]) && isset($traineeTrainerCompleted[$user->id]) && isset($traineeTrainerInProgress[$user->id]))
-                    {{$user->name}} has {{ $traineeTrainer[$user->id] }} trainees where {{ $traineeTrainerCompleted[$user->id]}} are completed and {{ $traineeTrainerInProgress[$user->id]}} are in progress  <br>
+                    {{$user->name}} has {{ $traineeTrainer[$user->id] }} trainees. &emsp; Sessions Completed: {{ $traineeTrainerCompleted[$user->id]}} &emsp; Sessions In Progress: {{ $traineeTrainerInProgress[$user->id]}}
                   @endif
                 @endforeach
                </div>              
