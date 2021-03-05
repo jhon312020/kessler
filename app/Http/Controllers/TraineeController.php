@@ -36,11 +36,15 @@ class TraineeController extends Controller
      */
     public function index(Request $request) {
       $user = Auth::user();
+      $trainee_id = null;
       $trainee_id = $request->get('trainee_id');
       $date = $request->get('date');
       $queryObj = Trainee::select('id', 'trainee_id','session_pin', 'session_type', 'session_number', 'session_current_position', 'session_start_time', 'session_end_time', 'session_state','completed', 'created_at');
       if ($user->role != "SA") {
         $queryObj = $queryObj->where('trainer_id', $user->id);
+        $traineesOfTrainer = Trainee::select('trainee_id')->distinct('trainee_id')->where('trainer_id', $user->id)->groupBy('trainee_id')->get();
+      } else {
+        $traineesOfTrainer = Trainee::select('trainee_id')->distinct('trainee_id')->groupBy('trainee_id')->get();
       }
       if ($date != '') {
         $queryObj = $queryObj->whereDate('created_at', $date);
@@ -49,10 +53,8 @@ class TraineeController extends Controller
         $queryObj = $queryObj->where('trainee_id', $trainee_id);
       }
       $trainees = $queryObj->orderBy('id', 'desc')->get();
-      $uniqueKesslerTrainees = Trainee::select('trainee_id')->distinct('trainee_id')->groupBy('trainee_id')->get();
-      $uniqueTrainerTrainees = Trainee::select('trainee_id')->distinct('trainee_id')->where('trainer_id', $user->id)->groupBy('trainee_id')->get();
       $types = Type::pluck('type', 'id');
-      return view('kessler.trainee.index', compact('user', 'trainees', 'types', 'uniqueKesslerTrainees', 'uniqueTrainerTrainees'));
+      return view('kessler.trainee.index', compact('user', 'trainees', 'types', 'traineesOfTrainer', 'trainee_id'));
     }
 
     /**
