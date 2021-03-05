@@ -77,7 +77,7 @@
                    $sessionStartTime = isset($trainee->session_start_time)?json_decode($trainee->session_start_time): null;
                 @endphp
                 @if ($sessionStartTime) 
-                <td>{{date('Y/m/d h:i a', strtotime($sessionStartTime->roundOne))}}</td>
+                <td>{{date('m/d/Y h:i a', strtotime($sessionStartTime->roundOne))}}</td>
                 @else
                 <td></td>
                 @endif
@@ -87,9 +87,9 @@
                 @if ($sessionEndTime)
                 <td>
                   @if($sessionEndTime->roundTwo)
-                  {{date('Y/m/d h:i a', strtotime($sessionEndTime->roundTwo))}}
+                  {{date('m/d/Y h:i a', strtotime($sessionEndTime->roundTwo))}}
                   @elseif($sessionEndTime->roundOne)
-                  {{date('Y/m/d h:i a', strtotime($sessionEndTime->roundOne))}}
+                  {{date('m/d/Y h:i a', strtotime($sessionEndTime->roundOne))}}
                   @endif
                 </td>
                 @else
@@ -148,7 +148,7 @@ $(document).ready(function() {
   $("#jsSearchForm").submit();
   });
   $("#date").datepicker({        
-      format: 'yyyy-mm-dd',
+      //format: 'yyyy-mm-dd',
       autoclose: true,
       todayHighlight: true,
   });     
