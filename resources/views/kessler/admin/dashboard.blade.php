@@ -8,7 +8,7 @@
     </ol>
     <div class="row">
          @if($kessler->role === "TA")
-        <div class="col-xl-4 col-md-6">
+        <div class="col-xl-6 col-md-6">
             <div class="card bg-success text-white mb-4">
                 @isset($traineeCount)
                 <div class="card-body">No of Trainees :&emsp;{{$traineeCount}} 
@@ -23,7 +23,7 @@
         </div>
         @endif
         @if($kessler->role === "SA")
-        <div class="col-xl-4 col-md-6">
+        <div class="col-xl-8 col-md-6">
           <div id="viewMoreAccordion">
             <div class="card bg-success text-white mb-4">
             @isset($kesslerTraineeCount)
