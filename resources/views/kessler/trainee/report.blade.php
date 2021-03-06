@@ -20,7 +20,12 @@
 	        <div class="card mb-4">
 	            <div class="card-header">
 	                <i class="fas fa-chart-pie mr-1"></i>
-	            Round One
+              @php
+                  $sessionStartTime = json_decode($startTime);
+                  $sessionEndTime = json_decode($endTime);
+              @endphp
+              Round One  <p>Start Time: {{ date('m/d/Y h:i a', strtotime($sessionStartTime->roundOne)) }}
+	             &emsp; End Time: {{ date('m/d/Y h:i a', strtotime($sessionEndTime->roundOne)) }}</p>
 	            </div>
 	            <div class="card-body"><canvas id="jsPieChartOne" width="100%" height="50"></canvas></div>
 	            <div class="card-footer small text-muted text-center">Time Taken : {{ $roundOneTotalTime }}</div>
@@ -30,7 +35,13 @@
           <div class="card mb-4">
               <div class="card-header">
                   <i class="fas fa-chart-pie mr-1"></i>
-              Round Two
+              @php
+                  $sessionStartTime = json_decode($startTime);
+                  $sessionEndTime = json_decode($endTime);
+              @endphp
+              Round Two  <p>Start Time: {{ date('m/d/Y h:i a', strtotime($sessionStartTime->roundTwo)) }}
+               &emsp; End Time: {{ date('m/d/Y h:i a', strtotime($sessionEndTime->roundTwo)) }}</p>
+               
               </div>
               <div class="card-body"><canvas id="jsPieChartTwo" width="100%" height="50"></canvas></div>
               <div class="card-footer small text-muted text-center">Time Taken : {{ $roundTwoTotalTime }}</div>
@@ -40,7 +51,12 @@
           <div class="card mb-4">
               <div class="card-header">
                   <i class="fas fa-chart-pie mr-1"></i>
-              Overall Report
+              @php
+                  $sessionStartTime = json_decode($startTime);
+                  $sessionEndTime = json_decode($endTime);
+              @endphp
+              Overall Report  <p>Start Time: {{ date('m/d/Y h:i a', strtotime($sessionStartTime->roundOne)) }}
+               &emsp; End Time: {{ date('m/d/Y h:i a', strtotime($sessionEndTime->roundTwo)) }}</p>
               </div>
               <div class="card-body"><canvas id="jsPieChart" width="100%" height="50"></canvas></div>
               <div class="card-footer small text-muted text-center">Time Taken : {{ $overallTotalTime }}</div>

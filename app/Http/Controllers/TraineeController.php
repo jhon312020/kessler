@@ -11,6 +11,7 @@ use App\Models\Word;
 use App\Models\Type;
 use App\Models\Booster;
 use Auth;
+//use Carbon\Carbon;
 
 class TraineeController extends Controller
 {
@@ -39,9 +40,16 @@ class TraineeController extends Controller
       $trainee_id = null;
       $oldDate = null;
       $trainee_id = $request->get('trainee_id');
+      //$date = Carbon::parse($oldDate)->format('m/d/Y');
       $oldDate = $request->get('oldDate');
       $date = $request->get('date');
-      $queryObj = Trainee::select('id', 'trainee_id','session_pin', 'session_type', 'session_number', 'session_current_position', 'session_start_time', 'session_end_time', 'session_state','completed', 'created_at');
+      //$oldDate = date('m-d-Y', strtotime($request->get('oldDate')));
+      //$date = date('m-d-Y', strtotime($request->get('date')));
+      //$date = date('m/d/Y');
+      //$oldDate = date('m/d/Y');
+      //$this->pr($oldDate);
+      //$this->pr($date); exit();
+      $queryObj = Trainee::select('id', 'trainee_id','session_pin', 'session_type', 'session_number', 'session_current_position', 'session_start_time', 'session_end_time', 'session_state','completed');
       if ($user->role != "SA") {
         $queryObj = $queryObj->where('trainer_id', $user->id);
         $traineesOfTrainer = Trainee::select('trainee_id')->distinct('trainee_id')->where('trainer_id', $user->id)->groupBy('trainee_id')->get();
@@ -396,10 +404,15 @@ class TraineeController extends Controller
      */
     public function report($id) {
       $trainee = Trainee::find($id);
-      $traineeReport = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed')->where('id', $trainee->id)->first();
+      $traineeReport = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed','session_start_time', 'session_end_time')->where('id', $trainee->id)->first();
+      //$this->pr($traineeReport->toArray()); exit();
       $traineeID = $traineeReport->trainee_id;
       $sessionNumber = $traineeReport->session_number;
       $round = $traineeReport->round;
+      $startTime = $traineeReport->session_start_time;
+      //$this->pr($startTime); exit();
+      $endTime = $traineeReport->session_end_time;
+      //$this->pr($endTime); exit();
       $queryObj = TraineeTransaction::select('id', 'word_id', 'trainee_id', 'session_pin', 'type', 'answer', 'correct_or_wrong','round','time_taken')->where('trainee_id', $trainee->trainee_id)->where('session_pin', $trainee->session_pin);
       if ($trainee->round > 1) {
           $roundOneReport = with(clone $queryObj)->where('round', '=', '1')->get();
@@ -452,6 +465,6 @@ class TraineeController extends Controller
             $timeOverall = with(clone $queryObj);
             $overallTotal = $timeOverall->sum('time_taken');
             $overallTotalTime = gmdate('i', $overallTotal)." mins : ".gmdate('s', $overallTotal)." sec";
-            return view('kessler.trainee.report', compact('sessionNumber','traineeID', 'contextualRoundOneCount','categoricalRoundOneCount', 'recallRoundOneCount','contextualRoundTwoCount','categoricalRoundTwoCount', 'recallRoundTwoCount', 'recallOverallCount', 'contextualOverallCount', 'categoricalOverallCount', 'roundOneTotalTime', 'roundTwoTotalTime', 'overallTotalTime'));
+            return view('kessler.trainee.report', compact('sessionNumber','traineeID', 'contextualRoundOneCount','categoricalRoundOneCount', 'recallRoundOneCount','contextualRoundTwoCount','categoricalRoundTwoCount', 'recallRoundTwoCount', 'recallOverallCount', 'contextualOverallCount', 'categoricalOverallCount', 'roundOneTotalTime', 'roundTwoTotalTime', 'overallTotalTime','startTime', 'endTime'));
     }
 }
