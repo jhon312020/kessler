@@ -32,8 +32,8 @@
              <div id="viewMoreCollapseOne" class="collapse" aria-labelledby="viewMore" data-parent="#viewMoreAccordion">
                <div class="card-body">
                 @foreach($users as $user)
-                  @if(isset($traineeTrainer[$user->id]) && isset($traineeTrainerCompleted[$user->id]) && isset($traineeTrainerInProgress[$user->id]))
-                    {{$user->name}} has {{ $traineeTrainer[$user->id] }} trainees. &emsp; Sessions Completed: {{ $traineeTrainerCompleted[$user->id]}} &emsp; Sessions In Progress: {{ $traineeTrainerInProgress[$user->id]}}
+                  @if(isset($traineeTrainer[$user->id]) && (isset($traineeTrainerCompleted[$user->id]) || isset($traineeTrainerInProgress[$user->id])))
+                    {{$user->name}} has {{ $traineeTrainer[$user->id] }} trainees. &emsp; Sessions Completed: {{ isset($traineeTrainerCompleted[$user->id]) ? $traineeTrainerCompleted[$user->id]: 0}} &emsp; Sessions In Progress: {{ isset($traineeTrainerInProgress[$user->id]) ? $traineeTrainerInProgress[$user->id] : 0}}
                   @endif
                 @endforeach
                </div>              
