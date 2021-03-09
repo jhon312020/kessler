@@ -24,6 +24,7 @@ class TraineeController extends Controller
     var $boosterRange = array();
     var $user = null;
     public function __construct() {
+      $this->middleware('auth');
       parent::__construct();
       $this->totalSessions = range(1, 10);
       $this->boosterRange = range(1, 3);
@@ -43,12 +44,18 @@ class TraineeController extends Controller
       //$date = Carbon::parse($oldDate)->format('m/d/Y');
       $oldDate = $request->get('oldDate');
       $date = $request->get('date');
-      //$oldDate = date('m-d-Y', strtotime($request->get('oldDate')));
-      //$date = date('m-d-Y', strtotime($request->get('date')));
+      //echo $oldDate; echo $date; //exit();
+      //echo date('m-d-Y', strtotime(''));
+      //echo '<br/>';
+      //echo $oldDate = date('m-d-Y', strtotime($request->get('oldDate')));
+      //if (isset($request->date) && $request->date) {
+        //echo $date = date('m-d-Y', strtotime($request->get('date')));
+      //}      
+     //exit;
       //$date = date('m/d/Y');
       //$oldDate = date('m/d/Y');
       //$this->pr($oldDate);
-      //$this->pr($date); exit();
+      //$this->pr($date); //exit();
       $queryObj = Trainee::select('id', 'trainee_id','session_pin', 'session_type', 'session_number', 'session_current_position', 'session_start_time', 'session_end_time', 'session_state','completed');
       if ($user->role != "SA") {
         $queryObj = $queryObj->where('trainer_id', $user->id);

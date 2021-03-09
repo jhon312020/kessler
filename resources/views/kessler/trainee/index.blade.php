@@ -148,8 +148,9 @@ $(document).ready(function() {
   $("#jsSearchForm").submit();
   });
   $("#date").datepicker({        
-      format: 'yyyy-mm-dd',
-      //dateFormat: 'mm-dd-yy',
+      //format: 'yyyy-mm-dd',
+      //format: 'mm-dd-yyyy',
+      dateFormat: 'mm-dd-yyyy',
       autoclose: true,
       todayHighlight: true,
   });     
