@@ -41,7 +41,7 @@
     </div>
       <div class="card-body">
         <div class="table-responsive text-justify">
-          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <table class="table table-bordered" id="traineeDataTable" width="100%" cellspacing="0">
             <thead>
               <tr>
                 <th>Trainee ID</th>
@@ -153,6 +153,29 @@ $(document).ready(function() {
       dateFormat: 'mm-dd-yyyy',
       autoclose: true,
       todayHighlight: true,
+  });
+  $('#traineeDataTable').DataTable({
+    "pageLength": 10, 
+    "ordering": false,
+    //"processing": true,
+    //"serverSide": true,
+    // "ajax": "{{ url('trainee') }}",
+    // "columns": [
+    //     { "data": "trainee_id" },
+    //     { "data": "session_pin" },
+    //     { "data": "session_type" },
+    //     { "data": "session_number" },
+    //     { "data": "session_start_time" },
+    //     { "data": "session_end_time" },
+    //     { "data": "session_state" },
+    // ],
+    // "ajax": {
+    //   "url": "{{ url('trainee') }}",
+    //   "method": "GET",
+    //   success : function() {
+    //         $("#traineeDataTable").html(data.title);
+    //       }
+    // }
   });     
 });  
 </script> 
