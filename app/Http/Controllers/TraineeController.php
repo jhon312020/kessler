@@ -140,7 +140,7 @@ class TraineeController extends Controller
           $state = $request->get('state');
           return view('kessler.trainee.edit', compact('trainee','state'));
         } else {
-          abort(403, 'UNAUTHORIZED ACTION');
+          return view('errors.404');
         }
     } 
 
@@ -186,7 +186,7 @@ class TraineeController extends Controller
         $trainee->delete();
         return redirect('/trainee')->with('success', 'Trainee has been deleted succesfully!');
       } else {
-          abort(403, 'UNAUTHORIZED ACTION');
+          return view('errors.404');
         }
     }
 
@@ -285,7 +285,7 @@ class TraineeController extends Controller
         //exit;
         return view('kessler.trainee.view')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords','traineeID','sessionNumber', 'roundOneTimeTaken', 'roundTwoTimeTaken', 'sessionTime'));
         } else {
-           abort(403, 'UNAUTHORIZED ACTION');
+           return view('errors.404');
         }
       
     }
@@ -344,7 +344,7 @@ class TraineeController extends Controller
         $traineeStory = TraineeStory::select('id', 'trainee_id', 'story_id', 'session_pin', 'original_story','round')->where('story_id', $trainee->session_number)->where('session_pin', $trainee->session_pin)->where('round', $trainee->round)->first();
         return view('kessler.trainee.approve', compact('traineeStory'));
       } else {
-        abort(403, 'UNAUTHORIZED ACTION');
+        return view('errors.404');
       }
     }
 
@@ -425,7 +425,7 @@ class TraineeController extends Controller
         $booster = Booster::all();
         return view('kessler.trainee.add', compact('trainee', 'totalSessions', 'boosterRange' ,'types','booster'));
       } else {
-          abort(403, 'UNAUTHORIZED ACTION');
+          return view('errors.404');
         }
       
     }
@@ -502,7 +502,7 @@ class TraineeController extends Controller
             $overallTotalTime = gmdate('i', $overallTotal)." mins : ".gmdate('s', $overallTotal)." sec";
             return view('kessler.trainee.report', compact('sessionNumber','traineeID', 'contextualRoundOneCount','categoricalRoundOneCount', 'recallRoundOneCount','contextualRoundTwoCount','categoricalRoundTwoCount', 'recallRoundTwoCount', 'recallOverallCount', 'contextualOverallCount', 'categoricalOverallCount', 'roundOneTotalTime', 'roundTwoTotalTime', 'overallTotalTime','startTime', 'endTime'));
           } else {
-            abort(403, 'UNAUTHORIZED ACTION');
+            return view('errors.404');
           }
       
     }
