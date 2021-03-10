@@ -81,11 +81,10 @@ class TraineeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getTrainee(Request $request) {
-        $queryObj = Trainee::select('id', 'trainee_id','session_pin', 'session_type', 'session_number', 'session_current_position', 'session_start_time', 'session_end_time', 'session_state','completed');
-
-        $trainees = $queryObj->get();
+        $trainees = Trainee::select('id', 'trainee_id','session_pin', 'session_type', 'session_number', 'session_current_position', 'session_start_time', 'session_end_time', 'session_state','completed')->get();
         $rowperpage = $request->get("traineeDataTable_length"); // Rows display per page
         $totalRecords = $trainees->count();
+
         $data_arr =  array();
         foreach ($trainees as $records) {
           $trainee_id = $records->trainee_id;
@@ -94,6 +93,7 @@ class TraineeController extends Controller
           $session_number = $records->session_number;
           $session_start_time = $records->session_start_time;
           $session_end_time = $records->session_end_time;
+
           $session_state = $records->session_state;
 
           $data_arr[] = array(
@@ -104,10 +104,11 @@ class TraineeController extends Controller
           "session_start_time" => $session_start_time,
           "session_end_time" => $session_end_time,
           "session_state" => $session_state,
-          null
+          //"action" => $action,
           );
         }
           $response = array(
+            "totalRecords" => $totalRecords,
             "data" => $data_arr
           );
           echo json_encode($response);

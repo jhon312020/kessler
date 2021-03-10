@@ -36,13 +36,13 @@ use App\Http\Controllers\ToDoController;
 Auth::routes();
 Route::get('/logout', [HomeController::class, 'logout']);
 Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
-
+Route::get('/trainee/getTrainee', [TraineeController::class, 'getTrainee'])->name('trainee.getTrainee');
 // ---------------------------------------- ./ ADMIN ----------------------------------------------------------- //
 //Trainer Admin
 Route::group(['middleware' => 'auth'], function() {
   Route::resource('/trainee', TraineeController::class);
 	Route::get('/trainee/view/{id}', [TraineeController::class, 'view']);
-	Route::get('/trainee/getTrainee', [TraineeController::class, 'getTrainee'])->name('trainee.getTrainee');
+	//Route::get('/trainee/getTrainee', [TraineeController::class, 'getTrainee'])->name('trainee.getTrainee');
 	Route::post('/trainee/add/{id}', [TraineeController::class, 'add'])->name('trainee.add');
 	Route::get('/trainee/add/{id}', [TraineeController::class, 'add']);
 	Route::get('/trainee/report/{id}', [TraineeController::class, 'report']);

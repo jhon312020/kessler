@@ -66,7 +66,7 @@
                 <th width="50%">Actions</th>
               </tr>
             </tfoot>
-            <tbody>
+            {{-- <tbody>
               @foreach($trainees as $trainee)
               <tr>
                 <td>{{$trainee->trainee_id}}</td>
@@ -127,7 +127,7 @@
                 </td>
               </tr>
                @endforeach
-            </tbody>
+            </tbody> --}}
           </table>
           <div>
             @if(session()->get('success'))
@@ -168,7 +168,7 @@ $(document).ready(function() {
         { data: "session_start_time" },
         { data: "session_end_time" },
         { data: "session_state" },
-        { data: null },
+        { data: "actions" },
     ]
   });     
 });  
