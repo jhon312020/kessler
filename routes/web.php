@@ -42,6 +42,7 @@ Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 Route::group(['middleware' => 'auth'], function() {
   Route::resource('/trainee', TraineeController::class);
 	Route::get('/trainee/view/{id}', [TraineeController::class, 'view']);
+	Route::get('/trainee/getTrainee', [TraineeController::class, 'getTrainee'])->name('trainee.getTrainee');
 	Route::post('/trainee/add/{id}', [TraineeController::class, 'add'])->name('trainee.add');
 	Route::get('/trainee/add/{id}', [TraineeController::class, 'add']);
 	Route::get('/trainee/report/{id}', [TraineeController::class, 'report']);
@@ -51,7 +52,6 @@ Route::group(['middleware' => 'auth'], function() {
 });
 //Super Admin Role
 Route::group(['middleware' => 'App\Http\Middleware\SuperAdminMiddleware'], function() {
-
 	Route::resource('/trainer', TrainerController::class);
 	Route::post('/trainer/status/{id}', [TrainerController::class, 'status'])->name('trainer.status');
 	Route::resource('/overview', OverviewController::class);

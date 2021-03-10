@@ -155,27 +155,21 @@ $(document).ready(function() {
       todayHighlight: true,
   });
   $('#traineeDataTable').DataTable({
-    "pageLength": 10, 
-    "ordering": false,
-    //"processing": true,
-    //"serverSide": true,
-    // "ajax": "{{ url('trainee') }}",
-    // "columns": [
-    //     { "data": "trainee_id" },
-    //     { "data": "session_pin" },
-    //     { "data": "session_type" },
-    //     { "data": "session_number" },
-    //     { "data": "session_start_time" },
-    //     { "data": "session_end_time" },
-    //     { "data": "session_state" },
-    // ],
-    // "ajax": {
-    //   "url": "{{ url('trainee') }}",
-    //   "method": "GET",
-    //   success : function() {
-    //         $("#traineeDataTable").html(data.title);
-    //       }
-    // }
+    pageLength: 10, 
+    ordering: false,
+    processing: true,
+    serverSide: true,
+    ajax: "{{ route('trainee.getTrainee') }}",
+    columns: [
+        { data: "trainee_id" },
+        { data: "session_pin" },
+        { data: "session_type" },
+        { data: "session_number" },
+        { data: "session_start_time" },
+        { data: "session_end_time" },
+        { data: "session_state" },
+        { data: null },
+    ]
   });     
 });  
 </script> 

@@ -74,6 +74,47 @@ class TraineeController extends Controller
       return view('kessler.trainee.index', compact('user', 'trainees', 'types', 'traineesOfTrainer', 'trainee_id', 'oldDate'));
     }
 
+
+    /**
+     * View table via datatable AJAX.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getTrainee(Request $request) {
+        $queryObj = Trainee::select('id', 'trainee_id','session_pin', 'session_type', 'session_number', 'session_current_position', 'session_start_time', 'session_end_time', 'session_state','completed');
+
+        $trainees = $queryObj->get();
+        $rowperpage = $request->get("traineeDataTable_length"); // Rows display per page
+        $totalRecords = $trainees->count();
+        $data_arr =  array();
+        foreach ($trainees as $records) {
+          $trainee_id = $records->trainee_id;
+          $session_pin = $records->session_pin;
+          $session_type = $records->session_type;
+          $session_number = $records->session_number;
+          $session_start_time = $records->session_start_time;
+          $session_end_time = $records->session_end_time;
+          $session_state = $records->session_state;
+
+          $data_arr[] = array(
+          "trainee_id" => $trainee_id,
+          "session_pin" => $session_pin,
+          "session_type" => $session_type,
+          "session_number" => $session_number,
+          "session_start_time" => $session_start_time,
+          "session_end_time" => $session_end_time,
+          "session_state" => $session_state,
+          null
+          );
+        }
+          $response = array(
+            "data" => $data_arr
+          );
+          echo json_encode($response);
+          exit;
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
