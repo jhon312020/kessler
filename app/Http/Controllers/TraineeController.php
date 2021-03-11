@@ -87,18 +87,23 @@ class TraineeController extends Controller
         $trainees = $trainee->get();
         $rowperpage = $request->get("traineeDataTable_length"); // Rows display per page
         $totalRecords = $trainees->count();
-        $record = $trainees->where('session_pin', $request->session_pin)->where('completed', 0)->first();
+        $record = $trainee->where('session_pin', $request->session_pin)->where('completed', 0)->first();
         $session_start_time = '';
         $session_end_time = '';
-        $sessionStartTime = json_decode($record->session_start_time);
-        $sessionEndTime = json_decode($record->session_end_time);
+        $sessionStartTime = isset($record->session_start_time)?json_decode($record->session_start_time): null;
+        $sessionEndTime = isset($record->session_end_time)?json_decode($record->session_end_time): null;
+      
+          if ($sessionStartTime) {
+              $session_start_time =  date('m/d/Y h:i a', strtotime($sessionStartTime->roundOne));
+          }
+            if ($sessionEndTime) {
+              //$session_end_time =  date('m/d/Y h:i a', strtotime($sessionEndTime->roundOne));
+              $session_end_time =  date('m/d/Y h:i a', strtotime($sessionEndTime->roundTwo));
+            } 
+            // else {
+            //   $session_end_time =  date('m/d/Y h:i a', strtotime($sessionEndTime->roundTwo));
+            // }
 
-        if ($trainees->round === 1) {
-          $session_start_time =  date('m/d/Y h:i a', strtotime($sessionStartTime->roundOne));
-          $session_end_time =  date('m/d/Y h:i a', strtotime($sessionEndTime->roundOne));
-        } else {
-          $session_end_time =  date('m/d/Y h:i a', strtotime($sessionEndTime->roundTwo));
-        }
         $data_arr =  array();
         //$action = "<a href='.route('trainee.add', $trainee->id)' class='btn btn-primary' role='button' title='Add'><i class='fas fa-plus' title='Add'>&nbsp;</i></a> " + "<a href='.route('trainee.edit', $trainee->id)' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'>&nbsp;</i></a>" + "<a href='.url('trainee/view', $trainee->id)' class='btn btn-primary' role='button' title='View'><i class='fas fa-eye' title='View'>&nbsp;</i></a>" + "<a href='.url('trainee/report', $trainee->id)' class='btn btn-primary' role='button' title='Report'><i class='fas fa-chart-pie' title='Report'>&nbsp;</i></a>" + "<a href='url('trainee/approve', $trainee->id)' class='btn btn-primary' role='button' title='Approve'><i class='fas fa-book' title='Approve'>&nbsp;</i></a>";
         foreach ($trainees as $records) {
@@ -108,6 +113,8 @@ class TraineeController extends Controller
           $session_number = $records->session_number;
           $session_start_time = $session_start_time;
           $session_end_time = $session_end_time;
+          // $session_start_time = $records->session_start_time;
+          // $session_end_time = $records->session_end_time;
           $session_state = $records->session_state;
 
           $data_arr[] = array(
