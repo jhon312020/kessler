@@ -83,17 +83,9 @@ class TraineeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getTrainee(Request $request) {
-        //$trainee = Trainee::select('id', 'trainee_id','session_pin', 'session_type', 'session_number', 'session_current_position', 'session_start_time', 'session_end_time', 'session_state','completed', 'round');
-        //$trainees = $trainee->get();
-        //$totalRecords = $trainees->count();
-        // $draw = $request->get('draw');
-        // $rowperpage = $request->get("traineeDataTable_length"); // Rows display per page 
-
         $draw = $request->get('draw');
-        //$this->pr($draw);
         $start = $request->get("start");
-       // $this->pr($start);
-        $rowperpage = $request->get("length"); // Rows display per page
+        $rowperpage = $request->get("length");
         //$this->pr($rowperpage);
         //$columnIndex_arr = $request->get('order');
         //$this->pr($columnIndex_arr);
@@ -116,7 +108,7 @@ class TraineeController extends Controller
         //$this->pr($totalRecordswithFilter);
 
         // Fetch records
-        $trainees = Trainee::select('trainees.*')->skip($start)->take($rowperpage)->get();
+        $trainees = Trainee::skip($start)->take($rowperpage)->get();
         //$this->pr($trainees->toArray());
         $data_arr =  array();
         $sno = $start+1;
