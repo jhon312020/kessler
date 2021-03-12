@@ -168,7 +168,7 @@ $(document).ready(function() {
         { data: "session_start_time" },
         { data: "session_end_time" },
         { data: "session_state" },
-        { data: "actions" },
+        { data: "action" },
     ]
   });     
 });  
