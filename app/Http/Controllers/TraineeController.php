@@ -29,8 +29,6 @@ class TraineeController extends Controller
       $this->totalSessions = range(1, 10);
       $this->boosterRange = range(1, 3);
       $this->traineeCurrentPosition = (object) array('word_id'=>'', 'position'=>'tale', 'user_word_id'=>0, 'sentence'=>0);
-      $this->sessionStartTime = (object)array('roundOne'=>'', 'roundTwo'=>'');
-      $this->sessionEndTime = (object)array('roundOne'=>'', 'roundTwo'=>'');
     }
 
     /**
