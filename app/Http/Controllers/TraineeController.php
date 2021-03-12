@@ -83,13 +83,35 @@ class TraineeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getTrainee(Request $request) {
-        $trainee = Trainee::select('id', 'trainee_id','session_pin', 'session_type', 'session_number', 'session_current_position', 'session_start_time', 'session_end_time', 'session_state','completed', 'round');
-        $trainees = $trainee->get();
-        $totalRecords = $trainees->count();
+        //$trainee = Trainee::select('id', 'trainee_id','session_pin', 'session_type', 'session_number', 'session_current_position', 'session_start_time', 'session_end_time', 'session_state','completed', 'round');
+        //$trainees = $trainee->get();
+        //$totalRecords = $trainees->count();
+        // $draw = $request->get('draw');
+        // $rowperpage = $request->get("traineeDataTable_length"); // Rows display per page 
+
         $draw = $request->get('draw');
-        $rowperpage = $request->get("traineeDataTable_length"); // Rows display per page 
+        $start = $request->get("start");
+        $rowperpage = $request->get("length"); // Rows display per page
+
+        //$columnIndex_arr = $request->get('order');
+        //$columnName_arr = $request->get('columns');
+        $order_arr = $request->get('order');
+        //$search_arr = $request->get('search');
+
+        //$columnIndex = $columnIndex_arr[0]['column']; // Column index
+        //$columnName = $columnName_arr[$columnIndex]['data']; // Column name
+        //$columnSortOrder = $order_arr[0]['dir']; // asc or desc
+        //$searchValue = $search_arr['value']; // Search value
+
+        // Total records
+        $totalRecords = Trainee::select('count(*) as allcount')->count();
+        //$totalRecordswithFilter = Trainee::select('count(*) as allcount')->where('trainee_id', 'like', '%' .$searchValue . '%')->count();
+
+        // Fetch records
+        $trainees = Trainee::select('*')->skip($start)->take($rowperpage)->get();
 
         $data_arr =  array();
+        $sno = $start+1;
         foreach ($trainees as $records) {
           $trainee_id = $records->trainee_id;
           $session_pin = $records->session_pin;
@@ -145,9 +167,13 @@ class TraineeController extends Controller
           );
         }
           $response = array(
+            // "draw" => intval($draw),
+            // "iTotalRecords" => $totalRecords,
+            // "data" => $data_arr
             "draw" => intval($draw),
             "iTotalRecords" => $totalRecords,
-            "data" => $data_arr
+            //"iTotalDisplayRecords" => $totalRecordswithFilter,
+            "aaData" => $data_arr
           );
           echo json_encode($response);
           exit;
