@@ -112,19 +112,19 @@ class TraineeController extends Controller
           $session_end_time = $session_end_time;
           $session_state = $records->session_state;
           $action =  "<a href='{{ route('trainee.add', $records->id)}}' class='btn btn-primary' role='button' title='Add'><i class='fas fa-plus' title='Add'></i></a>";
-           $action = "<a href='{{ url('trainee/view', $records->id)}}'' class='btn btn-primary' role='button' title='View'><i class='fas fa-eye' title='View'></i></a>";
+           $action .= "<a href='{{ url('trainee/view', $records->id)}}'' class='btn btn-primary' role='button' title='View'><i class='fas fa-eye' title='View'></i></a>";
           if ($records->completed == 0) {
-            $action = "<a href='{{ route('trainee.edit', $records->id)}}' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i></a>";
-            $action = "<form action='{{ route('trainee.destroy', $records->id)}}' method='post' class='d-inline' id='jsSubmitForm-{{ $records->id }}'>
+            $action .= "<a href='{{ route('trainee.edit', $records->id)}}' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i></a>";
+            $action .= "<form action='{{ route('trainee.destroy', $records->id)}}' method='post' class='d-inline' id='jsSubmitForm-{{ $records->id }}'>
                     <button class='btn btn-danger jsConfirmButton' type='button' data-value='{{ $records->id }}' title='Delete'><i class='fa fa-trash' title='Delete'></i> </button></form>";  
           }
           if ($records->completed == 1) {
-            $action = "<a href='{{ url('trainee/report', $records->id)}}' class='btn btn-primary' role='button' title='Report'><i class='fas fa-chart-pie' title='Report'></i></a>";
+            $action .= "<a href='{{ url('trainee/report', $records->id)}}' class='btn btn-primary' role='button' title='Report'><i class='fas fa-chart-pie' title='Report'></i></a>";
           }
           if ($records->session_number > 4 && $records->session_type == "A") {
             $traineeCurrentPosition = json_decode($records->session_current_position);
             if ($traineeCurrentPosition && $traineeCurrentPosition->position == 'review') {
-            $action = "<a href='{{ url('trainee/approve', $records->id)}}'' class='btn btn-primary' role='button' title='Approve'><i class='fas fa-book' title='Approve'></i></a>";
+            $action .= "<a href='{{ url('trainee/approve', $records->id)}}'' class='btn btn-primary' role='button' title='Approve'><i class='fas fa-book' title='Approve'></i></a>";
             }       
           }
           $data_arr[] = array(
