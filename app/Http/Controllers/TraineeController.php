@@ -90,25 +90,34 @@ class TraineeController extends Controller
         // $rowperpage = $request->get("traineeDataTable_length"); // Rows display per page 
 
         $draw = $request->get('draw');
+        //$this->pr($draw);
         $start = $request->get("start");
+       // $this->pr($start);
         $rowperpage = $request->get("length"); // Rows display per page
-
+        //$this->pr($rowperpage);
         //$columnIndex_arr = $request->get('order');
-        //$columnName_arr = $request->get('columns');
-        $order_arr = $request->get('order');
-        //$search_arr = $request->get('search');
+        //$this->pr($columnIndex_arr);
+        $columnName_arr = $request->get('columns');
+        //$this->pr($columnName_arr);
+        //$order_arr = $request->get('order');
+        $search_arr = $request->get('search');
+        //$this->pr($search_arr);
 
         //$columnIndex = $columnIndex_arr[0]['column']; // Column index
         //$columnName = $columnName_arr[$columnIndex]['data']; // Column name
         //$columnSortOrder = $order_arr[0]['dir']; // asc or desc
-        //$searchValue = $search_arr['value']; // Search value
+        $searchValue = $search_arr['value']; // Search value
+        //$this->pr($searchValue);
 
         // Total records
         $totalRecords = Trainee::select('count(*) as allcount')->count();
+        // $this->pr($totalRecords);
         //$totalRecordswithFilter = Trainee::select('count(*) as allcount')->where('trainee_id', 'like', '%' .$searchValue . '%')->count();
+        //$this->pr($totalRecordswithFilter);
 
         // Fetch records
         $trainees = Trainee::select('*')->skip($start)->take($rowperpage)->get();
+        //$this->pr($trainees->toArray());
 
         $data_arr =  array();
         $sno = $start+1;
