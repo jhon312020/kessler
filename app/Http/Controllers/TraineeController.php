@@ -150,7 +150,11 @@ class TraineeController extends Controller
             }
           $session_start_time = $session_start_time;
           $session_end_time = $session_end_time;
-          $session_state = $records->session_state;
+          if ($records->completed === 1) {
+            $session_state = "completed";
+          } else {
+            $session_state = $records->session_state;
+          }
           $add = route('trainee.add', $records->id);
           $view = url('trainee/view', $records->id);
           $edit = route('trainee.edit', $records->id);
