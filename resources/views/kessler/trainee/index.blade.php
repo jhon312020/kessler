@@ -155,10 +155,8 @@
 $(document).ready(function() {
   
  $("#createdDate").on('changeDate', function() {
-  createdDate = $("#createdDate").val();
-   console.log('Date', createdDate);
-   //$("#jsSearchForm").submit();
-   });
+    $('#traineeDataTable').DataTable().ajax.reload();
+  });
   $("#createdDate").datepicker({        
       //format: 'yyyy-mm-dd',
       //format: 'mm-dd-yyyy',
@@ -171,14 +169,14 @@ $(document).ready(function() {
       // }
   });
   $('#traineeDataTable').DataTable({
-    pageLength: 10, 
-    ordering: false,
-    processing: true,
-    serverSide: true,
-    ajax: {
-      url: "{{ route('trainee.getTrainee') }}",
-      data: {
-        "createdDate": createdDate,
+    "pageLength": 10, 
+    "ordering": false,
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+      "url": "{{ route('trainee.getTrainee') }}",
+      "data": function (d) {
+        d.createdDate = $("#createdDate").val()
       }
     },
     columns: [
