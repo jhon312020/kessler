@@ -157,6 +157,7 @@ class TraineeController extends Controller
           $delete = route('trainee.destroy', $records->id);
           $report = url('trainee/report', $records->id);
           $approve = url('trainee/approve', $records->id);
+          $csrf = csrf_token();
           $id = $records->id;
           $action =  "<a href='$add' class='btn btn-primary' role='button' title='Add'><i class='fas fa-plus' title='Add'></i></a>&nbsp;";
            $action .= "<a href='$view' class='btn btn-primary' role='button' title='View'><i class='fas fa-eye' title='View'></i></a>&nbsp;";
@@ -169,6 +170,8 @@ class TraineeController extends Controller
           if ($records->completed == 0) {
             $action .= "<a href='$edit' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i></a>&nbsp;";
             $action .= "<form action='$delete' method='post' class='d-inline' id='jsSubmitForm-$id'>
+                      <input type='hidden' name='_token' value='$csrf' />
+                      <input type='hidden' name='_method' value='delete'>
                       <button class='btn btn-danger jsConfirmButton' type='button' data-value='$id' title='Delete'><i class='fa fa-trash' title='Delete'></i></button></form>";  
           }
           if ($records->completed == 1) {
