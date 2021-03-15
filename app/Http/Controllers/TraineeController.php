@@ -102,7 +102,7 @@ class TraineeController extends Controller
         // Total records
         $totalRecords = Trainee::select('count(*) as allcount')->count();
         // $this->pr($totalRecords);
-        $totalRecordswithFilter = Trainee::select('count(*) as allcount')->where('trainee_id', 'like', '%' .$searchValue . '%')->count();
+        $totalRecordswithFilter = Trainee::select('count(*) as allcount')->where('trainee_id', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%')->where('trainees.created_at', 'like', '%' .$searchValue . '%')->count();
         //$this->pr($totalRecordswithFilter);
         $user = Auth::user();
         $trainee_id = null;
