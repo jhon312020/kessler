@@ -81,41 +81,27 @@ class TraineeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getTrainee(Request $request) {
+        $user = Auth::user();
         $draw = $request->get('draw');
         $start = $request->get("start");
         $rowperpage = $request->get("length");
-        //$this->pr($rowperpage);
-        //$columnIndex_arr = $request->get('order');
-        //$this->pr($columnIndex_arr);
         $columnName_arr = $request->get('columns');
-        //$this->pr($columnName_arr);
-        //$order_arr = $request->get('order');
         $search_arr = $request->get('search');
-        //$this->pr($search_arr);
-
-        //$columnIndex = $columnIndex_arr[0]['column']; // Column index
-        //$columnName = $columnName_arr[$columnIndex]['data']; // Column name
-        //$columnSortOrder = $order_arr[0]['dir']; // asc or desc
         $searchValue = $search_arr['value']; // Search value
-        //$this->pr($searchValue);
 
         // Total records
         $totalRecords = Trainee::select('count(*) as allcount')->count();
-        // $this->pr($totalRecords);
-        $totalRecordswithFilter = Trainee::select('count(*) as allcount')->where('trainee_id', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%')->where('trainees.created_at', 'like', '%' .$searchValue . '%')->count();
-        //$this->pr($totalRecordswithFilter);
-        $user = Auth::user();
-        $oldDate = null;
-        $oldDate = $request->get('oldDate');
-        $date = $request->get('date');
+
+        $totalRecordswithFilter = Trainee::select('count(*) as allcount')->where('trainees.created_at', 'like', '%' .$searchValue . '%')->where('trainee_id', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%')->where('trainees.created_at', 'like', '%' .$searchValue . '%')->count();
+  
         // Fetch records
-        $queryObj = Trainee::where('trainees.trainee_id', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%')->where('trainees.created_at', 'like', '%' .$searchValue . '%')->skip($start)->take($rowperpage);
+        $queryObj = Trainee::where('trainees.trainee_id', 'like', '%' .$searchValue . '%')->where('trainees.created_at', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%')->where('trainees.created_at', 'like', '%' .$searchValue . '%')->skip($start)->take($rowperpage);
         if ($user->role != "SA") {
           $trainees = $queryObj->where('trainer_id', $user->id);
         } else {
-          $trainees = $queryObj->orderBy('id', 'desc')->get();
+           $trainees = $queryObj->orderBy('id', 'desc')->get();
         }
-        //$this->pr($trainees->toArray());
+       
         $data_arr =  array();
         $sno = $start+1;
         foreach ($trainees as $records) {

@@ -15,12 +15,12 @@
       </div>
       <div class="card-body">
         <div class="form-group">
-          <!-- <label for="search">Search by Date and Trainee ID</label> -->
-          <label for="search">Search by Date:</label> 
+          <!-- <label for="search">Search by Date and Trainee ID</label>
+          <label for="search">Search by Date:</label>  -->
         <div class="form-row align-items-center">
           <div class="col-sm-3 my-1">
             <label class="sr-only" for="createdDate">Date</label>
-            <input type="text" class="form-control" id="createdDate" name="createdDate" autocomplete="off" placeholder="Date" value="{{ (isset($oldDate)) ? $oldDate : '' }}">
+            <input type="text" class="form-control" id="createdDate" name="createdDate" autocomplete="off" placeholder="Search By Date" value="{{ (isset($oldDate)) ? $oldDate : '' }}">
           </div>
         </div>
       {{-- <form method="get" action="{{ url('/trainee') }}" id="jsSearchForm">
@@ -151,9 +151,8 @@
     </div>
   </div>
 <script type="text/javascript">
-  var createdDate = '';
+var createdDate = '';
 $(document).ready(function() {
-  
  $("#createdDate").on('changeDate', function() {
     $('#traineeDataTable').DataTable().ajax.reload();
   });
@@ -163,10 +162,6 @@ $(document).ready(function() {
       dateFormat: 'mm-dd-yyyy',
       autoclose: true,
       todayHighlight: true,
-      // onSelect: function(dataText) {
-      //   createdDate = dataText
-      //   console.log('Come in', dataText);
-      // }
   });
   $('#traineeDataTable').DataTable({
     "pageLength": 10, 
