@@ -112,7 +112,7 @@ class TraineeController extends Controller
         $oldDate = $request->get('oldDate');
         $date = $request->get('date');
         // Fetch records
-        $queryObj = Trainee::where('trainees.trainee_id', 'like', '%' .$searchValue . '%')->skip($start)->take($rowperpage);
+        $queryObj = Trainee::where('trainees.trainee_id', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%')->where('trainees.created_at', 'like', '%' .$searchValue . '%')->skip($start)->take($rowperpage);
         if ($user->role != "SA") {
           $trainees = $queryObj->where('trainer_id', $user->id);
           $traineesOfTrainer = Trainee::select('trainee_id')->distinct('trainee_id')->where('trainer_id', $user->id)->groupBy('trainee_id')->get();
