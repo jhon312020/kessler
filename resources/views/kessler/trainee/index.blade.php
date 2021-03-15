@@ -14,31 +14,40 @@
         View Details of Trainee Information  <a href="{{ route('trainee.create')}}" class="btn btn-primary btn-block bg-gradient-primary float-right" style="width: fit-content; margin-left: 25px;"><i class="fas fa-plus">&nbsp;</i> Add Trainee</a>
       </div>
       <div class="card-body">
-      <form method="get" action="{{ url('/trainee') }}" id="jsSearchForm">
+        <div class="form-group">
+          <!-- <label for="search">Search by Date and Trainee ID</label> -->
+          <label for="search">Search by Date:</label> 
+        <div class="form-row align-items-center">
+          <div class="col-sm-3 my-1">
+            <label class="sr-only" for="createdDate">Date</label>
+            <input type="text" class="form-control" id="createdDate" name="createdDate" autocomplete="off" placeholder="Date" value="{{ (isset($oldDate)) ? $oldDate : '' }}">
+          </div>
+        </div>
+      {{-- <form method="get" action="{{ url('/trainee') }}" id="jsSearchForm">
       @csrf
         <div class="form-group">
           <!-- <label for="search">Search by Date and Trainee ID</label> -->
           <label for="search">Search by Date</label>
         <div class="form-row align-items-center">
           <div class="col-sm-3 my-1">
-            <label class="sr-only" for="date">Date</label>
-            <input type="text" class="form-control" id="date" name="date" autocomplete="off" placeholder="Date" value="{{ (isset($oldDate)) ? $oldDate : '' }}">
+            <label class="sr-only" for="createdDate">Date</label>
+            <input type="text" class="form-control" id="createdDate" name="createdDate" autocomplete="off" placeholder="Date" value="{{ (isset($oldDate)) ? $oldDate : '' }}">
           </div>
-          {{-- <div class="col-sm-3 my-1">
+           <div class="col-sm-3 my-1">
               <label class="sr-only" for="trainee_id">Trainee ID</label>
               <select class="form-control" id="trainee_id" name="trainee_id" autocomplete="off" placeholder="Trainee ID">
                 <option value= '' selected="selected">Trainee ID</option>              @foreach($traineesOfTrainer as $trainee)
                  <option value="{{ $trainee->trainee_id }}" @if($trainee_id  == $trainee->trainee_id) selected="selected" @endif>{{ $trainee->trainee_id }}</option>
                 @endforeach;
               </select>
-          </div> --}}
+          </div> 
           <input type="hidden" name="oldDate" id="oldDate" value="">
           <div class="col-auto my-1">
             <button type="submit" class="btn btn-primary" id="jsSearch">Submit</button>
           </div>
       </div>
       </div>
-    </form>   
+    </form> --}}  
     </div>
       <div class="card-body">
         <div class="table-responsive text-justify">
@@ -142,25 +151,36 @@
     </div>
   </div>
 <script type="text/javascript">
+  var createdDate = '';
 $(document).ready(function() {
- $("#jsSearch").on('click', function() {
-  var date = $("#date").val();
-  $("#oldDate").val(date);
-  $("#jsSearchForm").submit();
-  });
-  $("#date").datepicker({        
+  
+ $("#createdDate").on('changeDate', function() {
+  createdDate = $("#createdDate").val();
+   console.log('Date', createdDate);
+   //$("#jsSearchForm").submit();
+   });
+  $("#createdDate").datepicker({        
       //format: 'yyyy-mm-dd',
       //format: 'mm-dd-yyyy',
       dateFormat: 'mm-dd-yyyy',
       autoclose: true,
       todayHighlight: true,
+      // onSelect: function(dataText) {
+      //   createdDate = dataText
+      //   console.log('Come in', dataText);
+      // }
   });
   $('#traineeDataTable').DataTable({
     pageLength: 10, 
     ordering: false,
     processing: true,
     serverSide: true,
-    ajax: "{{ route('trainee.getTrainee') }}",
+    ajax: {
+      url: "{{ route('trainee.getTrainee') }}",
+      data: {
+        "createdDate": createdDate,
+      }
+    },
     columns: [
         { data: "trainee_id" },
         { data: "session_pin" },
