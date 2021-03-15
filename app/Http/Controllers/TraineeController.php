@@ -104,9 +104,29 @@ class TraineeController extends Controller
         // $this->pr($totalRecords);
         $totalRecordswithFilter = Trainee::select('count(*) as allcount')->where('trainee_id', 'like', '%' .$searchValue . '%')->count();
         //$this->pr($totalRecordswithFilter);
-
+        $user = Auth::user();
+        $trainee_id = null;
+        $oldDate = null;
+        $trainee_id = $request->get('trainee_id');
+        //$date = Carbon::parse($oldDate)->format('m/d/Y');
+        $oldDate = $request->get('oldDate');
+        $date = $request->get('date');
         // Fetch records
-        $trainees = Trainee::skip($start)->take($rowperpage)->get();
+        $queryObj = Trainee::skip($start)->take($rowperpage);
+        if ($user->role != "SA") {
+          $trainees = $queryObj->where('trainer_id', $user->id);
+          $traineesOfTrainer = Trainee::select('trainee_id')->distinct('trainee_id')->where('trainer_id', $user->id)->groupBy('trainee_id')->get();
+        } else {
+          $traineesOfTrainer = Trainee::select('trainee_id')->distinct('trainee_id')->groupBy('trainee_id')->get();
+        }
+        if ($date != '') {
+          $trainees = $queryObj->whereDate('created_at', $date);
+        }
+        if ($trainee_id != '') {
+          $trainees = $queryObj->where('trainee_id', $trainee_id);
+        }
+
+        $trainees = $queryObj->orderBy('id', 'desc')->get();
         //$this->pr($trainees->toArray());
         $data_arr =  array();
         $sno = $start+1;
