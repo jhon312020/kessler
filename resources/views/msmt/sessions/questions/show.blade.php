@@ -1,25 +1,7 @@
 @extends('msmt.layouts.master')
 
 @section('content')
-<section class="{{ $showTraineeMessage? '': 'd-none' }}" id="jsTraineeMessage">
-  <div class="row">
-    <div class="col-lg-8 mx-auto">
-      <h1 class="heading">INSTRUCTIONS<br/></h1>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-lg-8 mx-auto text-justify">
-       <p class="mx-auto">Following the free recall, a contextual cue, and if necessary a categorical cue, is given to facilitate recall for each of the target words. After this is completed, the process is repeated with the same story</p>
-       <br/>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-lg-8 mx-auto">
-       <div class="form-group text-center"><button class="btn btn-primary btn-xl" id="jsStartSession" type="submit">START</button></div>
-    </div>
-  </div>
-</section>
-<section class="text-center {{ !$showTraineeMessage? '': 'd-none' }}" id="jsQuestions">
+<section class="text-center" id="jsQuestions">
   <div class="row">
     <div class="col-lg-8 mx-auto">
       <h1 class="heading">CUES<br/></h1>
@@ -49,20 +31,12 @@
 <script type="text/javascript">
   $(document).ready( function() { // Wait until document is fully parsed
     var showTraineeMessage = '{{ $showTraineeMessage }}';
-    var timer = null;
+    var timer = performance.now();;
     var requestInProcess = false;
     var categoryCueShowed = 0;
     var showedAnswer = 0;
     $('#answer').focus();
-    //document.getElementById("answer").focus();
-    if (!showTraineeMessage) {
-      timer = performance.now();
-    }
-    $(document).on('keyup', '#answer', function() {
-      //this.value = this.value.toUpperCase();
-    });
     $(document).on("keydown", "form", function(event) { 
-      //window.confetti.remove();
       var key;
       if (window.event)
         key = window.event.keyCode;
@@ -78,17 +52,11 @@
         return event.key;
       }
     });
-    //var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     $("#jsNext").on('click touchstart', function(event) {
-      //window.confetti.remove();
       $(this).prop("disabled", true);
       $("#jsQueContainer").slideDown();
       $("#jsLoader").removeClass('d-none');
       $("#jsNext").text("CHECK");
-      // $(this).html(
-      //   '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
-      // );
-      //confetti.remove();
       $('#jsUserMessage').text('');
       $('#jsUserMessage').removeClass().addClass('alert d-none');
       var answer = $('#answer').val().toUpperCase();
@@ -120,13 +88,10 @@
           $("#jsLoader").addClass('d-none');
           $("#jsNext").text("CHECK");
            if (response.completed) {
-            //location.reload();
-            console.log(response);
             window.location = response.redirectURL;
            } else if (response.reload) {
             console.log(response.reload);
            } else {
-            console.log(response);
             timer = performance.now();
             $('#question').html(response.question);
             if (response.categorical_cue && !response.show_answer) {
@@ -142,8 +107,6 @@
               $('#jsUserMessage').html(response.answer);
               if (response.is_answer_correct) {
                 $('#jsUserMessage').addClass('alert-success');
-                //window.confetti.start();
-                //setTimeout(removeConfetti, 1000);
                 $("#jsQueContainer").show("slow");
               } else {
                 $('#jsUserMessage').addClass('alert-danger');
@@ -184,9 +147,6 @@
       document.getElementById("answer").focus();
       timer = performance.now();
     });
-    function removeConfetti() {
-      //window.confetti.stop();
-    }
   })
   
 </script>

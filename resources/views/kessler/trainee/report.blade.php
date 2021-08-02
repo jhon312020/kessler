@@ -66,31 +66,39 @@
    </div>
 </div>
 <script type="text/javascript">
+
+
+
    $(document).ready( function() { // Wait until document is fully parsed
     var recallRoundOneCount = {{ $recallRoundOneCount['found_count'] }};
     var contextualRoundOneCount = {{ $contextualRoundOneCount }};
     var categoricalRoundOneCount = {{ $categoricalRoundOneCount }};
-    var ctx = $("#jsPieChartOne");
-    var PieChartOne = new Chart(ctx, {
-    type: 'pie',
-    data: {
-        labels: ["Recall", "Contextual", "Categorical"],
-        datasets: [{
-          data: [recallRoundOneCount, contextualRoundOneCount, categoricalRoundOneCount],
-          backgroundColor: ['#dc3545', '#ffc107', '#28a745'],
-        }],
-      },
-    options: {
-        plugins: {
-            datalabels: {
-                color: 'black',
-                labels: {
+    const barColors = ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'];
+    const borderColors = ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'];
+    const barWidth = 1;
+    const barDataLabels = { color: 'black', labels: {
                     render: 'value',
                     fontSize: 14,
                     fontStyle: 'bold',
                     fontColor: '#000'
                     }
                   }
+    var ctx = $("#jsPieChartOne");
+    var PieChartOne = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ["Recall", "Contextual", "Categorical"],
+        datasets: [{
+          label: 'Round 1',
+          data: [recallRoundOneCount, contextualRoundOneCount, categoricalRoundOneCount],
+          backgroundColor: barColors,
+          borderColor: borderColors,
+          borderWidth: barWidth,
+        }],
+      },
+    options: {
+        plugins: {
+            datalabels: barDataLabels
                 }
             }
     });
@@ -99,25 +107,20 @@
     var categoricalRoundTwoCount = {{ $categoricalRoundTwoCount }};
     var ctx = $("#jsPieChartTwo");
     var PieChartTwo = new Chart(ctx, {
-    type: 'pie',
+    type: 'bar',
     data: {
         labels: ["Recall", "Contextual", "Categorical"],
         datasets: [{
+          label: 'Round 2',
           data: [recallRoundTwoCount, contextualRoundTwoCount, categoricalRoundTwoCount],
-          backgroundColor: ['#dc3545', '#ffc107', '#28a745'],
+          backgroundColor: barColors,
+          borderColor: borderColors,
+          borderWidth: barWidth,
         }],
       },
     options: {
         plugins: {
-            datalabels: {
-                color: 'black',
-                labels: {
-                    render: 'value',
-                    fontSize: 14,
-                    fontStyle: 'bold',
-                    fontColor: '#000'
-                    }
-                  }
+            datalabels: barDataLabels
                 }
             }
     });
@@ -126,25 +129,20 @@
     var categoricalOverallCount = {{ $categoricalOverallCount }};
     var ctx = $("#jsPieChart");
     var PieChart = new Chart(ctx, {
-    type: 'pie',
+    type: 'bar',
     data: {
         labels:  ["Recall", "Contextual", "Categorical"],
         datasets: [{
+          label: 'Overall',
           data: [recallOverallCount, contextualOverallCount, categoricalOverallCount],
-          backgroundColor: ['#dc3545', '#ffc107', '#28a745'],
+          backgroundColor: barColors,
+          borderColor: borderColors,
+          borderWidth: barWidth,
         }],
       },
     options: {
       plugins: {
-                datalabels: {
-                color: 'black',
-                labels: {
-                    render: 'value',
-                    fontSize: 14,
-                    fontStyle: 'bold',
-                    fontColor: '#000'
-                    }
-                  }
+                datalabels: barDataLabels
                 }
             }
     });

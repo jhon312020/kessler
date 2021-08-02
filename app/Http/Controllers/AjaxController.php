@@ -22,6 +22,10 @@ class AjaxController extends Controller
      * @return void
      */
     private $traineeCurrentPosition;
+    private $successHtml = "Excellent. Your answer is correct: ";
+    private $errorHtml = "Oops sorry! The correct answer is: ";
+    private $tryAgainHtml = "<span class='wrong'>Your response is incorrect.</span> Please try again.<br/>";
+
     public function __construct() {
       $this->traineeCurrentPosition = (object) array('word_id'=>'', 'position'=>'', 'user_word_id'=>0, 'sentence'=>0);
     }
@@ -66,10 +70,10 @@ class AjaxController extends Controller
               $traineeTransaction['correct_or_wrong'] = 1;
               $iconWrongORRight = '<i class="fa fa-check" style="color:#155724"></i>';
               $showAnswer = 1;
-              $response['answer'] = 'Wow your answer is correct : '.$word['word'];
+              $response['answer'] = $this->successHtml.$word['word'];
               $response['is_answer_correct'] = 1;
             } else if($request->categoryCue && $word['word'] != $answer) {
-              $response['answer'] = 'Oops sorry! The Right answer is : '.$word['word'];
+              $response['answer'] = $this->errorHtml.$word['word'];
               $response['is_answer_correct'] = 0;
             }
 
@@ -84,9 +88,6 @@ class AjaxController extends Controller
           } 
         }
         if ($word) {
-          // if ($word['id'] > 2) {
-          //   echo $traineeRecord->session_current_position = $word['id'];
-          // }
           $this->traineeCurrentPosition->word_id = $word['id'];
           $this->traineeCurrentPosition->position = 'answer';
           $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
@@ -99,21 +100,16 @@ class AjaxController extends Controller
             $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$word['id']."' id='answer' autocomplete='off'>", $question);
           }
           $question = str_replace("$$", str_repeat("_", 15), $question);
-          //$pattern = '/(\w+) (\d+), (\d+)/i';
-          //$replacement = '${1}1,$3';
-         //echo preg_replace($pattern, $replacement, $string);
           $response['question'] = $question;
           $response['categorical_cue'] = null;
           $response['reload'] = false;
           $response['show_answer'] = $showAnswer;
           if ($wordID == $word['id']) {
-            $response['categorical_cue'] = '<span class="wrong">Your response is incorrect!</span> Try again <br/>"'.$word['categorical_cue'].'"';
-            //$word['categorical_cue'];
+            $response['categorical_cue'] = $this->tryAgainHtml."<i>".$word['categorical_cue']."</i>";
           }
           return $response;
         } else if ($wordID == $lastWord->id) {
           $traineeRecord->session_current_position = null;
-          //$traineeRecord->state = 0;
           $response['completed'] = true;
           $response['redirectURL'] = url("/complete");
           $request->session()->put('completed', true);
@@ -135,7 +131,6 @@ class AjaxController extends Controller
       $response['reload'] = true;
       $showAnswer = 0;
       $iconWrongORRight = '<i class="fa fa-times" style="color:#721c24"></i>';
-      //$this->pr($request->all());
       if ($request->session()->has('trainee')) {
         $timeTaken = (int)(($request->endTime - $request->startTime)/1000);
         $trainee = $request->session()->get('trainee');
@@ -149,23 +144,22 @@ class AjaxController extends Controller
           $wordID = array_pop($wordKey);
           $answer = $answer;
         }
-        //$lastWord = Word::select('id')->where('story_id', $trainee['session_number'])->orderBy('id', 'desc')->first();
-        //$allStoryWords = Word::select('id', 'word')->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->pluck('word', 'id')->all();
         $allStoryWords = $this->getWordAndID($trainee)->all();
-        //$currentWord = Word::select('id', 'word', 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
         $currentWord = $this->getCurrentWord($trainee, $wordID);
+        //$this->pr($allStoryWords);
+        //$this->pr($currentWord);
         $story = TraineeStory::select('updated_story', 'user_story_words')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->where('round', $trainee['round'])->orderBy('id', 'desc')->first();
         $userStoryWords = array();
         $totalUsersWords = 0;
         $userWordKey = 0;
         $addedInputBox = false;
-        $storySentences = explode('. ',$story->updated_story);
+        $storySentences = explode('. ', $story->updated_story);
+        //$this->pr($storySentences);
         $sentenceKey = 0;
         if ($story) {
           $userStoryWords = json_decode($story->user_story_words);
-          //$userStoryWords = array_values(array_unique($userStoryWords));
+          //$this->pr($userStoryWords);
           $totalUsersWords = count($userStoryWords);
-          //$userWordKey = array_search($currentWord->word, $userStoryWords);
           if ($traineeCurrentPosition) {
             $userWordKey = $traineeCurrentPosition->user_word_id ? $traineeCurrentPosition->user_word_id : array_search($currentWord->word, $userStoryWords);
             $sentenceKey = $traineeCurrentPosition->sentence ? $traineeCurrentPosition->sentence : 0;
@@ -176,7 +170,7 @@ class AjaxController extends Controller
           $this->traineeCurrentPosition->position = 'answer';
         }
         if ($currentWord) {
-          $fillUpWord = $currentWord->word;
+         $fillUpWord = $currentWord->word;
           if (!$request->showedAnswer) {
             $traineeTransaction['correct_or_wrong'] = 0;
             $traineeTransaction['round'] = 1;
@@ -192,10 +186,10 @@ class AjaxController extends Controller
               $traineeTransaction['correct_or_wrong'] = 1;
               $iconWrongORRight = '<i class="fa fa-check" style="color:#155724"></i>';
               $showAnswer = 1;
-              $response['answer'] = 'Wow your answer is correct : '.$currentWord['word'];
+              $response['answer'] = $this->successHtml.$currentWord['word'];
               $response['is_answer_correct'] = 1;
             } else if($request->categoryCue && $currentWord['word'] != strtoupper($answer)) {
-              $response['answer'] = 'Oops sorry! The Right answer is : '.$currentWord['word'];
+              $response['answer'] = $this->errorHtml.$currentWord['word'];
               $response['is_answer_correct'] = 0;
             }
 
@@ -219,7 +213,7 @@ class AjaxController extends Controller
             }
           } 
         }
-        
+        //echo 'test'.$fillUpWord;
         if ($story && $fillUpWord) {
           $breakParentLoop = false;
           $counter =1;
@@ -262,26 +256,6 @@ class AjaxController extends Controller
             $counter++;
           }
         }
-        //$this->pr($traineeRecord->toArray());
-        //$this->pr($this->traineeCurrentPosition);
-        //echo $currentSentence;
-        //   foreach($userStoryWords as $wordKey=>$word) {
-        //     $findWord = $word;
-        //     if ($wordKey < $userWordKey) {
-        //       continue;
-        //     } else if ($fillUpWord === $word && !$addedInputBox) {
-        //       $addedInputBox = true;
-        //       $storyWordID = array_search($word, $allStoryWords);
-        //       if ($showAnswer) {
-        //         $story->updated_story = str_replace($findWord, "<input class='fill-ups' name='answer-".$storyWordID."' id='answer' value='".$answer."' readonly autocomplete='off'> $iconWrongORRight", $story->updated_story);
-        //       } else {
-        //         $story->updated_story = str_replace($findWord, "<input id='answer' class='fill-ups' name='answer-".$storyWordID."'>", $story->updated_story);
-        //       }
-        //     } else {
-        //       $story->updated_story = str_replace($findWord, str_repeat("_", 15), $story->updated_story);
-        //     }
-        //   }
-        // }
         if ($fillUpWord) {
           $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
           $response['question'] = $currentSentence;
@@ -289,7 +263,7 @@ class AjaxController extends Controller
           $response['reload'] = false;
           $response['show_answer'] = $showAnswer;
           if ($fillUpWord === $currentWord['word']) {
-            $response['categorical_cue'] = '<span class="wrong">Your response is incorrect!</span> Try again <br/> "'.$currentWord['categorical_cue'].'"';
+            $response['categorical_cue'] =  $this->tryAgainHtml."<i>".$currentWord['categorical_cue']."</i>";
           }
         } else if ($userWordKey >= $totalUsersWords) {
           $traineeRecord->session_current_position = null;

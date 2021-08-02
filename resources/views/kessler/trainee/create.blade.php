@@ -21,7 +21,7 @@
               <label class="small mb-1" for="trainee_id">Trainee ID</label>
               <input type="text" class="form-control py-4" id="trainee_id" name="trainee_id" placeholder="Enter Trainee ID" required>
             </div>
-            <div class="form-group" id="jsSessionType">
+            {{-- <div class="form-group" id="jsSessionType">
                <label class="small mb-1" for="session_number">Session Type</label>
               <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
                 <option value= '' selected="selected">Session Type</option>
@@ -29,31 +29,40 @@
                   <option value="{{ $type->type }}">{{ $type->type }}</option>
                 @endforeach;
               </select>
-            </div>
+            </div> --}}
             <div class="form-group" id="jsSessionNumber">
-              <label class="small mb-1" for="session_number">Session Number</label>
-              <select class="form-control select2" id="session_number" name="session_number" required placeholder="Select Session Number">
-                <option value='' selected="selected">Session Number</option>
+              <label class="small mb-1" for="session_number">Session Type</label>
+              <select class="form-control select2" id="session_number" name="session_number" required placeholder="Select Session Type">
+                <option value='' selected="selected">Session Type</option>
                 @foreach($totalSessions as $session)
                   <option value="{{ $session }}">{{ $session }}</option>
                 @endforeach;
               </select>
             </div>
-            <div class="form-group d-none" id="jsBooster">
-               <label class="small mb-1" for="booster_id">Booster Session</label>
-              <select class="form-control select2" id="booster_id" name="booster_id" placeholder="Select Booster Session">
-                <option value= '' selected="selected">Booster Session</option>
-                @foreach($booster as $booster)
+          {{--  <div class="form-group d-none" id="jsFormType">
+               <label class="small mb-1" for="type_id">Select Category</label>
+              <select class="form-control select2" id="type_id" name="type_id" placeholder="Select Type">
+                <option value= '' selected="selected">Select type</option>
+                @foreach($formTypes as $formType)
                 @if($type->type = 'A')
-                  <option value="{{ $booster->id }}">{{ $booster->category }}</option>
+                  <option value="{{ $formType->id }}">{{ $formType->category }}</option>
                 @endif
                 @endforeach;
               </select>
+            </div> --}}
+            <div class="form-group d-none" id="jsBooster">
+               <label class="small mb-1" for="booster_id">Select Category</label>
+              <select class="form-control select2" id="booster_id" name="booster_id" placeholder="Select Category">
+                <option value= '' selected="selected">Select Category</option>
+                @foreach($booster as $booster)
+                  <option value="{{ $booster->id }}">{{ $booster->category }}</option>
+                @endforeach;
+              </select>
             </div>
-             <div class="form-group d-none" id="jsBoosterRange">
-              <label class="small mb-1" for="booster_range">Booster Range</label>
-              <select class="form-control select2" id="booster_range" name="booster_range" placeholder="Select Session Number">
-                <option value='' selected="selected">Select Range</option>
+            <div class="form-group d-none" id="jsBoosterRange">
+              <label class="small mb-1" for="booster_range">Select Form</label>
+              <select class="form-control select2" id="booster_range" name="booster_range" placeholder="Select Form">
+                <option value='' selected="selected">Select Form</option>
                 @foreach($boosterRange as $range)
                   <option value="{{ $range }}">{{ $range }}</option>
                 @endforeach;
@@ -71,15 +80,30 @@
 </div>
 <script type="text/javascript">
 $(document).ready( function() { // Wait until document is fully parsed
-  $('#jsSessionNumber, #jsSessionType').on('change', function() {
-    if (($("#session_type option:selected").val() == "A") && (($("#session_number option:selected").val() == "9") || ($("#session_number option:selected").val() == "10"))) {
-    $('#jsBooster').removeClass('d-none').show();
-    $('#jsBoosterRange').removeClass('d-none').show();
-     } else {
-      $('#jsBooster').addClass('d-none');
-      $('#jsBoosterRange').addClass('d-none');
-     }
+  $('#jsSessionNumber').on('change', function() {
+      resetSelect();
+      var session_number = $("#session_number option:selected").val().toLowerCase();
+      switch(session_number) {
+        case 9:
+        case 10:
+        case '9':
+        case '10':
+          $('#jsBooster').removeClass('d-none').show();
+        break;
+        case 'booster':
+          $('#jsBooster').removeClass('d-none').show();
+          $('#jsBoosterRange').removeClass('d-none').show();
+        break;
+      }
    });
+    function resetSelect() {
+      // $('#jsFormType').addClass('d-none');
+      // $("#jsFormType option:selected").val('');
+      $('#jsBooster').addClass('d-none');
+      $('#jsBoosterRange').addClass('d-none'); 
+      $("#jsBooster option:selected").val('');
+      $("#jsBoosterRange option:selected").val('');
+    }
   })
 </script>
 @endsection

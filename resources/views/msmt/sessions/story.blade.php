@@ -45,7 +45,7 @@
         </div>
         <div class="row d-none" id="jsCue">
           <div class="col-lg-8 mx-auto text-center">
-            <p>Click on <span class="emboss">CONTINUE</span> <br> to proceed with recall words</p>
+            <p>Click on <span class="emboss">CONTINUE</span> <br> to proceed with recall words <br/>or <br/><a id="jsShowStory" href="#">Click here</a> to see the story again</p>
             <br/>
           </div>
         </div>
@@ -91,6 +91,10 @@
         $(this).text("Hide Time");
       }
       return false;
+    });
+    $(document).on('click touchstart', '#jsShowStory', function() {
+      $('#time-out').show();
+      $('#jsCue').addClass('d-none');
     });
 
     $('#jsStartSession').on('click touchstart', function(event) { 

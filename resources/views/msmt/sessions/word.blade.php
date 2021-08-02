@@ -9,7 +9,7 @@
   </div>
   <div class="row">
     <div class="col-lg-8 mx-auto text-justify">
-       <p>On the same page below you are going to see a set of 20 words. The words will be capitalized like <span class="emboss">THIS</span>. <p>Build a story of your own using these words. Fit in as many words in a sentence. This story is to help you remember the capitalized words. Try to make a picture of each storyline in your head. </p><p>Click on <span class="emboss">START</span> when you are ready.</p>
+       <p>Below you are going to see a list of 20 words. The words will be capitalized like <span class="emboss">THIS</span>. <p>Build a story of your own using these words. You can use multiple words in a sentence, but you want each sentence to be as easy to visualize as possible. The purpose of the story is to help you remember the capitalized words - you want to be able to create a picture of the storyline in your head.</p><p>Click on <span class="emboss">START</span> when you are ready.</p>
        <br/>
     </div>
   </div>
@@ -34,7 +34,7 @@
         <div class="col-xs-4 col-lg-12">
           <div class="row">
             @foreach($words as $wordGroup)
-              <div class="col-xs-6 col-sm-6 col-lg-3">
+              <div class="col-xs-6 col-sm-6 <?php echo $respClass;?>">
                 @foreach($wordGroup as $wordID=>$word)
                   <p id="jsWord-{{ $wordID }}" class="text-left">{{$word}}</p>
                 @endforeach
@@ -68,6 +68,7 @@
     allWords = allWords.split(',');
     var wordCount = allWords.length;
     var userUsedWordCount = 0;
+    console.log(allWords);
     $(document).on("keyup", "form", function(event) { 
       $('#jsUserMessage').addClass('d-none');
       $('#jsWordContainer p').removeClass('strikeThrough');

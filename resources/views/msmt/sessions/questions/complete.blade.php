@@ -3,12 +3,13 @@
 <section>
   <div class="row">
     <div class="col-lg-6 mx-auto">
-      <h1 class="heading">CONGRATULATIONS </br></h1>
+      <h1 class="heading">CONGRATULATIONS! </br></h1>
     </div>
   </div>
   <div class="row">
     <div class="col-lg-6 mx-auto text-justify">
-       <p>You have successfully completed the {{ $round }} round of your session {{ $sessionNumber }}! Please contact your trainer!!!</p>
+       <p>You have successfully completed the {{ $round }} round of session {{ $sessionNumber }}.
+       <p>Please contact your trainer for further instructions.</p>
        <br/>
     </div>
   </div>

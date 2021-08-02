@@ -27,6 +27,7 @@ class TraineeController extends Controller
       $this->middleware('auth');
       parent::__construct();
       $this->totalSessions = range(1, 10);
+      $this->totalSessions[] = 'Booster';
       $this->boosterRange = range(1, 3);
       $this->traineeCurrentPosition = (object) array('word_id'=>'', 'position'=>'tale', 'user_word_id'=>0, 'sentence'=>0);
     }
@@ -95,13 +96,14 @@ class TraineeController extends Controller
         $totalRecordswithFilter = Trainee::select('count(*) as allcount')->where('trainees.created_at', 'like', '%' .$searchValue . '%')->where('trainee_id', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%')->where('trainees.created_at', 'like', '%' .$searchValue . '%')->count();
   
         // Fetch records
-        $queryObj = Trainee::where('trainees.trainee_id', 'like', '%' .$searchValue . '%')->where('trainees.created_at', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%')->where('trainees.created_at', 'like', '%' .$searchValue . '%')->skip($start)->take($rowperpage);
+        $queryObj = Trainee::where('trainees.trainee_id', 'like', '%' .$searchValue . '%')->where('trainees.created_at', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%')->skip($start)->take($rowperpage);
         if ($user->role != "SA") {
-          $trainees = $queryObj->where('trainer_id', $user->id);
+          $queryObj->where('trainer_id', $user->id);
+          echo $queryObj->toSql();
         } else {
-           $trainees = $queryObj->orderBy('id', 'desc')->get();
+           $queryObj = $queryObj->orderBy('id', 'desc');
         }
-       
+       $trainees = $queryObj->get();
         $data_arr =  array();
         $sno = $start+1;
         foreach ($trainees as $records) {
@@ -201,13 +203,14 @@ class TraineeController extends Controller
     public function store(Request $request) {
       $request->validate([
         'trainee_id'=>'required',
-        'session_type'=>'required',
+        //'session_type'=>'required',
         'session_number'=>'required'
       ]);
       $session_pin = mt_rand(100000, 999999);
       $trainee = new Trainee([
         'trainee_id' => $request->get('trainee_id'),
-        'session_type' => $request->get('session_type'),
+        //'session_type' => $request->get('session_type'),
+        'session_type' => 'A',
         'session_number' => $request->get('session_number'),
         'booster_id' => $request->get('booster_id'),
         'booster_range' => $request->get('booster_range'),

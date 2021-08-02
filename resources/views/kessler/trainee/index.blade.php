@@ -17,12 +17,12 @@
         <div class="form-group">
           <!-- <label for="search">Search by Date and Trainee ID</label>
           <label for="search">Search by Date:</label>  -->
-        <div class="form-row align-items-center">
+       {{--  <div class="form-row align-items-center">
           <div class="col-sm-3 my-1">
             <label class="sr-only" for="createdDate">Date</label>
             <input type="text" class="form-control" id="createdDate" name="createdDate" autocomplete="off" placeholder="Search By Date" value="{{ (isset($oldDate)) ? $oldDate : '' }}">
           </div>
-        </div>
+        </div> --}}
       {{-- <form method="get" action="{{ url('/trainee') }}" id="jsSearchForm">
       @csrf
         <div class="form-group">
@@ -76,7 +76,7 @@
                 <th width="50%">Actions</th>
               </tr>
             </tfoot>
-            {{-- <tbody>
+            <tbody>
               @foreach($trainees as $trainee)
               <tr>
                 <td>{{$trainee->trainee_id}}</td>
@@ -137,7 +137,7 @@
                 </td>
               </tr>
                @endforeach
-            </tbody> --}}
+            </tbody>
           </table>
           <div>
             @if(session()->get('success'))
@@ -154,7 +154,7 @@
 var createdDate = '';
 $(document).ready(function() {
  $("#createdDate").on('changeDate', function() {
-    $('#traineeDataTable').DataTable().ajax.reload();
+    //$('#traineeDataTable').DataTable().ajax.reload();
   });
   $("#createdDate").datepicker({        
       //format: 'yyyy-mm-dd',
@@ -163,28 +163,29 @@ $(document).ready(function() {
       autoclose: true,
       todayHighlight: true,
   });
-  $('#traineeDataTable').DataTable({
-    "pageLength": 10, 
-    "ordering": false,
-    "processing": true,
-    "serverSide": true,
-    "ajax": {
-      "url": "{{ route('trainee.getTrainee') }}",
-      "data": function (d) {
-        d.createdDate = $("#createdDate").val()
-      }
-    },
-    columns: [
-        { data: "trainee_id" },
-        { data: "session_pin" },
-        { data: "session_type" },
-        { data: "session_number" },
-        { data: "session_start_time" },
-        { data: "session_end_time" },
-        { data: "session_state" },
-        { data: "action" },
-    ]
-  });     
+  $('#traineeDataTable').DataTable();
+  // $('#traineeDataTable').DataTable({
+  //   "pageLength": 10, 
+  //   "ordering": false,
+  //   "processing": true,
+  //   "serverSide": true,
+  //   "ajax": {
+  //     "url": "{{ route('trainee.getTrainee') }}",
+  //     "data": function (d) {
+  //       d.createdDate = $("#createdDate").val()
+  //     }
+  //   },
+  //   columns: [
+  //       { data: "trainee_id" },
+  //       { data: "session_pin" },
+  //       { data: "session_type" },
+  //       { data: "session_number" },
+  //       { data: "session_start_time" },
+  //       { data: "session_end_time" },
+  //       { data: "session_state" },
+  //       { data: "action" },
+  //   ]
+  // });     
 });  
 </script> 
 @include('common.confirm')

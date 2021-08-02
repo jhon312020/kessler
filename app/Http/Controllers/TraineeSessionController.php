@@ -59,7 +59,9 @@ class TraineeSessionController extends Controller
             $record->session_start_time = json_encode($sessionStartTime);
             $record->save(); 
             $request->session()->put('trainee', $record);
-            if ($record['session_number'] <= 4) {
+            //$this->pr($record);
+            //exit;
+            if ($record['session_number'] <= 4 && $record['session_number'] != 'Booster') {
               return redirect('sessions');
             } else {
               return redirect('write');
@@ -132,7 +134,19 @@ class TraineeSessionController extends Controller
           $traineeCurrentPosition = $traineeRecord->session_current_position !== null?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
           $wordStory = $this->getWords($traineeRecord);
           //$this->pr($traineeRecord);
-          $allWords = $words = $wordStory->toArray();
+          //$this->pr($wordStory);
+          if ($traineeRecord['booster_id']) {
+            //echo 'came in';
+            $words = $wordStory->pluck('word')->toArray();
+            $allWords = $wordStory->pluck('words')->toArray();
+            //$this->pr($allWords);      
+          } else {
+            $allWords = $words = $wordStory->pluck('word')->toArray();
+          }
+          
+          //exit;
+          //$this->pr($traineeRecord);
+          //$allWords = $words = $wordStory->toArray();
           //$this->pr($allWords);
           if ($traineeCurrentPosition->position === 'review' || $traineeCurrentPosition->position === 'tale' ) {
             return redirect('/review');
@@ -143,9 +157,17 @@ class TraineeSessionController extends Controller
           } else if ($traineeCurrentPosition->position === 'answer') {
             return redirect('/cue');
           } else {
-            $allWords = implode(',',$allWords);
+            $totalWords = count($allWords);
+            $chunkLength = (int) $totalWords / 5;
+            $respClass = 'col-lg-3';
+            switch($chunkLength) {
+              case 2:
+                $respClass = 'col-lg-6';
+              break;
+            }
+            $allWords = implode(',', $allWords);
             $words = array_chunk($words, 5, true);
-            return view('msmt.sessions.word', compact('words', 'allWords'));
+            return view('msmt.sessions.word', compact('words', 'allWords', 'respClass'));
           }
         } else {
           return redirect('/index');
@@ -166,7 +188,8 @@ class TraineeSessionController extends Controller
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
         //$storyWords = Word::where('story_id', $trainee['session_number'])->pluck('word');
-        $storyWords = $this->getWords($trainee);
+        $storyObj = $this->getWords($trainee);
+        $storyWords = $this->getStoryWords($trainee, $storyObj);
         $story = $request->get('story');
         $fullStory = strtolower($story);
         $sentences = preg_split('/([.?!]+)/', $fullStory, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
@@ -227,7 +250,8 @@ class TraineeSessionController extends Controller
         $story = TraineeStory::select('updated_story as story', 'reviewed')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->where('round', $trainee['round'])->orderBy('id', 'desc')->first();
         if ($story && $story['reviewed']) {
           //$storyWords = Word::where('story_id', $trainee['session_number'])->pluck('word');
-          $storyWords = $this->getWords($trainee);
+          $storyObj = $this->getWords($trainee);
+          $storyWords = $this->getStoryWords($trainee, $storyObj);
           foreach ($storyWords as $word) {
             $story->story = str_replace($word, "<span class='emboss'>$word</span>", $story->story);
           }
