@@ -133,15 +133,20 @@ class TraineeSessionController extends Controller
         if ($traineeRecord) {
           $traineeCurrentPosition = $traineeRecord->session_current_position !== null?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
           $wordStory = $this->getWords($traineeRecord);
+
+          // echo "<pre>";print_r($traineeRecord);
+          //    exit;
           //$this->pr($traineeRecord);
           //$this->pr($wordStory);
           if ($traineeRecord['booster_id']) {
-            //echo 'came in';
+
             $words = $wordStory->pluck('word')->toArray();
             $allWords = $wordStory->pluck('words')->toArray();
             //$this->pr($allWords);      
           } else {
+             
             $allWords = $words = $wordStory->pluck('word')->toArray();
+            
           }
           
           //exit;
@@ -165,9 +170,17 @@ class TraineeSessionController extends Controller
                 $respClass = 'col-lg-6';
               break;
             }
-            $allWords = implode(',', $allWords);
-            $words = array_chunk($words, 5, true);
-            return view('msmt.sessions.word', compact('words', 'allWords', 'respClass'));
+            if ($traineeRecord['booster_id']) {
+              $allWords = implode('.', $allWords);
+              $words = array_chunk($words, 5, true);
+              $type = "directions";
+              return view('msmt.sessions.word', compact('words', 'allWords', 'respClass', 'type'));
+            } else {
+              $allWords = implode(',', $allWords);
+              $words = array_chunk($words, 5, true);
+              return view('msmt.sessions.word', compact('words', 'allWords', 'respClass'));
+            }
+            
           }
         } else {
           return redirect('/index');

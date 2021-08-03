@@ -65,40 +65,116 @@
 <script type="text/javascript">
   $(document).ready( function() { 
     var allWords = "{{ $allWords }}";
-    allWords = allWords.split(',');
-    var wordCount = allWords.length;
-    var userUsedWordCount = 0;
-    console.log(allWords);
-    $(document).on("keyup", "form", function(event) { 
-      $('#jsUserMessage').addClass('d-none');
-      $('#jsWordContainer p').removeClass('strikeThrough');
-      var writeup = $('#jsWriteup').val().toUpperCase();
-      var updateWriteUp = $('#jsWriteup').val();
-      userUsedWordCount = 0;
-      //$('#jsWriteup').val(writeup.toUpperCase())
+    var type = "{{ $type ?? '' }}";
+    if (type) {
+
+      allWords = allWords.split('.');
+      var wordCount = allWords.length;
+      var allWordsUsed = false;
+      console.log(allWords);
+      var wordsArr = [];
       for (counter = 0; counter < wordCount; counter++) {
-        if (writeup.indexOf(' '+allWords[counter]+' ')!= -1 || writeup.indexOf(' '+allWords[counter]+'.') != -1 || writeup.indexOf(' '+allWords[counter]+',') != -1  || writeup.indexOf(allWords[counter]+' ')!= -1 ) {
-          $('#jsWord-'+counter).addClass('strikeThrough');
-          var regExp = new RegExp(allWords[counter],"i");
-          updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
-          userUsedWordCount++;
-        } else {
-          var regExp = new RegExp(allWords[counter],"gi");
-          updateWriteUp = updateWriteUp.replace(regExp, allWords[counter].toLowerCase());
+          var wordsArr2 = allWords[counter].split(",");
+          wordsArr.push(wordsArr2);
         }
-      }
-      $('#jsWriteup').val(updateWriteUp)
-    });
+      var i = 0;
+      var j = 0;
+      var wordNxt = wordsArr[i][j];
+      $(document).on("keyup", "form", function(event) { 
+        
+        $('#jsUserMessage').addClass('d-none');
+        //$('#jsWordContainer p').removeClass('strikeThrough');
+        var writeup = $('#jsWriteup').val().toUpperCase();
+        var updateWriteUp = $('#jsWriteup').val();
+    
+        if(event.which == 32){
+          var totWord = $("#jsWriteup").val().split(' ');
+          var lastWord = totWord[totWord.length - 2];
+          if(lastWord.toUpperCase() == wordNxt) {
+            updateWriteUp = updateWriteUp.replace(lastWord, wordNxt);
+            getNextWord();
+          }
+        }
+        if (event.which == 188) {
+          var totWord = $("#jsWriteup").val().split(' ');
+          var lastWord = totWord[totWord.length - 1];
+          if(lastWord.toUpperCase() == wordNxt+",") {
+            updateWriteUp = updateWriteUp.replace(lastWord, wordNxt);
+            getNextWord();
+          }
+        }
+        if (event.which == 190) {
+          var totWord = $("#jsWriteup").val().split(' ');
+          var lastWord = totWord[totWord.length - 1];
+          if(lastWord.toUpperCase() == wordNxt+".") {
+            updateWriteUp = updateWriteUp.replace(lastWord, wordNxt);
+            var next = getNextWord();
+            console.log(next);
+          }
+        }
+
+        for (var row = 0; row < wordsArr.length; row++) {
+          for (var col = 0; col < wordsArr[row].length; col++) {
+            if (writeup.indexOf(' '+wordsArr[row][col]+' ')!= -1 || writeup.indexOf(' '+wordsArr[row][col]+'.') != -1 || writeup.indexOf(' '+wordsArr[row][col]+',') != -1  || writeup.indexOf(wordsArr[row][col]+' ')!= -1 ) { 
+            } else {
+
+              console.log(row);
+              if($("#jsWord-"+row).hasClass("strikeThrough")) {
+                i = row;
+                j = col;
+                wordNxt = wordsArr[row][col];
+                for(var p = 0; p >= row; p++) {
+                  $("#jsWord-"+p).removeClass("strikeThrough");
+                }
+                
+              }
+
+            }
+          }
+        }
+      });
+
+    } else {
+      allWords = allWords.split(',');
+      var wordCount = allWords.length;
+      var userUsedWordCount = 0;
+      console.log(allWords);
+      $(document).on("keyup", "form", function(event) { 
+        console.log("pressed");
+        $('#jsUserMessage').addClass('d-none');
+        $('#jsWordContainer p').removeClass('strikeThrough');
+        var writeup = $('#jsWriteup').val().toUpperCase();
+        var updateWriteUp = $('#jsWriteup').val();
+        userUsedWordCount = 0;
+        //$('#jsWriteup').val(writeup.toUpperCase())
+        for (counter = 0; counter < wordCount; counter++) {
+          if (writeup.indexOf(' '+allWords[counter]+' ')!= -1 || writeup.indexOf(' '+allWords[counter]+'.') != -1 || writeup.indexOf(' '+allWords[counter]+',') != -1  || writeup.indexOf(allWords[counter]+' ')!= -1 ) {
+            $('#jsWord-'+counter).addClass('strikeThrough');
+            var regExp = new RegExp(allWords[counter],"i");
+            updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
+            userUsedWordCount++;
+          } else {
+            var regExp = new RegExp(allWords[counter],"gi");
+            updateWriteUp = updateWriteUp.replace(regExp, allWords[counter].toLowerCase());
+          }
+        }
+        $('#jsWriteup').val(updateWriteUp)
+      });
+    }
+    
+    
+   
     $(document).on('click touchstart', '#jsStartSession', function() {
       $('#jsTraineeSession').slideUp();
       $('#jsTraineeStory').removeClass('d-none').show();
     });
     $("#jsSubmit").on('click touchstart', function(event) {
       event.preventDefault();
+      console.log("comes");
       $('#jsUserMessage').addClass('d-none');
       $("#jsLoader").removeClass('d-none');
       $(this).prop("disabled", true);
-      if (wordCount == userUsedWordCount) {
+      if (wordCount == userUsedWordCount || allWordsUsed == true) {
         $("#jsFormWriteup").submit();
       } else {
         $('#jsUserMessage').addClass('alert-danger');
@@ -110,7 +186,30 @@
         $(this).prop("disabled", false);
       }
     })
+    function getNextWord() {
+
+      j++;
+      if (j < wordsArr[i].length) {
+        wordNxt = wordsArr[i][j];
+      } else {
+        //console.log("new array");
+        $('#jsWord-'+i).addClass('strikeThrough');
+        if (i == 9) {
+          allWordsUsed = true;
+          return;
+        } else {
+          i++;
+          j = 0;
+          wordNxt = wordsArr[i][j];
+        }
+        
+      }
+  
+      
+      return wordNxt;
+    }
 
   })
+
 </script>
 @endsection

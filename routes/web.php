@@ -92,3 +92,5 @@ Route::get('/cue', [TraineeSessionController::class,'cue']);
 Route::post('/after', [AjaxController::class,'save']);
 //Route::get('/finish', [TraineeSessionController::class,'finish']);
 // ---------------------------------------- ./ SESSIONS 5-8 /--------------------------------------------------- //
+
+// ---------------------------------------- / SESSIONS 9 & 10 /---------------------------------------------------- //
