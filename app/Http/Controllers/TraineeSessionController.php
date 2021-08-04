@@ -140,8 +140,13 @@ class TraineeSessionController extends Controller
           //$this->pr($wordStory);
           if ($traineeRecord['booster_id']) {
 
-            $words = $wordStory->pluck('word')->toArray();
-            $allWords = $wordStory->pluck('words')->toArray();
+            
+
+            $words = $wordStory->where('sentence_type', 'O')->pluck('contextual_cue')->toArray();
+            $allWords = $wordStory->pluck('word')->toArray();
+            $arrays = $wordStory->where('question', '<>', '')->pluck('question')->toArray();
+            // print_r($allWords);
+            // exit;
             //$this->pr($allWords);      
           } else {
              
@@ -169,12 +174,16 @@ class TraineeSessionController extends Controller
               case 2:
                 $respClass = 'col-lg-6';
               break;
+              case 4:
+                $respClass = 'col-lg-6';
+              break;
             }
             if ($traineeRecord['booster_id']) {
-              $allWords = implode('.', $allWords);
+              $allWords = implode(',', $allWords);
               $words = array_chunk($words, 5, true);
               $type = "directions";
-              return view('msmt.sessions.word', compact('words', 'allWords', 'respClass', 'type'));
+              $arrays = implode('.', $arrays);
+              return view('msmt.sessions.word', compact('words', 'allWords', 'respClass', 'type', 'arrays'));
             } else {
               $allWords = implode(',', $allWords);
               $words = array_chunk($words, 5, true);

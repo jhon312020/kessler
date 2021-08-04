@@ -66,33 +66,54 @@
   $(document).ready( function() { 
     var allWords = "{{ $allWords }}";
     var type = "{{ $type ?? '' }}";
+    var arrays = "{{ $arrays ?? '' }}";
     if (type) {
 
-      allWords = allWords.split('.');
+      allWords = allWords.split(',');
       var wordCount = allWords.length;
       var allWordsUsed = false;
-      console.log(allWords);
+      
+      var allArr = arrays.split('.');
+
       var wordsArr = [];
-      for (counter = 0; counter < wordCount; counter++) {
-          var wordsArr2 = allWords[counter].split(",");
+      var wordsTotal = [];
+      var wordsTimes = [];
+      for (counter = 0; counter < allArr.length; counter++) {
+          var wordsArr2 = allArr[counter].split(",");
           wordsArr.push(wordsArr2);
         }
+      
       var i = 0;
       var j = 0;
       var wordNxt = wordsArr[i][j];
+     
+      for (var counter = 0; counter < wordCount; counter++) {
+        var count = countOccurences(allWords[counter]);
+        wordsTimes.push([allWords[counter], count]);
+      }
+      var $rows = [];
       $(document).on("keyup", "form", function(event) { 
         
         $('#jsUserMessage').addClass('d-none');
+        
         //$('#jsWordContainer p').removeClass('strikeThrough');
         var writeup = $('#jsWriteup').val().toUpperCase();
         var updateWriteUp = $('#jsWriteup').val();
+        // var totWord = $("#jsWriteup").val().split(' ');
+        // var lastWord = totWord[totWord.length - 2];
+        // if(lastWord.toUpperCase() == wordNxt) {
+        //   updateWriteUp = updateWriteUp.replace(lastWord, wordNxt);
+        //   var next = getNextWord();
+        //   console.log(next);
+        // }
     
         if(event.which == 32){
           var totWord = $("#jsWriteup").val().split(' ');
           var lastWord = totWord[totWord.length - 2];
           if(lastWord.toUpperCase() == wordNxt) {
             updateWriteUp = updateWriteUp.replace(lastWord, wordNxt);
-            getNextWord();
+            var next = getNextWord();
+            console.log(next);
           }
         }
         if (event.which == 188) {
@@ -100,7 +121,8 @@
           var lastWord = totWord[totWord.length - 1];
           if(lastWord.toUpperCase() == wordNxt+",") {
             updateWriteUp = updateWriteUp.replace(lastWord, wordNxt);
-            getNextWord();
+            var next = getNextWord();
+            console.log(next);
           }
         }
         if (event.which == 190) {
@@ -113,19 +135,60 @@
           }
         }
 
+        // for (var t = 0; t < wordsTimes.length; t++) {
+        //   // console.log(getOccurences(writeup, wordsTimes[t][0]));
+        //     if (wordsTimes[t][1] == getOccurences(writeup, wordsTimes[t][0])) {
+              
+        //       // wordsTimes[t][1] = 0;
+        //     } else {
+        //       console.log("else");
+        //       // wordsTimes[t][1] = getOccurences(writeup, wordsTimes[t][0])
+        //     }
+        // }
+        if ($rows.length > 0) {
+          var $w;
+          var $near;
+          var $dir; 
+          var $row;
+          $.each($rows,function(i,v) {
+            if (wordsArr[v[0]].length-1 == v[1]) {
+              console.log("comes to strikeThrough");
+              $w = wordsArr[v[0]][v[1]];
+              $near = wordsArr[v[0]][v[1]-1];
+              $dir = "left";
+              $row = v[0];
+            } else {
+              $w = wordsArr[v[0]][v[1]];
+              $near = wordsArr[v[0]][v[1]+1];
+              $dir = "right";
+            }
+            
+            searchNearBy($w,$near,$dir,$row);
+           /* if ($find == true) {
+              console.log(v[0]);
+              $("#jsWord-"+v[0]).addClass("strikeThrough");
+            }*/
+          });
+
+        }
+
         for (var row = 0; row < wordsArr.length; row++) {
+
           for (var col = 0; col < wordsArr[row].length; col++) {
             if (writeup.indexOf(' '+wordsArr[row][col]+' ')!= -1 || writeup.indexOf(' '+wordsArr[row][col]+'.') != -1 || writeup.indexOf(' '+wordsArr[row][col]+',') != -1  || writeup.indexOf(wordsArr[row][col]+' ')!= -1 ) { 
+
+              
             } else {
 
-              console.log(row);
+             
               if($("#jsWord-"+row).hasClass("strikeThrough")) {
-                i = row;
-                j = col;
-                wordNxt = wordsArr[row][col];
-                for(var p = 0; p >= row; p++) {
-                  $("#jsWord-"+p).removeClass("strikeThrough");
-                }
+                console.log("comes.");
+                $rows.push([row, col]);
+                allWordsUsed = false;
+                // for(var p = row; p <= 9; p++) {
+                //   $("#jsWord-"+p).removeClass("strikeThrough");
+                  $("#jsWord-"+row).removeClass("strikeThrough");
+                //}
                 
               }
 
@@ -208,8 +271,50 @@
       
       return wordNxt;
     }
+    function countOccurences(word) {
+      var occurance = 0;
+      $(allWords).each(function (index, value) {
+           if(value.indexOf(word)!= -1) 
+           {
+              occurance++;
+           }
+      }); 
+      return occurance;
+    }
+
+    function getOccurences(string,word) {
+      return string.split(word).length - 1;
+    }
+
+    function searchNearBy(word,near,dir,row) {
+      
+      var writeup = $('#jsWriteup').val().toUpperCase();
+      var sentences = writeup.split(".");
+      $.each(sentences, function(i,v) {
+        if(v.indexOf(word)!= -1) {
+          var wordFound = i;
+          if (v.indexOf(near) != -1) {
+            $("#jsWord-"+row).addClass("strikeThrough");
+            return false;
+          } else {
+            if (dir == "left") {
+
+            }
+         }
+         
+        }
+      })
+    
+    }
 
   })
 
 </script>
 @endsection
+
+
+
+
+
+
+
