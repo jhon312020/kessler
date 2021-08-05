@@ -9,7 +9,7 @@
   </div>
   <div class="row">
     <div class="col-lg-8 mx-auto text-justify">
-       <p>On the same page below you are going to see a set of 20 words. The words will be capitalized like <span class="emboss">THIS</span>. <p>Build a story of your own using these words. Fit in as many words in a sentence. This story is to help you remember the capitalized words. Try to make a picture of each storyline in your head. </p><p>Click on <span class="emboss">START</span> when you are ready.</p>
+       <p>Below you are going to see a list of 20 words. The words will be capitalized like <span class="emboss">THIS</span>. <p>Build a story of your own using these words. You can use multiple words in a sentence, but you want each sentence to be as easy to visualize as possible. The purpose of the story is to help you remember the capitalized words - you want to be able to create a picture of the storyline in your head.</p><p>Click on <span class="emboss">START</span> when you are ready.</p>
        <br/>
     </div>
   </div>
@@ -34,7 +34,7 @@
         <div class="col-xs-4 col-lg-12">
           <div class="row">
             @foreach($words as $wordGroup)
-              <div class="col-xs-6 col-sm-6 col-lg-3">
+              <div class="col-xs-6 col-sm-6 <?php echo $respClass;?>">
                 @foreach($wordGroup as $wordID=>$word)
                   <p id="jsWord-{{ $wordID }}" class="text-left">{{$word}}</p>
                 @endforeach
@@ -64,26 +64,89 @@
 
 <script type="text/javascript">
   $(document).ready( function() { 
-    var allWords = "{{ $allWords }}";
-    allWords = allWords.split(',');
-    var wordCount = allWords.length;
+    var totalwords = "{{ $allWords }}";
+    var sentenceWords = "{{ $sentenceWords }}";
+    sentenceWords = sentenceWords.split('**');
+    sentenceWordsLength = sentenceWords.length;
+    console.log(sentenceWords);
     var userUsedWordCount = 0;
+    var wordCount = '';
+    var writeUpWords = '';
+    var subStringLen = 0;
     $(document).on("keyup", "form", function(event) { 
+      allWords = totalwords.split(',');
+      writeUpWords = [];
+      wordCount = allWords.length;
       $('#jsUserMessage').addClass('d-none');
       $('#jsWordContainer p').removeClass('strikeThrough');
       var writeup = $('#jsWriteup').val().toUpperCase();
       var updateWriteUp = $('#jsWriteup').val();
       userUsedWordCount = 0;
       //$('#jsWriteup').val(writeup.toUpperCase())
+      var combinations = ['spaceandspace', 'spaceanddot', 'spaceandcomma', 'wordandspace'];
+      var combLength = combinations.length;
       for (counter = 0; counter < wordCount; counter++) {
-        if (writeup.indexOf(' '+allWords[counter]+' ')!= -1 || writeup.indexOf(' '+allWords[counter]+'.') != -1 || writeup.indexOf(' '+allWords[counter]+',') != -1  || writeup.indexOf(allWords[counter]+' ')!= -1 ) {
-          $('#jsWord-'+counter).addClass('strikeThrough');
+        var wordPostion = '';
+        var checkKey = '';
+        for (combCounter = 0; combCounter < combLength; combCounter++  ) {
+          switch(combinations[combCounter]) {
+            case 'spaceandspace':
+              wordCombination = ' '+allWords[counter]+' ';
+              wordPostion = writeup.indexOf(wordCombination);
+            break;
+            case 'spaceanddot':
+              wordCombination = ' '+allWords[counter]+'.';
+              wordPostion = writeup.indexOf(wordCombination);
+            break;
+            case 'spaceandcomma':
+              wordCombination = ' '+allWords[counter]+',';
+              wordPostion = writeup.indexOf(wordCombination);
+            break;
+            case 'wordandspace':
+              wordCombination = allWords[counter]+' ';
+              wordPostion = writeup.indexOf(wordCombination);
+            break;
+          }
+          if (wordPostion != -1) {
+            console.log('WordPostion', wordPostion);
+            break;
+          }
+        }
+        //return;
+        if ( wordPostion != -1 ) {
+          subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
+          writeup = writeup.substring(subStringLen, writeup.length);
+
+          //$('#jsWord-'+counter).addClass('strikeThrough');
           var regExp = new RegExp(allWords[counter],"i");
           updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
           userUsedWordCount++;
-        } else {
-          var regExp = new RegExp(allWords[counter],"gi");
-          updateWriteUp = updateWriteUp.replace(regExp, allWords[counter].toLowerCase());
+          writeUpWords.push(allWords[counter]); 
+          delete allWords[counter];
+          //writeup =  writeup.substring(pos+checkKey.length, writeup.length);
+        } 
+        console.log('Update writeup',updateWriteUp);
+      }
+      //
+      if (writeUpWords.length) {
+        for(senCounter = 0; senCounter < sentenceWordsLength; senCounter++ ) {
+          words = sentenceWords[senCounter].split(",");
+          wordLength = words.length;
+          var wordFound = false;
+          for (subSenCounter = 0; subSenCounter < wordLength; subSenCounter++) {
+            var findWord = words[subSenCounter];
+            wordIndex = writeUpWords.indexOf(findWord);
+            if (wordIndex !== -1) {
+              wordFound = true;
+              delete writeUpWords[wordIndex];
+            } else {
+              wordFound = false;
+              break;
+            }
+          }
+          if (wordFound == true) {
+            $('#jsWord-'+senCounter).addClass('strikeThrough');
+          }
         }
       }
       $('#jsWriteup').val(updateWriteUp)
@@ -100,6 +163,7 @@
       if (wordCount == userUsedWordCount) {
         $("#jsFormWriteup").submit();
       } else {
+        console.log(wordCount, '==', userUsedWordCount);
         $('#jsUserMessage').addClass('alert-danger');
         $('#jsUserMessage').text('Please use all the words to build the story!');
         $('#jsUserMessage').removeClass('d-none').show();
@@ -113,3 +177,10 @@
   })
 </script>
 @endsection
+
+
+
+
+
+
+

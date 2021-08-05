@@ -134,24 +134,13 @@ class TraineeSessionController extends Controller
           $traineeCurrentPosition = $traineeRecord->session_current_position !== null?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
           $wordStory = $this->getWords($traineeRecord);
 
-          // echo "<pre>";print_r($traineeRecord);
-          //    exit;
-          //$this->pr($traineeRecord);
-          //$this->pr($wordStory);
           if ($traineeRecord['booster_id']) {
-
-            
-
-            $words = $wordStory->where('sentence_type', 'O')->pluck('contextual_cue')->toArray();
-            $allWords = $wordStory->pluck('word')->toArray();
-            $arrays = $wordStory->where('question', '<>', '')->pluck('question')->toArray();
-            // print_r($allWords);
-            // exit;
-            //$this->pr($allWords);      
+            $words = $wordStory->where('question', '<>', 'D')->pluck('word')->toArray();
+            $sentenceWords = $wordStory->where('question', '<>', 'D')->pluck('question')->toArray();
+            $allWords = $wordStory->pluck('words')->toArray();
+            //$this->pr($words);
           } else {
-             
             $allWords = $words = $wordStory->pluck('word')->toArray();
-            
           }
           
           //exit;
@@ -167,7 +156,7 @@ class TraineeSessionController extends Controller
           } else if ($traineeCurrentPosition->position === 'answer') {
             return redirect('/cue');
           } else {
-            $totalWords = count($allWords);
+            $totalWords = count($words);
             $chunkLength = (int) $totalWords / 5;
             $respClass = 'col-lg-3';
             switch($chunkLength) {
@@ -181,9 +170,14 @@ class TraineeSessionController extends Controller
             if ($traineeRecord['booster_id']) {
               $allWords = implode(',', $allWords);
               $words = array_chunk($words, 5, true);
-              $type = "directions";
-              $arrays = implode('.', $arrays);
-              return view('msmt.sessions.word', compact('words', 'allWords', 'respClass', 'type', 'arrays'));
+              if ($traineeRecord['booster_id'] == 1) {
+                $sentenceWords = implode('**', $sentenceWords);
+                $type = "directions";
+                return view('msmt.sessions.directions', compact('words', 'allWords', 'respClass', 'type', 'sentenceWords'));
+              } else {
+                return view('msmt.sessions.word', compact('words', 'allWords', 'respClass', 'type', 'sentenceWords'));
+              }
+              
             } else {
               $allWords = implode(',', $allWords);
               $words = array_chunk($words, 5, true);
@@ -206,7 +200,6 @@ class TraineeSessionController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function writeup(Request $request) {
-
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
@@ -241,7 +234,6 @@ class TraineeSessionController extends Controller
         // $this->pr($userWords);
         // $this->pr($userStoryWords);
         // exit;
-
         $traineeStory['trainee_id'] = $trainee['trainee_id'];
         $traineeStory['story_id'] = $trainee['session_number'];
         $traineeStory['session_pin'] = $trainee['session_pin'];
@@ -251,11 +243,9 @@ class TraineeSessionController extends Controller
         $userStoryWords = array_values(array_unique($userStoryWords));
         $traineeStory['user_story_words'] = json_encode($userStoryWords);
         $this->traineeCurrentPosition->position = 'review';
-
         if (TraineeStory::insert($traineeStory)) {
           $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
           $traineeRecord->session_state = 'continue';
-
           $traineeRecord->save();
         }
         return redirect('/review');
