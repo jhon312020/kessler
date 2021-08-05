@@ -175,7 +175,7 @@ class TraineeSessionController extends Controller
                 $type = "directions";
                 return view('msmt.sessions.directions', compact('words', 'allWords', 'respClass', 'type', 'sentenceWords'));
               } else {
-                return view('msmt.sessions.word', compact('words', 'allWords', 'respClass', 'type', 'sentenceWords'));
+                return view('msmt.sessions.word', compact('words', 'allWords', 'respClass'));
               }
               
             } else {

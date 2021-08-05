@@ -34,7 +34,7 @@
         <div class="col-xs-4 col-lg-12">
           <div class="row">
             @foreach($words as $wordGroup)
-              <div class="col-xs-6 col-sm-6 col-lg-3">
+              <div class="col-xs-6 col-sm-6  <?php echo $respClass;?>">
                 @foreach($wordGroup as $wordID=>$word)
                   <p id="jsWord-{{ $wordID }}" class="text-left">{{$word}}</p>
                 @endforeach
