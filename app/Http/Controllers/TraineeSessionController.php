@@ -206,7 +206,7 @@ class TraineeSessionController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function writeup(Request $request) {
-      
+
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
@@ -241,6 +241,7 @@ class TraineeSessionController extends Controller
         // $this->pr($userWords);
         // $this->pr($userStoryWords);
         // exit;
+
         $traineeStory['trainee_id'] = $trainee['trainee_id'];
         $traineeStory['story_id'] = $trainee['session_number'];
         $traineeStory['session_pin'] = $trainee['session_pin'];
@@ -250,9 +251,11 @@ class TraineeSessionController extends Controller
         $userStoryWords = array_values(array_unique($userStoryWords));
         $traineeStory['user_story_words'] = json_encode($userStoryWords);
         $this->traineeCurrentPosition->position = 'review';
+
         if (TraineeStory::insert($traineeStory)) {
           $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
           $traineeRecord->session_state = 'continue';
+
           $traineeRecord->save();
         }
         return redirect('/review');

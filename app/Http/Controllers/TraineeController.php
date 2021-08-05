@@ -591,6 +591,9 @@ class TraineeController extends Controller
             $recallWordsData = with(clone $queryObj)->where('type', 'recall')->get();
             $storyWords = $this->getWordAndIDObj($trainee);
             $allStoryWords = $storyWords->pluck('word')->toArray();
+            $totalWords = count($allStoryWords);
+            // print_r($totalWords);
+            // exit;
             $recallRoundOneCount = array();
             $recallRoundOneCount = $this->_recallReport($recallRoundOne, $allStoryWords);
             $recallRoundTwoCount = array();
@@ -607,7 +610,7 @@ class TraineeController extends Controller
             $timeOverall = with(clone $queryObj);
             $overallTotal = $timeOverall->sum('time_taken');
             $overallTotalTime = gmdate('i', $overallTotal)." mins : ".gmdate('s', $overallTotal)." sec";
-            return view('kessler.trainee.report', compact('sessionNumber','traineeID', 'contextualRoundOneCount','categoricalRoundOneCount', 'recallRoundOneCount','contextualRoundTwoCount','categoricalRoundTwoCount', 'recallRoundTwoCount', 'recallOverallCount', 'contextualOverallCount', 'categoricalOverallCount', 'roundOneTotalTime', 'roundTwoTotalTime', 'overallTotalTime','startTime', 'endTime'));
+            return view('kessler.trainee.report', compact('sessionNumber','traineeID', 'contextualRoundOneCount','categoricalRoundOneCount', 'recallRoundOneCount','contextualRoundTwoCount','categoricalRoundTwoCount', 'recallRoundTwoCount', 'recallOverallCount', 'contextualOverallCount', 'categoricalOverallCount', 'roundOneTotalTime', 'roundTwoTotalTime', 'overallTotalTime','startTime', 'endTime','totalWords'));
           } else {
             return view('errors.404');
           }

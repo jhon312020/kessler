@@ -70,9 +70,10 @@
 
 
    $(document).ready( function() { // Wait until document is fully parsed
-    var recallRoundOneCount = {{ $recallRoundOneCount['found_count'] }};
-    var contextualRoundOneCount = {{ $contextualRoundOneCount }};
-    var categoricalRoundOneCount = {{ $categoricalRoundOneCount }};
+    var recallRoundOneCount = '{{ $recallRoundOneCount['found_count'] }}';
+    var contextualRoundOneCount = '{{ $contextualRoundOneCount }}';
+    var categoricalRoundOneCount = '{{ $categoricalRoundOneCount }}';
+    var totalWordsCount = '{{ $totalWords }}';
     const barColors = ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'];
     const borderColors = ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'];
     const barWidth = 1;
@@ -98,9 +99,19 @@
       },
     options: {
         plugins: {
-            datalabels: barDataLabels
-                }
+          datalabels: barDataLabels
+        },
+        scales: {
+          yAxes: [{
+            display: true,
+            ticks: {
+              beginAtZero: true,
+              max: Math.abs(totalWordsCount)
             }
+          }]
+        }
+      },
+        
     });
     var recallRoundTwoCount = {{ $recallRoundTwoCount['found_count'] }};
     var contextualRoundTwoCount = {{ $contextualRoundTwoCount }};
@@ -118,11 +129,20 @@
           borderWidth: barWidth,
         }],
       },
-    options: {
+      options: {
         plugins: {
-            datalabels: barDataLabels
-                }
+          datalabels: barDataLabels
+        },
+        scales: {
+          yAxes: [{
+            display: true,
+            ticks: {
+              beginAtZero: true,
+              max: Math.abs(totalWordsCount)
             }
+          }]
+        },
+      }
     });
     var recallOverallCount = {{ $recallOverallCount }};
     var contextualOverallCount = {{ $contextualOverallCount }};
