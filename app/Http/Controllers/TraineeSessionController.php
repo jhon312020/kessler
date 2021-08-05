@@ -206,6 +206,7 @@ class TraineeSessionController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function writeup(Request $request) {
+      
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
