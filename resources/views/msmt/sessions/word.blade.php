@@ -68,6 +68,7 @@
     allWords = allWords.split(',');
     var wordCount = allWords.length;
     var userUsedWordCount = 0;
+    
     $(document).on("keyup", "form", function(event) { 
       $('#jsUserMessage').addClass('d-none');
       $('#jsWordContainer p').removeClass('strikeThrough');
@@ -93,6 +94,7 @@
       $('#jsTraineeStory').removeClass('d-none').show();
     });
     $("#jsSubmit").on('click touchstart', function(event) {
+
       event.preventDefault();
       $('#jsUserMessage').addClass('d-none');
       $("#jsLoader").removeClass('d-none');

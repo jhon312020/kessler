@@ -317,29 +317,45 @@ class TraineeController extends Controller
         $storyWords = array();
         $roundOneTimeTaken = 0;
         $roundTwoTimeTaken = 0;
-        $traineeReport = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed')->where('id', $trainee->id)->first();
+        $traineeReport = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'booster_id', 'session_type', 'round', 'completed')->where('id', $trainee->id)->first();
+
         $traineeID = $traineeReport->trainee_id;
         $sessionNumber = $traineeReport->session_number;
+
+        // print_r($traineeReport->booster_id);
+        // exit;
 
         if ($trainee && ($user->role == 'SA' || in_array($trainee->id, $trainer_traines))) {
           //$storyWords = Word::select('id', 'word')->where('story_id', $trainee->session_number)->get();
           $storyWords = $this->getWordAndIDObj($trainee);
+
           $queryObj = TraineeTransaction::select('id', 'word_id', 'trainee_id', 'session_pin', 'type', 'answer', 'correct_or_wrong','round','time_taken')->where('trainee_id', $trainee->trainee_id)->where('session_pin', $trainee->session_pin);
           $allStoryWords = $storyWords->pluck('word')->toArray();
+          //print_r($queryObj);
+          
           $timeOverall = with(clone $queryObj);
           $overallTotal = $timeOverall->sum('time_taken');
           $sessionTime = gmdate('i : s', $overallTotal).' sec';
           // $this->pr($sessionTime); exit();
           if ($trainee->round > 1) {
             $roundOneReport = with(clone $queryObj)->where('round', '=', '1')->get();
+
             if ($roundOneReport) {
               $roundOneTime = $roundOneReport->sum('time_taken');
               $roundOneTimeTaken = gmdate('i : s', $roundOneTime).' sec';
 
               $recallWords = $roundOneReport->shift();
-              $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
+              if ($traineeReport->booster_id == 1) {
+                $recallReport[] = $this->_directionsRecallReport($recallWords, $allStoryWords);
+              } else {
+                $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
+              }
+              
+              
               //$roundOneReport->where('type', 'contextual')->sum('time_taken');
               $roundOneReport = $roundOneReport->groupBy('word_id', 'type');
+              // print_r();
+              // exit;
               //$this->pr($roundOneReport->toArray());
               // $contextual = $roundOneReport->map(function ($item, $key) {
               //   return ["total" => $item->where('type', 'contextual')->sum('time_taken')];
@@ -375,6 +391,7 @@ class TraineeController extends Controller
               $roundTwoTimeTaken = gmdate('i : s', $roundTwoTime).' sec';
               $recallWords = $roundTwoReport->shift();
               $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
+              
               $roundTwoReport = $roundTwoReport->groupBy('word_id', 'type');
               $contextual = $this->_totalTime( $roundTwoReport, 'contextual');
               $categorical = $this->_totalTime( $roundTwoReport, 'categorical');
@@ -423,6 +440,46 @@ class TraineeController extends Controller
         }
         $recallReport['found_count'] = count($foundWords);
         $recallReport['unfound_count'] = count($allStoryWords) - count($foundWords);
+        $recallReport['words'] = implode(' ', $recallReport['words']).' ('.gmdate('i : s', $timeTaken).' sec)';
+      }
+      //$this->pr($recallReport);
+      return $recallReport;
+    }
+
+    private function _directionsRecallReport($recallWords, $allStoryWords) {
+      $recallReport = array();
+      //$this->pr($recallWords->toArray());
+      if ($recallWords) {
+        $timeTaken = $recallWords->time_taken;
+        $recallAnwers = json_decode($recallWords->answer);
+        $recallWords = explode(' ', $recallAnwers->words);
+
+        //
+        $wordsCount = array_count_values($allStoryWords);
+        $foundWords = 0;
+        foreach($recallWords as $key=>$recallWord) {
+          if (in_array($recallWord, $allStoryWords)) {
+            if ($wordsCount[$recallWord] > 0) {
+              $recallReport['words'][$key] = '<span class="correct"><i class="fa fa-check" aria-hidden="true">&nbsp;</i> '.$recallWord.'</span>';
+              $wordsCount[$recallWord]--;
+              $foundWords++;
+            } else {
+              $recallReport['words'][$key] = '<span class="wrong"><i class="fa fa-times" aria-hidden="true">&nbsp;</i> '.$recallWord.'</span>';
+            }
+            
+          } else {
+            $recallReport['words'][$key] = '<span class="wrong"><i class="fa fa-times" aria-hidden="true">&nbsp;</i> '.$recallWord.'</span>';
+          }
+        }        
+
+        //
+        // print_r($foundWords);
+        // exit;
+        //$recallWords = array_unique($recallWords);
+        // $unFoundWords = array_diff($allStoryWords, $recallWords);
+        $unFoundWords = count($allStoryWords) - $foundWords;
+        $recallReport['found_count'] = $foundWords;
+        $recallReport['unfound_count'] = $unFoundWords;
         $recallReport['words'] = implode(' ', $recallReport['words']).' ('.gmdate('i : s', $timeTaken).' sec)';
       }
       //$this->pr($recallReport);

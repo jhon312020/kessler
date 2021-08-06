@@ -54,24 +54,30 @@ class Controller extends BaseController
    * @return array
    */
   function getWords($trainee) {
+
     $this->booster = Booster::pluck('category','id');
     //$this->pr($trainee);
+   
     
     if (strtolower($trainee['session_number']) === $this->boosterSession) {
-      //echo 'came in';
+       echo "booster";
+      exit;
+      
       $wordObj = Task::select('task as word', 'words')->where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->get();
     } else {
-
+      
       if ($trainee['booster_id']) {
+
         $type = strtolower($this->booster[$trainee['booster_id']]);
         
         //$wordObj = Word::where('story_id', $trainee['session_number'])->where('type', "$type")->pluck('word');
         $wordObj = Word::select('word', 'contextual_cue', 'question', 'words')->where('story_id', $trainee['session_number'])->where('type', "$type")->get('word');
-      } else {
 
+      } else {
+           
         $wordObj = Word::select('word')->where('story_id', $trainee['session_number'])->get('word');
-    //     echo $trainee;
-    // exit;
+
+    
       }
       
     }
@@ -155,9 +161,12 @@ class Controller extends BaseController
    */
   function getStoryWords($trainee, $storyWords) {
     if ($trainee['booster_id']) {
-      $storyWords = $storyWords->pluck('words');
+      
+      // $storyWords = $storyWords->pluck('words');
+      $storyWords = $storyWords->pluck('word');
     } else {
       $storyWords = $storyWords->pluck('word');
+
     }
     return $storyWords;
   }

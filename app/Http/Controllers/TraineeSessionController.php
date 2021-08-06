@@ -127,19 +127,21 @@ class TraineeSessionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function writing(Request $request) {
+
      if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee');
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
         if ($traineeRecord) {
           $traineeCurrentPosition = $traineeRecord->session_current_position !== null?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
           $wordStory = $this->getWords($traineeRecord);
-
+            
           if ($traineeRecord['booster_id']) {
             $words = $wordStory->where('question', '<>', 'D')->pluck('word')->toArray();
             $sentenceWords = $wordStory->where('question', '<>', 'D')->pluck('question')->toArray();
             $allWords = $wordStory->pluck('words')->toArray();
             //$this->pr($words);
           } else {
+
             $allWords = $words = $wordStory->pluck('word')->toArray();
           }
           
@@ -173,6 +175,7 @@ class TraineeSessionController extends Controller
               if ($traineeRecord['booster_id'] == 1) {
                 $sentenceWords = implode('**', $sentenceWords);
                 $type = "directions";
+
                 return view('msmt.sessions.directions', compact('words', 'allWords', 'respClass', 'type', 'sentenceWords'));
               } else {
                 return view('msmt.sessions.word', compact('words', 'allWords', 'respClass'));
@@ -200,27 +203,41 @@ class TraineeSessionController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function writeup(Request $request) {
+
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
+
         //$storyWords = Word::where('story_id', $trainee['session_number'])->pluck('word');
         $storyObj = $this->getWords($trainee);
+         
+
         $storyWords = $this->getStoryWords($trainee, $storyObj);
+        
         $story = $request->get('story');
         $fullStory = strtolower($story);
         $sentences = preg_split('/([.?!]+)/', $fullStory, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+
         $newString = '';
         foreach ($sentences as $key => $sentence) {
           $newString .= ($key & 1) == 0 ? ucfirst(strtolower(trim($sentence))) : $sentence.' ';
         }
+        
         foreach($storyWords as $word) {
           $searchWord = strtolower($word);
           //$newString = str_replace($searchWord, $word, $newString);
           $findWord = '/\b'.$searchWord.'\b/i';
-          $newString = preg_replace($findWord, $word, $newString, 1);
+          // $newString = preg_replace($findWord, $word, $newString, 1);
+          $newString = preg_replace($findWord, $word, $newString);
         }
-        //echo $newString;
+        $wordsArr = $storyObj->pluck("word","question");
+        // echo "<pre>";print_r($wordsArr);
+        // print_r($storyWords);
+        // print_r($newString);
+        //  exit;
+        
         preg_match_all('/\b([A-Z-]+)\b/', $newString, $userWords);
+
         $storyWords = $storyWords->toArray();
         $userStoryWords = array();
         if ($userWords) {
@@ -259,6 +276,7 @@ class TraineeSessionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function review(Request $request) {
+
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee');
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
@@ -375,13 +393,16 @@ class TraineeSessionController extends Controller
      * @return \Illuminate\Http\Response
      */   
     public function save(Request $request) {
+     
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee');
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
         if ($request->isMethod('post')) {
           $timeTaken = (int)(($request->endTime - $request->startTime)/1000);
           //$this->pr($trainee);
+          
           $data = $request->only('words');
+          
           $traineeTransaction['answer'] = json_encode($data);
           $traineeTransaction['trainee_id'] = $trainee['trainee_id'];
           $traineeTransaction['story_id'] = $trainee['session_number'];
