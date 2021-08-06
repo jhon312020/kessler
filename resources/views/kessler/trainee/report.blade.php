@@ -162,9 +162,18 @@
       },
     options: {
       plugins: {
-                datalabels: barDataLabels
-                }
+        datalabels: barDataLabels
+        },
+        scales: {
+          yAxes: [{
+            display: true,
+            ticks: {
+              beginAtZero: true,
+              max: Math.abs(totalWordsCount * 2)
             }
+          }]
+        }
+      }
     });
   });
 </script>
