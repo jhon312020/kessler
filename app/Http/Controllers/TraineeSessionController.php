@@ -163,9 +163,9 @@ class TraineeSessionController extends Controller
               case 2:
                 $respClass = 'col-lg-6';
               break;
-              case 4:
-                $respClass = 'col-lg-6';
-              break;
+              // case 4:
+              //   $respClass = 'col-lg-6';
+              // break;
             }
             if ($traineeRecord['booster_id']) {
               $allWords = implode(',', $allWords);
