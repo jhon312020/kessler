@@ -66,7 +66,7 @@ class Controller extends BaseController
         $type = strtolower($this->booster[$trainee['booster_id']]);
         
         //$wordObj = Word::where('story_id', $trainee['session_number'])->where('type', "$type")->pluck('word');
-        $wordObj = Word::select('word', 'contextual_cue', 'question', 'sentence_type')->where('story_id', $trainee['session_number'])->where('type', "$type")->get('word');
+        $wordObj = Word::select('word', 'contextual_cue', 'question', 'words')->where('story_id', $trainee['session_number'])->where('type', "$type")->get('word');
       } else {
 
         $wordObj = Word::select('word')->where('story_id', $trainee['session_number'])->get('word');
