@@ -525,37 +525,58 @@ class TraineeController extends Controller
       if ($traineeStory) {
         $traineeObj = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'booster_id', 'booster_range')->where('trainee_id', $traineeStory->trainee_id)->where('session_pin', $traineeStory->session_pin)->first();
         //$this->pr($traineeObj->toArray());
-        // exit;
+        //exit;
         $storyWords = $this->getWordAndIDObj($traineeObj);
         $storyWords = $storyWords->pluck('word', 'id');
         //$this->pr($storyWords);
         $story = $request->get('story');
         $fullStory = strtolower($story);
-        $sentences = preg_split('/([.?!]+)/', $fullStory, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+        $sentences = preg_split('/([.?!]+( ))/', $fullStory, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+        $sentences = array_values(array_filter($sentences, 'trim'));
+        //$this->pr($sentences);
         $newString = '';
+
         foreach ($sentences as $key => $sentence) {
           $newString .= ($key & 1) == 0 ? ucfirst(strtolower(trim($sentence))) : $sentence.' ';
         }
+        // echo $newString;
+        // echo '<br/>';
+        $formingString = '';
         foreach($storyWords as $word) {
           $searchWord = strtolower($word);
           //$newString = str_replace($searchWord, $word, $newString);
           $findWord = '/\b'.$searchWord.'\b/i';
           $newString = preg_replace($findWord, $word, $newString, 1);
+          $wordPosition = stripos($newString, $searchWord);
+          $strLen = strlen($searchWord);
+          $copyPosition = $wordPosition + $strLen;
+          $formingString .= $replaceString = subStr($newString, 0, $copyPosition);
+          //echo '<br/>';
+          $newString = substr($newString, $copyPosition);
+          //echo $newString;
+          //echo '<br/>';
         }
-        //echo $newString;
-        preg_match_all('/\b([A-Z-]+)\b/', $newString, $userWords);
-        $storyWords = $storyWords->toArray();
-        $userStoryWords = array();
-        if ($userWords) {
-          foreach($userWords[0] as $word) {
-            $word = strtoupper($word);
-            if (in_array($word, $storyWords)) {
-              $userStoryWords[] = $word;
+        $newString = $formingString;
+        // echo '<br/>';
+        // echo $formingString;
+        // echo '<br/>';
+        if ($traineeObj->booster_id != 1) {
+          preg_match_all('/\b([A-Z-]+)\b/', $formingString, $userWords);
+          $storyWords = $storyWords->toArray();
+          $userStoryWords = array();
+          if ($userWords) {
+            foreach($userWords[0] as $word) {
+              $word = strtoupper($word);
+              if (in_array($word, $storyWords)) {
+                $userStoryWords[] = $word;
+              }
             }
           }
+        } else {
+          $userStoryWords = array_values($storyWords->toArray());
         }
-        //$this->pr($userStoryWords);
-        //exit;
+        // $this->pr($userStoryWords);
+        // exit;
         $traineeStory->updated_story = $newString;
         $traineeStory->user_story_words = $userStoryWords;
         // $this->pr($traineeStory->toArray());
