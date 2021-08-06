@@ -280,15 +280,17 @@ class TraineeSessionController extends Controller
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee');
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
-        //$this->pr($trainee);
+        // $this->pr($trainee);
         $story = TraineeStory::select('updated_story as story', 'reviewed')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->where('round', $trainee['round'])->orderBy('id', 'desc')->first();
         if ($story && $story['reviewed']) {
           //$storyWords = Word::where('story_id', $trainee['session_number'])->pluck('word');
           $storyObj = $this->getWords($trainee);
           $storyWords = $this->getStoryWords($trainee, $storyObj);
+          //echo $story->story;
           foreach ($storyWords as $word) {
             $story->story = str_replace($word, "<span class='emboss'>$word</span>", $story->story);
           }
+          //echo $story->story;
           $linkURL = url('recallword');
           return view('msmt.sessions.story', compact('story', 'trainee', 'linkURL'));
         } else {

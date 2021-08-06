@@ -68,7 +68,6 @@
     var sentenceWords = "{{ $sentenceWords }}";
     sentenceWords = sentenceWords.split('**');
     sentenceWordsLength = sentenceWords.length;
-    console.log(sentenceWords);
     var userUsedWordCount = 0;
     var wordCount = '';
     var writeUpWords = '';

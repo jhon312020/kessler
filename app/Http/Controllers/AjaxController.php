@@ -131,6 +131,7 @@ class AjaxController extends Controller
       $response['reload'] = true;
       $showAnswer = 0;
       $iconWrongORRight = '<i class="fa fa-times" style="color:#721c24"></i>';
+      //$this->pr($request->all());
       if ($request->session()->has('trainee')) {
         $timeTaken = (int)(($request->endTime - $request->startTime)/1000);
         $trainee = $request->session()->get('trainee');
@@ -146,8 +147,8 @@ class AjaxController extends Controller
         }
         $allStoryWords = $this->getWordAndID($trainee)->all();
         $currentWord = $this->getCurrentWord($trainee, $wordID);
-        //$this->pr($allStoryWords);
-        //$this->pr($currentWord);
+        $this->pr($allStoryWords);
+        $this->pr($currentWord->toArray());
         $story = TraineeStory::select('updated_story', 'user_story_words')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->where('round', $trainee['round'])->orderBy('id', 'desc')->first();
         $userStoryWords = array();
         $totalUsersWords = 0;
@@ -198,7 +199,7 @@ class AjaxController extends Controller
               $traineeTransaction['type'] = 'categorical';
               
             }
-            TraineeTransaction::insert($traineeTransaction);
+            //TraineeTransaction::insert($traineeTransaction);
           }
           if (!$showAnswer && $request->showedAnswer) {   
             if ($userWordKey !== false) {
@@ -213,14 +214,19 @@ class AjaxController extends Controller
             }
           } 
         }
-        //echo 'test'.$fillUpWord;
+        echo 'test'.$fillUpWord;
         if ($story && $fillUpWord) {
           $breakParentLoop = false;
           $counter =1;
           $count = 0;
           $sentenceKey = 0;
+          //$this->pr($storySentences);
+          //$this->pr(array_slice($storySentences, $sentenceKey));
+          echo 'userStoryWords'.'--userWordKey'.$userWordKey;
+          $this->pr($userStoryWords);
           foreach (array_slice($storySentences, $sentenceKey) as $sentenceKey=>$currentSentence) {
-            //echo $currentSentence.'--'.$this->pr($userStoryWords);
+            echo $currentSentence.'--current';
+            //$this->pr($userStoryWords);
             foreach(array_slice($userStoryWords, $userWordKey, null, true) as $wordKey=>$word) {
               $findWord = '/\b'.$word.'\b/';
               //echo '<br/>'.$findWord.'--'.$wordKey.'--userWordkey--'.$userWordKey.'--fillupword--'.$fillUpWord.'---CurrentWord'.$word;

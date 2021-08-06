@@ -57,12 +57,7 @@ class Controller extends BaseController
 
     $this->booster = Booster::pluck('category','id');
     //$this->pr($trainee);
-   
-    
     if (strtolower($trainee['session_number']) === $this->boosterSession) {
-       echo "booster";
-      exit;
-      
       $wordObj = Task::select('task as word', 'words')->where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->get();
     } else {
       
@@ -162,8 +157,8 @@ class Controller extends BaseController
   function getStoryWords($trainee, $storyWords) {
     if ($trainee['booster_id']) {
       
-      // $storyWords = $storyWords->pluck('words');
-      $storyWords = $storyWords->pluck('word');
+      $storyWords = $storyWords->pluck('words');
+      //$storyWords = $storyWords->pluck('word');
     } else {
       $storyWords = $storyWords->pluck('word');
 
