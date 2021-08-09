@@ -166,4 +166,34 @@ class Controller extends BaseController
     return $storyWords;
   }
 
+  /**
+   * Get the sentenceKey of story, based on the 
+   * words array
+   *
+   * @params  $sentences, $words
+   * @return integer
+   */
+  function getSentenceKey($sentences, $words) {
+    $detecedKey = 0;
+    foreach ($sentences as $sentenceKey=>$sentence) {
+      //echo 'Before entering loop';
+      //print_r($words);
+      $newSentence = $sentence;
+      foreach($words as $wordkey=>$word) {
+        $pos = strpos($newSentence, $word);
+        if ($pos !== false) {
+          $length = $pos + strlen($word);
+          $newSentence = substr($sentence, $length);
+          unset($words[$wordkey]);
+        }
+      }
+      $wordCount = count($words);
+      if ($wordCount == 0) {
+        $detecedKey = $sentenceKey;
+        break;
+      }
+    }
+    return $detecedKey;
+  }
+
 }

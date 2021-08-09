@@ -25,7 +25,7 @@ class AjaxController extends Controller
     private $successHtml = "Excellent. Your answer is correct: ";
     private $errorHtml = "Oops sorry! The correct answer is: ";
     private $tryAgainHtml = "<span class='wrong'>Your response is incorrect.</span> Please try again.<br/>";
-
+    const ALTERNATETEXT = 'abcxyz';
     public function __construct() {
       $this->traineeCurrentPosition = (object) array('word_id'=>'', 'position'=>'', 'user_word_id'=>0, 'sentence'=>0);
     }
@@ -147,8 +147,8 @@ class AjaxController extends Controller
         }
         $allStoryWords = $this->getWordAndID($trainee)->all();
         $currentWord = $this->getCurrentWord($trainee, $wordID);
-        $this->pr($allStoryWords);
-        $this->pr($currentWord->toArray());
+        //$this->pr($allStoryWords);
+        //$this->pr($currentWord->toArray());
         $story = TraineeStory::select('updated_story', 'user_story_words')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->where('round', $trainee['round'])->orderBy('id', 'desc')->first();
         $userStoryWords = array();
         $totalUsersWords = 0;
@@ -199,7 +199,7 @@ class AjaxController extends Controller
               $traineeTransaction['type'] = 'categorical';
               
             }
-            //TraineeTransaction::insert($traineeTransaction);
+            TraineeTransaction::insert($traineeTransaction);
           }
           if (!$showAnswer && $request->showedAnswer) {   
             if ($userWordKey !== false) {
@@ -214,18 +214,24 @@ class AjaxController extends Controller
             }
           } 
         }
-        echo 'test'.$fillUpWord;
+        //echo 'test'.$fillUpWord;
         if ($story && $fillUpWord) {
           $breakParentLoop = false;
-          $counter =1;
+          $counter = 1;
           $count = 0;
           $sentenceKey = 0;
+          $replacingText = '';
+          $newSentence = '';
+          $strLength = 0;
           //$this->pr($storySentences);
           //$this->pr(array_slice($storySentences, $sentenceKey));
-          echo 'userStoryWords'.'--userWordKey'.$userWordKey;
-          $this->pr($userStoryWords);
+          //echo 'userWordKey'.$userWordKey;
+          $completedWords = array_slice($userStoryWords, 0, $userWordKey, true);
+          $sentenceKey = $this->getSentenceKey($storySentences, $completedWords);
+          //echo 'userStoryWords'.'--userWordKey'.$userWordKey;
+          //$this->pr($userStoryWords);
           foreach (array_slice($storySentences, $sentenceKey) as $sentenceKey=>$currentSentence) {
-            echo $currentSentence.'--current';
+            //echo $currentSentence.'--current';
             //$this->pr($userStoryWords);
             foreach(array_slice($userStoryWords, $userWordKey, null, true) as $wordKey=>$word) {
               $findWord = '/\b'.$word.'\b/';
@@ -235,7 +241,14 @@ class AjaxController extends Controller
                 $this->traineeCurrentPosition->sentence = $sentenceKey;
                 //echo 'came in';
                 if ($showAnswer) {
-                  $currentSentence = preg_replace($findWord, "<input class='fill-ups' name='answer-".$storyWordID."' id='answer' value='".$answer."' readonly autocomplete='off'> $iconWrongORRight", $currentSentence, 1, $count);
+                  $replacingText = "<input class='fill-ups' name='answer-".$storyWordID."' id='answer' value='".$answer."' readonly autocomplete='off'> $iconWrongORRight";
+                  $currentSentence = preg_replace($findWord, SELF::ALTERNATETEXT, $currentSentence, 1, $count);
+                  $position = strpos($currentSentence, SELF::ALTERNATETEXT);
+                  if ($position !== false) {
+                    $strLength = $position + strlen(SELF::ALTERNATETEXT);
+                  }
+                  $newSentence = substr($currentSentence, 0, $strLength);
+                  $currentSentence = substr($currentSentence, $strLength);
                   //echo '<br/>'.$currentSentence.'<br/>';
                   //If replacements happens we are breaking the parent loop
                   if ($count) {
@@ -243,8 +256,14 @@ class AjaxController extends Controller
                     $breakParentLoop = true;
                   }
                 } else {
-                  
-                  $currentSentence = preg_replace($findWord, "<input id='answer' class='fill-ups' name='answer-".$storyWordID."'>", $currentSentence, 1, $count);
+                  $replacingText = "<input id='answer' class='fill-ups' name='answer-".$storyWordID."'>";
+                  $currentSentence = preg_replace($findWord, SELF::ALTERNATETEXT, $currentSentence, 1, $count);
+                  $position = strpos($currentSentence, SELF::ALTERNATETEXT);
+                  if ($position !== false) {
+                    $strLength = $position + strlen(SELF::ALTERNATETEXT);
+                  }
+                  $newSentence = substr($currentSentence, 0, $strLength);
+                  $currentSentence = substr($currentSentence, $strLength);
                   //If replacements happens we are breaking the parent loop
                   if ($count) {
                     $breakParentLoop = true;
@@ -257,11 +276,15 @@ class AjaxController extends Controller
               }
             }
             if ($breakParentLoop) {
+              $currentSentence = $newSentence.$currentSentence;
+              $currentSentence = preg_replace("/".SELF::ALTERNATETEXT."/", $replacingText, $currentSentence, 1, $count);
               break;
             } 
             $counter++;
           }
         }
+        //echo $currentSentence;
+        //break;
         if ($fillUpWord) {
           $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
           $response['question'] = $currentSentence;
