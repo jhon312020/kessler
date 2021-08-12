@@ -66,7 +66,10 @@
   $(document).ready( function() { 
     var totalwords = "{{ $allWords }}";
     var sentenceWords = "{{ $sentenceWords }}";
+    console.log('TotalWords', totalwords);
+    console.log('sentenceWords', sentenceWords);
     sentenceWords = sentenceWords.split('**');
+    console.log('sentenceWords', sentenceWords);
     sentenceWordsLength = sentenceWords.length;
     var userUsedWordCount = 0;
     var wordCount = '';
@@ -74,39 +77,56 @@
     var subStringLen = 0;
     $(document).on("keyup", "form", function(event) { 
       allWords = totalwords.split(',');
+      console.log('allWords', allWords);
       writeUpWords = [];
       wordCount = allWords.length;
       $('#jsUserMessage').addClass('d-none');
       $('#jsWordContainer p').removeClass('strikeThrough');
       var writeup = $('#jsWriteup').val().toUpperCase();
+      //var writeup = $('#jsWriteup').val();
       var updateWriteUp = $('#jsWriteup').val();
+      var newWriteUp = '';
       userUsedWordCount = 0;
       //$('#jsWriteup').val(writeup.toUpperCase())
-      var combinations = ['spaceandspace', 'spaceanddot', 'spaceandcomma', 'wordandspace'];
+      var combinations = ['spaceanddot', 'spaceandcomma', 'spaceandspace', 'wordandspace'];
       var combLength = combinations.length;
       for (counter = 0; counter < wordCount; counter++) {
+        console.log('Word:',allWords[counter]);
         var wordPostion = '';
         var checkKey = '';
         for (combCounter = 0; combCounter < combLength; combCounter++  ) {
-          switch(combinations[combCounter]) {
-            case 'spaceandspace':
-              wordCombination = ' '+allWords[counter]+' ';
-              wordPostion = writeup.indexOf(wordCombination);
-            break;
-            case 'spaceanddot':
-              wordCombination = ' '+allWords[counter]+'.';
-              wordPostion = writeup.indexOf(wordCombination);
-            break;
-            case 'spaceandcomma':
-              wordCombination = ' '+allWords[counter]+',';
-              wordPostion = writeup.indexOf(wordCombination);
-            break;
-            case 'wordandspace':
-              wordCombination = allWords[counter]+' ';
-              wordPostion = writeup.indexOf(wordCombination);
-            break;
-          }
-          if (wordPostion != -1) {
+          wordCombination = allWords[counter];
+          wordPostion = writeup.indexOf(wordCombination);
+          subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
+          console.log('WordLenth', subStringLen);
+          startWordCounter = parseInt(wordPostion) - 1;
+          startOfWord = '';
+          // if (startWordCounter > -1) {
+          //   startOfWord = writeup[wordPostion] - 1;
+          // }
+          startOfWord = writeup[wordPostion] - 1;
+          endOfWord = writeup[subStringLen];
+          
+          //     wordPostion = writeup.indexOf(wordCombination);
+          // switch(combinations[combCounter]) {
+          //   case 'spaceanddot':
+          //     wordCombination = ' '+allWords[counter]+'.';
+          //     wordPostion = writeup.indexOf(wordCombination);
+          //   break;
+          //   case 'spaceandcomma':
+          //     wordCombination = ' '+allWords[counter]+',';
+          //     wordPostion = writeup.indexOf(wordCombination);
+          //   break;
+          //   case 'spaceandspace':
+          //     wordCombination = ' '+allWords[counter]+' ';
+          //     wordPostion = writeup.indexOf(wordCombination);
+          //   break;
+          //   case 'wordandspace':
+          //     wordCombination = allWords[counter]+' ';
+          //     wordPostion = writeup.indexOf(wordCombination);
+          //   break;
+          // }
+          if (wordPostion != -1 && (startOfWord == '' || startOfWord == ' ') && (endOfWord =='.' || endOfWord == ',' || endOfWord ==' ')) {
             console.log('WordPostion', wordPostion);
             break;
           }
@@ -114,8 +134,16 @@
         //return;
         if ( wordPostion != -1 ) {
           subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
+          //var regExp = new RegExp(allWords[counter],"i");
+          //writeup = writeup.replace(regExp, allWords[counter]);
+          // if (newWriteUp == ''){
+          //   newWriteUp = writeup.substring(0, subStringLen + 1);
+          // } else {
+          //   newWriteUp = newWriteUp + writeup.substring(1, subStringLen + 1);
+          // }
+          
           writeup = writeup.substring(subStringLen, writeup.length);
-
+          console.log(writeup);
           //$('#jsWord-'+counter).addClass('strikeThrough');
           var regExp = new RegExp(allWords[counter],"i");
           updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
@@ -123,8 +151,10 @@
           writeUpWords.push(allWords[counter]); 
           delete allWords[counter];
           //writeup =  writeup.substring(pos+checkKey.length, writeup.length);
+          //console.log(writeup);
         } 
         console.log('Update writeup',updateWriteUp);
+        //console.log('New write up', newWriteUp);
       }
       //
       if (writeUpWords.length) {
@@ -148,7 +178,7 @@
           }
         }
       }
-      $('#jsWriteup').val(updateWriteUp)
+      $('#jsWriteup').val(updateWriteUp);
     });
     $(document).on('click touchstart', '#jsStartSession', function() {
       $('#jsTraineeSession').slideUp();
