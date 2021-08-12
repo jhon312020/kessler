@@ -51,7 +51,8 @@
             <tbody>
               @if(count($roundOneReport))
               <tr>
-                <td>Recall Words {{ $roundOneReport->count() }}</td>
+                {{-- <td>Recall Words {{ $roundOneReport->count() }}</td> --}}
+                <td>Recall Words {{ $storyWords->count() }}</td>
                 <td>{!! $recallReport[0]['words'] !!}</td>
                 <td>Remember: {{ $recallReport[0]['found_count'] }} <br> Forgot: {{ $recallReport[0]['unfound_count']  }}</td>
                 @if (count($roundTwoReport))

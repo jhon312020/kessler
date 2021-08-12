@@ -14,6 +14,7 @@ class Controller extends BaseController
   use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
   private $boosterSession = 'booster';
   private $booster = array();
+  public $directionBoosterID;
   public function __construct() {
 	$sideMenu = array('dashboard'=>array('name'=>'Dashboard', 'url'=>'/dashboard','icon'=>'fa-tachometer-alt', 'role'=>''),
                 'trainee'=>array('name'=>'Trainee Information', 'url'=>'/trainee','icon'=>'fa-table', 'role'=>''), 
@@ -58,7 +59,8 @@ class Controller extends BaseController
     $this->booster = Booster::pluck('category','id');
     //$this->pr($trainee);
     if (strtolower($trainee['session_number']) === $this->boosterSession) {
-      $wordObj = Task::select('task as word', 'words')->where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->get();
+      //echo 'came in';
+      $wordObj = Task::select('task as word', 'question', 'words')->where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->get();
     } else {
       
       if ($trainee['booster_id']) {
@@ -194,6 +196,44 @@ class Controller extends BaseController
       }
     }
     return $detecedKey;
+  }
+
+  /**
+   * Get the sentenceKey of story, based on the 
+   * words array
+   *
+   * @params  $sentences, $words
+   * @return integer
+   */
+  function getRevisedStoryForDirection($storyWords, $userStory) {
+    $revisedStory = '';
+    foreach($storyWords as $word) {
+      $searchWord = strtolower($word);
+      $findWord = '/\b'.$searchWord.'\b/i';
+      $userStory = preg_replace($findWord, $word, $userStory, 1);
+      $wordPosition = stripos($userStory, $searchWord);
+      $strLen = strlen($searchWord);
+      $copyPosition = $wordPosition + $strLen;
+      $revisedStory .= $replaceString = subStr($userStory, 0, $copyPosition);
+      $userStory = substr($userStory, $copyPosition);
+    }
+    return $revisedStory;
+  }
+
+   /**
+   * Get the sentenceKey of story, based on the 
+   * words array
+   *
+   * @params  $sentences, $words
+   * @return integer
+   */
+  function getRevisedStory($storyWords, $userStory) {
+    foreach($storyWords as $word) {
+      $searchWord = strtolower($word);
+      $findWord = '/\b'.$searchWord.'\b/i';
+      $userStory = preg_replace($findWord, $word, $userStory, 1);
+    }
+    return $userStory;
   }
 
 }

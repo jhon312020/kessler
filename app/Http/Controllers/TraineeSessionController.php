@@ -24,10 +24,12 @@ class TraineeSessionController extends Controller
      * @return void
      */
     private $traineeCurrentPosition;
+
     public function __construct() {
       $this->traineeCurrentPosition = (object)array('word_id'=>'', 'position'=>'', 'user_word_id'=>'', 'sentence'=>'');
       $this->sessionStartTime = (object)array('roundOne'=>'', 'roundTwo'=>'');
       $this->sessionEndTime = (object)array('roundOne'=>'', 'roundTwo'=>'');
+      $this->directionBoosterID = \Config::get('constants.DIRECTION_BOOSTER_ID');
     }
     /**
      * Show the application dashboard.
@@ -134,14 +136,14 @@ class TraineeSessionController extends Controller
         if ($traineeRecord) {
           $traineeCurrentPosition = $traineeRecord->session_current_position !== null?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
           $wordStory = $this->getWords($traineeRecord);
-            
+          //$this->pr($wordStory->toArray());
+          //$this->pr($traineeRecord->toArray());
           if ($traineeRecord['booster_id']) {
             $words = $wordStory->where('question', '<>', 'D')->pluck('word')->toArray();
             $sentenceWords = $wordStory->where('question', '<>', 'D')->pluck('question')->toArray();
             $allWords = $wordStory->pluck('words')->toArray();
             //$this->pr($words);
           } else {
-
             $allWords = $words = $wordStory->pluck('word')->toArray();
           }
           
@@ -159,7 +161,7 @@ class TraineeSessionController extends Controller
             return redirect('/cue');
           } else {
             $totalWords = count($words);
-            $chunkLength = (int) $totalWords / 5;
+            $chunkLength = ceil ($totalWords / 5);
             $respClass = 'col-lg-3';
             switch($chunkLength) {
               case 2:
@@ -172,10 +174,9 @@ class TraineeSessionController extends Controller
             if ($traineeRecord['booster_id']) {
               $allWords = implode(',', $allWords);
               $words = array_chunk($words, 5, true);
-              if ($traineeRecord['booster_id'] == 1) {
+              if ($traineeRecord['booster_id'] == $this->directionBoosterID) {
                 $sentenceWords = implode('**', $sentenceWords);
                 $type = "directions";
-
                 return view('msmt.sessions.directions', compact('words', 'allWords', 'respClass', 'type', 'sentenceWords'));
               } else {
                 return view('msmt.sessions.word', compact('words', 'allWords', 'respClass'));
@@ -437,8 +438,10 @@ class TraineeSessionController extends Controller
     if ($request->session()->has('trainee')) {
       $trainee = $request->session()->get('trainee');
       $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
+      //$this->pr($traineeRecord->toArray());
       $story = TraineeStory::select('updated_story', 'user_story_words')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->where('round', $trainee['round'])->orderBy('id', 'desc')->first();
       $storySentences = explode('. ',$story->updated_story);
+      //$this->pr($storySentences);
       $wordStory = $this->getWordAndID($trainee);
       $allStoryWords = $wordStory->toArray();
       if ($story && $traineeRecord) {
@@ -449,22 +452,39 @@ class TraineeSessionController extends Controller
         $userStoryWords = json_decode($story->user_story_words);
         $totalUsersWords = count($userStoryWords);
         $userWordKey = $traineeCurrentPosition->user_word_id;
-        $sentenceKey = $traineeCurrentPosition->sentence;
+        //$sentenceKey = $traineeCurrentPosition->sentence;
+        $nextWordKey = $userWordKey + 1;
+        $completedWords = array_slice($userStoryWords, 0, $nextWordKey, true);
+        $sentenceKey = $this->getSentenceKey($storySentences, $completedWords);
         $fillUpWord = $userStoryWords[$userWordKey];
+        if ($traineeRecord['booster_id'] == $this->directionBoosterID) {
+          $allStoryWords = array_slice($allStoryWords, $userWordKey, null, true);
+        }
       }
+      //$this->pr($allStoryWords);
+      //$this->pr(array_slice($userStoryWords, $userWordKey, null, true));
+      //$this->pr(array_slice($storySentences, $sentenceKey, null, true));
+      $storySentences = array_slice($storySentences, $sentenceKey, null, true);
       $breakParentLoop = false;
       $showTraineeMessage = ($userWordKey)?false:true;
-      foreach (array_slice($storySentences, $sentenceKey) as $question) {
-        foreach(array_slice($userStoryWords, $userWordKey) as $wordKey=>$word) {
+      foreach ($storySentences as $question) {
+        // echo $question;
+        // echo '<br/>';
+        foreach(array_slice($userStoryWords, $userWordKey, null, true) as $wordKey=>$word) {
           $findWord = '/\b'.$word.'\b/';
+          // echo $question;
+          // echo '<br/>';
           if ($fillUpWord === $word) {
             $storyWordID = array_search($word, $allStoryWords);
             $question = preg_replace($findWord, "<input id='answer' class='fill-ups' autocomplete='off' name='answer-".$storyWordID."'>", $question, 1, $count);
-            $breakParentLoop = true;
+            if ($count) {
+              $breakParentLoop = true;
+            }
           } else {
             $question = preg_replace($findWord, str_repeat("_", 15), $question, 1);
           }
         }
+        //echo '<br/>BreakParentLoop - '.$breakParentLoop;
         if ($breakParentLoop) {
           break;
         }

@@ -381,8 +381,8 @@ class TraineeController extends Controller
               //exit;
             }
           }
-         /*$this->pr($roundOneReport->toArray());
-          exit;*/
+         //$this->pr($roundOneReport->toArray());
+         //exit;
           if ($trainee->round > 1 && $trainee->completed == 1 ) {
             $roundTwoReport = with(clone $queryObj)->where('round', '=', '2')->get();
             if ($roundTwoReport) {
@@ -541,27 +541,29 @@ class TraineeController extends Controller
         }
         // echo $newString;
         // echo '<br/>';
-        $formingString = '';
-        foreach($storyWords as $word) {
-          $searchWord = strtolower($word);
-          //$newString = str_replace($searchWord, $word, $newString);
-          $findWord = '/\b'.$searchWord.'\b/i';
-          $newString = preg_replace($findWord, $word, $newString, 1);
-          $wordPosition = stripos($newString, $searchWord);
-          $strLen = strlen($searchWord);
-          $copyPosition = $wordPosition + $strLen;
-          $formingString .= $replaceString = subStr($newString, 0, $copyPosition);
-          //echo '<br/>';
-          $newString = substr($newString, $copyPosition);
-          //echo $newString;
-          //echo '<br/>';
-        }
-        $newString = $formingString;
-        // echo '<br/>';
-        // echo $formingString;
-        // echo '<br/>';
+        // $formingString = '';
+        // foreach($storyWords as $word) {
+        //   $searchWord = strtolower($word);
+        //   //$newString = str_replace($searchWord, $word, $newString);
+        //   $findWord = '/\b'.$searchWord.'\b/i';
+        //   echo $newString = preg_replace($findWord, $word, $newString, 1);
+        //   $wordPosition = stripos($newString, $searchWord);
+        //   $strLen = strlen($searchWord);
+        //   $copyPosition = $wordPosition + $strLen;
+        //   $formingString .= $replaceString = subStr($newString, 0, $copyPosition);
+        //   //echo '<br/>';
+        //   $newString = substr($newString, $copyPosition);
+        //   //echo $newString;
+        //   //echo '<br/>';
+        // }
+        // $newString = $formingString;
+        // // echo '<br/>';
+        // // echo $formingString;
+        // // echo '<br/>';
+
         if ($traineeObj->booster_id != 1) {
-          preg_match_all('/\b([A-Z-]+)\b/', $formingString, $userWords);
+          $revisedStory = $this->getRevisedStory($storyWords, $newString);
+          preg_match_all('/\b([A-Z-]+)\b/', $revisedStory, $userWords);
           $storyWords = $storyWords->toArray();
           $userStoryWords = array();
           if ($userWords) {
@@ -573,11 +575,13 @@ class TraineeController extends Controller
             }
           }
         } else {
+          $revisedStory = $this->getRevisedStoryForDirection($storyWords, $newString);
           $userStoryWords = array_values($storyWords->toArray());
         }
-        // $this->pr($userStoryWords);
-        // exit;
-        $traineeStory->updated_story = $newString;
+        //echo $revisedStory;
+        //$this->pr($userStoryWords);
+        //exit;
+        $traineeStory->updated_story = $revisedStory;
         $traineeStory->user_story_words = $userStoryWords;
         // $this->pr($traineeStory->toArray());
         // exit;

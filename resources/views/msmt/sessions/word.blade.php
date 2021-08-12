@@ -65,6 +65,7 @@
 <script type="text/javascript">
   $(document).ready( function() { 
     var allWords = "{{ $allWords }}";
+    console.log(allWords);
     allWords = allWords.split(',');
     var wordCount = allWords.length;
     var userUsedWordCount = 0;
@@ -75,6 +76,7 @@
       var writeup = $('#jsWriteup').val().toUpperCase();
       var updateWriteUp = $('#jsWriteup').val();
       userUsedWordCount = 0;
+      console.log('came in');
       //$('#jsWriteup').val(writeup.toUpperCase())
       for (counter = 0; counter < wordCount; counter++) {
         if (writeup.indexOf(' '+allWords[counter]+' ')!= -1 || writeup.indexOf(' '+allWords[counter]+'.') != -1 || writeup.indexOf(' '+allWords[counter]+',') != -1  || writeup.indexOf(allWords[counter]+' ')!= -1 ) {

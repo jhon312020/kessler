@@ -28,6 +28,7 @@ class AjaxController extends Controller
     const ALTERNATETEXT = 'abcxyz';
     public function __construct() {
       $this->traineeCurrentPosition = (object) array('word_id'=>'', 'position'=>'', 'user_word_id'=>0, 'sentence'=>0);
+      $this->directionBoosterID = \Config::get('constants.DIRECTION_BOOSTER_ID');
     }
     /**
      * Store the recorded list of words
@@ -140,6 +141,7 @@ class AjaxController extends Controller
         $remove = ['_token', '_method', 'endTime', 'startTime', 'categoryCue', 'showedAnswer'];
         $traineeAnswer = array_diff_key($request->all(), array_flip($remove));
         $sentenceKey = 0;
+        //$this->pr($traineeAnswer);
         foreach($traineeAnswer as $key=>$answer) {
           $wordKey = explode('-', $key);
           $wordID = array_pop($wordKey);
@@ -215,7 +217,11 @@ class AjaxController extends Controller
           } 
         }
         //echo 'test'.$fillUpWord;
+        //exit;
         if ($story && $fillUpWord) {
+          if ($traineeRecord['booster_id'] == $this->directionBoosterID) {
+            $allStoryWords = array_slice($allStoryWords, $userWordKey, null, true);
+          }
           $breakParentLoop = false;
           $counter = 1;
           $count = 0;
@@ -227,10 +233,13 @@ class AjaxController extends Controller
           //$this->pr(array_slice($storySentences, $sentenceKey));
           //echo 'userWordKey'.$userWordKey;
           $completedWords = array_slice($userStoryWords, 0, $userWordKey, true);
+          // if () {
+          //   $allStoryWords = array_slice($allStoryWords, $userWordKey, true);
+          // }
           $sentenceKey = $this->getSentenceKey($storySentences, $completedWords);
           //echo 'userStoryWords'.'--userWordKey'.$userWordKey;
           //$this->pr($userStoryWords);
-          foreach (array_slice($storySentences, $sentenceKey) as $sentenceKey=>$currentSentence) {
+          foreach (array_slice($storySentences, $sentenceKey, null, true) as $sentenceKey=>$currentSentence) {
             //echo $currentSentence.'--current';
             //$this->pr($userStoryWords);
             foreach(array_slice($userStoryWords, $userWordKey, null, true) as $wordKey=>$word) {
