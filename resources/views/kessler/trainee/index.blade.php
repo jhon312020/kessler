@@ -119,7 +119,7 @@
                   @if ($trainee->completed == 1)
                   <a href="{{ url('trainee/report', $trainee->id)}}" class="btn btn-primary" role="button" title="Report"><i class="fas fa-chart-pie" title="Report">&nbsp;</i> </a>
                   @endif 
-                  @if ($trainee->session_number > 4 && $trainee->session_type == "A")
+                  @if (($trainee->session_number > 4 || strtolower($trainee->session_number) == 'booster') && $trainee->session_type == "A")
                     @php
                       $traineeCurrentPosition = json_decode($trainee->session_current_position)
                     @endphp
