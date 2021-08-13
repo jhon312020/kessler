@@ -13,6 +13,7 @@ use DB;
 use App\Models\Story;
 use App\Models\Word;
 use App\Models\Task;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Validator;
 
 class TraineeSessionController extends Controller
@@ -175,9 +176,15 @@ class TraineeSessionController extends Controller
               $allWords = implode(',', $allWords);
               $words = array_chunk($words, 5, true);
               if ($traineeRecord['booster_id'] == $this->directionBoosterID) {
+                $settings = Setting::pluck('booster_id','active')->toArray();
+                if ($settings && isset($settings[$traineeRecord['booster_id']]) && $settings[$traineeRecord['booster_id']] == 1) {
+                  $viewName = 'msmt.sessions.directions-final-review';
+                } else {
+                  $viewName = 'msmt.sessions.directions';
+                }
                 $sentenceWords = implode('**', $sentenceWords);
                 $type = "directions";
-                return view('msmt.sessions.directions', compact('words', 'allWords', 'respClass', 'type', 'sentenceWords'));
+                return view($viewName, compact('words', 'allWords', 'respClass', 'type', 'sentenceWords'));
               } else {
                 return view('msmt.sessions.word', compact('words', 'allWords', 'respClass'));
               }

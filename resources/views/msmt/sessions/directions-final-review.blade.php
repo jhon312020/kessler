@@ -53,7 +53,7 @@
           <div class="form-group text-center">
             <br/>
             <div class="alert d-none" role="alert" id="jsUserMessage"></div>
-            <button class="btn btn-primary btn-xl" id="jsSubmit" type="submit">SUBMIT</button>
+            <button class="btn btn-primary btn-xl" id="jsReview" type="button">REVIEW</button>
           </div>
         </div>
       </div>
@@ -66,23 +66,24 @@
   $(document).ready( function() { 
     var totalwords = "{{ $allWords }}";
     var sentenceWords = "{{ $sentenceWords }}";
-    console.log('TotalWords', totalwords);
-    console.log('sentenceWords', sentenceWords);
+    //console.log('TotalWords', totalwords);
+    //console.log('sentenceWords', sentenceWords);
     sentenceWords = sentenceWords.split('**');
-    console.log('sentenceWords', sentenceWords);
+    //console.log('sentenceWords', sentenceWords);
     sentenceWordsLength = sentenceWords.length;
     var userUsedWordCount = 0;
     var wordCount = '';
     var writeUpWords = '';
     var subStringLen = 0;
-    $(document).on("keyup", "form", function(event) { 
+    function review() { 
       allWords = totalwords.split(',');
-      console.log('allWords', allWords);
+      //console.log('allWords', allWords);
       writeUpWords = [];
       wordCount = allWords.length;
       $('#jsUserMessage').addClass('d-none');
       $('#jsWordContainer p').removeClass('strikeThrough');
       var writeup = $('#jsWriteup').val().toUpperCase();
+      //var writeup = $('#jsWriteup').val();
       //var writeup = $('#jsWriteup').val();
       var updateWriteUp = $('#jsWriteup').val();
       var newWriteUp = '';
@@ -91,47 +92,59 @@
       var combinations = ['spaceanddot', 'spaceandcomma', 'spaceandspace', 'wordandspace'];
       var combLength = combinations.length;
       for (counter = 0; counter < wordCount; counter++) {
-        console.log('Word:',allWords[counter]);
+        // console.log('Write Start from loop', writeup);
+        // console.log('Word:',allWords[counter]);
         var wordPostion = '';
         var checkKey = '';
         //for (combCounter = 0; combCounter < combLength; combCounter++  ) {
           wordCombination = allWords[counter];
           wordPostion = writeup.indexOf(wordCombination);
           subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
-          console.log('WordLength', subStringLen);
           startWordCounter = parseInt(wordPostion);
           startOfWord = 0;
-          console.log('startWordCounter-',startWordCounter);
           if (startWordCounter > -1) {
-            console.log(writeup);
             startOfWord = writeup[wordPostion - 1] ;
-            console.log('startOfWord-', startOfWord);
           }
           endOfWord = writeup[subStringLen];
-          console.log('EndofWord', endOfWord);
           if (wordPostion != -1) {
             subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
             //For left user types lefthand in this case word left is getting matched so restting the substring
             if ((startOfWord == '' || startOfWord == ' ') && (endOfWord =='.' || endOfWord == ',' || endOfWord ==' ' || endOfWord == '') && typeof(endOfWord) !== 'undefined') {
-              console.log('WordPostion', wordPostion);
-            writeup = writeup.substring(subStringLen, writeup.length);
-            console.log('If writeup',writeup);
-            var regExp = new RegExp(allWords[counter],"i");
-            updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
-            userUsedWordCount++;
-            writeUpWords.push(allWords[counter]); 
-            delete allWords[counter];
+              //console.log('WordPostion', wordPostion);
+              var regExp = new RegExp(allWords[counter],"i");
+              updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
+              if (newWriteUp == '') {
+                newWriteUp = updateWriteUp.substring(0, subStringLen);
+              } else {
+                newWriteUp = newWriteUp + updateWriteUp.substring(0, subStringLen);
+              }
+              writeup = writeup.substring(subStringLen, writeup.length);
+              updateWriteUp = updateWriteUp.substring(subStringLen, updateWriteUp.length);
+              //console.log('If writeup', writeup);
+              //console.log('newwriteup', newWriteUp);
+              userUsedWordCount++;
+              writeUpWords.push(allWords[counter]); 
+              delete allWords[counter];
           } else {
+            if (newWriteUp == '') {
+              newWriteUp = updateWriteUp.substring(0, subStringLen);
+            } else {
+              newWriteUp = newWriteUp + updateWriteUp.substring(0, subStringLen);
+            }
             writeup = writeup.substring(subStringLen, writeup.length);
-            console.log('Else writeup',writeup);
+            updateWriteUp = updateWriteUp.substring(subStringLen, updateWriteUp.length);
+            //console.log('Else writeup', writeup);
             counter--;
           }
         } 
-        console.log('Update writeup',updateWriteUp);
+        //console.log('New writeup',newWriteUp);
       }
-      //
+      if (writeup != '') {
+        newWriteUp = newWriteUp + updateWriteUp;
+      }
+      
       if (writeUpWords.length) {
-        console.log('writeUpWords-',writeUpWords);
+        //console.log('writeUpWords-',writeUpWords);
         for(senCounter = 0; senCounter < sentenceWordsLength; senCounter++ ) {
           words = sentenceWords[senCounter].split(",");
           wordLength = words.length;
@@ -152,14 +165,15 @@
           }
         }
       }
-      $('#jsWriteup').val(updateWriteUp);
-    });
+      $('#jsWriteup').val(newWriteUp);
+    }
     $(document).on('click touchstart', '#jsStartSession', function() {
       $('#jsTraineeSession').slideUp();
       $('#jsTraineeStory').removeClass('d-none').show();
     });
-    $("#jsSubmit").on('click touchstart', function(event) {
+    $("#jsReview").on('click touchstart', function(event) {
       event.preventDefault();
+      review();
       $('#jsUserMessage').addClass('d-none');
       $("#jsLoader").removeClass('d-none');
       $(this).prop("disabled", true);
