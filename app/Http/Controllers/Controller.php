@@ -91,7 +91,8 @@ class Controller extends BaseController
   function getWordAndID($trainee) {
     $this->booster = Booster::pluck('category','id');
     if (strtolower($trainee['session_number']) == $this->boosterSession) {
-      $wordObj = Task::where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->pluck('task as word', 'id');
+      //$wordObj = Task::where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->pluck('task as word', 'id');
+      $wordObj = Task::where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->pluck('words as word', 'id');
     } else {
       if ($trainee['booster_id']) {
         $type = strtolower($this->booster[$trainee['booster_id']]);
@@ -113,8 +114,8 @@ class Controller extends BaseController
    */
   function getCurrentWord($trainee, $wordID) {
     $this->booster = Booster::pluck('category','id');
-    if ($trainee['session_number'] == $this->boosterSession) {
-      $wordObj = Task::select('id', 'task as word', 'task as question', 'categorical_cue')->where('booster_id', $trainee['booster_id'])->where('id', $wordID)->where('booster_range', $trainee['booster_range'])->first();
+    if (strtolower($trainee['session_number']) == $this->boosterSession) {
+      $wordObj = Task::select('id', 'words as word', 'task as question', 'categorical_cue')->where('booster_id', $trainee['booster_id'])->where('id', $wordID)->where('booster_range', $trainee['booster_range'])->first();
     } else {
       if ($trainee['booster_id']) {
         $type = strtolower($this->booster[$trainee['booster_id']]);
@@ -137,7 +138,8 @@ class Controller extends BaseController
   function getWordAndIDObj($traineeObj) {
     $this->booster = Booster::pluck('category','id');
     if (strtolower($traineeObj['session_number']) === $this->boosterSession) {
-      $wordObj = Task::select('id', 'task as word')->where('booster_id', $traineeObj->booster_id)->where('booster_range', $traineeObj->booster_range)->get();
+      $wordObj = Task::select('id', 'words as word')->where('booster_id', $traineeObj->booster_id)->where('booster_range', $traineeObj->booster_range)->get();
+      //$wordObj = Task::select('id', 'task as word')->where('booster_id', $traineeObj->booster_id)->where('booster_range', $traineeObj->booster_range)->get();
     } else {
       if ($traineeObj['booster_id']) {
         $type = strtolower($this->booster[$traineeObj['booster_id']]);
