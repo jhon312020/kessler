@@ -41,7 +41,7 @@
             </div>
              <div class="form-group d-none" id="jsBooster">
                <label class="small mb-1" for="booster_id">Select Category</label>
-              <select class="form-control select2" id="booster_id" name="booster_id" placeholder="Select Category">
+              <select class="form-control select2" id="booster_id" name="booster_id" placeholder="Select Category" required>
                 <option value= '' selected="selected">Select Category</option>
                 @foreach($booster as $booster)
                   <option value="{{ $booster->id }}">{{ $booster->category }}</option>
@@ -50,7 +50,7 @@
             </div>
             <div class="form-group d-none" id="jsBoosterRange">
               <label class="small mb-1" for="booster_range">Select Form</label>
-              <select class="form-control select2" id="booster_range" name="booster_range" placeholder="Select Form">
+              <select class="form-control select2" id="booster_range" name="booster_range" placeholder="Select Form" required>
                 <option value='' selected="selected">Select Form</option>
                 @foreach($boosterRange as $range)
                   <option value="{{ $range }}">{{ $range }}</option>
@@ -77,9 +77,12 @@ $(document).ready( function() { // Wait until document is fully parsed
         case 10:
         case '9':
         case '10':
+          $('#booster_id').attr('required',true);
           $('#jsBooster').removeClass('d-none').show();
         break;
         case 'booster':
+          $('#booster_id').attr('required',true);
+          $('#booster_range').attr('required',true);
           $('#jsBooster').removeClass('d-none').show();
           $('#jsBoosterRange').removeClass('d-none').show();
         break;
@@ -90,8 +93,8 @@ $(document).ready( function() { // Wait until document is fully parsed
       // $("#jsFormType option:selected").val('');
       $('#jsBooster').addClass('d-none');
       $('#jsBoosterRange').addClass('d-none'); 
-      $("#jsBooster option:selected").val('');
-      $("#jsBoosterRange option:selected").val('');
+      $("#booster_id option:first").prop('selected', true);
+      $("#booster_range option:first").prop('selected', true);
     }
   })
 </script>

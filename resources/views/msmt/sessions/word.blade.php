@@ -9,7 +9,8 @@
   </div>
   <div class="row">
     <div class="col-lg-8 mx-auto text-justify">
-       <p>On the same page below you are going to see a set of 20 words. The words will be capitalized like <span class="emboss">THIS</span>. <p>Build a story of your own using these words. Fit in as many words in a sentence. This story is to help you remember the capitalized words. Try to make a picture of each storyline in your head. </p><p>Click on <span class="emboss">START</span> when you are ready.</p>
+       {!! $instructions !!}
+       <p>Click on <span class="emboss">START</span> when you are ready.</p>
        <br/>
     </div>
   </div>
@@ -78,16 +79,38 @@
       userUsedWordCount = 0;
       console.log('came in');
       //$('#jsWriteup').val(writeup.toUpperCase())
+
+
       for (counter = 0; counter < wordCount; counter++) {
-        if (writeup.indexOf(' '+allWords[counter]+' ')!= -1 || writeup.indexOf(' '+allWords[counter]+'.') != -1 || writeup.indexOf(' '+allWords[counter]+',') != -1  || writeup.indexOf(allWords[counter]+' ')!= -1 ) {
-          $('#jsWord-'+counter).addClass('strikeThrough');
-          var regExp = new RegExp(allWords[counter],"i");
-          updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
-          userUsedWordCount++;
-        } else {
-          var regExp = new RegExp(allWords[counter],"gi");
-          updateWriteUp = updateWriteUp.replace(regExp, allWords[counter].toLowerCase());
-        }
+        var wordPostion = '';
+        var checkKey = '';
+        //for (combCounter = 0; combCounter < combLength; combCounter++  ) {
+          wordCombination = allWords[counter];
+          console.log(wordCombination);
+          wordPostion = writeup.indexOf(wordCombination);
+          subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
+          startWordCounter = parseInt(wordPostion);
+          startOfWord = 0;
+          if (startWordCounter > -1) {
+            startOfWord = writeup[wordPostion - 1] ;
+          }
+          endOfWord = writeup[subStringLen];
+          if (wordPostion != -1) {
+            subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
+            //For left user types lefthand in this case word left is getting matched so restting the substring
+            if ((startOfWord == '' || startOfWord == ' ') && (endOfWord =='.' || endOfWord == ',' || endOfWord ==' ' || endOfWord == '') && typeof(endOfWord) !== 'undefined') {
+              console.log('came in -', wordCombination);
+              $('#jsWord-'+counter).addClass('strikeThrough');
+              writeup = writeup.substring(subStringLen, writeup.length);
+              var regExp = new RegExp(allWords[counter],"i");
+              updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
+              userUsedWordCount++;
+          } else {
+            var regExp = new RegExp(allWords[counter],"gi");
+            updateWriteUp = updateWriteUp.replace(regExp, allWords[counter].toLowerCase());
+            counter--;
+          }
+        } 
       }
       $('#jsWriteup').val(updateWriteUp)
     });
@@ -96,7 +119,6 @@
       $('#jsTraineeStory').removeClass('d-none').show();
     });
     $("#jsSubmit").on('click touchstart', function(event) {
-
       event.preventDefault();
       $('#jsUserMessage').addClass('d-none');
       $("#jsLoader").removeClass('d-none');

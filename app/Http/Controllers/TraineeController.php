@@ -531,6 +531,11 @@ class TraineeController extends Controller
         //$this->pr($storyWords);
         $story = $request->get('story');
         $fullStory = strtolower($story);
+        //Removing new-line characters
+        $fullStory = str_replace("\r\n", "\n", $fullStory);
+        $fullStory = str_replace("\r", "\n", $fullStory); 
+        //Removing extra spaces.
+        $fullStory = trim(preg_replace('/\s+/', ' ', $fullStory));
         $sentences = preg_split('/([.?!]+( ))/', $fullStory, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
         $sentences = array_values(array_filter($sentences, 'trim'));
         //$this->pr($sentences);
@@ -578,9 +583,9 @@ class TraineeController extends Controller
           $revisedStory = $this->getRevisedStoryForDirection($storyWords, $newString);
           $userStoryWords = array_values($storyWords->toArray());
         }
-        //echo $revisedStory;
-        //$this->pr($userStoryWords);
-        //exit;
+        // echo $revisedStory;
+        // $this->pr($userStoryWords);
+        // exit;
         $traineeStory->updated_story = $revisedStory;
         $traineeStory->user_story_words = $userStoryWords;
         // $this->pr($traineeStory->toArray());
@@ -646,9 +651,9 @@ class TraineeController extends Controller
             $allStoryWords = $storyWords->pluck('word')->toArray();
             $recallRoundOneCount = array();
             $recallRoundOneCount = $this->_recallReport($recallRoundOne, $allStoryWords);
-            $contextualRoundOne = $roundOneReport->where('type', 'contextual')->where('correct_or_wrong', 1);
+            $contextualRoundOne = $roundOneReport->where('type', 'contextual')->where('correct_or_wrong', 1)->groupBy('word_id');
             $contextualRoundOneCount = $contextualRoundOne->count();
-            $categoricalRoundOne = $roundOneReport->where('type', 'categorical')->where('correct_or_wrong', 1);
+            $categoricalRoundOne = $roundOneReport->where('type', 'categorical')->where('correct_or_wrong', 1)->groupBy('word_id');
             $categoricalRoundOneCount = $categoricalRoundOne->count();
             $roundOneTotal = $roundOneReport->sum('time_taken');
             $roundOneTotalTime = gmdate('i', $roundOneTotal)." mins : ".gmdate('s', $roundOneTotal)." sec";
@@ -662,9 +667,9 @@ class TraineeController extends Controller
             $allStoryWords = $storyWords->pluck('word')->toArray();
             $recallRoundTwoCount = array();
             $recallRoundTwoCount = $this->_recallReport($recallRoundTwo, $allStoryWords);
-            $contextualRoundTwo = $roundTwoReport->where('type', 'contextual')->where('correct_or_wrong', 1);
+            $contextualRoundTwo = $roundTwoReport->where('type', 'contextual')->where('correct_or_wrong', 1)->groupBy('word_id');
             $contextualRoundTwoCount = $contextualRoundTwo->count();
-            $categoricalRoundTwo = $roundTwoReport->where('type', 'categorical')->where('correct_or_wrong', 1);
+            $categoricalRoundTwo = $roundTwoReport->where('type', 'categorical')->where('correct_or_wrong', 1)->groupBy('word_id');
             $categoricalRoundTwoCount = $categoricalRoundTwo->count();
             $roundTwoTotal = $roundTwoReport->sum('time_taken');
             $roundTwoTotalTime = gmdate('i', $roundTwoTotal)." mins : ".gmdate('s', $roundTwoTotal)." sec";
@@ -685,10 +690,12 @@ class TraineeController extends Controller
             // $this->pr($recallRoundTwoCount); 
             // $this->pr($recallOverallCount);  exit();
             $overallReport = with(clone $queryObj)->where('correct_or_wrong', '=', '1')->get();
-            $contextualOverall = $overallReport->where('type', 'contextual')->where('correct_or_wrong', 1);
-            $contextualOverallCount = $contextualOverall->count();
-            $categoricalOverall = $overallReport->where('type', 'categorical')->where('correct_or_wrong', 1);
-            $categoricalOverallCount = $categoricalOverall->count();
+            //$contextualOverall = $overallReport->where('type', 'contextual')->where('correct_or_wrong', 1);
+            //$contextualOverallCount = $contextualOverall->count();
+            $contextualOverallCount = $contextualRoundOneCount + $contextualRoundTwoCount;
+            //$categoricalOverall = $overallReport->where('type', 'categorical')->where('correct_or_wrong', 1);
+            //$categoricalOverallCount = $categoricalOverall->count();
+            $categoricalOverallCount = $categoricalRoundOneCount + $categoricalRoundTwoCount;
             $timeOverall = with(clone $queryObj);
             $overallTotal = $timeOverall->sum('time_taken');
             $overallTotalTime = gmdate('i', $overallTotal)." mins : ".gmdate('s', $overallTotal)." sec";

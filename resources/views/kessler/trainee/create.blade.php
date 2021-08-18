@@ -88,9 +88,13 @@ $(document).ready( function() { // Wait until document is fully parsed
         case 10:
         case '9':
         case '10':
+          $('#booster_id').attr('required',true);
           $('#jsBooster').removeClass('d-none').show();
+         
         break;
         case 'booster':
+          $('#booster_id').attr('required',true);
+          $('#booster_range').attr('required',true);
           $('#jsBooster').removeClass('d-none').show();
           $('#jsBoosterRange').removeClass('d-none').show();
         break;
@@ -101,8 +105,10 @@ $(document).ready( function() { // Wait until document is fully parsed
       // $("#jsFormType option:selected").val('');
       $('#jsBooster').addClass('d-none');
       $('#jsBoosterRange').addClass('d-none'); 
-      $("#jsBooster option:selected").val('');
-      $("#jsBoosterRange option:selected").val('');
+      $('#booster_id').attr('required',false);
+      $('#booster_range').attr('required',false);
+      $("#booster_id option:first").prop('selected', true);
+      $("#booster_range option:first").prop('selected', true);
     }
   })
 </script>

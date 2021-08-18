@@ -130,7 +130,8 @@ class TraineeSessionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function writing(Request $request) {
-
+      $instructions = '<p>On the same page below you are going to see a set of 20 words. The words will be capitalized like <span class="emboss">THIS</span>. <p>Build a story of your own using these words. Fit in as many words in a sentence. This story is to help you remember the capitalized words. Try to make a picture of each storyline in your head. </p>';
+      
      if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee');
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
@@ -175,6 +176,15 @@ class TraineeSessionController extends Controller
             if ($traineeRecord['booster_id']) {
               $allWords = implode(',', $allWords);
               $words = array_chunk($words, 5, true);
+              switch($traineeRecord['booster_id']) {
+                case 1:
+                   $instructions = '<p>Below you are going to see a list of directions, with capitalised word like <span class="emboss">THIS</span> in each item.</p><p>Use these words to make up a story of your own.  Remember to make up a story that is easy to picture in your mind.  Use what you have learned in previous sessions to visualise the story.  The visualisation will help you remember the words, which will then help you to remember the step in the directions.</p>';
+                break;
+                case 3:
+                 $instructions = '<p>Below you are going to see a list of things to do, with capitalised word like <span class="emboss">THIS</span> in each item.</p><p>Use these words to make up a story of your own.  Remember to make up a story that is easy to picture in your mind.  Use what you have learned in previous sessions to visualise the story.  The visualisation will help you remember the words, which will then help you to remember the "to do" item.</p>';
+                break;
+              }
+             
               if ($traineeRecord['booster_id'] == $this->directionBoosterID) {
                 $settings = Setting::pluck('booster_id','active')->toArray();
                 if ($settings && isset($settings[$traineeRecord['booster_id']]) && $settings[$traineeRecord['booster_id']] == 1) {
@@ -184,15 +194,15 @@ class TraineeSessionController extends Controller
                 }
                 $sentenceWords = implode('**', $sentenceWords);
                 $type = "directions";
-                return view($viewName, compact('words', 'allWords', 'respClass', 'type', 'sentenceWords'));
+                return view($viewName, compact('words', 'allWords', 'respClass', 'type', 'sentenceWords', 'instructions'));
               } else {
-                return view('msmt.sessions.word', compact('words', 'allWords', 'respClass'));
+                return view('msmt.sessions.word', compact('words', 'allWords', 'respClass', 'instructions'));
               }
               
             } else {
               $allWords = implode(',', $allWords);
               $words = array_chunk($words, 5, true);
-              return view('msmt.sessions.word', compact('words', 'allWords', 'respClass'));
+              return view('msmt.sessions.word', compact('words', 'allWords', 'respClass', 'instructions'));
             }
             
           }
@@ -224,6 +234,11 @@ class TraineeSessionController extends Controller
         
         $story = $request->get('story');
         $fullStory = strtolower($story);
+        //Removing new-line characters
+        $fullStory = str_replace("\r\n", "\n", $fullStory);
+        $fullStory = str_replace("\r", "\n", $fullStory); 
+        //Removing extra spaces.
+        $fullStory = trim(preg_replace('/\s+/', ' ', $fullStory));
         $sentences = preg_split('/([.?!]+)/', $fullStory, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 
         $newString = '';
