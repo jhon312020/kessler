@@ -50,7 +50,7 @@
           </div>
         </div>
         <div class="form-group text-center">
-          <a href="{{ $linkURL }}" class="btn btn-primary btn-xl">CONTINUE</a>
+          <a href="{{ $linkURL }}" class="btn btn-primary btn-xl disabled" id="jsStoryContinue">CONTINUE</a>
         </div>
       </div>
     </div>
@@ -68,6 +68,7 @@
          // Display 'counter' wherever you want to display it.
         if (counter <= 0) {
           clearInterval(interval);
+          $('#jsStoryContinue').removeClass('disabled');
           $('#timer').html("<span>Times Up</span>");  
           return;
         } else {

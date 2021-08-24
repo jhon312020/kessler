@@ -186,6 +186,7 @@ class TraineeSessionController extends Controller
               }
              
               if ($traineeRecord['booster_id'] == $this->directionBoosterID) {
+                $respClass = 'col-lg-12';
                 $settings = Setting::pluck('booster_id','active')->toArray();
                 if ($settings && isset($settings[$traineeRecord['booster_id']]) && $settings[$traineeRecord['booster_id']] == 1) {
                   $viewName = 'msmt.sessions.directions-final-review';

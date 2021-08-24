@@ -11,7 +11,7 @@
     <link href="{{asset('css/app.css')}}" rel="stylesheet">
     <script src="{{asset('vendor/jquery/jquery.min.js')}}"></script>
   </head>
-  <body>
+  <body oncopy = 'return false' oncut = 'return false' onmousedown = 'return false' onselectstart = 'return false'>
     <!-- Page Content -->
     <div id="container" class="container grey-background" style="padding-bottom: 0px;">
       <div id="header">
@@ -22,8 +22,17 @@
         <img src="{{asset('assets/img/footer.png')}}" class="center"/>
       </div>
     </div>
-   
     <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript">
+      $(document).ready(function() {
+          $(".disableEvent").on("contextmenu",function() {
+             return false;
+          }); 
+          $('.disableEvent').bind('cut copy paste', function (e) {
+            e.preventDefault();
+          });
+      });
+  </script>
     <script src="{{asset('vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
   </body>
 </html>

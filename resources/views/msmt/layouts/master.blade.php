@@ -19,9 +19,9 @@
     <script src="{{asset('vendor/jquery/jquery.min.js')}}"></script>
   </head>
   @isset($page)
-    <body class="main-body grey-background">
+    <body class="main-body grey-background" oncopy = 'return false' oncut = 'return false' onselectstart = 'return false'>
   @else
-    <body class="main-body white-background">
+    <body class="main-body white-background" oncopy = 'return false' oncut = 'return false' onselectstart = 'return false'>
   @endisset
     <main role="main" class="container">
       <div id="header">
@@ -42,12 +42,18 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    
     <script src="{{asset('vendor/bootstrap/js/bootstrap.min.js')}}"></script>
     <script src="{{asset('js/confetti.min.js')}}"></script>
     <script type='text/javascript'>
       if ( window.history.replaceState ) {
           window.history.replaceState( null, null, window.location.href );
       }
+      $(document).ready(function() {
+          $('body').bind('contextmenu cut copy paste', function (e) {
+            e.preventDefault();
+          });
+      });
     </script>
   </body>
 </html>

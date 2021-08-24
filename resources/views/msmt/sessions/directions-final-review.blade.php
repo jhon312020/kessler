@@ -69,37 +69,27 @@
   $(document).ready( function() { 
     var totalwords = "{{ $allWords }}";
     var sentenceWords = "{{ $sentenceWords }}";
-    //console.log('TotalWords', totalwords);
-    //console.log('sentenceWords', sentenceWords);
     sentenceWords = sentenceWords.split('**');
-    //console.log('sentenceWords', sentenceWords);
     sentenceWordsLength = sentenceWords.length;
     var userUsedWordCount = 0;
-    var wordCount = '';
+    ;var wordCount = totalwords.split(',').length;
     var writeUpWords = '';
     var subStringLen = 0;
     function review() { 
       allWords = totalwords.split(',');
-      //console.log('allWords', allWords);
       writeUpWords = [];
       wordCount = allWords.length;
       $('#jsUserMessage').addClass('d-none');
       $('#jsWordContainer p').removeClass('strikeThrough');
       var writeup = $('#jsWriteup').val().toUpperCase();
-      //var writeup = $('#jsWriteup').val();
-      //var writeup = $('#jsWriteup').val();
       var updateWriteUp = $('#jsWriteup').val();
       var newWriteUp = '';
       userUsedWordCount = 0;
-      //$('#jsWriteup').val(writeup.toUpperCase())
       var combinations = ['spaceanddot', 'spaceandcomma', 'spaceandspace', 'wordandspace'];
       var combLength = combinations.length;
       for (counter = 0; counter < wordCount; counter++) {
-        // console.log('Write Start from loop', writeup);
-        // console.log('Word:',allWords[counter]);
         var wordPostion = '';
         var checkKey = '';
-        //for (combCounter = 0; combCounter < combLength; combCounter++  ) {
           wordCombination = allWords[counter];
           wordPostion = writeup.indexOf(wordCombination);
           subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
@@ -113,7 +103,6 @@
             subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
             //For left user types lefthand in this case word left is getting matched so restting the substring
             if ((startOfWord == '' || startOfWord == ' ') && (endOfWord =='.' || endOfWord == ',' || endOfWord ==' ' || endOfWord == '') && typeof(endOfWord) !== 'undefined') {
-              //console.log('WordPostion', wordPostion);
               var regExp = new RegExp(allWords[counter],"i");
               updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
               if (newWriteUp == '') {
@@ -123,8 +112,6 @@
               }
               writeup = writeup.substring(subStringLen, writeup.length);
               updateWriteUp = updateWriteUp.substring(subStringLen, updateWriteUp.length);
-              //console.log('If writeup', writeup);
-              //console.log('newwriteup', newWriteUp);
               userUsedWordCount++;
               writeUpWords.push(allWords[counter]); 
               delete allWords[counter];
@@ -136,18 +123,15 @@
             }
             writeup = writeup.substring(subStringLen, writeup.length);
             updateWriteUp = updateWriteUp.substring(subStringLen, updateWriteUp.length);
-            //console.log('Else writeup', writeup);
             counter--;
           }
         } 
-        //console.log('New writeup',newWriteUp);
       }
       if (writeup != '') {
         newWriteUp = newWriteUp + updateWriteUp;
       }
       
       if (writeUpWords.length) {
-        //console.log('writeUpWords-',writeUpWords);
         for(senCounter = 0; senCounter < sentenceWordsLength; senCounter++ ) {
           words = sentenceWords[senCounter].split(",");
           wordLength = words.length;
@@ -183,7 +167,6 @@
       if (wordCount == userUsedWordCount) {
         $("#jsFormWriteup").submit();
       } else {
-        console.log(wordCount, '==', userUsedWordCount);
         $('#jsUserMessage').addClass('alert-danger');
         $('#jsUserMessage').text('Please use all the words to build the story!');
         $('#jsUserMessage').removeClass('d-none').show();

@@ -20,16 +20,16 @@
               <div class="form-group">
                 <label class="small mb-1" for="trainee_id">Trainee ID</label>
                 <input type="text" class="form-control py-4" name="trainee_id" id="trainee_id" placeholder="Trainee ID" value="{{$trainee->trainee_id}}" readonly="true">
-            {{--   </div>
-             <div class="form-group" id="jsSessionType">
-               <label class="small mb-1" for="session_number">Session Type</label>
+            </div>
+             {{-- <div class="form-group" id="jsSessionType">
+               <label class="small mb-1" for="session_type">Session Type</label>
               <select class="form-control select2" id="session_type" name="session_type" required placeholder="Select Session Type">
                 <option value= '' selected="selected">Session Type</option>
                 @foreach($types as $type)
                   <option value="{{ $type->type }}">{{ $type->type }}</option>
                 @endforeach;
-              </select> --}}
-            </div>
+              </select>
+            </div> --}}
             <div class="form-group" id="jsSessionNumber">
               <label class="small mb-1" for="session_number">Session Type</label>
               <select class="form-control select2" id="session_number" name="session_number" required placeholder="Select Session Type">
@@ -41,7 +41,7 @@
             </div>
              <div class="form-group d-none" id="jsBooster">
                <label class="small mb-1" for="booster_id">Select Category</label>
-              <select class="form-control select2" id="booster_id" name="booster_id" placeholder="Select Category" required>
+              <select class="form-control select2" id="booster_id" name="booster_id" placeholder="Select Category" >
                 <option value= '' selected="selected">Select Category</option>
                 @foreach($booster as $booster)
                   <option value="{{ $booster->id }}">{{ $booster->category }}</option>
@@ -50,7 +50,7 @@
             </div>
             <div class="form-group d-none" id="jsBoosterRange">
               <label class="small mb-1" for="booster_range">Select Form</label>
-              <select class="form-control select2" id="booster_range" name="booster_range" placeholder="Select Form" required>
+              <select class="form-control select2" id="booster_range" name="booster_range" placeholder="Select Form" >
                 <option value='' selected="selected">Select Form</option>
                 @foreach($boosterRange as $range)
                   <option value="{{ $range }}">{{ $range }}</option>

@@ -108,7 +108,6 @@
           } else {
             var regExp = new RegExp(allWords[counter],"gi");
             updateWriteUp = updateWriteUp.replace(regExp, allWords[counter].toLowerCase());
-            counter--;
           }
         } 
       }

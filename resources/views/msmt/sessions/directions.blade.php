@@ -36,7 +36,7 @@
         <div class="col-xs-4 col-lg-12">
           <div class="row">
             @foreach($words as $wordGroup)
-              <div class="col-xs-6 col-sm-6 <?php echo $respClass;?>">
+              <div class="col-xs-12 col-sm-12 <?php echo $respClass;?>">
                 @foreach($wordGroup as $wordID=>$word)
                   <p id="jsWord-{{ $wordID }}" class="text-left">{{$word}}</p>
                 @endforeach
@@ -71,7 +71,7 @@
     sentenceWords = sentenceWords.split('**');
     sentenceWordsLength = sentenceWords.length;
     var userUsedWordCount = 0;
-    var wordCount = '';
+    var wordCount = totalwords.split(',').length;
     var writeUpWords = '';
     var subStringLen = 0;
     $(document).on("keyup", "form", function(event) { 
@@ -89,7 +89,6 @@
       for (counter = 0; counter < wordCount; counter++) {
         var wordPostion = '';
         var checkKey = '';
-        //for (combCounter = 0; combCounter < combLength; combCounter++  ) {
           wordCombination = allWords[counter];
           wordPostion = writeup.indexOf(wordCombination);
           subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);

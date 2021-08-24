@@ -163,7 +163,7 @@ $(document).ready(function() {
       autoclose: true,
       todayHighlight: true,
   });
-  $('#traineeDataTable').DataTable();
+  $('#traineeDataTable').DataTable({"ordering": false});
   // $('#traineeDataTable').DataTable({
   //   "pageLength": 10, 
   //   "ordering": false,
