@@ -80,7 +80,9 @@
                     @if($roundOneReport[$storyWord->id][0]['correct_or_wrong'])
                       <i class="fa fa-check" aria-hidden="true"> </i>
                     @else 
+                      <a href="#"><i class="fa fa-edit" aria-hidden="true"></i></a> &nbsp;
                       <i class="fa fa-times" aria-hidden="true"> </i>
+
                     @endif
                     {{$roundOneReport[$storyWord->id][0]['answer']}} ({{ $roundOneReport[$storyWord->id][0]['time_taken']}} sec)
                   </td>
@@ -91,7 +93,8 @@
                     <td class="type text-center categorical {{ $roundOneReport[$storyWord->id][1]['correct_or_wrong'] ? 'correct' : 'wrong' }}">
                       @if($roundOneReport[$storyWord->id][1]['correct_or_wrong'])
                         <i class="fa fa-check" aria-hidden="true"> </i>
-                      @else 
+                      @else
+                        <a href="#"><i class="fa fa-edit" aria-hidden="true"></i></a> &nbsp; 
                         <i class="fa fa-times" aria-hidden="true"> </i>
                       @endif
                         {{ $roundOneReport[$storyWord->id][1]['answer'] ?: '' }} 
@@ -105,7 +108,8 @@
                       <td class="type text-center {{ $roundTwoReport[$storyWord->id][0]['correct_or_wrong'] ? 'correct' : 'wrong' }}"> 
                         @if($roundTwoReport[$storyWord->id][0]['correct_or_wrong'])
                           <i class="fa fa-check" aria-hidden="true"> </i>
-                          @else 
+                          @else
+                            <a href="#"><i class="fa fa-edit" aria-hidden="true"></i></a> &nbsp; 
                             <i class="fa fa-times" aria-hidden="true"> </i>
                         @endif
                             {{$roundTwoReport[$storyWord->id][0]['answer']}} ({{ $roundTwoReport[$storyWord->id][0]['time_taken']}} sec)</td>
@@ -114,6 +118,7 @@
                             @if($roundTwoReport[$storyWord->id][1]['correct_or_wrong'])
                               <i class="fa fa-check" aria-hidden="true"> </i>
                             @else 
+                              <a href="#"><i class="fa fa-edit" aria-hidden="true"></i></a> &nbsp;
                               <i class="fa fa-times" aria-hidden="true"> </i>
                             @endif
                               {{$roundTwoReport[$storyWord->id][1]['answer'] ?: ''}} ({{$roundTwoReport[$storyWord->id][1]['time_taken']}}sec)

@@ -74,40 +74,50 @@
     var wordCount = totalwords.split(',').length;
     var writeUpWords = '';
     var subStringLen = 0;
+    var writeup = '';
+    var updateWriteUp = '';
+    var newWriteUp = '';
+    var wordPostion = '';
+    var checkKey = '';
+    var startOfWord = '';
+    var regExp = '';
+    var findWord = '';
+    var wordFound = false;
+    //var combinations = ['spaceanddot', 'spaceandcomma', 'spaceandspace', 'wordandspace'];
+    //var combLength = combinations.length;
     $(document).on("keyup", "form", function(event) { 
       allWords = totalwords.split(',');
       writeUpWords = [];
       wordCount = allWords.length;
       $('#jsUserMessage').addClass('d-none');
       $('#jsWordContainer p').removeClass('strikeThrough');
-      var writeup = $('#jsWriteup').val().toUpperCase();
-      var updateWriteUp = $('#jsWriteup').val();
-      var newWriteUp = '';
+      writeup = $('#jsWriteup').val().toUpperCase();
+      updateWriteUp = $('#jsWriteup').val();
+      newWriteUp = '';
+      regExp = '';
       userUsedWordCount = 0;
-      var combinations = ['spaceanddot', 'spaceandcomma', 'spaceandspace', 'wordandspace'];
-      var combLength = combinations.length;
       for (counter = 0; counter < wordCount; counter++) {
-        var wordPostion = '';
-        var checkKey = '';
-          wordCombination = allWords[counter];
-          wordPostion = writeup.indexOf(wordCombination);
+        wordPostion = '';
+        checkKey = '';
+        wordCombination = allWords[counter];
+        wordPostion = writeup.indexOf(wordCombination);
+        subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
+        startWordCounter = parseInt(wordPostion);
+        startOfWord = '';
+        if (startWordCounter > 0) {
+          startOfWord = writeup[wordPostion - 1] ;
+        }
+        endOfWord = writeup[subStringLen];
+        if (wordPostion != -1) {
           subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
-          startWordCounter = parseInt(wordPostion);
-          startOfWord = 0;
-          if (startWordCounter > -1) {
-            startOfWord = writeup[wordPostion - 1] ;
-          }
-          endOfWord = writeup[subStringLen];
-          if (wordPostion != -1) {
-            subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
-            //For left user types lefthand in this case word left is getting matched so restting the substring
-            if ((startOfWord == '' || startOfWord == ' ') && (endOfWord =='.' || endOfWord == ',' || endOfWord ==' ' || endOfWord == '') && typeof(endOfWord) !== 'undefined') {
-              writeup = writeup.substring(subStringLen, writeup.length);
-              var regExp = new RegExp(allWords[counter],"i");
-              updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
-              userUsedWordCount++;
-              writeUpWords.push(allWords[counter]); 
-              delete allWords[counter];
+          //For left user types lefthand in this case word left is getting matched so restting the substring
+          if ((startOfWord == '' || startOfWord == ' ') && (endOfWord =='.' || endOfWord == ',' || endOfWord ==' ' || endOfWord == '') && typeof(endOfWord) !== 'undefined') {
+            writeup = writeup.substring(subStringLen, writeup.length);
+            regExp = new RegExp(allWords[counter],"i");
+            updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
+            userUsedWordCount++;
+            writeUpWords.push(allWords[counter]); 
+            delete allWords[counter];
           } else {
             writeup = writeup.substring(subStringLen, writeup.length);
             counter--;
@@ -119,9 +129,10 @@
         for(senCounter = 0; senCounter < sentenceWordsLength; senCounter++ ) {
           words = sentenceWords[senCounter].split(",");
           wordLength = words.length;
-          var wordFound = false;
+          wordFound = false;
+          findWord = '';
           for (subSenCounter = 0; subSenCounter < wordLength; subSenCounter++) {
-            var findWord = words[subSenCounter];
+            findWord = words[subSenCounter];
             wordIndex = writeUpWords.indexOf(findWord);
             if (wordIndex !== -1) {
               wordFound = true;

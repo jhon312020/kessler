@@ -72,49 +72,59 @@
     sentenceWords = sentenceWords.split('**');
     sentenceWordsLength = sentenceWords.length;
     var userUsedWordCount = 0;
-    ;var wordCount = totalwords.split(',').length;
+    var wordCount = totalwords.split(',').length;
     var writeUpWords = '';
     var subStringLen = 0;
+    var writeup = '';
+    var updateWriteUp = '';
+    var newWriteUp = '';
+    var wordPostion = '';
+    var checkKey = '';
+    var startOfWord = '';
+    var regExp = '';
+    var findWord = '';
+    var wordFound = false;
+    //var combinations = ['spaceanddot', 'spaceandcomma', 'spaceandspace', 'wordandspace'];
+    //var combLength = combinations.length;
     function review() { 
       allWords = totalwords.split(',');
       writeUpWords = [];
       wordCount = allWords.length;
       $('#jsUserMessage').addClass('d-none');
       $('#jsWordContainer p').removeClass('strikeThrough');
-      var writeup = $('#jsWriteup').val().toUpperCase();
-      var updateWriteUp = $('#jsWriteup').val();
-      var newWriteUp = '';
+      writeup = $('#jsWriteup').val().toUpperCase();
+      updateWriteUp = $('#jsWriteup').val();
+      newWriteUp = '';
       userUsedWordCount = 0;
-      var combinations = ['spaceanddot', 'spaceandcomma', 'spaceandspace', 'wordandspace'];
-      var combLength = combinations.length;
+      
       for (counter = 0; counter < wordCount; counter++) {
-        var wordPostion = '';
-        var checkKey = '';
-          wordCombination = allWords[counter];
-          wordPostion = writeup.indexOf(wordCombination);
+        wordPostion = '';
+        checkKey = '';
+        wordCombination = allWords[counter];
+        wordPostion = writeup.indexOf(wordCombination);
+        subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
+        startWordCounter = parseInt(wordPostion);
+        startOfWord = 0;
+        if (startWordCounter > -1) {
+          startOfWord = writeup[wordPostion - 1] ;
+        }
+        endOfWord = writeup[subStringLen];
+        if (wordPostion != -1) {
           subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
-          startWordCounter = parseInt(wordPostion);
-          startOfWord = 0;
-          if (startWordCounter > -1) {
-            startOfWord = writeup[wordPostion - 1] ;
-          }
-          endOfWord = writeup[subStringLen];
-          if (wordPostion != -1) {
-            subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
-            //For left user types lefthand in this case word left is getting matched so restting the substring
-            if ((startOfWord == '' || startOfWord == ' ') && (endOfWord =='.' || endOfWord == ',' || endOfWord ==' ' || endOfWord == '') && typeof(endOfWord) !== 'undefined') {
-              var regExp = new RegExp(allWords[counter],"i");
-              updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
-              if (newWriteUp == '') {
-                newWriteUp = updateWriteUp.substring(0, subStringLen);
-              } else {
-                newWriteUp = newWriteUp + updateWriteUp.substring(0, subStringLen);
-              }
-              writeup = writeup.substring(subStringLen, writeup.length);
-              updateWriteUp = updateWriteUp.substring(subStringLen, updateWriteUp.length);
-              userUsedWordCount++;
-              writeUpWords.push(allWords[counter]); 
-              delete allWords[counter];
+          //For left user types lefthand in this case word left is getting matched so restting the substring
+          if ((startOfWord == '' || startOfWord == ' ') && (endOfWord =='.' || endOfWord == ',' || endOfWord ==' ' || endOfWord == '') && typeof(endOfWord) !== 'undefined') {
+            var regExp = new RegExp(allWords[counter],"i");
+            updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
+            if (newWriteUp == '') {
+              newWriteUp = updateWriteUp.substring(0, subStringLen);
+            } else {
+              newWriteUp = newWriteUp + updateWriteUp.substring(0, subStringLen);
+            }
+            writeup = writeup.substring(subStringLen, writeup.length);
+            updateWriteUp = updateWriteUp.substring(subStringLen, updateWriteUp.length);
+            userUsedWordCount++;
+            writeUpWords.push(allWords[counter]); 
+            delete allWords[counter];
           } else {
             if (newWriteUp == '') {
               newWriteUp = updateWriteUp.substring(0, subStringLen);
@@ -135,7 +145,7 @@
         for(senCounter = 0; senCounter < sentenceWordsLength; senCounter++ ) {
           words = sentenceWords[senCounter].split(",");
           wordLength = words.length;
-          var wordFound = false;
+          wordFound = false;
           for (subSenCounter = 0; subSenCounter < wordLength; subSenCounter++) {
             var findWord = words[subSenCounter];
             wordIndex = writeUpWords.indexOf(findWord);
