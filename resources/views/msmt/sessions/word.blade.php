@@ -65,43 +65,39 @@
 
 <script type="text/javascript">
   $(document).ready( function() { 
-    var allWords = "{{ $allWords }}";
-    console.log(allWords);
-    allWords = allWords.split(',');
-    var wordCount = allWords.length;
+    var totalwords = "{{ $allWords }}";
+    var allWords = '';
+    var wordCount = totalwords.split(',').length;
     var userUsedWordCount = 0;
-    
+    var startOfWord = '';
+    var endOfWord = '';
+    var wordPosition = '';
+    var checkKey = '';
+    var writeup = '';
+    var updateWriteUp = '';
     $(document).on("keyup", "form", function(event) { 
+      allWords = totalwords.split(',');
       $('#jsUserMessage').addClass('d-none');
       $('#jsWordContainer p').removeClass('strikeThrough');
-      var writeup = $('#jsWriteup').val().toUpperCase();
-      var updateWriteUp = $('#jsWriteup').val();
+      writeup = $('#jsWriteup').val().toUpperCase();
+      updateWriteUp = $('#jsWriteup').val();
       userUsedWordCount = 0;
-      console.log('came in');
-      //$('#jsWriteup').val(writeup.toUpperCase())
-
-
       for (counter = 0; counter < wordCount; counter++) {
-        var wordPostion = '';
-        var checkKey = '';
-        //for (combCounter = 0; combCounter < combLength; combCounter++  ) {
           wordCombination = allWords[counter];
-          console.log(wordCombination);
-          wordPostion = writeup.indexOf(wordCombination);
-          subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
-          startWordCounter = parseInt(wordPostion);
-          startOfWord = 0;
-          if (startWordCounter > -1) {
-            startOfWord = writeup[wordPostion - 1] ;
+          wordPosition = writeup.indexOf(wordCombination);
+          subStringLen = parseInt(wordPosition) + parseInt(wordCombination.length);
+          startWordCounter = parseInt(wordPosition);
+          if (startWordCounter > 0) {
+            startOfWord = writeup[wordPosition - 1] ;
+          } else {
+            startOfWord = '';
           }
           endOfWord = writeup[subStringLen];
-          if (wordPostion != -1) {
-            subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
+          if (wordPosition != -1) {
+            subStringLen = parseInt(wordPosition) + parseInt(wordCombination.length);
             //For left user types lefthand in this case word left is getting matched so restting the substring
-            if ((startOfWord == '' || startOfWord == ' ') && (endOfWord =='.' || endOfWord == ',' || endOfWord ==' ' || endOfWord == '') && typeof(endOfWord) !== 'undefined') {
-              console.log('came in -', wordCombination);
+            if ((startOfWord == '' || startOfWord == ' ') && (endOfWord =='.' || endOfWord == ',' || endOfWord == ' ' || endOfWord == '') && typeof(endOfWord) !== 'undefined') {
               $('#jsWord-'+counter).addClass('strikeThrough');
-              writeup = writeup.substring(subStringLen, writeup.length);
               var regExp = new RegExp(allWords[counter],"i");
               updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
               userUsedWordCount++;
