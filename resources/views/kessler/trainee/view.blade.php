@@ -80,7 +80,7 @@
                     @if($roundOneReport[$storyWord->id][0]['correct_or_wrong'])
                       <i class="fa fa-check" aria-hidden="true"> </i>
                     @else 
-                      <a href="#"><i class="fa fa-edit" aria-hidden="true"></i></a> &nbsp;
+                      <a href="#"  class="jsEditAnswer" data-transactionid="{{$roundOneReport[$storyWord->id][0]['id']}}"><i class="fa fa-edit" aria-hidden="true"></i></a> &nbsp;
                       <i class="fa fa-times" aria-hidden="true"> </i>
 
                     @endif
@@ -94,7 +94,7 @@
                       @if($roundOneReport[$storyWord->id][1]['correct_or_wrong'])
                         <i class="fa fa-check" aria-hidden="true"> </i>
                       @else
-                        <a href="#"><i class="fa fa-edit" aria-hidden="true"></i></a> &nbsp; 
+                        <a href="#"  class="jsEditAnswer" data-transactionid="{{$roundOneReport[$storyWord->id][1]['id']}}"><i class="fa fa-edit" aria-hidden="true"></i></a> &nbsp; 
                         <i class="fa fa-times" aria-hidden="true"> </i>
                       @endif
                         {{ $roundOneReport[$storyWord->id][1]['answer'] ?: '' }} 
@@ -109,7 +109,7 @@
                         @if($roundTwoReport[$storyWord->id][0]['correct_or_wrong'])
                           <i class="fa fa-check" aria-hidden="true"> </i>
                           @else
-                            <a href="#"><i class="fa fa-edit" aria-hidden="true"></i></a> &nbsp; 
+                            <a href="#"  class="jsEditAnswer" data-transactionid="{{$roundTwoReport[$storyWord->id][0]['id']}}"><i class="fa fa-edit" aria-hidden="true"></i></a> &nbsp; 
                             <i class="fa fa-times" aria-hidden="true"> </i>
                         @endif
                             {{$roundTwoReport[$storyWord->id][0]['answer']}} ({{ $roundTwoReport[$storyWord->id][0]['time_taken']}} sec)</td>
@@ -118,7 +118,7 @@
                             @if($roundTwoReport[$storyWord->id][1]['correct_or_wrong'])
                               <i class="fa fa-check" aria-hidden="true"> </i>
                             @else 
-                              <a href="#"><i class="fa fa-edit" aria-hidden="true"></i></a> &nbsp;
+                              <a href="#"  class="jsEditAnswer" data-transactionid="{{$roundTwoReport[$storyWord->id][1]['id']}}"><i class="fa fa-edit" aria-hidden="true"></i></a> &nbsp;
                               <i class="fa fa-times" aria-hidden="true"> </i>
                             @endif
                               {{$roundTwoReport[$storyWord->id][1]['answer'] ?: ''}} ({{$roundTwoReport[$storyWord->id][1]['time_taken']}}sec)
@@ -166,4 +166,16 @@
       </div>
     </div>
   </div>
+  @include('common.modal')
+  <script type='text/javascript'>
+    $(document).ready( function() { // Wait until document is fully parsed
+    $(document).on('click touchstart', ".jsEditAnswer", function(event) {
+      console.log('called me');
+      event.preventDefault();
+      recordID = $(this).data('transactionid');
+      console.log('called me '+ recordID);
+      $('#exampleModal').modal('show');
+    });
+  });
+  </script>
 @endsection
