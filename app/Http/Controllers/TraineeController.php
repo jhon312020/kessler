@@ -404,10 +404,10 @@ class TraineeController extends Controller
             }
           }
         }
-
+        $submitURL = url('/trainee/answerSave');
         //$this->pr($roundTwoReport->toArray());
         //exit;
-        return view('kessler.trainee.view')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords','traineeID','sessionNumber', 'roundOneTimeTaken', 'roundTwoTimeTaken', 'sessionTime'));
+        return view('kessler.trainee.view')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords','traineeID','sessionNumber', 'roundOneTimeTaken', 'roundTwoTimeTaken', 'sessionTime','submitURL'));
         } else {
            return view('errors.404');
         }
@@ -704,5 +704,52 @@ class TraineeController extends Controller
             return view('errors.404');
           }
       
+    }
+
+    /**
+     * Updating useranswer by trainer
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function ajaxAnswerSave(Request $request) {
+      $response['reload'] = false;
+      $response['message'] = 'Invalid request!';
+       if ($request->ajax()) {
+        $remove = ['_token', '_method'];
+        $correctedAnswer = array_diff_key($request->all(), array_flip($remove));
+        foreach($correctedAnswer as $key=>$answer) {
+          $wordKey = explode('-', $key);
+          $transactionID = array_pop($wordKey);
+          $answer = strtoupper($answer);
+        }
+        if ($transactionID) { 
+          try {
+            $transactionDetail = TraineeTransaction::where('id', $transactionID)->firstOrFail();
+            $storyID = strtolower($transactionDetail->story_id);
+            $wordID = $transactionDetail->word_id;
+            $wordObj = $this->getWord($transactionDetail);
+            if ($wordObj['word'] === $answer) {
+              if ($transactionDetail->type == 'contextual') {
+                 TraineeTransaction::where('trainee_id', '=', "$transactionDetail->trainee_id")->where('session_pin','=',"$transactionDetail->session_pin")->where('word_id', '=', $transactionDetail->word_id)->where('round','=',$transactionDetail->round)->where('type', '=', 'categorical')->delete();
+              }
+              $transactionDetail->correct_or_wrong = 1;
+              $transactionDetail->answer = $answer;
+              if ($transactionDetail->save()) {
+                $response['reload'] = true;
+              } else {
+                $response['message'] = 'Some server error! Please try after sometimes!';
+              }
+            } else {
+              $response['message'] = 'Invalid answer!';
+            }
+            
+          } catch(Exception $e) {
+            Log::error($e);
+          }
+        } else {
+          $response['message'] = 'Invalid transactionid!';
+        } 
+       } 
+       return $response;
     }
 }

@@ -49,6 +49,8 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('/trainee/approve/{id}', [TraineeController::class, 'review']);
 	Route::post('/trainee/approve/{id}', [TraineeController::class, 'review']);
 	Route::post('/trainee/approve/{id}', [TraineeController::class, 'revise']);
+	Route::get('/trainee/answerSave', [TraineeController::class, 'ajaxAnswerSave']);
+	Route::post('/trainee/answerSave', [TraineeController::class, 'ajaxAnswerSave']);
 });
 //Super Admin Role
 Route::group(['middleware' => 'App\Http\Middleware\SuperAdminMiddleware'], function() {

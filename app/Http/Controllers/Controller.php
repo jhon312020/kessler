@@ -238,4 +238,30 @@ class Controller extends BaseController
     return $userStory;
   }
 
+   /**
+   * Get the storyword, based on the 
+   * word id
+   *
+   * @params  $transactionDetail
+   * @return objet
+   */
+  function getWord($transactionDetail) {
+    $wordObj = null;
+    try {
+      if (strtolower($transactionDetail->word_id) === $this->boosterSession) {
+        $wordObj = Task::select('task as word')->where('id',$transactionDetail->word_id)->firstOrFail();
+      } else {
+        $story_id = (int)$transactionDetail['story_id'];
+        if ($story_id > 8) {
+          $wordObj = Word::select('words as word')->where('id', $transactionDetail->word_id)->firstOrFail('word');
+        } else {
+          $wordObj = Word::select('word')->where('id', $transactionDetail->word_id)->firstOrFail('word');
+        }
+      }
+    } catch(Exception $e) {
+      Log::error($e);
+    }
+    return $wordObj;
+  }
+
 }
