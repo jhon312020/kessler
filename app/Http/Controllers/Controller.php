@@ -248,8 +248,8 @@ class Controller extends BaseController
   function getWord($transactionDetail) {
     $wordObj = null;
     try {
-      if (strtolower($transactionDetail->word_id) === $this->boosterSession) {
-        $wordObj = Task::select('task as word')->where('id',$transactionDetail->word_id)->firstOrFail();
+      if (strtolower($transactionDetail->story_id) === $this->boosterSession) {
+        $wordObj = Task::select('words as word')->where('id',$transactionDetail->word_id)->firstOrFail();
       } else {
         $story_id = (int)$transactionDetail['story_id'];
         if ($story_id > 8) {

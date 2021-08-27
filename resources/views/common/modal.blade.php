@@ -36,15 +36,14 @@
       requestInProcess = true;
       var form = $('#jsEditAnswerForm');
       var formData = form.serialize();
-      console.log('submit', formData);
       //return;
       $.ajax({
         type: "POST",
         url: form.attr("action"),
         data: formData,
         success: function(response) {
-          console.log('Response', response);
           if (response.reload) {
+            $("#editAnswerModal").modal('hide');
             window.location.reload();
           } else {
             $('#jsUserMessage').addClass('alert-danger');
@@ -52,6 +51,7 @@
             $('#jsUserMessage').removeClass('d-none');
           }
           $("#jsSaveAnswer").prop("disabled", false);
+
           $("#jsLoader").addClass('d-none');
           requestInProcess = false;
         },
