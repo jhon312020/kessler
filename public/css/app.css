@@ -1,6 +1,7 @@
 .main-body {
     min-height: 100vh;
-    position: absolute;
+    /*position: absolute;*/
+    margin: 0 auto;
   }
 .container {
   margin:auto;

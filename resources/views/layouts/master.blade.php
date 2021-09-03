@@ -11,7 +11,7 @@
     <link href="{{asset('css/app.css')}}" rel="stylesheet">
     <script src="{{asset('vendor/jquery/jquery.min.js')}}"></script>
   </head>
-  <body oncopy = 'return false' oncut = 'return false' onmousedown = 'return false' onselectstart = 'return false'>
+  <body oncopy = 'return false' oncut = 'return false'>
     <!-- Page Content -->
     <div id="container" class="container grey-background" style="padding-bottom: 0px;">
       <div id="header">
