@@ -11,6 +11,7 @@ use App\Models\Word;
 use App\Models\Type;
 use App\Models\Booster;
 use Auth;
+use Illuminate\Support\Facades\DB;
 //use Carbon\Carbon;
 
 class TraineeController extends Controller
@@ -91,15 +92,18 @@ class TraineeController extends Controller
         $searchValue = $search_arr['value']; // Search value
 
         // Total records
-        $totalRecords = Trainee::select('count(*) as allcount')->count();
+        $totalRecords = Trainee::select('*')->count();
+        $totalRecordswithFilters = Trainee::select('*')->Where('trainee_id', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%');
 
-        $totalRecordswithFilter = Trainee::select('count(*) as allcount')->where('trainees.created_at', 'like', '%' .$searchValue . '%')->where('trainee_id', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%')->where('trainees.created_at', 'like', '%' .$searchValue . '%')->count();
+        $totalRecordswithFilter = with(clone $totalRecordswithFilters)->count();
   
         // Fetch records
-        $queryObj = Trainee::where('trainees.trainee_id', 'like', '%' .$searchValue . '%')->where('trainees.created_at', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%')->skip($start)->take($rowperpage);
+        $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
+        //echo $queryObj->toSql();
+        //die();
         if ($user->role != "SA") {
           $queryObj->where('trainer_id', $user->id);
-          echo $queryObj->toSql();
+          $queryObj->toSql();
         } else {
            $queryObj = $queryObj->orderBy('id', 'desc');
         }
@@ -127,7 +131,7 @@ class TraineeController extends Controller
           $session_start_time = $session_start_time;
           $session_end_time = $session_end_time;
           if ($records->completed === 1) {
-            $session_state = "completed";
+            $session_state = $records->session_state;
           } else {
             $session_state = $records->session_state;
           }
@@ -153,8 +157,7 @@ class TraineeController extends Controller
                       <input type='hidden' name='_token' value='$csrf' />
                       <input type='hidden' name='_method' value='delete'>
                       <button class='btn btn-danger jsConfirmButton' type='button' data-value='$id' title='Delete'><i class='fa fa-trash' title='Delete'></i></button></form>";  
-          }
-          if ($records->completed == 1) {
+          }elseif ($records->completed == 1) {
             $action .= "<a href='$report' class='btn btn-primary' role='button' title='Report'><i class='fas fa-chart-pie' title='Report'></i></a>&nbsp;";
           }
           
@@ -336,7 +339,7 @@ class TraineeController extends Controller
           $timeOverall = with(clone $queryObj);
           $overallTotal = $timeOverall->sum('time_taken');
           $sessionTime = gmdate('i : s', $overallTotal).' sec';
-          // $this->pr($sessionTime); exit();
+          //$this->pr($sessionTime); exit();
           if ($trainee->round > 1) {
             $roundOneReport = with(clone $queryObj)->where('round', '=', '1')->get();
 
@@ -345,6 +348,8 @@ class TraineeController extends Controller
               $roundOneTimeTaken = gmdate('i : s', $roundOneTime).' sec';
 
               $recallWords = $roundOneReport->shift();
+              //$this->pr($recallWords->toArray());
+              //exit();
               if ($traineeReport->booster_id == 1) {
                 $recallReport[] = $this->_directionsRecallReport($recallWords, $allStoryWords);
               } else {
@@ -385,6 +390,8 @@ class TraineeController extends Controller
          //exit;
           if ($trainee->round > 1 && $trainee->completed == 1 ) {
             $roundTwoReport = with(clone $queryObj)->where('round', '=', '2')->get();
+            //$this->pr($roundTwoReport->toArray());
+            //exit();
             if ($roundTwoReport) {
               $roundTwoTime = $roundTwoReport->sum('time_taken');
               // $this->pr($roundTwoTime); exit();
@@ -752,4 +759,50 @@ class TraineeController extends Controller
        } 
        return $response;
     }
+
+    public function editWord(Request $request, $id){
+        $submitURL = url('/editword/').'/'.$id;
+        $errorMessage = '';
+        $transactionDetail = TraineeTransaction::where('id',$id)->firstOrFail();
+        try {
+        $wordObj = $this->getWord($transactionDetail);
+        $userans = $transactionDetail->answer;
+        $userans = strtoupper($userans);
+        if ($request->isMethod('post')) {
+          //$this->pr($request->all());
+          $userans = strtoupper(trim($request['word']));
+          if ($wordObj['word'] === $userans) {
+            if ($transactionDetail->type == 'contextual') {
+                TraineeTransaction::where('trainee_id', '=', "$transactionDetail->trainee_id")->where('session_pin','=',"$transactionDetail->session_pin")->where('word_id', '=', $transactionDetail->word_id)->where('round','=',$transactionDetail->round)->where('type', '=', 'categorical')->delete();
+            }
+            $transactionDetail->correct_or_wrong = 1;
+            $transactionDetail->answer = $userans;
+            $pin = $transactionDetail->session_pin ;
+
+            $detail = Trainee::select('session_pin' , 'id')->where('session_pin' , $transactionDetail->session_pin)->firstOrFail();
+            //$tpin = $detail->session_pin;
+            $tid = $detail->id;
+            /*print($tid);
+            die();*/
+              //return view('kessler.trainee.view')->with('success', 'Word has been updated sucessfuly!');
+            if ($transactionDetail->save()) {
+                return redirect()->route('trainee.view', ['id' => $tid]);
+              } else {
+                $errorMessage = 'Some server error! Please try after sometimes!';
+              }
+            } else {
+                $errorMessage = 'Invalid answer';
+            }
+        /*print_r($wordObj->toArray());*/
+        
+        /*print_r($userans);*/
+        }
+        }catch(Exception $e) {
+            Log::error($e);
+          }
+        return view ('kessler.trainee.words', compact('wordObj','userans','submitURL','errorMessage'));
+        
+    } 
+
+    
 }

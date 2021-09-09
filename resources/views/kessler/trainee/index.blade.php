@@ -106,7 +106,7 @@
                 <td></td>
                 @endif 
                 @if($trainee->completed === 1)
-                <td>completed</td>
+                <td>{{$trainee->session_state}}</td>
                 @else
                 <td>{{$trainee->session_state}}</td>
                 @endif
@@ -163,29 +163,29 @@ $(document).ready(function() {
       autoclose: true,
       todayHighlight: true,
   });
-  $('#traineeDataTable').DataTable({"ordering": false});
-  // $('#traineeDataTable').DataTable({
-  //   "pageLength": 10, 
-  //   "ordering": false,
-  //   "processing": true,
-  //   "serverSide": true,
-  //   "ajax": {
-  //     "url": "{{ route('trainee.getTrainee') }}",
-  //     "data": function (d) {
-  //       d.createdDate = $("#createdDate").val()
-  //     }
-  //   },
-  //   columns: [
-  //       { data: "trainee_id" },
-  //       { data: "session_pin" },
-  //       { data: "session_type" },
-  //       { data: "session_number" },
-  //       { data: "session_start_time" },
-  //       { data: "session_end_time" },
-  //       { data: "session_state" },
-  //       { data: "action" },
-  //   ]
-  // });     
+  //$('#traineeDataTable').DataTable({"ordering": false});
+  $('#traineeDataTable').DataTable({
+    "pageLength": 10, 
+    "ordering": false,
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+      "url": "{{ route('trainee.getTrainee') }}",
+      "data": function (d) {
+        d.createdDate = $("#createdDate").val()
+      }
+    },
+    columns: [
+        { data: "trainee_id" },
+        { data: "session_pin" },
+        { data: "session_type" },
+        { data: "session_number" },
+        { data: "session_start_time" },
+        { data: "session_end_time" },
+        { data: "session_state" },
+        { data: "action" },
+    ]
+  });     
 });  
 </script> 
 @include('common.confirm')

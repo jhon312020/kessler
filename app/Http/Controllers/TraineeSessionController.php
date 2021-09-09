@@ -62,7 +62,7 @@ class TraineeSessionController extends Controller
             $record->session_start_time = json_encode($sessionStartTime);
             $record->save(); 
             $request->session()->put('trainee', $record);
-            //$this->pr($record);
+            //$this->pr($record->toArray());
             //exit;
             if ($record['session_number'] <= 4 && $record['session_number'] != 'Booster') {
               return redirect('sessions');
@@ -91,7 +91,12 @@ class TraineeSessionController extends Controller
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
+        if($traineeRecord['session_number'] >= 5 ){
+          return redirect('/write');
+        }
         $traineeCurrentPosition = $traineeRecord->session_current_position?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
+        //$this->pr($traineeCurrentPosition);
+        //die();
         if ($traineeCurrentPosition->position === 'recall' || $traineeCurrentPosition->position === '') {
           $allWords = Word::where('story_id', $trainee['session_number'])->pluck('word');
           $story = Story::select('story')->where('id', $trainee['session_number'])->first(); 
@@ -134,10 +139,18 @@ class TraineeSessionController extends Controller
       
      if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee');
+        //$this->pr($trainee->toArray());
+        //die();
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
+        
         if ($traineeRecord) {
+          if($trainee['session_number'] <= 4){
+            return redirect('/sessions');
+          }
+
           $traineeCurrentPosition = $traineeRecord->session_current_position !== null?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
           $wordStory = $this->getWords($traineeRecord);
+
           //$this->pr($wordStory->toArray());
           //$this->pr($traineeRecord->toArray());
           if ($traineeRecord['booster_id']) {
@@ -530,7 +543,14 @@ class TraineeSessionController extends Controller
       $homeURL = url('index');
       $request->session()->forget('completed');
       $trainee = $request->session()->get('trainee');
-      $traineeObj = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_end_time')->where('id', $trainee->id)->first();
+      //$this->pr($trainee);
+      //die();
+      $traineeObj = Trainee::select('id', 'trainee_id', 'session_pin', 'session_state' ,'session_number', 'session_type', 'round', 'completed', 'session_end_time')->where('id', $trainee->id)->first();
+      //$this->pr($traineeObj);
+      //die();
+      /*if($traineeObj['completed'] == 1){
+        $query = Trainee::where('completed','=', 1)->update(['session_state' => 'completed']);
+      }*/
       if ($traineeObj) {
         $sessionEndTime = $traineeObj->session_end_time?json_decode($traineeObj->session_end_time):$this->sessionEndTime;
         switch($traineeObj->round) {
@@ -541,6 +561,7 @@ class TraineeSessionController extends Controller
           break;
           case 2:
             $traineeObj->completed = 1;
+            $traineeObj->session_state = 'completed';
             $sessionEndTime->roundTwo = now();
             $round = 'second';
           break;
