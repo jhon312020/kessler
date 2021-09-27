@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Word;
+use Auth;
 
 class WordController extends Controller
 {
@@ -117,5 +118,65 @@ class WordController extends Controller
       $word = Word::find($id);
       $word->delete();
       return redirect('/word')->with('success', 'WORD DELETED!');
+    }
+
+    public function getStoryWord(Request $request){
+      $user = Auth::user();
+      $draw = $request->get('draw');
+      $start = $request->get("start");
+      $rowperpage = $request->get("length");
+      $columnName_arr = $request->get('columns');
+      $search_arr = $request->get('search');
+      $searchValue = $search_arr['value'];
+      $csrf = csrf_token();
+      $totalRecords = Word::select('*')->count();
+      /*$this->pr($totalRecords);
+      die();*/
+      
+      $totalRecordswithFilters = Word::select('*')->Where('id', 'like', '%' .$searchValue . '%')->orWhere('word', 'like', '%' .$searchValue . '%')->orWhere('contextual_cue', 'like', '%' .$searchValue . '%')->orWhere('categorical_cue', 'like', '%' .$searchValue . '%');
+
+      $totalRecordswithFilter = with(clone $totalRecordswithFilters)->count();
+  
+        // Fetch records
+      $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
+
+      $words = $queryObj->get();
+      /*$this->pr($trainers->toArray());
+      die();*/
+      $data_arr =  array();
+
+      foreach ($words as $records) {
+        $records->id;
+        $records->word;
+        $records->categorical_cue;
+        $records->contextual_cue;
+        
+        $edit = route('word.edit', $records->id);
+        $delete = route('word.destroy', $records->id);
+        
+        $action = "<a href='$edit' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i> Edit</a>&nbsp;";
+        $action .="<form action='$delete' method='post' class='d-inline' id='jsSubmitForm-$records->id'>
+                  <input type='hidden' name='_token' value='$csrf'>
+                  <input type='hidden' name='_method' value='delete'>
+                  <button class='btn btn-danger jsConfirmButton' type='button' data-value='$records->id' title='Delete'><i class='fa fa-trash' title='Delete'></i> Delete</button>
+                </form>";
+                
+        $data_arr[] = array(
+          "id" => $records->id,
+          "word" => $records->word,
+          "contextual_cue" => $records->contextual_cue,
+          "categorical_cue" => $records->categorical_cue,
+          "action" => $action
+          );
+        }
+        $response = array(
+          "draw" => intval($draw),
+          "iTotalRecords" => $totalRecords,
+          "iTotalDisplayRecords" => $totalRecordswithFilter,
+          "aaData" => $data_arr
+        );
+        
+        echo json_encode($response);
+        exit;
     }
 }

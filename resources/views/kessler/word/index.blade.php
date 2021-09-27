@@ -17,7 +17,7 @@
       <a href="{{ route('word.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;"><i class="fas fa-plus">&nbsp;</i> Add Word</a>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <table class="table table-bordered" id="wordTable" width="100%" cellspacing="0">
             <thead>
               <tr>
                 <th>S.No</th>
@@ -37,7 +37,7 @@
               </tr>
             </tfoot>
             <tbody>
-            @foreach($word as $word)
+            <!-- @foreach($word as $word)
               <tr>
                <td>{{$word->id}}</td>
                <td>{{$word->word}}</td>
@@ -52,7 +52,7 @@
                 </form>
                 </td>
               </tr>
-            @endforeach
+            @endforeach -->
             </tbody>
           </table>
           <div>
@@ -66,5 +66,37 @@
       </div>
     </div>
   </div>
+
+<script type="text/javascript">
+  $(document).ready( function() {
+    $('#wordTable').DataTable({
+    "pageLength": 10, 
+    "ordering": false,
+    "processing": true,
+    "serverSide": true,
+    "bStateSave": true,
+        "fnStateSave": function (oSettings, oData) {
+            localStorage.setItem( 'DataTables', JSON.stringify(oData) );
+        },
+        "fnStateLoad": function (oSettings) {
+            return JSON.parse( localStorage.getItem('DataTables') );
+        },
+    "ajax": {
+      
+      "url": "{{ route('word.getWord') }}",
+      
+    },
+    
+    columns: [
+        { data: "id" },
+        { data: "word" },
+        { data: "contextual_cue" },
+        { data: "categorical_cue" },
+        { data: "action" },
+    ]
+  });    
+
+});  
+</script> 
 @include('common.confirm')
 @endsection

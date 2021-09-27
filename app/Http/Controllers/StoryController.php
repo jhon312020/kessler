@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Story;
 use App\Models\Type;
+use Auth;
 
 class StoryController extends Controller
 {
@@ -117,5 +118,62 @@ class StoryController extends Controller
       $story = Story::find($id);
       $story->delete();
       return redirect('/story')->with('success', 'STORY DELETED!');
+    }
+
+    public function getStory(Request $request){
+      $user = Auth::user();
+      $draw = $request->get('draw');
+      $start = $request->get("start");
+      $rowperpage = $request->get("length");
+      $columnName_arr = $request->get('columns');
+      $search_arr = $request->get('search');
+      $searchValue = $search_arr['value'];
+      $csrf = csrf_token();
+      $totalRecords = Story::select('*')->count();
+      /*$this->pr($totalRecords);
+      die();*/
+      
+      $totalRecordswithFilters = Story::select('*')->Where('id', 'like', '%' .$searchValue . '%')->orWhere('story', 'like', '%' .$searchValue . '%');
+
+      $totalRecordswithFilter = with(clone $totalRecordswithFilters)->count();
+  
+        // Fetch records
+      $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
+      
+      $stories = $queryObj->get();
+      /*$this->pr($trainers->toArray());
+      die();*/
+      $data_arr =  array();
+
+      foreach ($stories as $records) {
+        $records->id;
+        $records->story;
+
+        
+        $edit = route('story.edit', $records->id);
+        $delete = route('story.destroy', $records->id);
+        
+        $action = "<a href='$edit' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i> Edit</a>&nbsp;";
+        $action .="<form action='$delete' method='post' class='d-inline' id='jsStatusForm-$records->id'>
+                  <input type='hidden' name='_token' value='$csrf'>
+                  <input type='hidden' name='_method' value='delete'>
+                  <button class='btn btn-danger jsConfirmButton' type='button' data-value='$records->id' title='Delete'><i class='fa fa-trash' title='Delete'></i> Delete</button>
+                </form>";
+                
+        $data_arr[] = array(
+          "id" => $records->id, 
+          "story" => $records->story,
+          "action" => $action
+          );
+        }
+        $response = array(
+          "draw" => intval($draw),
+          "iTotalRecords" => $totalRecords,
+          "iTotalDisplayRecords" => $totalRecordswithFilter,
+          "aaData" => $data_arr
+        );
+        
+        echo json_encode($response);
+        exit;
     }
 }

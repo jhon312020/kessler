@@ -20,7 +20,7 @@
       <a href="{{ route('trainer.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;"><i class="fas fa-plus">&nbsp;</i> Add Trainer</a>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <table class="table table-bordered" id="TrainerTable" width="100%" cellspacing="0">
             <thead>
               <tr>
                 <th>Name</th>
@@ -38,7 +38,7 @@
               </tr>
             </tfoot>
             <tbody>
-            @foreach($trainers as $trainer)
+            <!-- @foreach($trainers as $trainer)
               <tr>
                <td>{{$trainer->name}}</td>
                <td>{{$trainer->email}}</td>
@@ -61,7 +61,7 @@
                   </form>
                </td> --}}               
               </tr>
-            @endforeach
+            @endforeach -->
             </tbody>
           </table>
           <div>
@@ -75,18 +75,55 @@
       </div>
     </div>
   </div>
+
 <script type="text/javascript">
   $(document).ready( function() { // Wait until document is fully parse
-    $('.jsStatus').on('change', function() {
+    $(document).on('change', '.jsStatus', function() {
+
       var currentVal = $(this).val();
       if (currentVal) {
         $(this).val(1);
       } else {
         $(this).val(0);
       }
-      $('#jsStatusForm-'+$(this).data('id')).submit();
+      
+    $('#jsStatusForm-'+$(this).data('id')).submit();
+
     }); 
- })
-</script>
+  var start = 0;
+  $('#TrainerTable').DataTable({
+    "pageLength": 10, 
+    "ordering": false,
+    "processing": true,
+    "serverSide": true,
+    "bStateSave": true,
+        "fnStateSave": function (oSettings, oData) {
+            localStorage.setItem( 'DataTables', JSON.stringify(oData) );
+        },
+        "fnStateLoad": function (oSettings) {
+            return JSON.parse( localStorage.getItem('DataTables') );
+        },
+    "ajax": {
+      
+      "url": "{{ route('trainer.getTrainer') }}",
+      /*data(d) {
+                d.start = start;
+            }*/
+      
+    },
+
+    "drawCallback":function( settings, json){
+            $(".jsStatus").bootstrapToggle('destroy');                 
+            $(".jsStatus").bootstrapToggle();
+        },
+    columns: [
+        { data: "name" },
+        { data: "email" },
+        { data: "action" },
+    ]
+  });    
+
+});  
+</script> 
 @include('common.confirm')
 @endsection

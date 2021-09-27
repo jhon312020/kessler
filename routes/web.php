@@ -37,6 +37,10 @@ Auth::routes();
 Route::get('/logout', [HomeController::class, 'logout']);
 Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 Route::get('/trainee/getTrainee', [TraineeController::class, 'getTrainee'])->name('trainee.getTrainee');
+Route::get('/trainer/getTrainer',[TrainerController::class, 'getTrainers'])->name('trainer.getTrainer');
+Route::get('/overview/getOverview',[OverviewController::class,'getOverview'])->name('overview.getOverview');
+Route::get('/story/getStory',[StoryController::class,'getStory'])->name('story.getStory');
+Route::get('/word/getWord',[WordController::class,'getStoryWord'])->name('word.getWord');
 // ---------------------------------------- ./ ADMIN ----------------------------------------------------------- //
 //Trainer Admin
 Route::group(['middleware' => 'auth'], function() {

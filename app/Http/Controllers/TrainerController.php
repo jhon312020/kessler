@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Invite;
 use App\Models\User;
+use Auth;
+use DB;
+
 
 class TrainerController extends Controller
 {
@@ -91,13 +94,15 @@ class TrainerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
+      //$draw = $request->get('draw');
+      //$start = $request->get("start");
       $request->validate([
         'name'=>'required'
       ]);
       $trainer = User::find($id);
       $trainer->name = $request->get('name');
       $trainer->save();
-      return redirect('/trainer')->with('success', 'TRAINER UPDATED!');
+      return redirect('/trainer/')->with('success', 'TRAINER UPDATED!');
     }
 
     /**
@@ -127,5 +132,69 @@ class TrainerController extends Controller
       } 
       $trainer->save();
       return redirect('/trainer')->with('success', 'TRAINER STATUS UPDATED!');
+    }
+
+    public function getTrainers(Request $request){
+      $user = Auth::user();
+      $draw = $request->get('draw');
+      $start = $request->get("start");
+      $rowperpage = $request->get("length");
+      $columnName_arr = $request->get('columns');
+      $search_arr = $request->get('search');
+      $searchValue = $search_arr['value'];
+      $csrf = csrf_token();      
+      $totalRecords = User::select('*')->Where('role','TA')->count();
+      /*$this->pr($totalRecords);
+      die();*/
+      
+      $totalRecordswithFilters = User::select('*')->where('role','TA')  
+      ->when($searchValue, function($search ,$searchValue){
+        $search->Where('name', 'like', '%' .$searchValue . '%')->orWhere('email', 'like', '%' .$searchValue . '%');
+      });
+
+      $totalRecordswithFilter = with(clone $totalRecordswithFilters)->count();
+  
+        // Fetch records
+      $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
+
+      if ($user->role = "SA") {
+          $queryObj->where('role', 'TA');
+          $queryObj = $queryObj->orderBy('name', 'asc');
+          $queryObj->toSql();
+        } 
+      
+      $trainers = $queryObj->get();
+      /*$this->pr($trainers->toArray());
+      die();*/
+      $data_arr =  array();
+
+      foreach ($trainers as $records) {
+        $records->name;
+        $records->email;
+        $activeOrInactiveUrl = url('trainer/status', $records->id).'?start='.$start;
+        $edit = route('trainer.edit', $records->id).'?start='.$start;;
+        
+        $checked = $records->status ? 'checked':'';
+        $action = "<a href='$edit' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i> Edit</a>&nbsp;";
+        $action .="<form action='$activeOrInactiveUrl' method='post' class='d-inline' id='jsStatusForm-$records->id'>
+                  <input type='hidden' name='_token' value='$csrf'>
+                  <input type='hidden' name='_method' value='post'>
+                  <input data-id='$records->id' name='status' value='$records->status' class='toggle-class jsStatus' type='checkbox' data-onstyle='success' data-offstyle='danger' data-toggle='toggle' data-on='Active' data-off='InActive' $checked>
+                </form>";
+        $data_arr[] = array(
+          "name" => $records->name,
+          "email" => $records->email,
+          "action" => $action
+          );
+        }
+        $response = array(
+          "draw" => intval($draw),
+          "iTotalRecords" => $totalRecords,
+          "iTotalDisplayRecords" => $totalRecordswithFilter,
+          "aaData" => $data_arr
+        );
+        
+        echo json_encode($response);
+        exit;
     }
 }

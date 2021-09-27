@@ -17,7 +17,7 @@
       <a href="{{ route('story.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;"><i class="fas fa-plus">&nbsp;</i> Add Story</a>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <table class="table table-bordered" id="storyTable" width="100%" cellspacing="0">
             <thead>
               <tr>
                 <th>S.No</th>
@@ -60,5 +60,27 @@
       </div>
     </div>
   </div>
+  <script type="text/javascript">
+  $(document).ready( function() { 
+  $('#storyTable').DataTable({
+    "pageLength": 10, 
+    "ordering": false,
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+      
+      "url": "{{ route('story.getStory') }}",
+      
+    },
+    
+    columns: [
+        { data: "id" },
+        { data: "story" },
+        { data: "action" },
+    ]
+  });    
+
+});  
+</script> 
 @include('common.confirm')
 @endsection

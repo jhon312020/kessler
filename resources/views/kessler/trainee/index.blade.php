@@ -169,6 +169,13 @@ $(document).ready(function() {
     "ordering": false,
     "processing": true,
     "serverSide": true,
+    "bStateSave": true,
+        "fnStateSave": function (oSettings, oData) {
+            localStorage.setItem( 'DataTables', JSON.stringify(oData) );
+        },
+        "fnStateLoad": function (oSettings) {
+            return JSON.parse( localStorage.getItem('DataTables') );
+        },
     "ajax": {
       "url": "{{ route('trainee.getTrainee') }}",
       "data": function (d) {

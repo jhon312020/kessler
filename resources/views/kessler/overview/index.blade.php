@@ -17,7 +17,7 @@
       <a href="{{ route('overview.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;"><i class="fas fa-plus">&nbsp;</i> Add Overview</a>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <table class="table table-bordered" id="overviewTable" width="100%" cellspacing="0">
             <thead>
               <tr>
                 <th>Overview</th>
@@ -57,5 +57,26 @@
       </div>
     </div>
   </div>
+<script type="text/javascript">
+  $(document).ready( function() { 
+    $('#overviewTable').DataTable({
+    "pageLength": 10, 
+    "ordering": false,
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+      
+      "url": "{{ route('overview.getOverview') }}",
+      
+    },
+    
+    columns: [
+        { data: "overview" },
+        { data: "action" },
+    ]
+  });    
+
+});  
+</script> 
 @include('common.confirm')
 @endsection

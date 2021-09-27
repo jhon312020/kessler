@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Overview;
-
+use Auth;
 
 class OverviewController extends Controller
 {
@@ -102,5 +102,59 @@ class OverviewController extends Controller
       $overview = Overview::find($id);
       $overview->delete();
       return redirect('/overview')->with('success', 'OVERVIEW DELETED!');
+    }
+
+    public function getOverview(Request $request){
+      $user = Auth::user();
+      $draw = $request->get('draw');
+      $start = $request->get("start");
+      $rowperpage = $request->get("length");
+      $columnName_arr = $request->get('columns');
+      $search_arr = $request->get('search');
+      $searchValue = $search_arr['value'];
+      $csrf = csrf_token();
+      $totalRecords = Overview::select('*')->count();
+      /*$this->pr($totalRecords);
+      die();*/
+      
+      $totalRecordswithFilters = Overview::select('*')->Where('overview', 'like', '%' .$searchValue . '%');
+
+      $totalRecordswithFilter = with(clone $totalRecordswithFilters)->count();
+  
+        // Fetch records
+      $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
+
+      $overviews = $queryObj->get();
+      /*$this->pr($trainers->toArray());
+      die();*/
+      $data_arr =  array();
+
+      foreach ($overviews as $records) {
+        $records->overview;
+        
+        $edit = route('overview.edit', $records->id);
+        $delete = route('overview.destroy', $records->id);
+        
+        $action = "<a href='$edit' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i> Edit</a>&nbsp;";
+        $action .="<form action='$delete' method='post' class='d-inline' id='jsStatusForm-$records->id'>
+                  <input type='hidden' name='_token' value='$csrf'>
+                  <input type='hidden' name='_method' value='delete'>
+                  <button class='btn btn-danger jsConfirmButton' type='button' data-value='$records->id' title='Delete'><i class='fa fa-trash' title='Delete'></i> Delete</button>
+                </form>";
+                
+        $data_arr[] = array(
+          "overview" => $records->overview,
+          "action" => $action
+          );
+        }
+        $response = array(
+          "draw" => intval($draw),
+          "iTotalRecords" => $totalRecords,
+          "iTotalDisplayRecords" => $totalRecordswithFilter,
+          "aaData" => $data_arr
+        );
+        
+        echo json_encode($response);
+        exit;
     }
 }
