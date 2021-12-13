@@ -94,8 +94,6 @@ class TrainerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-      //$draw = $request->get('draw');
-      //$start = $request->get("start");
       $request->validate([
         'name'=>'required'
       ]);
@@ -103,6 +101,7 @@ class TrainerController extends Controller
       $trainer->name = $request->get('name');
       $trainer->save();
       return redirect('/trainer/')->with('success', 'TRAINER UPDATED!');
+      
     }
 
     /**
@@ -126,12 +125,18 @@ class TrainerController extends Controller
 
     public function status(Request $request, $id) {
       $trainer = User::find($id);
-      $trainer->status = $request->get('status');
-      if ($trainer->status == 0) {
+      if ($request->get('status')) {
+        $trainer->status = 1;
+      } else {
         $trainer->status = 0;
-      } 
-      $trainer->save();
-      return redirect('/trainer')->with('success', 'TRAINER STATUS UPDATED!');
+      }
+      if($trainer->save()) {
+        $message = 'TRAINER STATUS UPDATED';
+      } else {
+        $message = 'Some server error! Please try after sometimes!';
+      }
+      return response()->json(['message' => $message]);
+      //return redirect('/trainer')->with('success', 'TRAINER STATUS UPDATED!');
     }
 
     public function getTrainers(Request $request){
@@ -172,22 +177,26 @@ class TrainerController extends Controller
         $records->name;
         $records->email;
         $activeOrInactiveUrl = url('trainer/status', $records->id).'?start='.$start;
-        $edit = route('trainer.edit', $records->id).'?start='.$start;;
+        $edit = route('trainer.edit', $records->id).'?start='.$start;
         
         $checked = $records->status ? 'checked':'';
-        $action = "<a href='$edit' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i> Edit</a>&nbsp;";
-        $action .="<form action='$activeOrInactiveUrl' method='post' class='d-inline' id='jsStatusForm-$records->id'>
+        $action = "<a onclick='openEditModal(this)' id = 'jsEditForm' data-id='$records->id' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i> Edit</a>&nbsp;";
+        $action .="<form action='$activeOrInactiveUrl' method='post' class='d-inline' id='jsStatusForm-$records->id' >
                   <input type='hidden' name='_token' value='$csrf'>
                   <input type='hidden' name='_method' value='post'>
                   <input data-id='$records->id' name='status' value='$records->status' class='toggle-class jsStatus' type='checkbox' data-onstyle='success' data-offstyle='danger' data-toggle='toggle' data-on='Active' data-off='InActive' $checked>
                 </form>";
+        /*if($records->status->save()){
+          $message = 'TRAINER STATUS UPDATED!';
+        } */       
         $data_arr[] = array(
-          "name" => $records->name,
+          "name" => "<span class='jsname'> ".$records->name."</span>",
           "email" => $records->email,
           "action" => $action
           );
         }
         $response = array(
+          "action" => $action,
           "draw" => intval($draw),
           "iTotalRecords" => $totalRecords,
           "iTotalDisplayRecords" => $totalRecordswithFilter,
@@ -196,5 +205,17 @@ class TrainerController extends Controller
         
         echo json_encode($response);
         exit;
+    }
+
+    public function editTrainer(Request $request) {
+        
+      $request->validate([
+        'name'=>'required',
+        'id'=>'required'
+      ]);
+      $trainer = User::find($request->id);
+      $trainer->name = $request->name;
+      $trainer->save();
+      return redirect('/trainer')->with('success', 'TRAINER UPDATED!');
     }
 }
