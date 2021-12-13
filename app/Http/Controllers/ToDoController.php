@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 //use App\Models\ToDo;
 use App\Models\Task;
 use App\Models\Type;
+use Auth;
 
 class ToDoController extends Controller
 {
@@ -116,5 +117,66 @@ class ToDoController extends Controller
       $todo = Task::find($id);
       $todo->delete();
       return redirect('/todo')->with('success', 'To-Do DELETED!');
+    }
+
+    public function getTodo(Request $request){
+      $user = Auth::user();
+      $draw = $request->get('draw');
+      $start = $request->get("start");
+      $rowperpage = $request->get("length");
+      $columnName_arr = $request->get('columns');
+      $search_arr = $request->get('search');
+      $searchValue = $search_arr['value'];
+      $csrf = csrf_token();
+      $totalRecords = Task::select('*')->Where('booster_id','3')->count();
+      /*$this->pr($totalRecords);
+      die();*/
+      
+      $totalRecordswithFilters = Task::select('*')->where('booster_id','3')->when($searchValue, function($search ,$searchValue){
+        $search->Where('task', 'like', '%' .$searchValue . '%')->orWhere('words', 'like', '%' .$searchValue . '%');
+         });
+
+      $totalRecordswithFilter = with(clone $totalRecordswithFilters)->count();
+  
+        // Fetch records
+      $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
+
+      $todo = $queryObj->where('booster_id','3')->get();
+      /*$this->pr($todo->toArray());
+      die();*/
+      $data_arr =  array();
+      $record_count = $start;
+      foreach ($todo as $records) {
+
+        // $records->id;
+        // $records->task;
+        // $records->categorical_cue;
+        
+        $edit = route('todo.edit', $records->id);
+        $delete = route('todo.destroy', $records->id);
+        
+        $action = "<a href='$edit' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i> Edit</a>&nbsp;";
+        $action .="<form action='$delete' method='post' class='d-inline' id='jsSubmitForm-$records->id'>
+                  <input type='hidden' name='_token' value='$csrf'>
+                  <input type='hidden' name='_method' value='delete'>
+                  <button class='btn btn-danger jsConfirmButton' type='button' data-value='$records->id' title='Delete'><i class='fa fa-trash' title='Delete'></i> Delete</button>
+                </form>";
+        $record_count++;       
+        $data_arr[] = array(
+          "id" => $record_count,
+          "todo" => $records->task,
+          "categorical_cue" => $records->categorical_cue,
+          "action" => $action
+          );
+        }
+        $response = array(
+          "draw" => intval($draw),
+          "iTotalRecords" => $totalRecords,
+          "iTotalDisplayRecords" => $totalRecordswithFilter,
+          "aaData" => $data_arr
+        );
+        
+        echo json_encode($response);
+        exit;
     }
 }

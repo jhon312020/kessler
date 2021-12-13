@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 //use App\Models\Direction;
 use App\Models\Task;
 use App\Models\Type;
+use Auth;
 
 class DirectionController extends Controller
 {
+    public $dir = '/direction';
     /**
      * Create a new controller instance.
      *
@@ -39,8 +41,8 @@ class DirectionController extends Controller
      */
     public function create() {
       $types = Type::all();
-      $boosterRange = $this->boosterRange;
-      return view('kessler.direction.create', compact('types', 'boosterRange'));
+      $boosterRanges = $this->boosterRange;
+      return view('kessler.direction.create', compact('types', 'boosterRanges'));
     }
 
     /**
@@ -64,7 +66,7 @@ class DirectionController extends Controller
           'categorical_cue' => $request->get('categorical_cue')
         ]);
         $directions->save();
-        return redirect('/direction')->with('success', 'Direction SAVED!');
+        return redirect($this->dir)->with('success', 'Direction SAVED!');
     }
 
     /**
@@ -105,7 +107,7 @@ class DirectionController extends Controller
       $direction->task = $request->get('direction');
       $direction->categorical_cue = $request->get('categorical_cue');
       $direction->save();
-      return redirect('/direction')->with('success', 'Direction UPDATED!');
+      return redirect($this->dir)->with('success', 'Direction UPDATED!');
     }
 
     /**
@@ -117,6 +119,65 @@ class DirectionController extends Controller
     public function destroy($id) {
       $direction = Task::find($id);
       $direction->delete();
-      return redirect('/direction')->with('success', 'Direction DELETED!');
+      return redirect($this->dir)->with('success', 'Direction DELETED!');
+    }
+
+    public function getDirection(Request $request){
+      $user = Auth::user();
+      $draw = $request->get('draw');
+      $start = $request->get("start");
+      $rowperpage = $request->get("length");
+      $columnName_arr = $request->get('columns');
+      $search_arr = $request->get('search');
+      $searchValue = $search_arr['value'];
+      $csrf = csrf_token();
+      $totalRecords = Task::select('*')->Where('booster_id','1')->count();
+      /*$this->pr($totalRecords);
+      die();*/
+      
+      $totalRecordswithFilters = Task::select('*')->where('booster_id','1')->when($searchValue, function($search ,$searchValue){
+        $search->Where('task', 'like', '%' .$searchValue . '%')->orWhere('words', 'like', '%' .$searchValue . '%')->orWhere('question', 'like', '%' .$searchValue . '%');
+      });
+
+      $totalRecordswithFilter = with(clone $totalRecordswithFilters)->count();
+  
+        // Fetch records
+      $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
+
+      $directions = $queryObj->where('booster_id','1')->get();
+      /*$this->pr($trainers->toArray());
+      die();*/
+      $data_arr =  array();
+
+      foreach ($directions as $records) {
+        $records->id;
+        $records->task;
+        $records->categorical_cue;
+        
+        $edit = route('direction.edit', $records->id);
+        $delete = route('direction.destroy', $records->id);
+        
+        $action = "<a href='$edit' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i> Edit</a>&nbsp;";
+        $action .="<form action='$delete' method='post' class='d-inline' id='jsSubmitForm-$records->id'>
+                  <input type='hidden' name='_token' value='$csrf'>
+                  <input type='hidden' name='_method' value='delete'>
+                  <button class='btn btn-danger jsConfirmButton' type='button' data-value='$records->id' title='Delete'><i class='fa fa-trash' title='Delete'></i> Delete</button>
+                </form>";
+                
+        $data_arr[] = array(
+          "direction" => $records->task,
+          "categorical_cue" => $records->categorical_cue,
+          "action" => $action
+          );
+        }
+        $response = array(
+          "draw" => intval($draw),
+          "iTotalRecords" => $totalRecords,
+          "iTotalDisplayRecords" => $totalRecordswithFilter,
+          "aaData" => $data_arr
+        );
+        
+        echo json_encode($response);
+        exit;
     }
 }
