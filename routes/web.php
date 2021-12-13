@@ -41,6 +41,10 @@ Route::get('/trainer/getTrainer',[TrainerController::class, 'getTrainers'])->nam
 Route::get('/overview/getOverview',[OverviewController::class,'getOverview'])->name('overview.getOverview');
 Route::get('/story/getStory',[StoryController::class,'getStory'])->name('story.getStory');
 Route::get('/word/getWord',[WordController::class,'getStoryWord'])->name('word.getWord');
+Route::get('/direction/getDirection',[DirectionController::class,'getDirection'])->name('direction.getDirection');
+Route::get('/item/getItem',[ShoppingController::class,'getItem'])->name('item.getItem');
+Route::get('/todo/getTodo',[ToDoController::class,'getTodo'])->name('todo.getTodo');
+Route::post('/trainer/update',[TrainerController::class,'editTrainer']);
 // ---------------------------------------- ./ ADMIN ----------------------------------------------------------- //
 //Trainer Admin
 Route::group(['middleware' => 'auth'], function() {
