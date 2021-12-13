@@ -14,7 +14,7 @@
         Overview
       </div>
       <br/>
-      <a href="{{ route('overview.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;"><i class="fas fa-plus">&nbsp;</i> Add Overview</a>
+      <a href="{{ route('overview.create')}}" class="btn btn-primary btn-block bg-gradient-primary add-tab" ><i class="fas fa-plus">&nbsp;</i> Add Overview</a>
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-bordered" id="overviewTable" width="100%" cellspacing="0">

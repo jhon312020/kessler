@@ -11,7 +11,7 @@
     <div class="card mb-4">
       <div class="card-header">
         <i class="fa fa-table mr-1"></i>
-        View Details of Trainee Information  <a href="{{ route('trainee.create')}}" class="btn btn-primary btn-block bg-gradient-primary float-right" style="width: fit-content; margin-left: 25px;"><i class="fas fa-plus">&nbsp;</i> Add Trainee</a>
+        View Details of Trainee Information  <a href="{{ route('trainee.create')}}" class="btn btn-primary btn-block bg-gradient-primary float-right add-tab" ><i class="fas fa-plus">&nbsp;</i> Add Trainee</a>
       </div>
       <div class="card-body">
         <div class="form-group">

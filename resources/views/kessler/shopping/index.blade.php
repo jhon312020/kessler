@@ -14,10 +14,10 @@
         Shopping List
       </div>
       <br/>
-      <a href="{{ route('shopping.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;"><i class="fas fa-plus">&nbsp;</i> Add Item</a>
+      <a href="{{ route('shopping.create')}}" class="btn btn-primary btn-block bg-gradient-primary add-tab" ><i class="fas fa-plus">&nbsp;</i> Add Item</a>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <table class="table table-bordered" id="itemTable" width="100%" cellspacing="0">
             <thead>
               <tr>
                 <!-- <th>S.No</th> -->
@@ -35,9 +35,9 @@
               </tr>
             </tfoot>
             <tbody>
-            @foreach($shopping as $shopping)
+            <!-- @foreach($shopping as $shopping)
               <tr>
-               <!-- <td>{{$shopping->id}}</td> -->
+               
                <td>{{$shopping->task}}</td>
                <td>{{$shopping->categorical_cue}}</td>
                <td>
@@ -50,7 +50,7 @@
                 </td>
               </tr>
             @endforeach
-            </tbody>
+            </tbody> -->
           </table>
           <div>
             @if(session()->get('success'))
@@ -63,5 +63,37 @@
       </div>
     </div>
   </div>
+
+  <script type="text/javascript">
+  $(document).ready( function() {
+    $('#itemTable').DataTable({
+    "pageLength": 10, 
+    "ordering": false,
+    "processing": true,
+    "serverSide": true,
+    "bStateSave": true,
+        "fnStateSave": function (oSettings, oData) {
+            localStorage.setItem( 'DataTables', JSON.stringify(oData) );
+        },
+        "fnStateLoad": function (oSettings) {
+            return JSON.parse( localStorage.getItem('DataTables') );
+        },
+    "ajax": {
+      
+      "url": "{{ route('item.getItem') }}",
+      
+    },
+    
+    columns: [
+        
+        { data: "item" },
+        { data: "categorical_cue" },
+        { data: "action" },
+    ]
+  });    
+
+});  
+</script> 
+
 @include('common.confirm')
 @endsection

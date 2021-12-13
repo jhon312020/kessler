@@ -14,10 +14,10 @@
         Direction
       </div>
       <br/>
-      <a href="{{ route('direction.create')}}" class="btn btn-primary btn-block bg-gradient-primary" style="width: fit-content; margin-left: 25px;"><i class="fas fa-plus">&nbsp;</i> Add Direction</a>
+      <a href="{{ route('direction.create')}}" class="btn btn-primary btn-block bg-gradient-primary add-tab"><i class="fas fa-plus">&nbsp;</i> Add Direction</a>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <table class="table table-bordered" id="directionTable" width="100%" cellspacing="0">
             <thead>
               <tr>
                 <!-- <th>S.No</th> -->
@@ -35,9 +35,9 @@
               </tr>
             </tfoot>
             <tbody>
-            @foreach($direction as $direction)
+            <!-- @foreach($direction as $direction)
               <tr>
-               <!-- <td>{{$direction->id}}</td> -->
+               
                <td>{{$direction->task}}</td>
                <td>{{$direction->categorical_cue}}</td>
                <td>
@@ -49,7 +49,7 @@
                 </form>
                 </td>
               </tr>
-            @endforeach
+            @endforeach -->
             </tbody>
           </table>
           <div>
@@ -63,5 +63,36 @@
       </div>
     </div>
   </div>
+
+  <script type="text/javascript">
+  $(document).ready( function() {
+    $('#directionTable').DataTable({
+    "pageLength": 10, 
+    "ordering": false,
+    "processing": true,
+    "serverSide": true,
+    "bStateSave": true,
+        "fnStateSave": function (oSettings, oData) {
+            localStorage.setItem( 'DataTables', JSON.stringify(oData) );
+        },
+        "fnStateLoad": function (oSettings) {
+            return JSON.parse( localStorage.getItem('DataTables') );
+        },
+    "ajax": {
+      
+      "url": "{{ route('direction.getDirection') }}",
+      
+    },
+    
+    columns: [
+        { data: "direction" },
+        { data: "categorical_cue" },
+        { data: "action" },
+    ]
+  });    
+
+});  
+</script> 
+
 @include('common.confirm')
 @endsection
