@@ -18,6 +18,7 @@ class TrainerController extends Controller
      *
      * @return void
      */
+    private $pageTrainer = '/trainer';
     public function __construct() {
       $this->middleware('auth');
       parent::__construct();
@@ -62,7 +63,7 @@ class TrainerController extends Controller
           $trainer->password = $password;
           Mail::to($trainer->email)->send(new Invite($trainer));
         }
-        return redirect('/trainer')->with('success', 'TRAINER SAVED!');
+        return redirect($this->pageTrainer)->with('success', 'TRAINER SAVED!');
     }
 
     /**
@@ -113,7 +114,7 @@ class TrainerController extends Controller
     public function destroy($id) {
       $trainer = User::find($id);
       $trainer->delete();
-      return redirect('/trainer')->with('success', 'TRAINER DELETED!');
+      return redirect($this->pageTrainer)->with('success', 'TRAINER DELETED!');
     }
 
     /**
@@ -149,8 +150,6 @@ class TrainerController extends Controller
       $searchValue = $search_arr['value'];
       $csrf = csrf_token();      
       $totalRecords = User::select('*')->Where('role','TA')->count();
-      /*$this->pr($totalRecords);
-      die();*/
       
       $totalRecordswithFilters = User::select('*')->where('role','TA')  
       ->when($searchValue, function($search ,$searchValue){
@@ -186,9 +185,7 @@ class TrainerController extends Controller
                   <input type='hidden' name='_method' value='post'>
                   <input data-id='$records->id' name='status' value='$records->status' class='toggle-class jsStatus' type='checkbox' data-onstyle='success' data-offstyle='danger' data-toggle='toggle' data-on='Active' data-off='InActive' $checked>
                 </form>";
-        /*if($records->status->save()){
-          $message = 'TRAINER STATUS UPDATED!';
-        } */       
+               
         $data_arr[] = array(
           "name" => "<span class='jsname'> ".$records->name."</span>",
           "email" => $records->email,
@@ -215,7 +212,12 @@ class TrainerController extends Controller
       ]);
       $trainer = User::find($request->id);
       $trainer->name = $request->name;
-      $trainer->save();
-      return redirect('/trainer')->with('success', 'TRAINER UPDATED!');
+
+      if($trainer->save()) {
+        $message = 'TRAINER UPDATED!';
+      } else {
+        $message = 'Some server error! Please try after sometimes!';
+      }
+      return response()->json(['message' => $message]);
     }
 }
