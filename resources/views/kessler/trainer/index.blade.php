@@ -19,9 +19,9 @@
       </div>
       <br/>
       <a href="{{ route('trainer.create')}}" class="btn btn-primary btn-block bg-gradient-primary add-tab" ><i class="fas fa-plus">&nbsp;</i> Add Trainer</a>
-
+      <hr>
       <div id="message"class="alert d-none"> </div>
-      <br><br>
+      <div id="update"class="alert d-none"> </div>
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-bordered" id="TrainerTable" width="100%" cellspacing="0">
@@ -102,11 +102,11 @@
 </div> 
 <!-- {Modal} -->
           <div>
-            <!-- @if(session()->get('success'))
+            @if(session()->get('success'))
               <div class="alert alert-success">
                 {{ session()->get('success') }}  
               </div>
-            @endif  -->
+            @endif
             
           </div>
         </div>
@@ -177,6 +177,9 @@
         
         
         success: function(result) {
+          $('#update').addClass('alert-success');
+          $('#update').removeClass('d-none');
+          $('#update').html(result.message);
           $('#editModal').modal('hide');
           $('#loader').css('display', 'none');  
           $('#jsupdate').prop('disabled', false);
