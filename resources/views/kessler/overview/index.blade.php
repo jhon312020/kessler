@@ -1,6 +1,7 @@
 @extends('kessler.layouts.master')
 @section('content')
   <!-- Content Wrapper. Contains page content -->
+  <link href="{{asset('css/style.css')}}" rel="stylesheet" />
   <div class="container-fluid">
     <h1 class="mt-4">Overview</h1>
     <div class="card mb-4">
