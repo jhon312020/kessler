@@ -13,10 +13,11 @@ class Controller extends BaseController
 {
   use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
   private $boosterSession = 'booster';
+  private $wordsAs = 'words as word';
   private $booster = array();
   public $directionBoosterID;
   public function __construct() {
-	$sideMenu = array('dashboard'=>array('name'=>'Dashboard', 'url'=>'/dashboard','icon'=>'fa-tachometer-alt', 'role'=>''),
+  $sideMenu = array('dashboard'=>array('name'=>'Dashboard', 'url'=>'/dashboard','icon'=>'fa-tachometer-alt', 'role'=>''),
                 'trainee'=>array('name'=>'Trainee Information', 'url'=>'/trainee','icon'=>'fa-table', 'role'=>''), 
                 'trainer'=>array('name'=>'Trainer', 'url'=>'/trainer','icon'=>'fa-table', 'role'=>'SA'), 
                 'overview'=>array('name'=>'Overview', 'url'=>'/overview','icon'=>'fa-table', 'role'=>'SA'),
@@ -25,11 +26,11 @@ class Controller extends BaseController
                 'word'=>array('name'=>'Word', 'url'=>'/word','icon'=>'fa-table', 'role'=>'SA'),
                 'type'=>array('name'=>'Session Type', 'url'=>'/type','icon'=>'fa-table', 'role'=>'SA'),
                 'booster'=>array('name'=>'Booster Category', 'url'=>'/booster','icon'=>'fa-table', 'role'=>'SA'),
-               // 'quiz'=>array('name'=>'Quiz', 'url'=>'/quiz','icon'=>'fa-table', 'role'=>'SA'),
+               
                 'Booster Section'=>array('name'=>'Booster Session', 'url'=>'#', 'icon'=>'fa-columns', 'role'=>'SA', 'subitems'=>array('direction'=>array('name'=>'Direction', 'url'=>'/direction', 'icon'=>'fa-table', 'role'=>'SA',), 'shopping'=>array('name'=>'Shopping', 'url'=>'/shopping','icon'=>'fa-table','role'=>'SA'), 'to-do'=>array('name'=>'To-Do', 'url'=>'/todo','icon'=>'fa-table', 'role'=>'SA')))
               );
 
-  	\View::share('sideMenu', $sideMenu);
+    \View::share('sideMenu', $sideMenu);
     
   }
 
@@ -42,9 +43,9 @@ class Controller extends BaseController
    */
   
   function pr($data) {
-  	echo '<pre>';
-  	print_r($data);
-  	echo '</pre>';
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>';
   }
 
   /**
@@ -57,9 +58,9 @@ class Controller extends BaseController
   function getWords($trainee) {
 
     $this->booster = Booster::pluck('category','id');
-    //$this->pr($trainee);
+   
     if (strtolower($trainee['session_number']) === $this->boosterSession) {
-      //echo 'came in';
+   
       $wordObj = Task::select('task as word', 'question', 'words')->where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->get();
     } else {
       
@@ -67,7 +68,6 @@ class Controller extends BaseController
 
         $type = strtolower($this->booster[$trainee['booster_id']]);
         
-        //$wordObj = Word::where('story_id', $trainee['session_number'])->where('type', "$type")->pluck('word');
         $wordObj = Word::select('word', 'contextual_cue', 'question', 'words')->where('story_id', $trainee['session_number'])->where('type', "$type")->get('word');
 
       } else {
@@ -91,8 +91,8 @@ class Controller extends BaseController
   function getWordAndID($trainee) {
     $this->booster = Booster::pluck('category','id');
     if (strtolower($trainee['session_number']) == $this->boosterSession) {
-      //$wordObj = Task::where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->pluck('task as word', 'id');
-      $wordObj = Task::where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->pluck('words as word', 'id');
+      
+      $wordObj = Task::where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->pluck($this->wordsAs, 'id');
     } else {
       if ($trainee['booster_id']) {
         $type = strtolower($this->booster[$trainee['booster_id']]);
@@ -115,11 +115,11 @@ class Controller extends BaseController
   function getCurrentWord($trainee, $wordID) {
     $this->booster = Booster::pluck('category','id');
     if (strtolower($trainee['session_number']) == $this->boosterSession) {
-      $wordObj = Task::select('id', 'words as word', 'task as question', 'categorical_cue')->where('booster_id', $trainee['booster_id'])->where('id', $wordID)->where('booster_range', $trainee['booster_range'])->first();
+      $wordObj = Task::select('id', $this->wordsAs, 'task as question', 'categorical_cue')->where('booster_id', $trainee['booster_id'])->where('id', $wordID)->where('booster_range', $trainee['booster_range'])->first();
     } else {
       if ($trainee['booster_id']) {
         $type = strtolower($this->booster[$trainee['booster_id']]);
-        $wordObj = Word::select('id', 'words as word', 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->where('type', "$type")->first();
+        $wordObj = Word::select('id', $this->wordsAs, 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->where('type', "$type")->first();
       } else {
         $wordObj = Word::select('id', 'word', 'words', 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
       }
@@ -138,12 +138,12 @@ class Controller extends BaseController
   function getWordAndIDObj($traineeObj) {
     $this->booster = Booster::pluck('category','id');
     if (strtolower($traineeObj['session_number']) === $this->boosterSession) {
-      $wordObj = Task::select('id', 'words as word')->where('booster_id', $traineeObj->booster_id)->where('booster_range', $traineeObj->booster_range)->get();
-      //$wordObj = Task::select('id', 'task as word')->where('booster_id', $traineeObj->booster_id)->where('booster_range', $traineeObj->booster_range)->get();
+      $wordObj = Task::select('id', $this->wordsAs)->where('booster_id', $traineeObj->booster_id)->where('booster_range', $traineeObj->booster_range)->get();
+      
     } else {
       if ($traineeObj['booster_id']) {
         $type = strtolower($this->booster[$traineeObj['booster_id']]);
-        $wordObj = Word::select('id', 'words as word')->where('story_id', $traineeObj['session_number'])->where('type', "$type")->orderBy('id', 'asc')->get();
+        $wordObj = Word::select('id', $this->wordsAs)->where('story_id', $traineeObj['session_number'])->where('type', "$type")->orderBy('id', 'asc')->get();
       } else {
         $wordObj = Word::select('id', 'word')->where('story_id', $traineeObj['session_number'])->orderBy('id', 'asc')->get();
       }
@@ -162,7 +162,7 @@ class Controller extends BaseController
     if ($trainee['booster_id']) {
       
       $storyWords = $storyWords->pluck('words');
-      //$storyWords = $storyWords->pluck('word');
+     
     } else {
       $storyWords = $storyWords->pluck('word');
 
@@ -180,8 +180,7 @@ class Controller extends BaseController
   function getSentenceKey($sentences, $words) {
     $detecedKey = 0;
     foreach ($sentences as $sentenceKey=>$sentence) {
-      //echo 'Before entering loop';
-      //print_r($words);
+      
       $newSentence = $sentence;
       foreach($words as $wordkey=>$word) {
         $pos = strpos($newSentence, $word);
@@ -216,7 +215,7 @@ class Controller extends BaseController
       $wordPosition = stripos($userStory, $searchWord);
       $strLen = strlen($searchWord);
       $copyPosition = $wordPosition + $strLen;
-      $revisedStory .= $replaceString = subStr($userStory, 0, $copyPosition);
+      $revisedStory .= subStr($userStory, 0, $copyPosition);
       $userStory = substr($userStory, $copyPosition);
     }
     return $revisedStory;
@@ -249,19 +248,19 @@ class Controller extends BaseController
     $wordObj = null;
     try {
       if (strtolower($transactionDetail->story_id) === $this->boosterSession) {
-        $wordObj = Task::select('words as word')->where('id',$transactionDetail->word_id)->firstOrFail();
+        $wordObj = Task::select($this->wordsAs)->where('id',$transactionDetail->word_id)->firstOrFail();
       } else {
         $story_id = (int)$transactionDetail['story_id'];
         if ($story_id > 8) {
-          $wordObj = Word::select('words as word')->where('id', $transactionDetail->word_id)->firstOrFail('word');
+          $wordObj = Word::select($this->wordsAs)->where('id', $transactionDetail->word_id)->firstOrFail('word');
         } else {
           $wordObj = Word::select('word')->where('id', $transactionDetail->word_id)->firstOrFail('word');
         }
       }
-    } catch(Exception $e) {
+    } catch(\Exception $e) {
       Log::error($e);
     }
     return $wordObj;
   }
-
+  
 }

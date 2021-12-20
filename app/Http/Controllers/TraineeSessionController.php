@@ -25,6 +25,9 @@ class TraineeSessionController extends Controller
      * @return void
      */
     private $traineeCurrentPosition;
+    private $index = '/index';
+    private $queshow = 'msmt.sessions.questions.show';
+    private $recallRem = 'msmt.sessions.recallwords.remember';
 
     public function __construct() {
       $this->traineeCurrentPosition = (object)array('word_id'=>'', 'position'=>'', 'user_word_id'=>'', 'sentence'=>'');
@@ -62,8 +65,7 @@ class TraineeSessionController extends Controller
             $record->session_start_time = json_encode($sessionStartTime);
             $record->save(); 
             $request->session()->put('trainee', $record);
-            //$this->pr($record->toArray());
-            //exit;
+            
             if ($record['session_number'] <= 4 && $record['session_number'] != 'Booster') {
               return redirect('sessions');
             } else {
@@ -94,9 +96,8 @@ class TraineeSessionController extends Controller
         if($traineeRecord['session_number'] >= 5 ){
           return redirect('/write');
         }
+
         $traineeCurrentPosition = $traineeRecord->session_current_position?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
-        //$this->pr($traineeCurrentPosition);
-        //die();
         if ($traineeCurrentPosition->position === 'recall' || $traineeCurrentPosition->position === '') {
           $allWords = Word::where('story_id', $trainee['session_number'])->pluck('word');
           $story = Story::select('story')->where('id', $trainee['session_number'])->first(); 
@@ -118,15 +119,15 @@ class TraineeSessionController extends Controller
             $traineeRecord->save();
             $wordID = $word['id'];
             $question = $word['question'];
-            $findWord = $word['word'];
+            
             $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$wordID."' id='answer' autocomplete='off'>", $question);
             $question = str_replace("$$", str_repeat("_", 15), $question);
             $submitURL = url('next');
-            return view('msmt.sessions.questions.show', compact('question', 'showTraineeMessage', 'submitURL'));
+            return view($this->queshow, compact('question', 'showTraineeMessage', 'submitURL'));
           }
         }
       } else {
-        return redirect('/index');
+        return redirect($this->index);
       }
     }
 
@@ -139,39 +140,30 @@ class TraineeSessionController extends Controller
       
      if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee');
-        //$this->pr($trainee->toArray());
-        //die();
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
-        
+
         if ($traineeRecord) {
           if($trainee['session_number'] <= 4){
             return redirect('/sessions');
           }
-
           $traineeCurrentPosition = $traineeRecord->session_current_position !== null?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
           $wordStory = $this->getWords($traineeRecord);
-
-          //$this->pr($wordStory->toArray());
-          //$this->pr($traineeRecord->toArray());
+          
           if ($traineeRecord['booster_id']) {
             $words = $wordStory->where('question', '<>', 'D')->pluck('word')->toArray();
             $sentenceWords = $wordStory->where('question', '<>', 'D')->pluck('question')->toArray();
             $allWords = $wordStory->pluck('words')->toArray();
-            //$this->pr($words);
+          
           } else {
-            $allWords = $words = $wordStory->pluck('word')->toArray();
+            $allWords = $wordStory->pluck('word')->toArray();
           }
           
-          //exit;
-          //$this->pr($traineeRecord);
-          //$allWords = $words = $wordStory->toArray();
-          //$this->pr($allWords);
           if ($traineeCurrentPosition->position === 'review' || $traineeCurrentPosition->position === 'tale' ) {
             return redirect('/review');
           } else if ($traineeCurrentPosition->position === 'recall' ) {
             $allWords = count($allWords);
             $submitURL = url('cue');
-            return view('msmt.sessions.recallwords.remember', compact('allWords','traineeRecord', 'submitURL'));
+            return view($this->recallRem, compact('allWords','traineeRecord', 'submitURL'));
           } else if ($traineeCurrentPosition->position === 'answer') {
             return redirect('/cue');
           } else {
@@ -182,9 +174,7 @@ class TraineeSessionController extends Controller
               case 2:
                 $respClass = 'col-lg-6';
               break;
-              // case 4:
-              //   $respClass = 'col-lg-6';
-              // break;
+              
             }
             if ($traineeRecord['booster_id']) {
               $allWords = implode(',', $allWords);
@@ -221,10 +211,10 @@ class TraineeSessionController extends Controller
             
           }
         } else {
-          return redirect('/index');
+          return redirect($this->index);
         }
       } else {
-        return redirect('/index');
+        return redirect($this->index);
       }
     }
 
@@ -240,10 +230,8 @@ class TraineeSessionController extends Controller
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
 
-        //$storyWords = Word::where('story_id', $trainee['session_number'])->pluck('word');
         $storyObj = $this->getWords($trainee);
          
-
         $storyWords = $this->getStoryWords($trainee, $storyObj);
         
         $story = $request->get('story');
@@ -262,16 +250,12 @@ class TraineeSessionController extends Controller
         
         foreach($storyWords as $word) {
           $searchWord = strtolower($word);
-          //$newString = str_replace($searchWord, $word, $newString);
+        
           $findWord = '/\b'.$searchWord.'\b/i';
-          // $newString = preg_replace($findWord, $word, $newString, 1);
+        
           $newString = preg_replace($findWord, $word, $newString);
         }
         $wordsArr = $storyObj->pluck("word","question");
-        // echo "<pre>";print_r($wordsArr);
-        // print_r($storyWords);
-        // print_r($newString);
-        //  exit;
         
         preg_match_all('/\b([A-Z-]+)\b/', $newString, $userWords);
 
@@ -285,9 +269,7 @@ class TraineeSessionController extends Controller
             }
           }
         }
-        // $this->pr($userWords);
-        // $this->pr($userStoryWords);
-        // exit;
+        
         $traineeStory['trainee_id'] = $trainee['trainee_id'];
         $traineeStory['story_id'] = $trainee['session_number'];
         $traineeStory['session_pin'] = $trainee['session_pin'];
@@ -304,7 +286,7 @@ class TraineeSessionController extends Controller
         }
         return redirect('/review');
       } else {
-        return redirect('/index');
+        return redirect($this->index);
       }
     }
 
@@ -317,24 +299,23 @@ class TraineeSessionController extends Controller
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee');
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
-        // $this->pr($trainee);
+        
         $story = TraineeStory::select('updated_story as story', 'reviewed')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->where('round', $trainee['round'])->orderBy('id', 'desc')->first();
         if ($story && $story['reviewed']) {
-          //$storyWords = Word::where('story_id', $trainee['session_number'])->pluck('word');
           $storyObj = $this->getWords($trainee);
           $storyWords = $this->getStoryWords($trainee, $storyObj);
-          //echo $story->story;
+        
           foreach ($storyWords as $word) {
             $story->story = str_replace($word, "<span class='emboss'>$word</span>", $story->story);
           }
-          //echo $story->story;
+        
           $linkURL = url('recallword');
           return view('msmt.sessions.story', compact('story', 'trainee', 'linkURL'));
         } else {
           return view('msmt.sessions.review');
         }
       }
-      return redirect('/index');
+      return redirect($this->index);
     }
 
     /**
@@ -345,9 +326,9 @@ class TraineeSessionController extends Controller
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
-        //$wordStory = Word::where('story_id', $trainee['session_number'])->pluck('word');
+        
         $wordStory = $this->getWords($trainee);
-        $allWords = $words = $wordStory->toArray();
+        $allWords = $wordStory->toArray();
         $allWords = count($allWords);
         $traineeCurrentPosition = $traineeRecord->session_current_position?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
         if ($traineeCurrentPosition->position === 'recall' || $traineeCurrentPosition->position === '') {
@@ -356,31 +337,31 @@ class TraineeSessionController extends Controller
           $traineeRecord->session_state = 'continue';
           $traineeRecord->save();
           $submitURL = url('sessions');
-          return view('msmt.sessions.recallwords.remember', compact('allWords','traineeRecord', 'submitURL'));
+          return view($this->recallRem, compact('allWords','traineeRecord', 'submitURL'));
         } 
       }
-      return redirect('/index');
+      return redirect($this->index);
     }
 
     public function recollect(Request $request) {
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
-        //$wordStory = Word::where('story_id', $trainee['session_number'])->pluck('word');
+        
         $wordStory = $this->getWords($trainee);
         $allWords = $words = $wordStory->toArray();
         $allWords = count($allWords);
         $traineeCurrentPosition = $traineeRecord->session_current_position?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
-        //$this->pr($allWords);
+        
         if ($traineeCurrentPosition->position === 'recall' || $traineeCurrentPosition->position === 'tale') {
           $this->traineeCurrentPosition->position = 'recall';
           $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
           $traineeRecord->save();
           $submitURL = url('cue');
-          return view('msmt.sessions.recallwords.remember', compact('allWords','traineeRecord', 'submitURL'));
+          return view($this->recallRem, compact('allWords','traineeRecord', 'submitURL'));
         } 
       }
-      return redirect('/index');
+      return redirect($this->index);
     }
 
     /**
@@ -394,7 +375,7 @@ class TraineeSessionController extends Controller
         $timeTaken = (int)(($request->endTime - $request->startTime)/1000);
         $trainee = $request->session()->get('trainee');
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
-        //$this->pr($trainee);
+        
         $data = $request->only('words');
         $traineeTransaction['answer'] = json_encode($data);
         $traineeTransaction['trainee_id'] = $trainee['trainee_id'];
@@ -414,14 +395,14 @@ class TraineeSessionController extends Controller
           $traineeRecord->save();
           $wordID = $word['id'];
           $question = $word['question'];
-          $findWord = $word['word'];
+          
           $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$wordID."' id='answer' autocomplete='off'>", $question);
           $question = str_replace("$$", str_repeat("_", 15), $question);
         } 
         $submitURL = url('next');
-        return view('msmt.sessions.questions.show', compact('question', 'showTraineeMessage', 'submitURL'));
+        return view($this->queshow, compact('question', 'showTraineeMessage', 'submitURL'));
       } else {
-        return redirect('/index');
+        return redirect($this->index);
       }
     }
 
@@ -438,7 +419,7 @@ class TraineeSessionController extends Controller
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
         if ($request->isMethod('post')) {
           $timeTaken = (int)(($request->endTime - $request->startTime)/1000);
-          //$this->pr($trainee);
+        
           
           $data = $request->only('words');
           
@@ -460,7 +441,7 @@ class TraineeSessionController extends Controller
         }
         return redirect('/cue');
       } else {
-        return redirect('/index');
+        return redirect($this->index);
       }
     }
 
@@ -474,21 +455,21 @@ class TraineeSessionController extends Controller
     if ($request->session()->has('trainee')) {
       $trainee = $request->session()->get('trainee');
       $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
-      //$this->pr($traineeRecord->toArray());
+      
       $story = TraineeStory::select('updated_story', 'user_story_words')->where('trainee_id', $trainee['trainee_id'])->where('story_id', $trainee['session_number'])->where('session_pin', $trainee['session_pin'])->where('round', $trainee['round'])->orderBy('id', 'desc')->first();
       $storySentences = explode('. ',$story->updated_story);
-      //$this->pr($storySentences);
+      
       $wordStory = $this->getWordAndID($trainee);
       $allStoryWords = $wordStory->toArray();
       if ($story && $traineeRecord) {
         $traineeCurrentPosition = json_decode($traineeRecord->session_current_position);
         if (!$traineeCurrentPosition) {
-          return redirect('/index');
+          return redirect($this->index);
         }
         $userStoryWords = json_decode($story->user_story_words);
-        $totalUsersWords = count($userStoryWords);
+        
         $userWordKey = $traineeCurrentPosition->user_word_id;
-        //$sentenceKey = $traineeCurrentPosition->sentence;
+      
         $nextWordKey = $userWordKey + 1;
         $completedWords = array_slice($userStoryWords, 0, $nextWordKey, true);
         $sentenceKey = $this->getSentenceKey($storySentences, $completedWords);
@@ -497,19 +478,13 @@ class TraineeSessionController extends Controller
           $allStoryWords = array_slice($allStoryWords, $userWordKey, null, true);
         }
       }
-      //$this->pr($allStoryWords);
-      //$this->pr(array_slice($userStoryWords, $userWordKey, null, true));
-      //$this->pr(array_slice($storySentences, $sentenceKey, null, true));
+      
       $storySentences = array_slice($storySentences, $sentenceKey, null, true);
       $breakParentLoop = false;
       $showTraineeMessage = ($userWordKey)?false:true;
       foreach ($storySentences as $question) {
-        // echo $question;
-        // echo '<br/>';
         foreach(array_slice($userStoryWords, $userWordKey, null, true) as $wordKey=>$word) {
           $findWord = '/\b'.$word.'\b/';
-          // echo $question;
-          // echo '<br/>';
           if ($fillUpWord === $word) {
             $storyWordID = array_search($word, $allStoryWords);
             $question = preg_replace($findWord, "<input id='answer' class='fill-ups' autocomplete='off' name='answer-".$storyWordID."'>", $question, 1, $count);
@@ -520,16 +495,15 @@ class TraineeSessionController extends Controller
             $question = preg_replace($findWord, str_repeat("_", 15), $question, 1);
           }
         }
-        //echo '<br/>BreakParentLoop - '.$breakParentLoop;
+        
         if ($breakParentLoop) {
           break;
         }
       }
-      //return view('msmt.sessions.questions.cue', compact('story', 'question', 'showTraineeMessage'));
       $submitURL = url('after');
-      return view('msmt.sessions.questions.show', compact('question', 'showTraineeMessage', 'submitURL'));
+      return view($this->queshow, compact('question', 'showTraineeMessage', 'submitURL'));
     } else {
-      return redirect('/index');
+      return redirect($this->index);
     }
   }
   /**
@@ -543,14 +517,7 @@ class TraineeSessionController extends Controller
       $homeURL = url('index');
       $request->session()->forget('completed');
       $trainee = $request->session()->get('trainee');
-      //$this->pr($trainee);
-      //die();
-      $traineeObj = Trainee::select('id', 'trainee_id', 'session_pin', 'session_state' ,'session_number', 'session_type', 'round', 'completed', 'session_end_time')->where('id', $trainee->id)->first();
-      //$this->pr($traineeObj);
-      //die();
-      /*if($traineeObj['completed'] == 1){
-        $query = Trainee::where('completed','=', 1)->update(['session_state' => 'completed']);
-      }*/
+      $traineeObj = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type','session_state', 'round', 'completed', 'session_end_time')->where('id', $trainee->id)->first();
       if ($traineeObj) {
         $sessionEndTime = $traineeObj->session_end_time?json_decode($traineeObj->session_end_time):$this->sessionEndTime;
         switch($traineeObj->round) {
@@ -572,35 +539,12 @@ class TraineeSessionController extends Controller
       }
       return view('msmt.sessions.questions.complete', compact('round', 'sessionNumber', 'homeURL'));
     }
-     return redirect('/index');
+     return redirect($this->index);
   }
 
   /**
    * On completting the session story the user is redirected to completion page.
    * @return \Illuminate\Http\Response
    */
-  // public function finish(Request $request) {
-  //   if ($request->session()->has('completed')) {
-  //     $sessionNumber = '';
-  //     $request->session()->forget('completed');
-  //     $trainee = $request->session()->get('trainee');
-  //     $traineeObj = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed')->where('id', $trainee->id)->first();
-  //     if ($traineeObj) {
-  //       switch($traineeObj->round) {
-  //         case 1:
-  //           $traineeObj->round = 2;
-  //           $round = 'first';
-  //         break;
-  //         case 2:
-  //           $traineeObj->completed = 1;
-  //           $round = 'second';
-  //         break;
-  //       }
-  //       $sessionNumber = $traineeObj->session_number;
-  //       $traineeObj->save();
-  //     }
-  //     return view('msmt.sessions.questions.complete', compact('round', 'sessionNumber'));
-  //   }
-  //    return redirect('/index');
-  // }
+  
 }
