@@ -12,6 +12,7 @@ class InstructionController extends Controller
      *
      * @return void
      */
+    public $commonRedirectRoute = '/instruction';
     public function __construct() {
       $this->middleware('auth');
       parent::__construct();
@@ -50,7 +51,7 @@ class InstructionController extends Controller
         'instruction' => $request->get('instruction')
       ]);
       $instruction->save();
-      return redirect('/instruction')->with('success', 'INSTRUCTION SAVED!');
+      return redirect($this->commonRedirectRoute)->with('success', 'INSTRUCTION SAVED!');
     }
 
     /**
@@ -89,7 +90,7 @@ class InstructionController extends Controller
       $instruction = Instruction::find($id);
       $instruction->instruction = $request->get('instruction');
       $instruction->save();
-      return redirect('/instruction')->with('success', 'INSTRUCTION UPDATED!');
+      return redirect($this->commonRedirectRoute)->with('success', 'INSTRUCTION UPDATED!');
     }
 
     /**
@@ -101,6 +102,6 @@ class InstructionController extends Controller
     public function destroy($id) {
       $instruction = Instruction::find($id);
       $instruction->delete();
-      return redirect('/instruction')->with('success', 'INSTRUCTION DELETED!');
+      return redirect($this->commonRedirectRoute)->with('success', 'INSTRUCTION DELETED!');
     }
 }

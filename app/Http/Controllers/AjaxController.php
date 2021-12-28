@@ -47,10 +47,11 @@ class AjaxController extends Controller
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
         $remove = ['_token', '_method', 'endTime', 'startTime', 'categoryCue', 'showedAnswer'];
         $traineeAnswer = array_diff_key($request->all(), array_flip($remove));
-        foreach($traineeAnswer as $key=>$answer) {
+        $answer = '';
+        foreach($traineeAnswer as $key=>$value) {
           $wordKey = explode('-', $key);
           $wordID = array_pop($wordKey);
-          $answer = $answer;
+          $answer = $value;
         }
         $lastWord = Word::select('id')->where('story_id', $trainee['session_number'])->orderBy('id', 'desc')->first();
         $word = Word::select('id', 'word', 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
@@ -58,13 +59,14 @@ class AjaxController extends Controller
           if (!$request->showedAnswer) {
             $answer = strtoupper(trim($answer));
             $traineeTransaction['correct_or_wrong'] = 0;
+            $trainee['round'] = $trainee['round'] ? $trainee['round'] : 1;
             $traineeTransaction['round'] = 1;
             $traineeTransaction['trainee_id'] = $trainee['trainee_id'];
             $traineeTransaction['story_id'] = $trainee['session_number'];
             $traineeTransaction['word_id'] = $wordID;
             $traineeTransaction['session_pin'] = $trainee['session_pin'];
             $traineeTransaction['time_taken'] = $timeTaken;
-            $traineeTransaction['round'] = $trainee['round'];
+    
             $traineeTransaction['type'] = 'contextual';
             $traineeTransaction['answer'] = $answer;
             if ($word['word'] == $answer ) {
@@ -118,7 +120,7 @@ class AjaxController extends Controller
         $traineeRecord->save();
         return $response;
       } else {
-        return $respone;
+        return $response;
       }
   }
 
@@ -142,10 +144,10 @@ class AjaxController extends Controller
         $traineeAnswer = array_diff_key($request->all(), array_flip($remove));
         $sentenceKey = 0;
         //$this->pr($traineeAnswer);
-        foreach($traineeAnswer as $key=>$answer) {
+        foreach($traineeAnswer as $key=>$value) {
           $wordKey = explode('-', $key);
           $wordID = array_pop($wordKey);
-          $answer = $answer;
+          $answer = $value;
         }
         $allStoryWords = $this->getWordAndID($trainee)->all();
         $currentWord = $this->getCurrentWord($trainee, $wordID);
@@ -176,13 +178,14 @@ class AjaxController extends Controller
          $fillUpWord = $currentWord->word;
           if (!$request->showedAnswer) {
             $traineeTransaction['correct_or_wrong'] = 0;
-            $traineeTransaction['round'] = 1;
+            //$traineeTransaction['round'] = 1;
+            $trainee['round'] = $trainee['round'] ? $trainee['round'] : 1;
             $traineeTransaction['trainee_id'] = $trainee['trainee_id'];
             $traineeTransaction['story_id'] = $trainee['session_number'];
             $traineeTransaction['word_id'] = $wordID;
             $traineeTransaction['session_pin'] = $trainee['session_pin'];
             $traineeTransaction['time_taken'] = $timeTaken;
-            $traineeTransaction['round'] = $trainee['round'];
+            //$traineeTransaction['round'] = $trainee['round'];
             $traineeTransaction['type'] = 'contextual';
             $traineeTransaction['answer'] = $answer;
             if ($currentWord['word'] == strtoupper($answer) ) {
@@ -312,7 +315,7 @@ class AjaxController extends Controller
         $traineeRecord->save();
         return $response;
       } else {
-        return $respone;
+        return $response;
       }
   }
 }

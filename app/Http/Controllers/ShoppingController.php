@@ -16,6 +16,7 @@ class ShoppingController extends Controller
      * @return void
      */
     var $boosterRange = array();
+    public $commonRedirectRoute = '/shopping';
     public function __construct() {
       $this->middleware('auth');
       $this->boosterRange = range(1, 3);
@@ -65,7 +66,7 @@ class ShoppingController extends Controller
           'categorical_cue' => $request->get('categorical_cue')
         ]);
         $shoppings->save();
-        return redirect('/shopping')->with('success', 'Shopping Item SAVED!');
+        return redirect($this->commonRedirectRoute)->with('success', 'Shopping Item SAVED!');
     }
 
     /**
@@ -108,7 +109,7 @@ class ShoppingController extends Controller
       $shopping->task = $request->get('item');
       $shopping->categorical_cue = $request->get('categorical_cue');
       $shopping->save();
-      return redirect('/shopping')->with('success', 'Shopping Item UPDATED!');
+      return redirect($this->commonRedirectRoute)->with('success', 'Shopping Item UPDATED!');
     }
 
     /**
@@ -120,7 +121,7 @@ class ShoppingController extends Controller
     public function destroy($id) {
       $shopping = Task::find($id);
       $shopping->delete();
-      return redirect('/shopping')->with('success', 'Shopping Item DELETED!');
+      return redirect($this->commonRedirectRoute)->with('success', 'Shopping Item DELETED!');
     }
 
     public function getItem(Request $request){
