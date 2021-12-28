@@ -73,10 +73,10 @@ $(document).ready( function() { // Wait until document is fully parsed
       resetSelect();
       var session_number = $("#session_number option:selected").val().toLowerCase();
       switch(session_number) {
-        case 9:
-        case 10:
-        case '9':
-        case '10':
+        case 17:
+        case 18:
+        case '17':
+        case '18':
           $('#booster_id').attr('required',true);
           $('#jsBooster').removeClass('d-none').show();
         break;

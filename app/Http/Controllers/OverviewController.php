@@ -13,6 +13,7 @@ class OverviewController extends Controller
      *
      * @return void
      */
+    private $page = '/overview'; 
     public function __construct() {
       $this->middleware('auth');
       parent::__construct();
@@ -51,7 +52,7 @@ class OverviewController extends Controller
         'overview' => $request->get('overview')
       ]);
       $overview->save();
-      return redirect('/overview')->with('success', 'OVERVIEW SAVED!');
+      return redirect($this->page)->with('success', 'OVERVIEW SAVED!');
     }
 
     /**
@@ -89,7 +90,7 @@ class OverviewController extends Controller
       $overview = Overview::find($id);
       $overview->overview = $request->get('overview');
       $overview->save();
-      return redirect('/overview')->with('success', 'OVERVIEW UPDATED!');
+      return redirect($this->page)->with('success', 'OVERVIEW UPDATED!');
     }
 
     /**
@@ -101,21 +102,20 @@ class OverviewController extends Controller
     public function destroy($id) {
       $overview = Overview::find($id);
       $overview->delete();
-      return redirect('/overview')->with('success', 'OVERVIEW DELETED!');
+      return redirect($this->page)->with('success', 'OVERVIEW DELETED!');
     }
 
     public function getOverview(Request $request){
-      $user = Auth::user();
+      
       $draw = $request->get('draw');
       $start = $request->get("start");
       $rowperpage = $request->get("length");
-      $columnName_arr = $request->get('columns');
+      
       $search_arr = $request->get('search');
       $searchValue = $search_arr['value'];
       $csrf = csrf_token();
       $totalRecords = Overview::select('*')->count();
-      /*$this->pr($totalRecords);
-      die();*/
+      
       
       $totalRecordswithFilters = Overview::select('*')->Where('overview', 'like', '%' .$searchValue . '%');
 
@@ -125,8 +125,7 @@ class OverviewController extends Controller
       $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
 
       $overviews = $queryObj->get();
-      /*$this->pr($trainers->toArray());
-      die();*/
+      
       $data_arr =  array();
 
       foreach ($overviews as $records) {

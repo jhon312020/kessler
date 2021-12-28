@@ -34,6 +34,9 @@ class TraineeSessionController extends Controller
       $this->sessionStartTime = (object)array('roundOne'=>'', 'roundTwo'=>'');
       $this->sessionEndTime = (object)array('roundOne'=>'', 'roundTwo'=>'');
       $this->directionBoosterID = \Config::get('constants.DIRECTION_BOOSTER_ID');
+      $this->minSession = \Config::get('constants.MIN_SESSION_NO');
+      $this->minWrite = \Config::get('constants.MIN_WRITE_NO');
+      $this->maxSession = \Config::get('constants.MAX_SESSION_NO');
     }
     /**
      * Show the application dashboard.
@@ -65,11 +68,11 @@ class TraineeSessionController extends Controller
             $record->session_start_time = json_encode($sessionStartTime);
             $record->save(); 
             $request->session()->put('trainee', $record);
-            
-            if ($record['session_number'] <= 4 && $record['session_number'] != 'Booster') {
-              return redirect('sessions');
+            if ($record['session_number'] <= $this->minSession && $record['session_number'] != 'Booster') {
+
+              return redirect('/sessions');
             } else {
-              return redirect('write');
+              return redirect('/write');
             }
           } else {
              $validator->errors()->add('sessionpin', 'INVALID PIN! Please contact your trainer..');
@@ -93,7 +96,7 @@ class TraineeSessionController extends Controller
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
-        if($traineeRecord['session_number'] >= 5 ){
+        if($traineeRecord['session_number'] >= $this->minWrite && $traineeRecord['session_number'] == 'Booster'){
           return redirect('/write');
         }
 
@@ -142,13 +145,14 @@ class TraineeSessionController extends Controller
         $trainee = $request->session()->get('trainee');
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
 
-        if ($traineeRecord) {
-          if($trainee['session_number'] <= 4){
+        if ($traineeRecord['session_number'] <= $this->minSession && $traineeRecord['session_number'] !== 'Booster'){
             return redirect('/sessions');
           }
+          
+        if($traineeRecord){
           $traineeCurrentPosition = $traineeRecord->session_current_position !== null?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
           $wordStory = $this->getWords($traineeRecord);
-          
+          $words = $wordStory->where('question', '<>', 'D')->pluck('word')->toArray();
           if ($traineeRecord['booster_id']) {
             $words = $wordStory->where('question', '<>', 'D')->pluck('word')->toArray();
             $sentenceWords = $wordStory->where('question', '<>', 'D')->pluck('question')->toArray();
@@ -365,7 +369,7 @@ class TraineeSessionController extends Controller
     }
 
     /**
-     * Store the recorded list of words of session 1-4
+     * Store the recorded list of words of session 1-8
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -407,7 +411,7 @@ class TraineeSessionController extends Controller
     }
 
     /**
-     * Save the recorded list of words of session 5 - 8
+     * Save the recorded list of words of session 9 - 16
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response

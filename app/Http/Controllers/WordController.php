@@ -14,9 +14,10 @@ class WordController extends Controller
      * @return void
      * @return \Illuminate\Http\Response
      */
+    private $pageWord = '/word';
     var $totalSessions = array();
     public function __construct() {
-      $this->totalSessions = range(1, 10);
+      $this->totalSessions = \Config::get('constants.RANGE');
       $this->middleware('auth');
       parent::__construct();
     }
@@ -37,8 +38,8 @@ class WordController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
-      $totalSessions = $this->totalSessions;
-      return view('kessler.word.create', compact('totalSessions'));
+      
+      return view('kessler.word.create', array('totalSessions'=>$this->totalSessions));
     }
 
     /**
@@ -61,7 +62,7 @@ class WordController extends Controller
           'categorical_cue' => $request->get('categorical_cue')
         ]);
         $words->save();
-        return redirect('/word')->with('success', 'WORD SAVED!');
+        return redirect($this->pageWord)->with('success', 'WORD SAVED!');
     }
 
     /**
@@ -82,8 +83,8 @@ class WordController extends Controller
      */
     public function edit($id) {
       $word = Word::find($id);
-      $totalSessions = $this->totalSessions;
-      return view('kessler.word.edit', compact('word', 'totalSessions'));
+      
+      return view('kessler.word.edit', array('word'=>$word, 'totalSessions'=>$this->totalSessions));
     }
 
     /**
@@ -105,7 +106,7 @@ class WordController extends Controller
       $word->contextual_cue = $request->get('contextual_cue');
       $word->categorical_cue = $request->get('categorical_cue');
       $word->save();
-      return redirect('/word')->with('success', 'WORD UPDATED!');
+      return redirect($this->pageWord)->with('success', 'WORD UPDATED!');
     }
 
     /**
@@ -117,22 +118,19 @@ class WordController extends Controller
     public function destroy($id) {
       $word = Word::find($id);
       $word->delete();
-      return redirect('/word')->with('success', 'WORD DELETED!');
+      return redirect($this->pageWord)->with('success', 'WORD DELETED!');
     }
 
     public function getStoryWord(Request $request){
-      $user = Auth::user();
+      
       $draw = $request->get('draw');
       $start = $request->get("start");
       $rowperpage = $request->get("length");
-      $columnName_arr = $request->get('columns');
+      
       $search_arr = $request->get('search');
       $searchValue = $search_arr['value'];
       $csrf = csrf_token();
       $totalRecords = Word::select('*')->count();
-      /*$this->pr($totalRecords);
-      die();*/
-      
       $totalRecordswithFilters = Word::select('*')->Where('id', 'like', '%' .$searchValue . '%')->orWhere('word', 'like', '%' .$searchValue . '%')->orWhere('contextual_cue', 'like', '%' .$searchValue . '%')->orWhere('categorical_cue', 'like', '%' .$searchValue . '%');
 
       $totalRecordswithFilter = with(clone $totalRecordswithFilters)->count();
@@ -141,8 +139,6 @@ class WordController extends Controller
       $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
 
       $words = $queryObj->get();
-      /*$this->pr($trainers->toArray());
-      die();*/
       $data_arr =  array();
 
       foreach ($words as $records) {

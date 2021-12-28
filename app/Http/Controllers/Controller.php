@@ -262,5 +262,67 @@ class Controller extends BaseController
     }
     return $wordObj;
   }
-  
+
+  function rowsOfTable($request, $boosterID)
+  {
+      $start = $request->get("start");
+      $rowperpage = $request->get("length");    
+      $search_arr = $request->get('search');   
+      $searchValue = $search_arr['value'];
+      $totalRecords = Task::select('*')->Where('booster_id',$boosterID)->count();
+      
+      $totalRecordswithFilters = Task::select('*')->where('booster_id',$boosterID)->where(function($search) use ($searchValue){
+                          $search->where('task', 'like', '%' .$searchValue . '%')->orWhere('words', 'like', '%' .$searchValue . '%');
+                      });
+
+
+      $totalRecordswithFilter = with(clone $totalRecordswithFilters)->count();
+      $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage)->get();
+
+
+      return compact('queryObj', 'totalRecordswithFilter', 'totalRecords');
+      
+      /*return array( "query" => $queryObj,
+          "draw" => intval($draw),
+          "iTotalRecords" => $totalRecords,
+          "items" => $items,
+          "iTotalDisplayRecords" => $totalRecordswithFilter,
+          "aaData" => $data_arr);*/
+      
+        // Fetch records
+      /*$queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
+
+      $items = $queryObj->where('booster_id',$boosterID)->get();
+      $data_arr =  array();
+
+      foreach ($items as $records) {
+        $records->id;
+        $records->task;
+        $records->categorical_cue;
+        
+        $edit = route($editRoute, $records->id);
+        $delete = route($deleteRoute, $records->id);
+        
+        $action = "<a href='$edit' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i> Edit</a>&nbsp;";
+        $action .="<form action='$delete' method='post' class='d-inline' id='jsSubmitForm-$records->id'>
+                  <input type='hidden' name='_token' value='$csrf'>
+                  <input type='hidden' name='_method' value='delete'>
+                  <button class='btn btn-danger jsConfirmButton' type='button' data-value='$records->id' title='Delete'><i class='fa fa-trash' title='Delete'></i> Delete</button>
+                </form>";
+                
+        $data_arr[] = array(
+          "item" => $records->task,
+          "categorical_cue" => $records->categorical_cue,
+          "action" => $action
+          );
+        }
+        
+        $response = array(
+          "draw" => intval($draw),
+          "iTotalRecords" => $totalRecords,
+          "iTotalDisplayRecords" => $totalRecordswithFilter,
+          "aaData" => $data_arr                                 
+        );*/
+         
+  }
 }

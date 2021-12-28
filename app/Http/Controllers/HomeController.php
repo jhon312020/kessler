@@ -40,11 +40,11 @@ class HomeController extends Controller
       $traineeInProgressCount = $incomplete->where('trainer_id', $kessler->id)->count();
       $traineeCompletedCount = $complete->where('trainer_id', $kessler->id)->count();
       $traineeTrainer = Trainee::select('trainer_id',DB::raw('count(DISTINCT trainee_id) AS trainee'))->groupBy('trainer_id')->pluck('trainee', 'trainer_id');
-      //$this->pr($traineeTrainer->toArray()); //exit();
+      
       $traineeTrainerCompleted = Trainee::select('trainer_id',DB::raw('COUNT(trainee_id) AS trainee'))->where('completed',1)->groupBy('trainer_id')->pluck('trainee', 'trainer_id');
-      //$this->pr($traineeTrainerCompleted->toArray()); //exit();
+      
       $traineeTrainerInProgress = Trainee::select('trainer_id',DB::raw('COUNT(trainee_id) AS trainee'))->where('completed',0)->groupBy('trainer_id')->pluck('trainee', 'trainer_id');
-      //$this->pr($traineeTrainerInProgress->toArray()); //exit();
+      
       return view('kessler.admin.dashboard',compact('kessler','kesslerTraineeCount','kesslerInProgressCount', 'kesslerCompletedCount','trainerCount','trainerActiveCount', 'trainerInActiveCount','traineeCount', 'traineeInProgressCount', 'traineeCompletedCount', 'users', 'traineeTrainer', 'traineeTrainerCompleted', 'traineeTrainerInProgress'));
     }
 

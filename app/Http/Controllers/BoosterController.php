@@ -7,6 +7,7 @@ use App\Models\Booster;
 
 class BoosterController extends Controller
 {
+    private $boosters = '/booster';
     /**
      * Create a new controller instance.
      *
@@ -50,7 +51,7 @@ class BoosterController extends Controller
         'category' => $request->get('category')
       ]);
       $booster->save();
-      return redirect('/booster')->with('success', 'SESSION booster SAVED!');
+      return redirect($this->boosters)->with('success', 'SESSION booster SAVED!');
     }
 
     /**
@@ -88,7 +89,7 @@ class BoosterController extends Controller
       $booster = Booster::find($id);
       $booster->category = $request->get('category');
       $booster->save();
-      return redirect('/booster')->with('success', 'SESSION booster UPDATED!');
+      return redirect($this->boosters)->with('success', 'SESSION booster UPDATED!');
     }
 
     /**
@@ -100,6 +101,6 @@ class BoosterController extends Controller
     public function destroy($id) {
       $booster = Booster::find($id);
       $booster->delete();
-      return redirect('/booster')->with('success', 'SESSION booster DELETED!');
+      return redirect($this->boosters)->with('success', 'SESSION booster DELETED!');
     }
 }

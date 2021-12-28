@@ -12,6 +12,7 @@ class TypeController extends Controller
      *
      * @return void
      */
+    private $pageType = '/type';
     public function __construct() {
       $this->middleware('auth');
       parent::__construct();
@@ -50,7 +51,7 @@ class TypeController extends Controller
         'type' => $request->get('type')
       ]);
       $type->save();
-      return redirect('/type')->with('success', 'SESSION TYPE SAVED!');
+      return redirect($this->pageType)->with('success', 'SESSION TYPE SAVED!');
     }
 
     /**
@@ -88,7 +89,7 @@ class TypeController extends Controller
       $type = Type::find($id);
       $type->type = $request->get('type');
       $type->save();
-      return redirect('/type')->with('success', 'SESSION TYPE UPDATED!');
+      return redirect($this->pageType)->with('success', 'SESSION TYPE UPDATED!');
     }
 
     /**
@@ -100,6 +101,6 @@ class TypeController extends Controller
     public function destroy($id) {
       $type = Type::find($id);
       $type->delete();
-      return redirect('/type')->with('success', 'SESSION TYPE DELETED!');
+      return redirect($this->pageType)->with('success', 'SESSION TYPE DELETED!');
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-// use App\Models\Shopping;
 use App\Models\Task;
 use App\Models\Type;
 use Auth;
@@ -15,6 +14,7 @@ class ShoppingController extends Controller
      *
      * @return void
      */
+    private $shoppingPage = '/shopping'; 
     var $boosterRange = array();
     public function __construct() {
       $this->middleware('auth');
@@ -40,8 +40,7 @@ class ShoppingController extends Controller
      */
     public function create() {
       $types = Task::all();
-      $boosterRange = $this->boosterRange;
-      return view('kessler.shopping.create', compact('types', 'boosterRange'));
+      return view('kessler.shopping.create', array('types'=>$types, 'boosterRange'=>$this->boosterRange));
     }
 
     /**
@@ -52,9 +51,7 @@ class ShoppingController extends Controller
      */
     public function store(Request $request) {
         $request->validate([
-          // 'booster_range'=>'required',
           'item'=>'required'
-         // 'categorical_cue'=>'required'
         ]);
         $booster_id = 2;
         $booster_range = 3;
@@ -65,7 +62,7 @@ class ShoppingController extends Controller
           'categorical_cue' => $request->get('categorical_cue')
         ]);
         $shoppings->save();
-        return redirect('/shopping')->with('success', 'Shopping Item SAVED!');
+        return redirect($this->shoppingPage)->with('success', 'Shopping Item SAVED!');
     }
 
     /**
@@ -99,16 +96,13 @@ class ShoppingController extends Controller
      */
     public function update(Request $request, $id) {
       $request->validate([
-       // 'booster_range'=>'required',
         'item'=>'required'
-        //'categorical_cue'=>'required'
       ]);
       $shopping = Task::find($id);
-     // $shopping->booster_range = $request->get('booster_range');
       $shopping->task = $request->get('item');
       $shopping->categorical_cue = $request->get('categorical_cue');
       $shopping->save();
-      return redirect('/shopping')->with('success', 'Shopping Item UPDATED!');
+      return redirect($this->shoppingPage)->with('success', 'Shopping Item UPDATED!');
     }
 
     /**
@@ -120,21 +114,19 @@ class ShoppingController extends Controller
     public function destroy($id) {
       $shopping = Task::find($id);
       $shopping->delete();
-      return redirect('/shopping')->with('success', 'Shopping Item DELETED!');
+      return redirect($this->shoppingPage)->with('success', 'Shopping Item DELETED!');
     }
 
     public function getItem(Request $request){
-      $user = Auth::user();
-      $draw = $request->get('draw');
+      
+      /*$draw = $request->get('draw');
       $start = $request->get("start");
       $rowperpage = $request->get("length");
-      $columnName_arr = $request->get('columns');
+      
       $search_arr = $request->get('search');
       $searchValue = $search_arr['value'];
       $csrf = csrf_token();
       $totalRecords = Task::select('*')->Where('booster_id','2')->count();
-      /*$this->pr($totalRecords);
-      die();*/
       
       $totalRecordswithFilters = Task::select('*')->where('booster_id','2')->when($searchValue, function($search ,$searchValue){
         $search->Where('task', 'like', '%' .$searchValue . '%')->orWhere('words', 'like', '%' .$searchValue . '%');
@@ -146,8 +138,6 @@ class ShoppingController extends Controller
       $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
 
       $items = $queryObj->where('booster_id','2')->get();
-      /*$this->pr($items->toArray());
-      die();*/
       $data_arr =  array();
 
       foreach ($items as $records) {
@@ -179,6 +169,52 @@ class ShoppingController extends Controller
         );
         
         echo json_encode($response);
-        exit;
+        exit;*/
+      $draw = $request->get('draw');
+      $csrf = csrf_token();
+
+      $result = $this->rowsOfTable($request,2);
+      extract($result);
+      //print_r($result);
+      
+      $items = $queryObj;
+
+      /*print_r($items);
+      exit();*/
+      $data_arr = array();
+      /*print_r($items);
+      exit();*/
+      foreach ($items as $records) {
+        $records->id;
+        $records->task;
+        $records->categorical_cue;
+        
+        $edit = route('shopping.edit', $records->id);
+        $delete = route('shopping.destroy', $records->id);
+        
+        $action = "<a href='$edit' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i> Edit</a>&nbsp;";
+        $action .="<form action='$delete' method='post' class='d-inline' id='jsSubmitForm-$records->id'>
+                  <input type='hidden' name='_token' value='$csrf'>
+                  <input type='hidden' name='_method' value='delete'>
+                  <button class='btn btn-danger jsConfirmButton' type='button' data-value='$records->id' title='Delete'><i class='fa fa-trash' title='Delete'></i> Delete</button>
+                </form>";
+                
+        $data_arr[] = array(
+          "item" => $records->task,
+          "categorical_cue" => $records->categorical_cue,
+          "action" => $action
+          );
+        }
+        
+        $response = array(
+          "draw" => intval($draw),
+          "iTotalRecords" => $totalRecords,
+          "iTotalDisplayRecords" => $totalRecordswithFilter,
+          "aaData" => $data_arr                                 
+        );
+
+        echo json_encode($response);
+        exit;  
+
     }
 }

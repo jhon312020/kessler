@@ -68,6 +68,7 @@
   $(document).ready( function() { 
     var totalwords = "{{ $allWords }}";
     var sentenceWords = "{{ $sentenceWords }}";
+    
     sentenceWords = sentenceWords.split('**');
     sentenceWordsLength = sentenceWords.length;
     var userUsedWordCount = 0;
@@ -142,8 +143,10 @@
               break;
             }
           }
-          if (wordFound == true) {
+          if (wordFound == true ) {
             $('#jsWord-'+senCounter).addClass('strikeThrough');
+            //$('#jsWriteup').toUpperCase();
+            //totalwords.map(f =>{ return f.toUpperCase(); });
           }
         }
       }
