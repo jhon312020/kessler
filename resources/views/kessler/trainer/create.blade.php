@@ -1,5 +1,6 @@
 @extends('kessler.layouts.master')
 @section('content')
+<link href="{{asset('css/bootstrap-multiselect.css')}}" rel="stylesheet" />
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-lg-8">
@@ -25,6 +26,16 @@
                 <label class="small mb-1" for="email">Enter email address</label>
                 <input type="email" class="form-control py-4" id="email" name="email" placeholder="Enter email address" required>
               </div>
+              <div class="form-group" id="jsCategory">
+              <label class="small mb-1" for="category">Category Type</label><br>
+              <select class="form-control select2" id="category" name="category[]" required placeholder="Select Category Type" multiple="multiple">
+                
+                @foreach($category as $categories)
+                  <option value="{{ $categories->category }}">{{ $categories->category }}</option>
+                @endforeach;
+                
+              </select>
+            </div>
            <!--    <div class="form-group">
                 <label class="small mb-1" for="password">Enter Password</label>
                 <input type="password" class="form-control py-4" id="password" name="password" placeholder="Enter Password" required>
@@ -39,4 +50,14 @@
     </div>
   </div>
 </div>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript" src="{{asset('js/bootstrap-multiselect.js')}}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#category').multiselect();
+    });
+</script>
+
+
 @endsection
