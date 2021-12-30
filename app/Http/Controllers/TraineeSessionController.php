@@ -93,7 +93,7 @@ class TraineeSessionController extends Controller
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
-        if($traineeRecord['session_number'] >= 5 ){
+        if($traineeRecord['session_number'] >= 5 && $traineeRecord['session_number'] == 'Booster'){
           return redirect('/write');
         }
 
@@ -142,12 +142,13 @@ class TraineeSessionController extends Controller
         $trainee = $request->session()->get('trainee');
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
 
-        if ($traineeRecord) {
-          if($trainee['session_number'] <= 4){
+        if($traineeRecord['session_number'] <= 4 && $traineeRecord['session_number'] !== 'Booster'){
             return redirect('/sessions');
           }
+        if ($traineeRecord){
           $traineeCurrentPosition = $traineeRecord->session_current_position !== null?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
           $wordStory = $this->getWords($traineeRecord);
+          
           
           if ($traineeRecord['booster_id']) {
             $words = $wordStory->where('question', '<>', 'D')->pluck('word')->toArray();
