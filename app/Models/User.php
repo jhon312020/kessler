@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
 
 class User extends Authenticatable
 {
@@ -21,8 +22,42 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'category'
     ];
 
+        /**
+
+     * Set the categories
+
+     *
+
+     */
+
+    public function setCatAttribute($value)
+
+    {
+
+        $this->attributes['category'] = json_encode($value);
+
+    }
+
+  
+
+    /**
+
+     * Get the categories
+
+     *
+
+     */
+
+    public function getCatAttribute($value)
+
+    {
+
+        return $this->attributes['category'] = json_decode($value);
+
+    }
     /**
      * The attributes that should be hidden for arrays.
      *

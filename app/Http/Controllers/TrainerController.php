@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Invite;
 use App\Models\User;
+use App\Models\Category;
 use Auth;
 use DB;
 
@@ -39,7 +40,8 @@ class TrainerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
-      return view('kessler.trainer.create');
+      $category = Category::all();
+      return view('kessler.trainer.create',compact('category'));
     }
 
     /**
@@ -51,13 +53,21 @@ class TrainerController extends Controller
     public function store(Request $request) {
         $request->validate([
           'name'=>'required',
-          'email'=>'required'
+          'email'=>'required',
+          'category'=>'required'
         ]);
         $password = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTVWXYZabcdefghijklmnopqrstvwxyz"), 0, 8);
+        
+        $category = $request->get('category');
+        $category = str_replace("'", "\'", json_encode($category));
+        
+        /*$input['category'] = $category;*/
         $trainer = new User([
           'name' => $request->get('name'),
           'email' => $request->get('email'),
-          'password' => Hash::make($password)
+          'password' => Hash::make($password),
+          'category' => $category,
+
         ]);
         if ($trainer->save()) {
           $trainer->password = $password;
@@ -219,4 +229,6 @@ class TrainerController extends Controller
       }
       return response()->json(['message' => $message]);
     }
+
+    
 }
