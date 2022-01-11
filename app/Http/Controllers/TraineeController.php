@@ -10,8 +10,10 @@ use App\Models\TraineeTransaction;
 use App\Models\Word;
 use App\Models\Type;
 use App\Models\Booster;
+use App\Models\Category;
 use Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 
 
 class TraineeController extends Controller
@@ -38,6 +40,8 @@ class TraineeController extends Controller
       $this->traineeCurrentPosition = (object) array('word_id'=>'', 'position'=>'tale', 'user_word_id'=>0, 'sentence'=>0);
       $this->minSession = \Config::get('constants.MIN_SESSION_NO');
       $this->maxSession = \Config::get('constants.MAX_SESSION_NO');
+      $this->boosterSession = \Config::get('constants.BOOSTER');
+
     }
 
     /**
@@ -180,9 +184,23 @@ class TraineeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
+      $user = Auth::user();
       $types = Type::all();
       $booster = Booster::all();
-      return view('kessler.trainee.create', array('types'=>$types, 'boosterRange'=>$this->boosterRange,'totalSessions'=>$this->totalSessions,'booster'=>$booster));
+      
+      $categoryList = json_decode($user->category);
+      
+      $category = json_decode($user->sessions, true);
+      $categories = Category::wherein('id', $categoryList)->pluck('name','id');
+      $collect = json_decode($user->sessions,true);
+      $story = collect($collect)->pluck('stories');
+      $contextual = collect($collect)->pluck('contextual');
+      $general = collect($collect)->pluck('general');
+      $boosterNo = collect($collect)->pluck('booster');
+      $decode = json_decode($boosterNo,true);
+      $boosterSession = $this->boosterSession;
+      
+      return view('kessler.trainee.create', array('types'=>$types, 'boosterRange'=>$this->boosterRange, 'story'=>$story,'contextual'=>$contextual,'general'=>$general,'boosterSession' => $boosterSession,'boosterNo'=>$boosterNo,'categories' => $categories,'totalSessions'=>$this->totalSessions,'booster'=>$booster));
     }
 
     /**
@@ -200,7 +218,7 @@ class TraineeController extends Controller
       $session_pin = random_int(100000, 999999);
       $trainee = new Trainee([
         'trainee_id' => $request->get('trainee_id'),
-        'session_type' => 'A',
+        'session_type' => $request->get('session_type'),
         'session_number' => $request->get('session_number'),
         'booster_id' => $request->get('booster_id'),
         'booster_range' => $request->get('booster_range'),
@@ -208,6 +226,7 @@ class TraineeController extends Controller
         'trainer_id' => Auth::id()
       ]);  
       $trainee->save();
+      //exit();
       return redirect($this->traineePage)->with('success', 'Trainee information has been saved succesfully!');
     } 
 

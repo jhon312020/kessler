@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\Invite;
 use App\Models\User;
 use App\Models\Category;
+use App\Models\Booster;
 use Auth;
 use DB;
 
@@ -20,9 +21,16 @@ class TrainerController extends Controller
      * @return void
      */
     private $pageTrainer = '/trainer';
+    var $storySession = array();
+
     public function __construct() {
       $this->middleware('auth');
       parent::__construct();
+      //$this->selectSessions = (object)array('story'=>'', 'contextual'=>'', 'general'=>'', 'booster'=>'');
+      $this->storySession = \Config::get('constants.STORY');
+      $this->writeSession = \Config::get('constants.WRITE');
+      $this->generalSession = \Config::get('constants.GENERAL');
+
     }
     /**
      * Display a listing of the resource.
@@ -41,7 +49,11 @@ class TrainerController extends Controller
      */
     public function create() {
       $category = Category::all();
-      return view('kessler.trainer.create',compact('category'));
+      $storySession = $this->storySession;
+      $writeSession = $this->writeSession;
+      $generalSession = $this->generalSession;
+      $boosterSession = Booster::all();
+      return view('kessler.trainer.create',compact('category','storySession','writeSession','generalSession','boosterSession'));
     }
 
     /**
@@ -51,29 +63,46 @@ class TrainerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+      //echo '<pre>'; print_r($request->all()); echo '</pre>';
+        $session = [];
         $request->validate([
           'name'=>'required',
           'email'=>'required',
           'category'=>'required'
+        ],
+        [
+          'name.required'=>'Please enter the name',
+          'email.required'=>'Please enter the email',
+          'category.required'=>'Please enter the category',
         ]);
         $password = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTVWXYZabcdefghijklmnopqrstvwxyz"), 0, 8);
         
         $category = $request->get('category');
-        $category = str_replace("'", "\'", json_encode($category));
         
-        /*$input['category'] = $category;*/
+        $session[] = [
+          'stories' => $request->get('story'),
+          'contextual' => $request->get('contextual'),
+          'general' => $request->get('general'),
+          'booster' => $request->get('booster'),
+        ];
+
         $trainer = new User([
           'name' => $request->get('name'),
           'email' => $request->get('email'),
           'password' => Hash::make($password),
-          'category' => $category,
+          'category' => json_encode($category),
+          'sessions' => json_encode($session),
 
         ]);
+
+
         if ($trainer->save()) {
           $trainer->password = $password;
           Mail::to($trainer->email)->send(new Invite($trainer));
         }
+
         return redirect($this->pageTrainer)->with('success', 'TRAINER SAVED!');
+      
     }
 
     /**

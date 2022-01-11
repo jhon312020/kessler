@@ -27,15 +27,46 @@
                 <input type="email" class="form-control py-4" id="email" name="email" placeholder="Enter email address" required>
               </div>
               <div class="form-group" id="jsCategory">
-              <label class="small mb-1" for="category">Category Type</label><br>
-              <select class="form-control select2" id="category" name="category[]" required placeholder="Select Category Type" multiple="multiple">
-                
+                <label class="small mb-1" for="category">Category Type</label><br>
+                <select class="form-control select2" id="category" name="category[]" multiple="multiple">
                 @foreach($category as $categories)
-                  <option value="{{ $categories->category }}">{{ $categories->category }}</option>
+                  <option value="{{ $categories->id }}">{{ $categories->name }}</option>
                 @endforeach;
-                
-              </select>
-            </div>
+                </select>
+              </div>
+              <div class="form-group d-none session" id="jsStory">
+                <label class="small mb-1" for="story">Select story sessions</label>
+                <select class="form-control select2" id="story" name="story[]" multiple="multiple">
+                  
+                  @foreach($storySession as $story)
+                    <option value="{{ $story }}">{{ $story }}</option>
+                  @endforeach;
+                </select>
+              </div>
+              <div class="form-group d-none session" id="jsWrite">
+                <label class="small mb-1" for="write">Select contextual sessions</label>
+                <select class="form-control select2" id="write" name="contextual[]" multiple="multiple">
+                  @foreach($writeSession as $write)
+                    <option value="{{ $write }}">{{ $write }}</option>
+                  @endforeach;
+                </select>
+              </div>
+              <div class="form-group d-none session" id="jsGeneral">
+                <label class="small mb-1" for="general">Select general sessions</label>
+                <select class="form-control select2" id="general" name="general[]" multiple="multiple">
+                  @foreach($generalSession as $general)
+                    <option value="{{ $general }}">{{ $general }}</option>
+                  @endforeach;
+                </select>
+              </div>
+              <div class="form-group d-none session" id="jsBooster">
+                <label class="small mb-1" for="booster">Select booster session</label>
+                <select class="form-control select2" id="booster" name="booster[]" multiple="multiple">
+                  @foreach($boosterSession as $booster)
+                    <option value="{{ $booster->id }}">{{ $booster->category }}</option>
+                  @endforeach;
+                </select>
+              </div>
            <!--    <div class="form-group">
                 <label class="small mb-1" for="password">Enter Password</label>
                 <input type="password" class="form-control py-4" id="password" name="password" placeholder="Enter Password" required>
@@ -55,8 +86,98 @@
 <script type="text/javascript" src="{{asset('js/bootstrap-multiselect.js')}}"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#category').multiselect();
+
+      $('#category').multiselect();
+      // location.reload();
+      $('#jsCategory').click(function() {
+      var select = $("#category option:selected");
+      var selected = $.map(select, function(option){
+        return option.value;
+      });
+      console.log(selected);
+      const iterator = selected.values();
+      $('.session').removeClass('d-none').hide();
+      for (const value of iterator) {
+      console.log(value);
+
+      //var category_type = $("#jsCategory option:selected").val();
+      
+      //console.log(category_type);
+      switch(value) {
+        //case story:
+        case '1':
+          $('#story').attr('required',true);
+          $('#jsStory').removeClass('d-none').show();  
+          break;
+
+        //case write:
+        case '2':
+          $('#write').attr('required',true);
+          $('#jsWrite').removeClass('d-none').show();
+          break;
+
+        //case general:
+        case '3':
+          $('#general').attr('required',true);
+          $('#jsGeneral').removeClass('d-none').show();
+           
+          break;
+        case '4':
+          $('#booster').attr('required',true);
+          $('#jsBooster').removeClass('d-none').show();
+          
+          break;
+      }
+    }  
     });
+    /*document.getElementsByClassName('multiselect').onclick = function() {
+      var select = document.getElementsByClassName('active');
+      var selected = [...select.selectedOptions]
+                      .map(option => option.value);
+      console.log(selected);*/ 
+    /*document.getElementsByClassName('multiselect').onclick = function() {
+      var select = document.getElementsByClassName('active');
+      var selected = [...select.selectedOptions]
+                      .map(option => option.value);
+      console.log(selected);
+    } */
+
+/*      $('#jsCategory').on('change', function() {
+      
+
+      var category_type = $("#category option:selected").val();
+      
+      console.log(category_type);
+         
+      switch(category_type) {
+        //case story:
+        case '1':
+          $('#story').attr('required',true);
+          $('#jsStory').removeClass('d-none').show();
+          break;
+        
+        //case write:
+        case '2':
+          $('#write').attr('required',true);
+          $('#jsWrite').removeClass('d-none').show();
+          break;
+
+        //case general:
+        case '3':
+          $('#general').attr('required',true);
+          $('#jsGeneral').removeClass('d-none').show();
+           
+          break;
+        case '4':
+          $('#booster').attr('required',true);
+          $('#jsBooster').removeClass('d-none').show();
+          
+          break;
+      }
+    
+    });
+*/      
+  });
 </script>
 
 

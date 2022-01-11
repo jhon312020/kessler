@@ -22,42 +22,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'category'
+        'category',
+        'sessions' 
     ];
 
-        /**
-
-     * Set the categories
-
-     *
-
-     */
-
-    public function setCatAttribute($value)
-
-    {
-
-        $this->attributes['category'] = json_encode($value);
-
-    }
-
-  
-
-    /**
-
-     * Get the categories
-
-     *
-
-     */
-
-    public function getCatAttribute($value)
-
-    {
-
-        return $this->attributes['category'] = json_decode($value);
-
-    }
+        
     /**
      * The attributes that should be hidden for arrays.
      *
