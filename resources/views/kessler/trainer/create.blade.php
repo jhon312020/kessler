@@ -20,15 +20,15 @@
               @csrf
               <div class="form-group">
                 <label class="small mb-1" for="name">Enter Name</label>
-                <input type="text" class="form-control py-4" id="name" name="name" placeholder="Enter name" required>
+                <input type="text" class="form-control py-4" id="name" name="name" placeholder="Enter name" value="{{old('name')}}" required>
               </div>
               <div class="form-group">
                 <label class="small mb-1" for="email">Enter email address</label>
-                <input type="email" class="form-control py-4" id="email" name="email" placeholder="Enter email address" required>
+                <input type="email" class="form-control py-4" id="email" name="email" placeholder="Enter email address" value="{{old('email')}}" required>
               </div>
-              <div class="form-group" id="jsCategory">
+              <div class="form-group" >
                 <label class="small mb-1" for="category">Category Type</label><br>
-                <select class="form-control select2" id="category" name="category[]" multiple="multiple">
+                <select class="form-control select2" id="jsCategory" name="category[]" multiple="multiple">
                 @foreach($category as $categories)
                   <option value="{{ $categories->id }}">{{ $categories->name }}</option>
                 @endforeach;
@@ -36,7 +36,7 @@
               </div>
               <div class="form-group d-none session" id="jsStory">
                 <label class="small mb-1" for="story">Select story sessions</label>
-                <select class="form-control select2" id="story" name="story[]" multiple="multiple">
+                <select class="form-control select2" id="jsStoryIn" name="story[]" multiple="multiple">
                   
                   @foreach($storySession as $story)
                     <option value="{{ $story }}">{{ $story }}</option>
@@ -45,7 +45,7 @@
               </div>
               <div class="form-group d-none session" id="jsWrite">
                 <label class="small mb-1" for="write">Select contextual sessions</label>
-                <select class="form-control select2" id="write" name="contextual[]" multiple="multiple">
+                <select class="form-control select2" id="jsWriteIn" name="contextual[]" multiple="multiple">
                   @foreach($writeSession as $write)
                     <option value="{{ $write }}">{{ $write }}</option>
                   @endforeach;
@@ -53,7 +53,7 @@
               </div>
               <div class="form-group d-none session" id="jsGeneral">
                 <label class="small mb-1" for="general">Select general sessions</label>
-                <select class="form-control select2" id="general" name="general[]" multiple="multiple">
+                <select class="form-control select2" id="jsGeneralIn" name="general[]" multiple="multiple">
                   @foreach($generalSession as $general)
                     <option value="{{ $general }}">{{ $general }}</option>
                   @endforeach;
@@ -61,7 +61,7 @@
               </div>
               <div class="form-group d-none session" id="jsBooster">
                 <label class="small mb-1" for="booster">Select booster session</label>
-                <select class="form-control select2" id="booster" name="booster[]" multiple="multiple">
+                <select class="form-control select2" id="jsBoosterIn" name="booster[]" multiple="multiple">
                   @foreach($boosterSession as $booster)
                     <option value="{{ $booster->id }}">{{ $booster->category }}</option>
                   @endforeach;
@@ -87,10 +87,10 @@
 <script type="text/javascript">
     $(document).ready(function() {
 
-      $('#category').multiselect();
+      $('#jsCategory').multiselect();
       // location.reload();
-      $('#jsCategory').click(function() {
-      var select = $("#category option:selected");
+      $('#jsCategory').bind('change',function() {
+      var select = $("#jsCategory option:selected");
       var selected = $.map(select, function(option){
         return option.value;
       });
@@ -106,77 +106,30 @@
       switch(value) {
         //case story:
         case '1':
-          $('#story').attr('required',true);
+          $('#jsStoryIn').attr('required',true);
           $('#jsStory').removeClass('d-none').show();  
           break;
 
         //case write:
         case '2':
-          $('#write').attr('required',true);
+          $('#jsWriteIn').attr('required',true);
           $('#jsWrite').removeClass('d-none').show();
           break;
 
         //case general:
         case '3':
-          $('#general').attr('required',true);
+          $('#jsGeneralIn').attr('required',true);
           $('#jsGeneral').removeClass('d-none').show();
            
           break;
         case '4':
-          $('#booster').attr('required',true);
+          $('#jsBoosterIn').attr('required',true);
           $('#jsBooster').removeClass('d-none').show();
           
           break;
       }
     }  
     });
-    /*document.getElementsByClassName('multiselect').onclick = function() {
-      var select = document.getElementsByClassName('active');
-      var selected = [...select.selectedOptions]
-                      .map(option => option.value);
-      console.log(selected);*/ 
-    /*document.getElementsByClassName('multiselect').onclick = function() {
-      var select = document.getElementsByClassName('active');
-      var selected = [...select.selectedOptions]
-                      .map(option => option.value);
-      console.log(selected);
-    } */
-
-/*      $('#jsCategory').on('change', function() {
-      
-
-      var category_type = $("#category option:selected").val();
-      
-      console.log(category_type);
-         
-      switch(category_type) {
-        //case story:
-        case '1':
-          $('#story').attr('required',true);
-          $('#jsStory').removeClass('d-none').show();
-          break;
-        
-        //case write:
-        case '2':
-          $('#write').attr('required',true);
-          $('#jsWrite').removeClass('d-none').show();
-          break;
-
-        //case general:
-        case '3':
-          $('#general').attr('required',true);
-          $('#jsGeneral').removeClass('d-none').show();
-           
-          break;
-        case '4':
-          $('#booster').attr('required',true);
-          $('#jsBooster').removeClass('d-none').show();
-          
-          break;
-      }
-    
-    });
-*/      
   });
 </script>
 

@@ -67,12 +67,12 @@ class TrainerController extends Controller
         $session = [];
         $request->validate([
           'name'=>'required',
-          'email'=>'required',
+          'email'=>'required|unique:users',
           'category'=>'required'
         ],
         [
           'name.required'=>'Please enter the name',
-          'email.required'=>'Please enter the email',
+          'email.unique'=>'Please enter a valid email ID',
           'category.required'=>'Please enter the category',
         ]);
         $password = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTVWXYZabcdefghijklmnopqrstvwxyz"), 0, 8);
