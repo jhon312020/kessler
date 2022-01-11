@@ -67,7 +67,7 @@
              </div>
              <div class="form-group d-none session" id="jsBooster">
                <label class="small mb-1" for="booster_id">Select Category</label>
-              <select class="form-control select2" id="booster_id1" name="booster_id" placeholder="Select Category">
+              <select class="form-control select2" id="booster_id1" name="booster_id" placeholder="Select Category" disabled="true">
                 <option value= '' selected="selected">Select Category</option>
                 @foreach($booster as $booster)
                   <option value="{{ $booster->id }}">{{ $booster->category}}</option>
@@ -84,7 +84,7 @@
             
             <div class="form-group d-none session" id="jsBoosterID">
                <label class="small mb-1" for="booster_id">Select Category</label>
-              <select class="form-control select2" id="booster_id" name="booster_id" placeholder="Select Category">
+              <select class="form-control select2" id="booster_id" name="booster_id" placeholder="Select Category" disabled="true">
                 <option value= '' selected="selected">Select Category</option>
                 @foreach($boosterNo[0] as $booster)
                   <option value="{{ $booster }}">{{ $booster}}</option>
@@ -141,6 +141,7 @@ $(document).ready( function() { // Wait until document is fully parsed
         $('#booster_session').attr('required',true);
         $('#jsBoosterID').removeClass('d-none').show();
         $('#jsBoosterSes').removeClass('d-none').show();
+        $('#booster_id').attr('disabled',false);
         $('#booster_id').attr('required',true);
         $('#booster_range').attr('required',true);
         //$('#jsBooster').removeClass('d-none').show();
@@ -157,7 +158,7 @@ $(document).ready( function() { // Wait until document is fully parsed
       switch(session_number) {
         case '17':
         case '18':
-          
+          $('#booster_id1').attr('disabled',false);
           $('#booster_id1').attr('required',true);
           $('#jsBooster').removeClass('d-none').show();
          
