@@ -82,6 +82,7 @@ class TraineeController extends Controller
      */
     public function getTrainee(Request $request) {
         $user = Auth::user();
+        //$this->pr($user);
         $draw = $request->get('draw');
         $start = $request->get("start");
         $rowperpage = $request->get("length");
@@ -90,20 +91,47 @@ class TraineeController extends Controller
         $searchValue = $search_arr['value']; // Search value
 
         // Total records
+        //if ($user->role = "SA") {
+        $userId = $user->id;
+        //echo($userId);
+        //exit();
         $totalRecords = Trainee::select('*')->count();
+        /*$totalRecordswithFilters = Trainee::select('*')->where(function($search) use ($searchValue){
+          $search->where('trainee_id', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%')
+        });*/
         $totalRecordswithFilters = Trainee::select('*')->Where('trainee_id', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%');
 
         $totalRecordswithFilter = with(clone $totalRecordswithFilters)->count();
   
         // Fetch records
         $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
-        if ($user->role != "SA") {
-          $queryObj->where('trainer_id', $user->id);
+        //echo $user->role;
+        
+        /*if ($user->role != "SA") {
+          $userId = $user->id;
+          $queryObj->whereNested(function($queryObj) use($userId) {
+            $queryObj->where('trainer_id', $userId);
+          });
           $queryObj->toSql();
+        }*/
+
+        if ($user->role != "SA") {
+        $queryObj = $queryObj->where('trainer_id', $user->id);
+        $traineesOfTrainer = Trainee::select('trainee_id')->distinct('trainee_id')->where('trainer_id', $user->id)->groupBy('trainee_id')->get();
+        
         } else {
-           $queryObj = $queryObj->orderBy('id', 'desc');
-        }
-       $trainees = $queryObj->get();
+        $traineesOfTrainer = Trainee::select('trainee_id')->distinct('trainee_id')->groupBy('trainee_id')->get();
+        //echo $traineesOfTrainer;
+        //exit();
+        }   
+        //exit;         
+        $queryObj = $queryObj->orderBy('id', 'desc');
+
+        //echo $queryObj->toSql();
+        //exit;
+        $trainees = $queryObj->get();
+        //dd($trainees);
+        //exit();
         $data_arr =  array();
         
         foreach ($trainees as $records) {
@@ -199,6 +227,8 @@ class TraineeController extends Controller
       $boosterNo = collect($collect)->pluck('booster');
       $decode = json_decode($boosterNo,true);
       $boosterSession = $this->boosterSession;
+      //dd($story);
+      //exit();
       
       return view('kessler.trainee.create', array('types'=>$types, 'boosterRange'=>$this->boosterRange, 'story'=>$story,'contextual'=>$contextual,'general'=>$general,'boosterSession' => $boosterSession,'boosterNo'=>$boosterNo,'categories' => $categories,'totalSessions'=>$this->totalSessions,'booster'=>$booster));
     }

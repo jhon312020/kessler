@@ -28,7 +28,7 @@
               </div>
               <div class="form-group" >
                 <label class="small mb-1" for="category">Category Type</label><br>
-                <select class="form-control select2" id="jsCategory" name="category[]" multiple="multiple">
+                <select class="form-control select2" id="jsCategory" name="category[]" multiple="multiple" value= "{{old('category[]')}}">
                 @foreach($category as $categories)
                   <option value="{{ $categories->id }}">{{ $categories->name }}</option>
                 @endforeach;

@@ -21,6 +21,7 @@
               <label class="small mb-1" for="trainee_id">Trainee ID</label>
               <input type="text" class="form-control py-4" id="trainee_id" name="trainee_id" placeholder="Enter Trainee ID" required>
             </div>
+            
             <div class="form-group" id="jsCategory">
               <label class="small mb-1" for="category_type">Category Type</label>
               <select class="form-control select2" id="category_type" name="session_type"  placeholder="Select Category Type">
@@ -31,7 +32,9 @@
                 @endforeach;
               
               </select>
-             </div>
+            </div>
+            
+            @if(is_array($story[0]) && count($story[0])>0)
             <div class="form-group d-none session" id="jsStory">
               <label class="small mb-1" for="session_number">Story Sessions</label>
               <select class="form-control select2 category" id="story_session" name="session_number"  placeholder="Select Story Session" disabled = "true">
@@ -42,7 +45,9 @@
                 @endforeach;
               
               </select>
-             </div>
+            </div>
+            @endif
+            @if(is_array($contextual[0]) && count($contextual[0]) > 0)
             <div class="form-group d-none session" id="jsContext">
               <label class="small mb-1" for="context_session">Contextual Sessions</label>
               <select class="form-control select2 category" id="context_session" name="session_number"  placeholder="Select Contextual Session" disabled = "true">
@@ -54,6 +59,8 @@
               
               </select>
              </div>
+            @endif
+            @if(is_array($general[0]) && count($general[0]) > 0)
             <div class="form-group d-none session" id="jsGeneral">
               <label class="small mb-1" for="general_session">General Sessions</label>
               <select class="form-control select2 category" id="general_session" name="session_number"  placeholder="Select General Session" disabled = "true">
@@ -65,7 +72,9 @@
               
               </select>
              </div>
-             <div class="form-group d-none session" id="jsBooster">
+            @endif
+            @if(is_array($booster[0]) && count($booster[0]) > 0)
+            <div class="form-group d-none session" id="jsBooster">
                <label class="small mb-1" for="booster_id">Select Category</label>
               <select class="form-control select2" id="booster_id1" name="booster_id" placeholder="Select Category" disabled="true">
                 <option value= '' selected="selected">Select Category</option>
@@ -74,6 +83,7 @@
                 @endforeach;
               </select>
             </div>
+            @endif  
             <div class="form-group d-none session" id="jsBoosterSes">
               <label class="small mb-1" for="booster_session">Booster Sessions</label>
               <select class="form-control select2 category" id="booster_session" name="session_number"  placeholder="Select Booster Session" disabled = "true">
@@ -81,7 +91,7 @@
                   <option value="{{$boosterSession}}">{{ $boosterSession }}</option>
               </select>
             </div> 
-            
+            @if(is_array($boosterNo[0]) && count($boosterNo[0]) > 0)
             <div class="form-group d-none session" id="jsBoosterID">
                <label class="small mb-1" for="booster_id">Select Category</label>
               <select class="form-control select2" id="booster_id" name="booster_id" placeholder="Select Category" disabled="true">
@@ -91,6 +101,7 @@
                 @endforeach;
               </select>
             </div>
+            @endif
             <div class="form-group d-none" id="jsBoosterRange">
               <label class="small mb-1" for="booster_range">Select Form</label>
               <select class="form-control select2" id="booster_range" name="booster_range" placeholder="Select Form">
