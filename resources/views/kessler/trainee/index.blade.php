@@ -12,7 +12,10 @@
     <div class="card mb-4">
       <div class="card-header">
         <i class="fa fa-table mr-1"></i>
-        View Details of Trainee Information  <a href="{{ route('trainee.create')}}" class="btn btn-primary btn-block bg-gradient-primary float-right add-tab" ><i class="fas fa-plus">&nbsp;</i> Add Trainee</a>
+        View Details of Trainee Information  
+        @if(Auth::user()->role == "TA")
+        <a href="{{ route('trainee.create')}}" class="btn btn-primary btn-block bg-gradient-primary float-right add-tab" ><i class="fas fa-plus">&nbsp;</i> Add Trainee</a>
+        @endif
       </div>
       <div class="card-body">
         <div class="form-group">
@@ -78,7 +81,7 @@
               </tr>
             </tfoot>
             <tbody>
-              @foreach($trainees as $trainee)
+              <!-- @foreach($trainees as $trainee)
               <tr>
                 <td>{{$trainee->trainee_id}}</td>
                 <td>{{$trainee->session_pin}}</td>
@@ -137,13 +140,18 @@
                   </form>
                 </td>
               </tr>
-               @endforeach
+               @endforeach -->
             </tbody>
           </table>
           <div>
             @if(session()->get('success'))
               <div class="alert alert-success">
                 {{ session()->get('success') }}  
+              </div>
+            @endif
+            @if(session()->get('error'))
+              <div class="alert alert-danger">
+                {{ session()->get('error') }}  
               </div>
             @endif
           </div>

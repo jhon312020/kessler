@@ -91,39 +91,28 @@ class TraineeController extends Controller
         $searchValue = $search_arr['value']; // Search value
 
         // Total records
-        //if ($user->role = "SA") {
-        $userId = $user->id;
-        //echo($userId);
-        //exit();
-        $totalRecords = Trainee::select('*')->count();
-        /*$totalRecordswithFilters = Trainee::select('*')->where(function($search) use ($searchValue){
-          $search->where('trainee_id', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%')
-        });*/
-        $totalRecordswithFilters = Trainee::select('*')->Where('trainee_id', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%');
+        
+        
+        $totalRecordswithFilters = Trainee::select('*')->where(function($search) use ($searchValue){
+          $search->orWhere('trainee_id', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%');
+        });
 
-        $totalRecordswithFilter = with(clone $totalRecordswithFilters)->count();
-  
+        //$totalRecordswithFilter = with(clone $totalRecordswithFilters)->count();
+        
         // Fetch records
         $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
-        //echo $user->role;
-        
-        /*if ($user->role != "SA") {
-          $userId = $user->id;
-          $queryObj->whereNested(function($queryObj) use($userId) {
-            $queryObj->where('trainer_id', $userId);
-          });
-          $queryObj->toSql();
-        }*/
 
         if ($user->role != "SA") {
         $queryObj = $queryObj->where('trainer_id', $user->id);
-        $traineesOfTrainer = Trainee::select('trainee_id')->distinct('trainee_id')->where('trainer_id', $user->id)->groupBy('trainee_id')->get();
-        
-        } else {
-        $traineesOfTrainer = Trainee::select('trainee_id')->distinct('trainee_id')->groupBy('trainee_id')->get();
-        //echo $traineesOfTrainer;
+        $totalRecords = Trainee::select('*')->where('trainer_id',$user->id)->count();
+        $totalRecordswithFilter = with(clone $totalRecordswithFilters)->where('trainer_id',$user->id)->count();
+        $queryObj->toSql();
         //exit();
-        }   
+        } else {
+          $queryObj->toSql();
+          $totalRecords = Trainee::select('*')->count();
+          $totalRecordswithFilter = with(clone $totalRecordswithFilters)->count();
+        } 
         //exit;         
         $queryObj = $queryObj->orderBy('id', 'desc');
 
@@ -175,7 +164,9 @@ class TraineeController extends Controller
             }       
           }
           if ($records->completed == 0) {
+            if ($user->role == 'TA') {
             $action .= "<a href='$edit' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i></a>&nbsp;";
+          }
             $action .= "<form action='$delete' method='post' class='d-inline' id='jsSubmitForm-$id'>
                       <input type='hidden' name='_token' value='$csrf' />
                       <input type='hidden' name='_method' value='delete'>
@@ -215,18 +206,22 @@ class TraineeController extends Controller
       $user = Auth::user();
       $types = Type::all();
       $booster = Booster::all();
-      
-      $categoryList = json_decode($user->category);
-      
-      $category = json_decode($user->sessions, true);
-      $categories = Category::wherein('id', $categoryList)->pluck('name','id');
-      $collect = json_decode($user->sessions,true);
-      $story = collect($collect)->pluck('stories');
-      $contextual = collect($collect)->pluck('contextual');
-      $general = collect($collect)->pluck('general');
-      $boosterNo = collect($collect)->pluck('booster');
-      $decode = json_decode($boosterNo,true);
-      $boosterSession = $this->boosterSession;
+      if($user->role != 'SA'){
+        $categoryList = json_decode($user->category);
+        $category = json_decode($user->sessions, true);
+        $categories = Category::wherein('id', $categoryList)->pluck('name','id');
+        $collect = json_decode($user->sessions,true);
+        $story = collect($collect)->pluck('stories');
+        $contextual = collect($collect)->pluck('contextual');
+        $general = collect($collect)->pluck('general');
+        $boosterNo = collect($collect)->pluck('booster');
+        $decode = json_decode($boosterNo,true);
+        $boosterSession = $this->boosterSession;
+      }else{
+        return redirect($this->traineePage)->with('error','Super Admin cannot create trainees');
+        //return redirect($this->traineePage)->with('success', 'Super Admin cannot create trainees');
+      }
+
       //dd($story);
       //exit();
       
