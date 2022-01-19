@@ -28,49 +28,55 @@
               </div>
               <div class="form-group" >
                 <label class="small mb-1" for="category">Category Type</label><br>
-                <select class="form-control select2" id="jsCategory" name="category[]" multiple="multiple" value= "{{old('category[]')}}">
-                @foreach($category as $categories)
-                  <option value="{{ $categories->id }}">{{ $categories->name }}</option>
+                <select class="form-control select2" id="jsCategory" name="category[]" multiple="multiple" >
+                @foreach($categories as $category)
+                  <option value="{{ $category->id }}">{{ $category->name }}</option>
                 @endforeach;
                 </select>
               </div>
+              
               <div class="form-group d-none session" id="jsStory">
-                <label class="small mb-1" for="story">Select story sessions</label>
+                <label class="small mb-1" for="story">Story sessions</label>
                 <select class="form-control select2" id="jsStoryIn" name="story[]" multiple="multiple">
-                  
+                  <option value= '' selected="selected">Select Story Session</option>
                   @foreach($storySession as $story)
                     <option value="{{ $story }}">{{ $story }}</option>
                   @endforeach;
                 </select>
               </div>
+              
+
               <div class="form-group d-none session" id="jsWrite">
-                <label class="small mb-1" for="write">Select contextual sessions</label>
+                <label class="small mb-1" for="write">Contextual sessions</label>
                 <select class="form-control select2" id="jsWriteIn" name="contextual[]" multiple="multiple">
+                  <option value= '' selected="selected">Select Contextual Session</option>
                   @foreach($writeSession as $write)
                     <option value="{{ $write }}">{{ $write }}</option>
                   @endforeach;
                 </select>
               </div>
+              
+              
               <div class="form-group d-none session" id="jsGeneral">
-                <label class="small mb-1" for="general">Select general sessions</label>
+                <label class="small mb-1" for="general">General sessions</label>
                 <select class="form-control select2" id="jsGeneralIn" name="general[]" multiple="multiple">
+                  <option value= '' selected="selected">Select General Session</option>
                   @foreach($generalSession as $general)
                     <option value="{{ $general }}">{{ $general }}</option>
                   @endforeach;
                 </select>
               </div>
+              
               <div class="form-group d-none session" id="jsBooster">
-                <label class="small mb-1" for="booster">Select booster session</label>
+                <label class="small mb-1" for="booster">Booster sessions</label>
                 <select class="form-control select2" id="jsBoosterIn" name="booster[]" multiple="multiple">
+                  <option value= '' selected="selected">Select Booster Session</option>
                   @foreach($boosterSession as $booster)
                     <option value="{{ $booster->id }}">{{ $booster->category }}</option>
                   @endforeach;
                 </select>
               </div>
-           <!--    <div class="form-group">
-                <label class="small mb-1" for="password">Enter Password</label>
-                <input type="password" class="form-control py-4" id="password" name="password" placeholder="Enter Password" required>
-              </div> -->
+              
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-plus">&nbsp;</i> Add</button>
                 <a href="{{ url('/trainer')}}" class="ml-2 btn btn-danger" role="button"><i class="fas fa-times">&nbsp;</i> Cancel</a>
@@ -86,9 +92,9 @@
 <script type="text/javascript" src="{{asset('js/bootstrap-multiselect.js')}}"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-
+      $('#jsCategory').val([]).multiselect('refresh');
       $('#jsCategory').multiselect();
-      // location.reload();
+      
       $('#jsCategory').bind('change',function() {
       var select = $("#jsCategory option:selected");
       var selected = $.map(select, function(option){
@@ -96,42 +102,44 @@
       });
       console.log(selected);
       const iterator = selected.values();
-      $('.session').removeClass('d-none').hide();
+      $('.session').addClass('d-none');
+      $('.session').find('select').attr('disabled',true);
+
       for (const value of iterator) {
       console.log(value);
 
-      //var category_type = $("#jsCategory option:selected").val();
-      
-      //console.log(category_type);
       switch(value) {
         //case story:
         case '1':
           $('#jsStoryIn').attr('required',true);
-          $('#jsStory').removeClass('d-none').show();  
+          $('#jsStory').removeClass('d-none'); 
+          $('#jsStoryIn').attr('disabled',false); 
           break;
 
         //case write:
         case '2':
           $('#jsWriteIn').attr('required',true);
-          $('#jsWrite').removeClass('d-none').show();
+          $('#jsWrite').removeClass('d-none');
+          $('#jsWriteIn').attr('disabled',false);
           break;
 
         //case general:
         case '3':
           $('#jsGeneralIn').attr('required',true);
-          $('#jsGeneral').removeClass('d-none').show();
-           
+          $('#jsGeneral').removeClass('d-none');
+          $('#jsGeneralIn').attr('disabled',false);
           break;
+
+        //case booster  
         case '4':
           $('#jsBoosterIn').attr('required',true);
-          $('#jsBooster').removeClass('d-none').show();
-          
+          $('#jsBooster').removeClass('d-none');
+          $('#jsBoosterIn').attr('disabled',false);
           break;
       }
     }  
     });
   });
 </script>
-
 
 @endsection

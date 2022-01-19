@@ -73,36 +73,35 @@
               </select>
              </div>
             @endif
-            @if(is_array($booster[0]) && count($booster[0]) > 0)
+            
             <div class="form-group d-none session" id="jsBooster">
                <label class="small mb-1" for="booster_id">Select Category</label>
               <select class="form-control select2" id="booster_id1" name="booster_id" placeholder="Select Category" disabled="true">
                 <option value= '' selected="selected">Select Category</option>
-                @foreach($booster as $booster)
+                @foreach($boosters as $booster)
                   <option value="{{ $booster->id }}">{{ $booster->category}}</option>
                 @endforeach;
               </select>
             </div>
-            @endif  
-            <div class="form-group d-none session" id="jsBoosterSes">
+            
+            <div class="form-group d-none " id="jsBoosterSes">
               <label class="small mb-1" for="booster_session">Booster Sessions</label>
               <select class="form-control select2 category" id="booster_session" name="session_number"  placeholder="Select Booster Session" disabled = "true">
-                <option value='' selected="selected">Booster Sessions</option>
-                  <option value="{{$boosterSession}}">{{ $boosterSession }}</option>
+              <option value="{{$boosterSession}}" selected="selected">Booster </option>
               </select>
-            </div> 
-            @if(is_array($boosterNo[0]) && count($boosterNo[0]) > 0)
+            </div>
+            
             <div class="form-group d-none session" id="jsBoosterID">
                <label class="small mb-1" for="booster_id">Select Category</label>
               <select class="form-control select2" id="booster_id" name="booster_id" placeholder="Select Category" disabled="true">
                 <option value= '' selected="selected">Select Category</option>
-                @foreach($boosterNo[0] as $booster)
-                  <option value="{{ $booster }}">{{ $booster}}</option>
+                @foreach($boosters as $booster)
+                  <option value="{{ $booster->id }}">{{ $booster->category}}</option>
                 @endforeach;
               </select>
             </div>
-            @endif
-            <div class="form-group d-none" id="jsBoosterRange">
+            
+            <div class="form-group d-none session" id="jsBoosterRange">
               <label class="small mb-1" for="booster_range">Select Form</label>
               <select class="form-control select2" id="booster_range" name="booster_range" placeholder="Select Form">
                 <option value='' selected="selected">Select Form</option>
@@ -149,9 +148,9 @@ $(document).ready( function() { // Wait until document is fully parsed
 
       case '4':
         $('#booster_session').attr('disabled',false);
-        $('#booster_session').attr('required',true);
+        //$('#booster_session').attr('required',true);
         $('#jsBoosterID').removeClass('d-none').show();
-        $('#jsBoosterSes').removeClass('d-none').show();
+        //$('#jsBoosterSes').removeClass('d-none').show();
         $('#booster_id').attr('disabled',false);
         $('#booster_id').attr('required',true);
         $('#booster_range').attr('required',true);
@@ -174,24 +173,9 @@ $(document).ready( function() { // Wait until document is fully parsed
           $('#jsBooster').removeClass('d-none').show();
          
         break;
-        /*case 'booster':
-          $('#booster_id').attr('required',true);
-          $('#booster_range').attr('required',true);
-          $('#jsBooster').removeClass('d-none').show();
-          $('#jsBoosterRange').removeClass('d-none').show();
-        break;*/
+
       }
    });
-    function resetSelect() {
-      // $('#jsFormType').addClass('d-none');
-      // $("#jsFormType option:selected").val('');
-      $('#jsBooster').addClass('d-none');
-      $('#jsBoosterRange').addClass('d-none'); 
-      $('#booster_id').attr('required',false);
-      $('#booster_range').attr('required',false);
-      $("#booster_id option:first").prop('selected', true);
-      $("#booster_range option:first").prop('selected', true);
-    }
   });
 </script>
 @endsection

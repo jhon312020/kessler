@@ -48,12 +48,12 @@ class TrainerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
-      $category = Category::all();
+      $categories = Category::all();
       $storySession = $this->storySession;
       $writeSession = $this->writeSession;
       $generalSession = $this->generalSession;
       $boosterSession = Booster::all();
-      return view('kessler.trainer.create',compact('category','storySession','writeSession','generalSession','boosterSession'));
+      return view('kessler.trainer.create',compact('categories','storySession','writeSession','generalSession','boosterSession'));
     }
 
     /**
@@ -72,7 +72,8 @@ class TrainerController extends Controller
         ],
         [
           'name.required'=>'Please enter the name',
-          'email.unique'=>'Please enter a valid email ID',
+          'email.required'=>'Please enter the email',
+          'email.unique'=>'The email ID already exists',
           'category.required'=>'Please enter the category',
         ]);
         $password = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTVWXYZabcdefghijklmnopqrstvwxyz"), 0, 8);
@@ -123,7 +124,29 @@ class TrainerController extends Controller
      */
     public function edit($id) {
       $trainer = User::find($id);
-      return view('kessler.trainer.edit', compact('trainer'));
+      $boosters = Booster::all();
+      $categoryList = json_decode($trainer->category);
+      $categories = Category::wherein('id', $categoryList)->pluck('name','id');
+      $collect = json_decode($trainer->sessions,true);
+      $story = collect($collect)->pluck('stories');
+      $contextual = collect($collect)->pluck('contextual');
+      $general = collect($collect)->pluck('general');
+      $boosterNo = collect($collect)->pluck('booster')->toArray();
+      //print_r($boosterNo);
+      //dd($boosterNo);
+      //exit();
+      
+      $boosterSes = [];
+      if (!is_null($boosterNo[0]) && count($boosterNo[0]) > 0) {
+        $boosterSes = Booster::whereIn('id',$boosterNo[0])->pluck('category','id')->toArray();
+      }else{
+        $boosterSes = [];
+      }
+      //$this->pr($boosterSes);
+      //exit();
+      
+      return view('kessler.trainer.edit', compact('trainer','categories','story','contextual','general','boosterSes','boosters'));
+    
     }
 
     /**
@@ -135,10 +158,22 @@ class TrainerController extends Controller
      */
     public function update(Request $request, $id) {
       $request->validate([
-        'name'=>'required'
+        'name'=>'required',
+        'email'=>'required'
       ]);
+      $session = [];
       $trainer = User::find($id);
       $trainer->name = $request->get('name');
+      $trainer->email = $request->get('email');
+      $category = $request->get('category');
+      $trainer->category = json_encode($category);
+      $session[] = [
+          'stories' => $request->get('story'),
+          'contextual' => $request->get('contextual'),
+          'general' => $request->get('general'),
+          'booster' => $request->get('booster'),
+        ];
+      $trainer->sessions = json_encode($session);  
       $trainer->save();
       return redirect('/trainer/')->with('success', 'TRAINER UPDATED!');
       
@@ -214,10 +249,11 @@ class TrainerController extends Controller
         $records->name;
         $records->email;
         $activeOrInactiveUrl = url('trainer/status', $records->id).'?start='.$start;
-        //$edit = route('trainer.edit', $records->id).'?start='.$start;
+        $edit = route('trainer.edit', $records->id);
         
         $checked = $records->status ? 'checked':'';
-        $action = "<a onclick='openEditModal(this)' id = 'jsEditForm' data-id='$records->id' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i> Edit</a>&nbsp;";
+        /*$action = "<a onclick='openEditModal(this)' id = 'jsEditForm' data-id='$records->id' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i> Edit</a>&nbsp;";*/
+        $action = "<a href='$edit' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'> </i> Edit </a>&nbsp;"; 
         $action .="<form action='$activeOrInactiveUrl' method='post' class='d-inline' id='jsStatusForm-$records->id' >
                   <input type='hidden' name='_token' value='$csrf'>
                   <input type='hidden' name='_method' value='post'>

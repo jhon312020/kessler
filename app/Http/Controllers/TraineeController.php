@@ -86,41 +86,33 @@ class TraineeController extends Controller
         $draw = $request->get('draw');
         $start = $request->get("start");
         $rowperpage = $request->get("length");
-        
         $search_arr = $request->get('search');
         $searchValue = $search_arr['value']; // Search value
 
         // Total records
-        
-        
+
         $totalRecordswithFilters = Trainee::select('*')->where(function($search) use ($searchValue){
           $search->orWhere('trainee_id', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%');
         });
-
-        //$totalRecordswithFilter = with(clone $totalRecordswithFilters)->count();
         
         // Fetch records
         $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
 
         if ($user->role != "SA") {
-        $queryObj = $queryObj->where('trainer_id', $user->id);
-        $totalRecords = Trainee::select('*')->where('trainer_id',$user->id)->count();
-        $totalRecordswithFilter = with(clone $totalRecordswithFilters)->where('trainer_id',$user->id)->count();
-        $queryObj->toSql();
-        //exit();
+          $queryObj = $queryObj->where('trainer_id', $user->id);
+          $totalRecords = Trainee::select('*')->where('trainer_id',$user->id)->count();
+          $totalRecordswithFilter = with(clone $totalRecordswithFilters)->where('trainer_id',$user->id)->count();
+          $queryObj->toSql();
+        
         } else {
           $queryObj->toSql();
           $totalRecords = Trainee::select('*')->count();
           $totalRecordswithFilter = with(clone $totalRecordswithFilters)->count();
         } 
-        //exit;         
+              
         $queryObj = $queryObj->orderBy('id', 'desc');
 
-        //echo $queryObj->toSql();
-        //exit;
         $trainees = $queryObj->get();
-        //dd($trainees);
-        //exit();
         $data_arr =  array();
         
         foreach ($trainees as $records) {
@@ -205,11 +197,11 @@ class TraineeController extends Controller
     public function create() {
       $user = Auth::user();
       $types = Type::all();
-      $booster = Booster::all();
+      $boosters = Booster::all();
       if($user->role != 'SA'){
         $categoryList = json_decode($user->category);
         $category = json_decode($user->sessions, true);
-        $categories = Category::wherein('id', $categoryList)->pluck('name','id');
+        $categories = Category::whereIn('id', $categoryList)->pluck('name','id');
         $collect = json_decode($user->sessions,true);
         $story = collect($collect)->pluck('stories');
         $contextual = collect($collect)->pluck('contextual');
@@ -219,13 +211,9 @@ class TraineeController extends Controller
         $boosterSession = $this->boosterSession;
       }else{
         return redirect($this->traineePage)->with('error','Super Admin cannot create trainees');
-        //return redirect($this->traineePage)->with('success', 'Super Admin cannot create trainees');
       }
-
-      //dd($story);
-      //exit();
       
-      return view('kessler.trainee.create', array('types'=>$types, 'boosterRange'=>$this->boosterRange, 'story'=>$story,'contextual'=>$contextual,'general'=>$general,'boosterSession' => $boosterSession,'boosterNo'=>$boosterNo,'categories' => $categories,'totalSessions'=>$this->totalSessions,'booster'=>$booster));
+      return view('kessler.trainee.create', array('types'=>$types, 'boosterRange'=>$this->boosterRange, 'story'=>$story,'contextual'=>$contextual,'general'=>$general,'boosterSession' => $boosterSession,'boosterNo'=>$boosterNo,'categories' => $categories,'totalSessions'=>$this->totalSessions,'boosters'=>$boosters));
     }
 
     /**

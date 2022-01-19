@@ -44,7 +44,7 @@ Route::get('/word/getWord',[WordController::class,'getStoryWord'])->name('word.g
 Route::get('/direction/getDirection',[DirectionController::class,'getDirection'])->name('direction.getDirection');
 Route::get('/item/getItem',[ShoppingController::class,'getItem'])->name('item.getItem');
 Route::get('/todo/getTodo',[ToDoController::class,'getTodo'])->name('todo.getTodo');
-Route::post('/trainer/update',[TrainerController::class,'editTrainer']);
+//Route::post('/trainer/update',[TrainerController::class,'editTrainer']);
 // ---------------------------------------- ./ ADMIN ----------------------------------------------------------- //
 //Trainer Admin
 Route::group(['middleware' => 'auth'], function() {

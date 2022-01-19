@@ -15,11 +15,8 @@
     <div class="card mb-4">
       <div class="card-header">
         <i class="fa fa-table mr-1"></i>
-        Trainer
+        Trainer <a href="{{ route('trainer.create')}}" class="btn btn-primary btn-block bg-gradient-primary float-right add-tab" ><i class="fas fa-plus">&nbsp;</i> Add Trainer</a>
       </div>
-      <br/>
-      <a href="{{ route('trainer.create')}}" class="btn btn-primary btn-block bg-gradient-primary add-tab" ><i class="fas fa-plus">&nbsp;</i> Add Trainer</a>
-      <hr>
       <div id="message"class="alert d-none"> </div>
       <div id="update"class="alert d-none"> </div>
       <div class="card-body">
