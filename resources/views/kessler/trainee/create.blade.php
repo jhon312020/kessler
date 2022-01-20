@@ -144,6 +144,9 @@ $(document).ready( function() { // Wait until document is fully parsed
         $('#general_session').attr('disabled',false);
         $('#general_session').attr('required',true);
         $('#jsGeneral').removeClass('d-none').show();
+        $('#booster_id1').attr('disabled',false);
+        $('#booster_id1').attr('required',true);
+        $('#jsBooster').removeClass('d-none').show();
       break;
 
       case '4':
@@ -159,23 +162,7 @@ $(document).ready( function() { // Wait until document is fully parsed
       break;
     }
   });
-  $('#jsGeneral').on('change', function() {
-      resetSelect();
-      var session_number = $("#general_session option:selected").val().toLowerCase();
-      console.log(session_number);
-      //$('.session').removeClass('d-none').hide();
-      
-      switch(session_number) {
-        case '17':
-        case '18':
-          $('#booster_id1').attr('disabled',false);
-          $('#booster_id1').attr('required',true);
-          $('#jsBooster').removeClass('d-none').show();
-         
-        break;
-
-      }
-   });
+  
   });
 </script>
 @endsection
