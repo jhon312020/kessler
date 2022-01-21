@@ -68,8 +68,8 @@ class TraineeSessionController extends Controller
             $record->session_start_time = json_encode($sessionStartTime);
             $record->save(); 
             $request->session()->put('trainee', $record);
-            if ($record['session_number'] <= $this->minSession && $record['session_number'] != 'Booster') {
-
+            
+            if($record['session_type'] == '1' && $record['session_type'] != '4'){
               return redirect('/sessions');
             } else {
               return redirect('/write');
@@ -96,7 +96,8 @@ class TraineeSessionController extends Controller
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
-        if($traineeRecord['session_number'] >= $this->minWrite && $traineeRecord['session_number'] == 'Booster'){
+        
+        if($traineeRecord['session_type'] == '2' && $traineeRecord['session_type']== '3' && $traineeRecord['session_type'] == '4'){
           return redirect('/write');
         }
 
@@ -145,7 +146,7 @@ class TraineeSessionController extends Controller
         $trainee = $request->session()->get('trainee');
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
 
-        if ($traineeRecord['session_number'] <= $this->minSession && $traineeRecord['session_number'] !== 'Booster'){
+          if($traineeRecord['session_type'] == '1' && $traineeRecord['session_type'] != '4'){
             return redirect('/sessions');
           }
           

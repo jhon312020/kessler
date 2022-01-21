@@ -7,7 +7,7 @@ return['DIRECTION_BOOSTER_ID'=>1,
 'MAX_SESSION_NO'=>18,
 'RANGE'=>range(1, 18),
 'STORY'=>range(1, 8),
-'WRITE'=>range(9, 16),
-'GENERAL'=>range(17, 18),
+'WRITE'=>range(1, 8),
+'GENERAL'=>range(1, 2),
 'BOOSTER'=> 'Booster'];
 ?>

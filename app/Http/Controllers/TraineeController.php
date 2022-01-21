@@ -149,7 +149,7 @@ class TraineeController extends Controller
           $id = $records->id;
           $action =  "<a href='$add' class='btn btn-primary' role='button' title='Add'><i class='fas fa-plus' title='Add'></i></a>&nbsp;";
            $action .= "<a href='$view' class='btn btn-primary' role='button' title='View'><i class='fas fa-eye' title='View'></i></a>&nbsp;";
-           if (($records->session_number > 4 || strtolower($records->session_number) == 'booster') && $records->session_type == "A") {
+           if (($records->session_type >= 2  || $records->session_type <= 4) ) {
             $traineeCurrentPosition = json_decode($records->session_current_position);
             if ($traineeCurrentPosition && $traineeCurrentPosition->position == 'review') {
             $action .= "<a href='$approve' class='btn btn-primary' role='button' title='Approve'><i class='fas fa-book' title='Approve'></i></a>&nbsp;";
@@ -290,7 +290,8 @@ class TraineeController extends Controller
         $trainee->round = 1;
         $trainee->completed = 0;
         TraineeTransaction::where('story_id', $trainee['session_number'])->where('trainee_id', $trainee['trainee_id'])->where('session_pin', $trainee['session_pin'])->delete();
-        if ( $trainee['session_number'] > $this->minSession &&  $trainee['session_number'] <= $this->maxSession) {
+        /*if ( $trainee['session_number'] > $this->minSession &&  $trainee['session_number'] <= $this->maxSession) */
+          if($trainee['session_type'] == '2' && $trainee['session_type'] == '3' ){
           TraineeStory::where('story_id', $trainee['session_number'])->where('trainee_id', $trainee['trainee_id'])->where('session_pin', $trainee['session_pin'])->delete();
         }
       }

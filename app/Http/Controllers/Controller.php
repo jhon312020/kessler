@@ -9,6 +9,9 @@ use Illuminate\Routing\Controller as BaseController;
 use App\Models\Task;
 use App\Models\Word;
 use App\Models\Booster;
+use App\Models\General;
+use App\Models\Contextual;
+
 class Controller extends BaseController
 {
   use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -59,25 +62,24 @@ class Controller extends BaseController
 
     $this->booster = Booster::pluck('category','id');
    
-    if (strtolower($trainee['session_number']) === $this->boosterSession) {
-   
-      $wordObj = Task::select('task as word', 'question', 'words')->where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->get();
-    } else {
-      
-      if ($trainee['booster_id']) {
-
+    switch ($trainee['session_type']) {
+      case '4':
+        $wordObj = Task::select('task as word', 'question', 'words')->where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->get();
+        break;
+      case '3':
         $type = strtolower($this->booster[$trainee['booster_id']]);
         
-        $wordObj = Word::select('word', 'contextual_cue', 'question', 'words')->where('story_id', $trainee['session_number'])->where('type', "$type")->get('word');
-
-      } else {
-           
+        $wordObj = General::select('word', 'contextual_cue', 'question', 'words')->where('story_id', $trainee['session_number'])->where('type', "$type")->get('word');
+      break;
+      case '2':
+        $wordObj = Contextual::select('word')->where('story_id', $trainee['session_number'])->get('word');
+      break;
+      default:
         $wordObj = Word::select('word')->where('story_id', $trainee['session_number'])->get('word');
-
-    
-      }
-      
+      break;
     }
+   
+    //dd($wordObj);    
     return $wordObj;
   }
 
@@ -90,18 +92,25 @@ class Controller extends BaseController
    */                                                                                                                      
   function getWordAndID($trainee) {
     $this->booster = Booster::pluck('category','id');
-    if (strtolower($trainee['session_number']) == $this->boosterSession) {
+    switch ($trainee['session_type']) {
+      case '4':
+        $wordObj = Task::where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->pluck($this->wordsAs, 'id');
+      break;
       
-      $wordObj = Task::where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->pluck($this->wordsAs, 'id');
-    } else {
-      if ($trainee['booster_id']) {
+      case '3':
         $type = strtolower($this->booster[$trainee['booster_id']]);
-        $wordObj = Word::where('story_id', $trainee['session_number'])->where('type', "$type")->orderBy('id', 'asc')->pluck('words', 'id');
-      } else {
+        $wordObj = General::where('story_id', $trainee['session_number'])->where('type', "$type")->orderBy('id', 'asc')->pluck('words', 'id');
+      break;
+
+      case '2':
+        $wordObj = Contextual::where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->pluck('word', 'id');
+      break;
+
+      default:
         $wordObj = Word::where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->pluck('word', 'id');
-      }
-      
+        break;
     }
+
     return $wordObj;
   }
 
@@ -114,17 +123,25 @@ class Controller extends BaseController
    */
   function getCurrentWord($trainee, $wordID) {
     $this->booster = Booster::pluck('category','id');
-    if (strtolower($trainee['session_number']) == $this->boosterSession) {
-      $wordObj = Task::select('id', $this->wordsAs, 'task as question', 'categorical_cue')->where('booster_id', $trainee['booster_id'])->where('id', $wordID)->where('booster_range', $trainee['booster_range'])->first();
-    } else {
-      if ($trainee['booster_id']) {
+    switch ($trainee['session_type']) {
+      case '4':
+        $wordObj = Task::select('id', $this->wordsAs, 'task as question', 'categorical_cue')->where('booster_id', $trainee['booster_id'])->where('id', $wordID)->where('booster_range', $trainee['booster_range'])->first();
+      break;
+
+      case '3':
         $type = strtolower($this->booster[$trainee['booster_id']]);
-        $wordObj = Word::select('id', $this->wordsAs, 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->where('type', "$type")->first();
-      } else {
+        $wordObj = General::select('id', $this->wordsAs, 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->where('type', "$type")->first();
+      break;
+
+      case '2':
+        $wordObj = Contextual::select('id', 'word', 'words', 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
+      break;
+
+      default:
         $wordObj = Word::select('id', 'word', 'words', 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
-      }
-      
+      break;
     }
+
     return $wordObj;
   }
 
@@ -134,21 +151,28 @@ class Controller extends BaseController
    *
    * @param  $trainee
    * @return array
-   */
+   */ 
   function getWordAndIDObj($traineeObj) {
     $this->booster = Booster::pluck('category','id');
-    if (strtolower($traineeObj['session_number']) === $this->boosterSession) {
-      $wordObj = Task::select('id', $this->wordsAs)->where('booster_id', $traineeObj->booster_id)->where('booster_range', $traineeObj->booster_range)->get();
+    switch ($traineeObj['session_type']) {
+      case '4':
+        $wordObj = Task::select('id', $this->wordsAs)->where('booster_id', $traineeObj->booster_id)->where('booster_range', $traineeObj->booster_range)->get();
+        break;
       
-    } else {
-      if ($traineeObj['booster_id']) {
+      case '3':
         $type = strtolower($this->booster[$traineeObj['booster_id']]);
-        $wordObj = Word::select('id', $this->wordsAs)->where('story_id', $traineeObj['session_number'])->where('type', "$type")->orderBy('id', 'asc')->get();
-      } else {
+        $wordObj = General::select('id', $this->wordsAs)->where('story_id', $traineeObj['session_number'])->where('type', "$type")->orderBy('id', 'asc')->get();
+      break;
+
+      case '2':
+        $wordObj = Contextual::select('id', 'word')->where('story_id', $traineeObj['session_number'])->orderBy('id', 'asc')->get();
+      break;
+
+      default:
         $wordObj = Word::select('id', 'word')->where('story_id', $traineeObj['session_number'])->orderBy('id', 'asc')->get();
-      }
-      
+      break;
     }
+    
     return $wordObj;
   }
   /**
@@ -251,8 +275,10 @@ class Controller extends BaseController
         $wordObj = Task::select($this->wordsAs)->where('id',$transactionDetail->word_id)->firstOrFail();
       } else {
         $story_id = (int)$transactionDetail['story_id'];
-        if ($story_id > 8) {
-          $wordObj = Word::select($this->wordsAs)->where('id', $transactionDetail->word_id)->firstOrFail('word');
+        if ($story_id > 8 && $story_id < 17) {
+          $wordObj = Contextual::select($this->wordsAs)->where('id', $transactionDetail->word_id)->firstOrFail('word');
+        } else if ($story_id = 17 || $story_id = 18) {
+          $wordObj = General::select($this->wordsAs)->where('id', $transactionDetail->word_id)->firstOrFail('word');
         } else {
           $wordObj = Word::select('word')->where('id', $transactionDetail->word_id)->firstOrFail('word');
         }

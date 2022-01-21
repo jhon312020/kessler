@@ -6,13 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class TraineeTransaction extends Model
+class Contextual extends Model
 {
     use HasFactory;
     use SoftDeletes;
-
+    
     protected $fillable = [
-        'session_pin',
-        'category'
+        'story_id',
+        'word',
+        'categorical_cue'
     ];
 }
