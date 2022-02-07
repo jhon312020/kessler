@@ -262,5 +262,24 @@ class Controller extends BaseController
     }
     return $wordObj;
   }
-  
+
+  function rowsOfTable($request, $boosterID)
+  {
+      $start = $request->get("start");
+      $rowperpage = $request->get("length");    
+      $search_arr = $request->get('search');   
+      $searchValue = $search_arr['value'];
+      $totalRecords = Task::select('*')->Where('booster_id',$boosterID)->count();
+      
+      $totalRecordswithFilters = Task::select('*')->where('booster_id',$boosterID)->where(function($search) use ($searchValue){
+                          $search->where('task', 'like', '%' .$searchValue . '%')->orWhere('words', 'like', '%' .$searchValue . '%');
+                      });
+
+
+      $totalRecordswithFilter = with(clone $totalRecordswithFilters)->count();
+      $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage)->get();
+
+
+      return compact('queryObj', 'totalRecordswithFilter', 'totalRecords');   
+  }
 }

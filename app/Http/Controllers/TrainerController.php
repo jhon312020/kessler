@@ -137,7 +137,7 @@ class TrainerController extends Controller
         $message = 'Some server error! Please try after sometimes!';
       }
       return response()->json(['message' => $message]);
-      //return redirect('/trainer')->with('success', 'TRAINER STATUS UPDATED!');
+      
     }
 
     public function getTrainers(Request $request){
@@ -145,7 +145,7 @@ class TrainerController extends Controller
       $draw = $request->get('draw');
       $start = $request->get("start");
       $rowperpage = $request->get("length");
-      $columnName_arr = $request->get('columns');
+      
       $search_arr = $request->get('search');
       $searchValue = $search_arr['value'];
       $csrf = csrf_token();      
@@ -168,15 +168,14 @@ class TrainerController extends Controller
         } 
       
       $trainers = $queryObj->get();
-      /*$this->pr($trainers->toArray());
-      die();*/
+      
       $data_arr =  array();
 
       foreach ($trainers as $records) {
         $records->name;
         $records->email;
         $activeOrInactiveUrl = url('trainer/status', $records->id).'?start='.$start;
-        $edit = route('trainer.edit', $records->id).'?start='.$start;
+        //$edit = route('trainer.edit', $records->id).'?start='.$start;
         
         $checked = $records->status ? 'checked':'';
         $action = "<a onclick='openEditModal(this)' id = 'jsEditForm' data-id='$records->id' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i> Edit</a>&nbsp;";

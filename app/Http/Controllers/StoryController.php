@@ -16,6 +16,7 @@ class StoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     var $totalSessions = array();
+    private $pageStory = '/story';
     public function __construct() {
       $this->totalSessions = range(1, 10);
       $this->middleware('auth');
@@ -38,8 +39,7 @@ class StoryController extends Controller
      */
     public function create() {
       $types = Type::all();
-      $totalSessions = $this->totalSessions;
-      return view('kessler.story.create', compact('totalSessions','types'));
+      return view('kessler.story.create', array('totalSessions'=>$this->totalSessions,'types'=>$types));
     }
 
     /**
@@ -61,7 +61,7 @@ class StoryController extends Controller
         'story' => $request->get('story')
       ]);
       $story->save();
-      return redirect('/story')->with('success', 'STORY SAVED!');
+      return redirect($this->pageStory)->with('success', 'STORY SAVED!');
     }
 
     /**
@@ -83,8 +83,8 @@ class StoryController extends Controller
     public function edit($id) {
       $story = Story::find($id);
       $types = Type::all();
-      $totalSessions = $this->totalSessions;
-      return view('kessler.story.edit', compact('story', 'totalSessions','types'));
+      return view('kessler.story.edit', array('story'=>$story, 'types'=>$types, 'totalSessions'=>$this->totalSessions));
+        
     }
 
     /**
@@ -96,16 +96,12 @@ class StoryController extends Controller
      */
     public function update(Request $request, $id) {
       $request->validate([
-       // 'session_type' => 'required',
-       // 'session_number' => 'required',
         'story'=>'required'
       ]);
       $story = Story::find($id);
-     // $story->session_type = $request->get('session_type');
-     // $story->session_number = $request->get('session_number');
       $story->story = $request->get('story');
       $story->save();
-      return redirect('/story')->with('success', 'STORY UPDATED!');
+      return redirect($this->pageStory)->with('success', 'STORY UPDATED!');
     }
 
     /**
@@ -117,21 +113,20 @@ class StoryController extends Controller
     public function destroy($id) {
       $story = Story::find($id);
       $story->delete();
-      return redirect('/story')->with('success', 'STORY DELETED!');
+      return redirect($this->pageStory)->with('success', 'STORY DELETED!');
     }
 
     public function getStory(Request $request){
-      $user = Auth::user();
+      
       $draw = $request->get('draw');
       $start = $request->get("start");
       $rowperpage = $request->get("length");
-      $columnName_arr = $request->get('columns');
+      
       $search_arr = $request->get('search');
       $searchValue = $search_arr['value'];
       $csrf = csrf_token();
       $totalRecords = Story::select('*')->count();
-      /*$this->pr($totalRecords);
-      die();*/
+      
       
       $totalRecordswithFilters = Story::select('*')->Where('id', 'like', '%' .$searchValue . '%')->orWhere('story', 'like', '%' .$searchValue . '%');
 
@@ -141,8 +136,7 @@ class StoryController extends Controller
       $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
       
       $stories = $queryObj->get();
-      /*$this->pr($trainers->toArray());
-      die();*/
+      
       $data_arr =  array();
 
       foreach ($stories as $records) {

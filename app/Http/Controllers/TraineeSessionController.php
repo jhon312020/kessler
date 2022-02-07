@@ -119,7 +119,7 @@ class TraineeSessionController extends Controller
             $traineeRecord->save();
             $wordID = $word['id'];
             $question = $word['question'];
-            
+            $findWord = $word['word'];
             $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$wordID."' id='answer' autocomplete='off'>", $question);
             $question = str_replace("$$", str_repeat("_", 15), $question);
             $submitURL = url('next');
@@ -136,7 +136,7 @@ class TraineeSessionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function writing(Request $request) {
-      $instructions = '<p>On the same page below you are going to see a set of 20 words. The words will be capitalized like <span class="emboss">THIS</span>. <p>Build a story of your own using these words. Fit in as many words in a sentence. This story is to help you remember the capitalized words. Try to make a picture of each storyline in your head. </p>';
+      $instructions = '<p>On the same page below you are going to see a set of 20 words. The words will be capitalized like <span class="emboss">THIS</span>. <p>Build a story of your own using these words. Try to use several of the words in each sentence. This story is to help you remember the capitalized words. Try to make a picture of each storyline in your head. </p>';
       
      if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee');
@@ -156,7 +156,7 @@ class TraineeSessionController extends Controller
             $allWords = $wordStory->pluck('words')->toArray();
           
           } else {
-            $allWords = $wordStory->pluck('word')->toArray();
+            $allWords = $words = $wordStory->pluck('word')->toArray();
           }
           
           if ($traineeCurrentPosition->position === 'review' || $traineeCurrentPosition->position === 'tale' ) {
@@ -329,7 +329,7 @@ class TraineeSessionController extends Controller
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
         
         $wordStory = $this->getWords($trainee);
-        $allWords = $wordStory->toArray();
+        $allWords = $words = $wordStory->toArray();
         $allWords = count($allWords);
         $traineeCurrentPosition = $traineeRecord->session_current_position?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
         if ($traineeCurrentPosition->position === 'recall' || $traineeCurrentPosition->position === '') {
@@ -396,7 +396,7 @@ class TraineeSessionController extends Controller
           $traineeRecord->save();
           $wordID = $word['id'];
           $question = $word['question'];
-          
+          $findWord = $word['word'];
           $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$wordID."' id='answer' autocomplete='off'>", $question);
           $question = str_replace("$$", str_repeat("_", 15), $question);
         } 
@@ -468,7 +468,7 @@ class TraineeSessionController extends Controller
           return redirect($this->index);
         }
         $userStoryWords = json_decode($story->user_story_words);
-        
+        $totalUsersWords = count($userStoryWords);
         $userWordKey = $traineeCurrentPosition->user_word_id;
       
         $nextWordKey = $userWordKey + 1;

@@ -9,7 +9,7 @@
   </div>
   <div class="row">
     <div class="col-offset-2 col-lg-8 mx-auto text-justify">
-       <p class="mx-auto">On the same page below you are going to see a story. It will stay on the screen for a set period of time. Certain words in the story will be capitalized like <span class="emboss">THIS</span>. </p><p>Use this story to help you remember the capitalized words. Try to make a picture of each storyline in your head.</p><p> Click on <span class="emboss">START</span> when you are ready.</p>
+       <p class="mx-auto">You are going to see a story. It will stay on the screen for a set period of time. Certain words in the story will be capitalized like <span class="emboss">THIS</span>. </p><p>Use this story to help you remember the capitalized words. Try to make a picture of each storyline in your head.</p><p> Click on <span class="emboss">START</span> when you are ready.</p>
        <br/>
     </div>
   </div>

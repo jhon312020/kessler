@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-//use App\Models\Direction;
 use App\Models\Task;
 use App\Models\Type;
 use Auth;
@@ -41,8 +40,7 @@ class DirectionController extends Controller
      */
     public function create() {
       $types = Type::all();
-      $boosterRanges = $this->boosterRange;
-      return view('kessler.direction.create', compact('types', 'boosterRanges'));
+      return view('kessler.direction.create', array('types'=>$types, 'boosterRange'=>$this->boosterRange));
     }
 
     /**
@@ -53,9 +51,7 @@ class DirectionController extends Controller
      */
     public function store(Request $request) {
         $request->validate([
-          //'booster_range'=>'required',
           'direction'=>'required'
-         // 'categorical_cue'=>'required'
         ]);
         $booster_id = 1;
         $booster_range = 3;
@@ -101,7 +97,6 @@ class DirectionController extends Controller
     public function update(Request $request, $id) {
       $request->validate([
         'direction'=>'required'
-        //'categorical_cue'=>'required'
       ]);
       $direction = Task::find($id);
       $direction->task = $request->get('direction');
@@ -123,31 +118,16 @@ class DirectionController extends Controller
     }
 
     public function getDirection(Request $request){
-      $user = Auth::user();
-      $draw = $request->get('draw');
-      $start = $request->get("start");
-      $rowperpage = $request->get("length");
-      $columnName_arr = $request->get('columns');
-      $search_arr = $request->get('search');
-      $searchValue = $search_arr['value'];
-      $csrf = csrf_token();
-      $totalRecords = Task::select('*')->Where('booster_id','1')->count();
-      /*$this->pr($totalRecords);
-      die();*/
       
-      $totalRecordswithFilters = Task::select('*')->where('booster_id','1')->when($searchValue, function($search ,$searchValue){
-        $search->Where('task', 'like', '%' .$searchValue . '%')->orWhere('words', 'like', '%' .$searchValue . '%')->orWhere('question', 'like', '%' .$searchValue . '%');
-      });
+      $draw = $request->get('draw');
+      $csrf = csrf_token();
 
-      $totalRecordswithFilter = with(clone $totalRecordswithFilters)->count();
-  
-        // Fetch records
-      $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
-
-      $directions = $queryObj->where('booster_id','1')->get();
-      /*$this->pr($trainers->toArray());
-      die();*/
-      $data_arr =  array();
+      $result = $this->rowsOfTable($request,1);
+      extract($result);
+      
+      $directions = $queryObj;
+      
+      $data_arr = array();
 
       foreach ($directions as $records) {
         $records->id;
@@ -179,5 +159,6 @@ class DirectionController extends Controller
         
         echo json_encode($response);
         exit;
+
     }
 }

@@ -120,7 +120,7 @@
                             @if($roundTwoReport[$storyWord->id][1]['correct_or_wrong'])
                               <i class="fa fa-check" aria-hidden="true"> </i>
                             @else 
-                              <a href="#"  class="jsEditAnswer" data-transactionid="{{$roundTwoReport[$storyWord->id][0]['id']}}" data-useranswer="{{ $roundTwoReport[$storyWord->id][0]['answer'] }}" data-storyanswer="{{$storyWord->word}}" data-title="Edit Categorical Round 2">
+                              <a href="#"  class="jsEditAnswer" data-transactionid="{{$roundTwoReport[$storyWord->id][1]['id']}}" data-useranswer="{{ $roundTwoReport[$storyWord->id][1]['answer'] }}" data-storyanswer="{{$storyWord->word}}" data-title="Edit Categorical Round 2">
                               <i class="fa fa-edit" aria-hidden="true"></i></a> &nbsp;
                               <i class="fa fa-times" aria-hidden="true"> </i>
                             @endif

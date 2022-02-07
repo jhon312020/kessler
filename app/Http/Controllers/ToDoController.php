@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-//use App\Models\ToDo;
 use App\Models\Task;
 use App\Models\Type;
+use app\Http\Controllers;
 use Auth;
 
 class ToDoController extends Controller
@@ -16,6 +16,7 @@ class ToDoController extends Controller
      * @return void
      */
     var $boosterRange = array();
+    private $pageTodo = '/todo';
     public function __construct() {
       $this->middleware('auth');
       $this->boosterRange = range(1, 3);
@@ -39,8 +40,7 @@ class ToDoController extends Controller
      */
     public function create() {
       $types = Task::all();
-      $boosterRange = $this->boosterRange;
-      return view('kessler.todo.create', compact('types', 'boosterRange'));
+      return view('kessler.todo.create', array('types'=>$types, 'boosterRange'=>$this->boosterRange));
     }
 
     /**
@@ -63,7 +63,7 @@ class ToDoController extends Controller
           'categorical_cue' => $request->get('categorical_cue')
         ]);
         $todos->save();
-        return redirect('/todo')->with('success', 'To-Do SAVED!');
+        return redirect($this->pageTodo)->with('success', 'To-Do SAVED!');
     }
 
     /**
@@ -104,7 +104,7 @@ class ToDoController extends Controller
       $todo->task = $request->get('todo');
       $todo->categorical_cue = $request->get('categorical_cue');
       $todo->save();
-      return redirect('/todo')->with('success', 'To-Do UPDATED!');
+      return redirect($this->pageTodo)->with('success', 'To-Do UPDATED!');
     }
 
     /**
@@ -116,42 +116,24 @@ class ToDoController extends Controller
     public function destroy($id) {
       $todo = Task::find($id);
       $todo->delete();
-      return redirect('/todo')->with('success', 'To-Do DELETED!');
+      return redirect($this->pageTodo)->with('success', 'To-Do DELETED!');
     }
 
     public function getTodo(Request $request){
-      $user = Auth::user();
+      
       $draw = $request->get('draw');
       $start = $request->get("start");
-      $rowperpage = $request->get("length");
-      $columnName_arr = $request->get('columns');
-      $search_arr = $request->get('search');
-      $searchValue = $search_arr['value'];
       $csrf = csrf_token();
-      $totalRecords = Task::select('*')->Where('booster_id','3')->count();
-      /*$this->pr($totalRecords);
-      die();*/
+
+      $result = $this->rowsOfTable($request,3);
+      extract($result);
       
-      $totalRecordswithFilters = Task::select('*')->where('booster_id','3')->when($searchValue, function($search ,$searchValue){
-        $search->Where('task', 'like', '%' .$searchValue . '%')->orWhere('words', 'like', '%' .$searchValue . '%');
-         });
+      $todo = $queryObj;
+      
+      $data_arr = array();
 
-      $totalRecordswithFilter = with(clone $totalRecordswithFilters)->count();
-  
-        // Fetch records
-      $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
-
-      $todo = $queryObj->where('booster_id','3')->get();
-      /*$this->pr($todo->toArray());
-      die();*/
-      $data_arr =  array();
       $record_count = $start;
-      foreach ($todo as $records) {
-
-        // $records->id;
-        // $records->task;
-        // $records->categorical_cue;
-        
+      foreach ($todo as $records) {        
         $edit = route('todo.edit', $records->id);
         $delete = route('todo.destroy', $records->id);
         
