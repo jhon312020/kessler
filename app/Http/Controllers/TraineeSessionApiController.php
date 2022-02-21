@@ -86,7 +86,7 @@ class TraineeSessionApiController extends Controller
     public function sessions(Request $request) {
       $result['success'] = true;
       $result['message'] = 'Passed the api token';
-      return response()->json($result);
+      //return response()->json($result);
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();

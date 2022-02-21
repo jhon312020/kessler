@@ -11,6 +11,7 @@ use App\Models\Word;
 use App\Models\Type;
 use App\Models\Booster;
 use Auth;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 
@@ -118,12 +119,8 @@ class TraineeController extends Controller
             if ($sessionEndTime && $records->completed === 1) {
                 $session_end_time =  date($this->dateFormat, strtotime($sessionEndTime->roundTwo));
             }
-          
-          if ($records->completed === 1) {
-            $session_state = $records->session_state;
-          }else{
-            $session_state = $records->session_state;
-          }
+
+          $session_state = $records->session_state;
           $add = route('trainee.add', $records->id);
           $view = url('trainee/view', $records->id);
           $edit = route('trainee.edit', $records->id);

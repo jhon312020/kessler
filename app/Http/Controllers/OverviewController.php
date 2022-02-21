@@ -13,7 +13,7 @@ class OverviewController extends Controller
      *
      * @return void
      */
-    private $page = '/overview'; 
+    public $commonRedirectRoute = '/overview';
     public function __construct() {
       $this->middleware('auth');
       parent::__construct();
@@ -52,7 +52,7 @@ class OverviewController extends Controller
         'overview' => $request->get('overview')
       ]);
       $overview->save();
-      return redirect($this->page)->with('success', 'OVERVIEW SAVED!');
+      return redirect($this->commonRedirectRoute)->with('success', 'OVERVIEW SAVED!');
     }
 
     /**
@@ -90,7 +90,7 @@ class OverviewController extends Controller
       $overview = Overview::find($id);
       $overview->overview = $request->get('overview');
       $overview->save();
-      return redirect($this->page)->with('success', 'OVERVIEW UPDATED!');
+      return redirect($this->commonRedirectRoute)->with('success', 'OVERVIEW UPDATED!');
     }
 
     /**
@@ -102,7 +102,7 @@ class OverviewController extends Controller
     public function destroy($id) {
       $overview = Overview::find($id);
       $overview->delete();
-      return redirect($this->page)->with('success', 'OVERVIEW DELETED!');
+      return redirect($this->commonRedirectRoute)->with('success', 'OVERVIEW DELETED!');
     }
 
     public function getOverview(Request $request){
