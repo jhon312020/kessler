@@ -13,7 +13,7 @@ class OverviewController extends Controller
      *
      * @return void
      */
-    private $page = '/overview'; 
+    public $commonRedirectRoute = '/overview'; 
     public function __construct() {
       $this->middleware('auth');
       parent::__construct();
