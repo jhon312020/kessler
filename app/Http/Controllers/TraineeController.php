@@ -147,8 +147,9 @@ class TraineeController extends Controller
           $approve = url('trainee/approve', $records->id);
           $csrf = csrf_token();
           $id = $records->id;
+          
           $action =  "<a href='$add' class='btn btn-primary' role='button' title='Add'><i class='fas fa-plus' title='Add'></i></a>&nbsp;";
-           $action .= "<a href='$view' class='btn btn-primary' role='button' title='View'><i class='fas fa-eye' title='View'></i></a>&nbsp;";
+          $action .= "<a href='$view' class='btn btn-primary' role='button' title='View'><i class='fas fa-eye' title='View'></i></a>&nbsp;";
            if (($records->session_type >= 2  || $records->session_type <= 4) ) {
             $traineeCurrentPosition = json_decode($records->session_current_position);
             if ($traineeCurrentPosition && $traineeCurrentPosition->position == 'review') {
@@ -562,11 +563,23 @@ class TraineeController extends Controller
     public function add(Request $request, $id) {
       $trainee = Trainee::find($id);
       $user = Auth::user();
+      //dd($user);
       if ($trainee->trainer_id == $user->id || $user->role == 'SA') {
-        
         $types = Type::all();
-        $booster = Booster::all();
-        return view('kessler.trainee.add', array('trainee'=>$trainee, 'totalSessions'=>$this->totalSessions, 'boosterRange'=>$this->boosterRange ,'types'=>$types,'booster'=>$booster));
+        $boosters = Booster::all();
+        $categoryList = json_decode($user->category);
+        $category = json_decode($user->sessions, true);
+        $categories = Category::whereIn('id', $categoryList)->pluck('name','id');
+        $collect = json_decode($user->sessions,true);
+        $story = collect($collect)->pluck('stories');
+        $contextual = collect($collect)->pluck('contextual');
+        $general = collect($collect)->pluck('general');
+        $boosterNo = collect($collect)->pluck('booster');
+        $decode = json_decode($boosterNo,true);
+        $boosterSession = $this->boosterSession;  
+        
+        return view('kessler.trainee.add', array('trainee'=>$trainee, 'types'=>$types, 'boosterRange'=>$this->boosterRange, 'story'=>$story,'contextual'=>$contextual,'general'=>$general,'boosterSession' => $boosterSession,'boosterNo'=>$boosterNo,'categories' => $categories,'totalSessions'=>$this->totalSessions,'boosters'=>$boosters));
+
       } else {
           return view($this->error);
         }

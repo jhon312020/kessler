@@ -12,6 +12,10 @@ use App\Models\Booster;
 use Auth;
 use DB;
 
+use Illuminate\Validation\Rule;
+ 
+
+
 
 class TrainerController extends Controller
 {
@@ -68,14 +72,39 @@ class TrainerController extends Controller
         $request->validate([
           'name'=>'required',
           'email'=>'required|unique:users',
-          'category'=>'required'
+          'category' => 'required|array|min:1',
+          'story'  => 'required_if:1.*,in:category|min:1',
+          'contextual'  => 'required_if:2.*,in:category|min:1',
+          'general'  => 'required_if:3.*,in:category|min:1',
+          'booster'  => 'required_if:4.*,in:category|min:1',
+          /*'story' => 'array',
+          'story.0'=>Rule::requiredIf(function() use ($request) {
+                      return in_array(1, $request->category);
+                    }),
+          'contextual' => 'array',
+          'contextual.0'=>Rule::requiredIf(function() use ($request) {
+                      return in_array(2, $request->category);
+                    }),
+          'general' => 'array',
+          'general.0'=>Rule::requiredIf(function() use ($request) {
+                      return in_array(3, $request->category);
+                    }),
+          'booster' => 'array',
+          'booster.0'=>Rule::requiredIf(function() use ($request) {
+                      return in_array(4, $request->category);
+                    }),*/
         ],
         [
           'name.required'=>'Please enter the name',
           'email.required'=>'Please enter the email',
           'email.unique'=>'The email ID already exists',
-          'category.required'=>'Please enter the category',
+          'category.required'=>'Please select the category',
+          'story.required'=>'Please select the story session',
+          'contextual.required'=>'Please select the contextual session',
+          'general.required'=>'Please select the general session',
+          'booster.required'=>'Please select the booster session', 
         ]);
+        //dd($request->input());
         $password = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTVWXYZabcdefghijklmnopqrstvwxyz"), 0, 8);
         
         $category = $request->get('category');
@@ -159,8 +188,40 @@ class TrainerController extends Controller
     public function update(Request $request, $id) {
       $request->validate([
         'name'=>'required',
-        'email'=>'required'
+        'email'=>'required',
+        'category'=>'required|array|min:1',
+        'story'=>'required_if:1.*,in:category|min:1',
+        'contextual'=>'required_if:2.*,in:category|min:1',
+        'general'=>'required_if:3.*,in:category|min:1',
+        'booster'=>'required_if:4.*,in:category|min:1',
+        //'category.0' =>'required|array',
+       /* 'story' => 'array',
+        'story.0'=>Rule::requiredIf(function() use ($request) {
+                      return in_array(1, $request->category);
+                    }),
+        'contextual' => 'array',
+        'contextual.0'=>Rule::requiredIf(function() use ($request) {
+                      return in_array(2, $request->category);
+                    }),
+        'general' => 'array',
+        'general.0'=>Rule::requiredIf(function() use ($request) {
+                      return in_array(3, $request->category);
+                    }),
+        'booster' => 'array',
+        'booster.0'=>Rule::requiredIf(function() use ($request) {
+                      return in_array(4, $request->category);
+                    }),*/
+      ],
+      [
+          'name.required'=>'Please enter the name',
+          'email.required'=>'Please enter the email',
+          'category.required'=>'Please select the category',
+          'story.required'=>'Please select the story session',
+          'contextual.required'=>'Please select the contextual session',
+          'general.required'=>'Please select the general session',
+          'booster.required'=>'Please select the booster session',
       ]);
+      //dd($request->input());
       $session = [];
       $trainer = User::find($id);
       $trainer->name = $request->get('name');

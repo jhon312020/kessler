@@ -34,33 +34,32 @@
                 @endforeach;
                 </select>
               </div>
-              
+              <div>
+              <label class="small mb-1" for="sessions" name="sessions"></label>
               <div class="form-group d-none session" id="jsStory">
                 <label class="small mb-1" for="story">Story sessions</label>
                 <select class="form-control select2" id="jsStoryIn" name="story[]" multiple="multiple">
-                  <option value= '' selected="selected">Select Story Session</option>
+                  <!-- <option value= '' selected="selected">Select Story Session</option> -->
                   @foreach($storySession as $story)
                     <option value="{{ $story }}">{{ $story }}</option>
                   @endforeach;
                 </select>
               </div>
               
-
               <div class="form-group d-none session" id="jsWrite">
                 <label class="small mb-1" for="write">Contextual sessions</label>
                 <select class="form-control select2" id="jsWriteIn" name="contextual[]" multiple="multiple">
-                  <option value= '' selected="selected">Select Contextual Session</option>
+                 <!--  <option value= '' selected="selected">Select Contextual Session</option> -->
                   @foreach($writeSession as $write)
                     <option value="{{ $write }}">{{ $write }}</option>
                   @endforeach;
                 </select>
               </div>
-              
-              
+                           
               <div class="form-group d-none session" id="jsGeneral">
                 <label class="small mb-1" for="general">General sessions</label>
                 <select class="form-control select2" id="jsGeneralIn" name="general[]" multiple="multiple">
-                  <option value= '' selected="selected">Select General Session</option>
+                  <!-- <option value= '' selected="selected">Select General Session</option> -->
                   @foreach($generalSession as $general)
                     <option value="{{ $general }}">{{ $general }}</option>
                   @endforeach;
@@ -70,13 +69,14 @@
               <div class="form-group d-none session" id="jsBooster">
                 <label class="small mb-1" for="booster">Booster sessions</label>
                 <select class="form-control select2" id="jsBoosterIn" name="booster[]" multiple="multiple">
-                  <option value= '' selected="selected">Select Booster Session</option>
+                  <!-- <option value= '' selected="selected">Select Booster Session</option> -->
                   @foreach($boosterSession as $booster)
-                    <option value="{{ $booster->id }}">{{ $booster->category }}</option>
+                    <option value="{{ $booster->id }}" >{{ $booster->category }}</option>
                   @endforeach;
                 </select>
               </div>
               
+              </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-plus">&nbsp;</i> Add</button>
                 <a href="{{ url('/trainer')}}" class="ml-2 btn btn-danger" role="button"><i class="fas fa-times">&nbsp;</i> Cancel</a>

@@ -29,7 +29,7 @@
               <div class="form-group">
                 <label class="small mb-1" for="email">Update category</label>
                 <select class="form-control select2" id="jsCategory" name="category[]" multiple="multiple">
-                  <option value= '' >Select Categories</option>
+                  <!-- <option value= '' >Select Categories</option> -->
                   @foreach($categories as $id=>$name)
                     <option value="{{ $id }}" selected="selected">{{ $name }}</option>
                   @endforeach;

@@ -11,6 +11,8 @@ use App\Models\Word;
 use App\Models\Booster;
 use App\Models\General;
 use App\Models\Contextual;
+use App\Models\Category;
+use DB;
 
 class Controller extends BaseController
 {
@@ -19,6 +21,7 @@ class Controller extends BaseController
   private $wordsAs = 'words as word';
   private $booster = array();
   public $directionBoosterID;
+  private $selectTable = array();
   public function __construct() {
   $sideMenu = array('dashboard'=>array('name'=>'Dashboard', 'url'=>'/dashboard','icon'=>'fa-tachometer-alt', 'role'=>''),
                 'trainee'=>array('name'=>'Trainee Information', 'url'=>'/trainee','icon'=>'fa-table', 'role'=>''), 
@@ -61,24 +64,44 @@ class Controller extends BaseController
   function getWords($trainee) {
 
     $this->booster = Booster::pluck('category','id');
-   
+    $conditions = ['story_id'=>$trainee['session_number']];
+    $selectFields = ['word'];
+    //$name = 'Task';
+    /*foreach ($names as $name) {*/
+      //$this->selectTable = DB::table($names)->select('word')->where('story_id', $trainee['session_number'])->get('word');
+    //$getWords = ->where('story_id', $trainee['session_number'])->get('word'); 
+    //dd($res) DB::table($names[0]);
+      //dd($name);
     switch ($trainee['session_type']) {
-      case '4':
-        $wordObj = Task::select('task as word', 'question', 'words')->where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->get();
-        break;
-      case '3':
-        $type = strtolower($this->booster[$trainee['booster_id']]);
-        
-        $wordObj = General::select('word', 'contextual_cue', 'question', 'words')->where('story_id', $trainee['session_number'])->where('type', "$type")->get('word');
+      case 4:
+        $modelObj = new Task();
+        $selectFields = ['task as word', 'question', 'words'];
+        //$wordObj = Task::select()->get();
+        $conditions = ['booster_id'=>$trainee['booster_id'], 'booster_range'=>$trainee['booster_range']];
       break;
-      case '2':
-        $wordObj = Contextual::select('word')->where('story_id', $trainee['session_number'])->get('word');
+      case 3:
+        $modelObj = new General();
+        $type = strtolower($this->booster[$trainee['booster_id']]);
+        $conditions['type'] = $type;
+        $selectFields = ['word', 'contextual_cue', 'question', 'words'];
+        //$selectFields = "'".implode("','", $selectFields)."'";
+        //$wordObj = $name::select()->get('word');
+      break;
+      case 2:
+        $modelObj = new Contextual();
       break;
       default:
-        $wordObj = Word::select('word')->where('story_id', $trainee['session_number'])->get('word');
+        $modelObj = new Word();
       break;
     }
-   
+    //$this->pr($modelObj);
+    //$this->pr($conditions);
+    //echo $selectFields;
+    $wordObj = $modelObj::where($conditions)->get($selectFields);
+    //$this->pr($wordObj->toArray()); 
+    //exit;
+    //
+  /*} */
     //dd($wordObj);    
     return $wordObj;
   }
@@ -92,25 +115,52 @@ class Controller extends BaseController
    */                                                                                                                      
   function getWordAndID($trainee) {
     $this->booster = Booster::pluck('category','id');
+    $conditions = ['story_id'=>$trainee['session_number']];
+    $selectField1 = 'word' ;
+    $selectField2 = 'id';
+
     switch ($trainee['session_type']) {
-      case '4':
-        $wordObj = Task::where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->pluck($this->wordsAs, 'id');
+      case 4:
+        $modelObj = new Task();
+        $conditions = ['booster_id'=> $trainee['booster_id'],'booster_range'=> $trainee['booster_range']];
+        $selectField1 = $this->wordsAs;
+        $selectField2 = 'id';
+       //$wordObj = Task::where('booster_id', $trainee['booster_id'])->where('booster_range', $trainee['booster_range'])->pluck($this->wordsAs, 'id');
       break;
       
-      case '3':
+      case 3:
+        $modelObj = new General();
         $type = strtolower($this->booster[$trainee['booster_id']]);
-        $wordObj = General::where('story_id', $trainee['session_number'])->where('type', "$type")->orderBy('id', 'asc')->pluck('words', 'id');
+        $conditions['type'] =  $type;
+        $selectField1 = 'words';
+        $selectField2 = 'id';
+        //$type = strtolower($this->booster[$trainee['booster_id']]);
+        //$wordObj = General::where('story_id', $trainee['session_number'])->where('type', "$type")->orderBy('id', 'asc')->pluck('words', 'id');
+        //dd($wordObj);
       break;
 
-      case '2':
-        $wordObj = Contextual::where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->pluck('word', 'id');
+      case 2:
+        $modelObj = new Contextual();
+        
+        //$wordObj = Contextual::where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->pluck('word', 'id');
+        //dd($wordObj);
       break;
 
       default:
-        $wordObj = Word::where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->pluck('word', 'id');
-        break;
+        $modelObj = new Word();
+        //$wordObj = Word::where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->pluck('word', 'id');
+      break;
     }
-
+    //$this->pr($modelObj);
+    //$this->pr($conditions);
+    //dd($selectFields);
+    //echo $selectFields;
+    $wordObj = $modelObj::where($conditions)->orderBy('id', 'asc')->pluck($selectField1,$selectField2);
+    //dd($wordObj);
+    //$this->pr($wordObj->toArray()); 
+    //exit;
+    
+    
     return $wordObj;
   }
 
@@ -123,25 +173,39 @@ class Controller extends BaseController
    */
   function getCurrentWord($trainee, $wordID) {
     $this->booster = Booster::pluck('category','id');
+    $conditions = ['story_id' => $trainee['session_number'], 'id' => $wordID];
+    $selectFields = ['id', 'word', 'words', 'question', 'categorical_cue'];
+
     switch ($trainee['session_type']) {
-      case '4':
-        $wordObj = Task::select('id', $this->wordsAs, 'task as question', 'categorical_cue')->where('booster_id', $trainee['booster_id'])->where('id', $wordID)->where('booster_range', $trainee['booster_range'])->first();
+      case 4:
+        $modelObj = new Task();
+        $selectFields = ['id', $this->wordsAs, 'task as question', 'categorical_cue'];
+        $conditions = ['booster_id' => $trainee['booster_id'], 'booster_range' => $trainee['booster_range'], 'id' => $wordID];
+
+        /*$wordObj = Task::select('id', $this->wordsAs, 'task as question', 'categorical_cue')->where('booster_id', $trainee['booster_id'])->where('id', $wordID)->where('booster_range', $trainee['booster_range'])->first();*/
       break;
 
-      case '3':
+      case 3:
+        $modelObj = new General();
+        $selectFields = ['id', $this->wordsAs, 'question', 'categorical_cue'];
         $type = strtolower($this->booster[$trainee['booster_id']]);
-        $wordObj = General::select('id', $this->wordsAs, 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->where('type', "$type")->first();
+        $conditions['type'] = $type; 
+        //$type = strtolower($this->booster[$trainee['booster_id']]);
+        /*$wordObj = General::select('id', $this->wordsAs, 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->where('type', "$type")->first();*/
       break;
 
-      case '2':
-        $wordObj = Contextual::select('id', 'word', 'words', 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
+      case 2:
+        $modelObj = new Contextual();
+        /*$wordObj = Contextual::select('id', 'word', 'words', 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();*/
       break;
 
       default:
-        $wordObj = Word::select('id', 'word', 'words', 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
+        $modelObj = new Word();
+        /*$wordObj = Word::select('id', 'word', 'words', 'question', 'categorical_cue')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();*/
       break;
     }
-
+    //dd($wordObj);
+    $wordObj = $modelObj::select($selectFields)->where($conditions)->first();
     return $wordObj;
   }
 
@@ -154,25 +218,36 @@ class Controller extends BaseController
    */ 
   function getWordAndIDObj($traineeObj) {
     $this->booster = Booster::pluck('category','id');
+    $selectFields = ['id','word'];
+    $conditions = ['story_id' => $traineeObj['session_number']];
+
     switch ($traineeObj['session_type']) {
-      case '4':
-        $wordObj = Task::select('id', $this->wordsAs)->where('booster_id', $traineeObj->booster_id)->where('booster_range', $traineeObj->booster_range)->get();
-        break;
+      case 4:
+        $modelObj = new Task();
+        $selectFields = ['id', $this->wordsAs];
+        $conditions = ['booster_id' => $traineeObj->booster_id , 'booster_range'=> $traineeObj->booster_range];
+        //$wordObj = Task::select('id', $this->wordsAs)->where('booster_id', $traineeObj->booster_id)->where('booster_range', $traineeObj->booster_range)->get();
+      break;
       
-      case '3':
+      case 3:
+        $modelObj = new General();
+        $selectFields = ['id', $this->wordsAs];
         $type = strtolower($this->booster[$traineeObj['booster_id']]);
-        $wordObj = General::select('id', $this->wordsAs)->where('story_id', $traineeObj['session_number'])->where('type', "$type")->orderBy('id', 'asc')->get();
+        $conditions['type'] = $type;
+        //$wordObj = General::select('id', $this->wordsAs)->where('story_id', $traineeObj['session_number'])->where('type', "$type")->orderBy('id', 'asc')->get();
       break;
 
-      case '2':
-        $wordObj = Contextual::select('id', 'word')->where('story_id', $traineeObj['session_number'])->orderBy('id', 'asc')->get();
+      case 2:
+        $modelObj = new Contextual();
+        //$wordObj = Contextual::select('id', 'word')->where('story_id', $traineeObj['session_number'])->orderBy('id', 'asc')->get();
       break;
 
       default:
-        $wordObj = Word::select('id', 'word')->where('story_id', $traineeObj['session_number'])->orderBy('id', 'asc')->get();
+        $modelObj = new Word();
+        //$wordObj = Word::select('id', 'word')->where('story_id', $traineeObj['session_number'])->orderBy('id', 'asc')->get();
       break;
     }
-    
+    $wordObj = $modelObj::where($conditions)->orderBy('id', 'asc')->get($selectFields);
     return $wordObj;
   }
   /**
@@ -270,25 +345,42 @@ class Controller extends BaseController
    */
   function getWord($transactionDetail) {
     $wordObj = null;
+    $conditions = ['id' => $transactionDetail->word_id];
+    $selectFields = 'word';
+
     try {
-      if (strtolower($transactionDetail->story_id) === $this->boosterSession) {
-        $wordObj = Task::select($this->wordsAs)->where('id',$transactionDetail->word_id)->firstOrFail();
-      } else {
-        $story_id = (int)$transactionDetail['story_id'];
-        if ($story_id > 8 && $story_id < 17) {
-          $wordObj = Contextual::select($this->wordsAs)->where('id', $transactionDetail->word_id)->firstOrFail('word');
-        } else if ($story_id = 17 || $story_id = 18) {
-          $wordObj = General::select($this->wordsAs)->where('id', $transactionDetail->word_id)->firstOrFail('word');
-        } else {
-          $wordObj = Word::select('word')->where('id', $transactionDetail->word_id)->firstOrFail('word');
-        }
+      switch ($transactionDetail['category']) {
+        case 4:
+          $modelObj = new Task();
+          $selectFields = $this->wordsAs;
+
+          //$wordObj = Task::select($this->wordsAs)->where('id',$transactionDetail->word_id)->firstOrFail();
+        break;
+        
+        case 3:
+          $modelObj = new General();
+          $selectFields = $this->wordsAs;
+          //$wordObj = General::select($this->wordsAs)->where('id', $transactionDetail->word_id)->firstOrFail();
+        break;
+
+        case 2:
+          $modelObj = new Contextual();
+          //$wordObj = Contextual::select('word')->where('id', $transactionDetail->word_id)->firstOrFail();
+        break;
+
+        default:
+          $modelObj = new Word();
+          //$wordObj = Word::select('word')->where('id', $transactionDetail->word_id)->firstOrFail();
+        break;
       }
     } catch(\Exception $e) {
       Log::error($e);
     }
+    //dd($modelObj);
+    $wordObj = $modelObj::where($conditions)->firstOrFail($selectFields);
     return $wordObj;
   }
-
+  
   function rowsOfTable($request, $boosterID)
   {
       $start = $request->get("start");
@@ -307,48 +399,6 @@ class Controller extends BaseController
 
 
       return compact('queryObj', 'totalRecordswithFilter', 'totalRecords');
-      
-      /*return array( "query" => $queryObj,
-          "draw" => intval($draw),
-          "iTotalRecords" => $totalRecords,
-          "items" => $items,
-          "iTotalDisplayRecords" => $totalRecordswithFilter,
-          "aaData" => $data_arr);*/
-      
-        // Fetch records
-      /*$queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
-
-      $items = $queryObj->where('booster_id',$boosterID)->get();
-      $data_arr =  array();
-
-      foreach ($items as $records) {
-        $records->id;
-        $records->task;
-        $records->categorical_cue;
-        
-        $edit = route($editRoute, $records->id);
-        $delete = route($deleteRoute, $records->id);
-        
-        $action = "<a href='$edit' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i> Edit</a>&nbsp;";
-        $action .="<form action='$delete' method='post' class='d-inline' id='jsSubmitForm-$records->id'>
-                  <input type='hidden' name='_token' value='$csrf'>
-                  <input type='hidden' name='_method' value='delete'>
-                  <button class='btn btn-danger jsConfirmButton' type='button' data-value='$records->id' title='Delete'><i class='fa fa-trash' title='Delete'></i> Delete</button>
-                </form>";
-                
-        $data_arr[] = array(
-          "item" => $records->task,
-          "categorical_cue" => $records->categorical_cue,
-          "action" => $action
-          );
-        }
-        
-        $response = array(
-          "draw" => intval($draw),
-          "iTotalRecords" => $totalRecords,
-          "iTotalDisplayRecords" => $totalRecordswithFilter,
-          "aaData" => $data_arr                                 
-        );*/
          
   }
 }

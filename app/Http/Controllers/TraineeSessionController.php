@@ -97,7 +97,8 @@ class TraineeSessionController extends Controller
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
         
-        if($traineeRecord['session_type'] == '2' && $traineeRecord['session_type']== '3' && $traineeRecord['session_type'] == '4'){
+        /*if($traineeRecord['session_type'] == '2' && $traineeRecord['session_type']== '3' && $traineeRecord['session_type'] == '4')*/
+        if($traineeRecord['session_type'] != '1'){
           return redirect('/write');
         }
 
@@ -140,7 +141,7 @@ class TraineeSessionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function writing(Request $request) {
-      $instructions = '<p>On the same page below you are going to see a set of 20 words. The words will be capitalized like <span class="emboss">THIS</span>. <p>Build a story of your own using these words. Fit in as many words in a sentence. This story is to help you remember the capitalized words. Try to make a picture of each storyline in your head. </p>';
+      $instructions = '<p>On the same page below you are going to see a set of 20 words. The words will be capitalized like <span class="emboss">THIS</span>. <p>Build a story of your own using these words. Try to use several of the words in each sentence. This story is to help you remember the capitalized words. Try to make a picture of each storyline in your head. </p>';
       
      if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee');
