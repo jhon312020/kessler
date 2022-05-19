@@ -12,10 +12,10 @@
     <div class="card mb-4">
       <div class="card-header">
         <i class="fas fa-table mr-1"></i>
-        Overview
+        Overview <a href="{{ route('overview.create')}}" class="btn btn-primary btn-block bg-gradient-primary float-right add-tab" ><i class="fas fa-plus">&nbsp;</i> Add Overview</a>
       </div>
       <br/>
-      <a href="{{ route('overview.create')}}" class="btn btn-primary btn-block bg-gradient-primary add-tab" ><i class="fas fa-plus">&nbsp;</i> Add Overview</a>
+      
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-bordered" id="overviewTable" width="100%" cellspacing="0">
@@ -32,7 +32,7 @@
               </tr>
             </tfoot>
             <tbody>
-              @foreach($overview as $overview)
+              <!-- @foreach($overview as $overview)
               <tr>
                 <td>{{$overview->overview}}</td>
                 <td>
@@ -44,7 +44,7 @@
                   </form>
                 </td>
               </tr>
-              @endforeach
+              @endforeach -->
             </tbody>
           </table>
           <div>

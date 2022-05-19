@@ -189,11 +189,11 @@ class TrainerController extends Controller
       $request->validate([
         'name'=>'required',
         'email'=>'required',
-        'category'=>'required|array|min:1',
-        'story'=>'required_if:1.*,in:category|min:1',
-        'contextual'=>'required_if:2.*,in:category|min:1',
-        'general'=>'required_if:3.*,in:category|min:1',
-        'booster'=>'required_if:4.*,in:category|min:1',
+        'category' => 'required|array|min:1',
+        'story'  => 'required_if:1.*,in:category|min:1',
+        'contextual'  => 'required_if:2.*,in:category|min:1',
+        'general'  => 'required_if:3.*,in:category|min:1',
+        'booster'  => 'required_if:4.*,in:category|min:1',
         //'category.0' =>'required|array',
        /* 'story' => 'array',
         'story.0'=>Rule::requiredIf(function() use ($request) {
