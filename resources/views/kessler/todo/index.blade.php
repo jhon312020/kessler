@@ -12,10 +12,10 @@
     <div class="card mb-4">
       <div class="card-header">
         <i class="fa fa-table mr-1"></i>
-        To-Do
+        To-Do <a href="{{ route('todo.create')}}" class="btn btn-primary btn-block bg-gradient-primary float-right add-tab" ><i class="fas fa-plus">&nbsp;</i> Add To-Do</a>
       </div>
       <br/>
-      <a href="{{ route('todo.create')}}" class="btn btn-primary btn-block bg-gradient-primary add-tab" ><i class="fas fa-plus">&nbsp;</i> Add To-Do</a>
+      
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-bordered" id="todoTable" width="100%" cellspacing="0">
