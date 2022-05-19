@@ -23,9 +23,9 @@
             </div>
             
             <div class="form-group" id="jsCategory">
-              <label class="small mb-1" for="category_type">Category Type</label>
-              <select class="form-control select2" id="category_type" name="session_type"  placeholder="Select Category Type">
-                <option value='' selected="selected">Category Type</option>
+              <label class="small mb-1" for="category_type">Session Type</label>
+              <select class="form-control select2" id="category_type" name="session_type"  placeholder="Select Session Type">
+                <option value='' selected="selected">Session Type</option>
                 
                 @foreach($categories as $id => $name)
                   <option value="{{ $id }}">{{ $name }}</option>
@@ -36,9 +36,9 @@
             
             @if(is_array($story[0]) && count($story[0])>0)
             <div class="form-group d-none session" id="jsStory">
-              <label class="small mb-1" for="session_number">Story Sessions</label>
+              <label class="small mb-1" for="session_number">Session Number</label>
               <select class="form-control select2 category" id="story_session" name="session_number"  placeholder="Select Story Session" disabled = "true">
-                <option value='' selected="selected">Story Sessions</option>
+                <option value='' selected="selected">Session Number</option>
                 
                 @foreach($story[0] as $story)
                   <option value="{{ $story }}">{{ $story }}</option>

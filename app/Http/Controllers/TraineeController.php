@@ -199,7 +199,7 @@ class TraineeController extends Controller
       $user = Auth::user();
       $types = Type::all();
       $boosters = Booster::all();
-      if($user->role != 'SA'){
+      if($user->role != 'SA' && $user->role != 'GA'){
         $categoryList = json_decode($user->category);
         $category = json_decode($user->sessions, true);
         $categories = Category::whereIn('id', $categoryList)->pluck('name','id');
@@ -210,8 +210,8 @@ class TraineeController extends Controller
         $boosterNo = collect($collect)->pluck('booster');
         $decode = json_decode($boosterNo,true);
         $boosterSession = $this->boosterSession;
-      }else{
-        return redirect($this->traineePage)->with('error','Super Admin cannot create trainees');
+      } else {
+        return redirect($this->traineePage)->with('error','Administrator cannot create trainees!!');
       }
       
       return view('kessler.trainee.create', array('types'=>$types, 'boosterRange'=>$this->boosterRange, 'story'=>$story,'contextual'=>$contextual,'general'=>$general,'boosterSession' => $boosterSession,'boosterNo'=>$boosterNo,'categories' => $categories,'totalSessions'=>$this->totalSessions,'boosters'=>$boosters));

@@ -50,7 +50,7 @@
           <div class="sb-sidenav-menu">
             <div class="nav">
               @foreach($sideMenu as $title=>$menu)
-                @if ($menu['role'] == '' || $menu['role'] == Auth::user()->role) 
+                @if ($menu['role'] == '' || in_array(Auth::user()->role, $menu['role'])) 
                   @if (array_key_exists('subitems', $menu))
                     <a class="nav-link collapsed"  data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts" title="{{$title}}">
                       <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>{{$title}}

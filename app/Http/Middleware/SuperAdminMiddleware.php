@@ -15,7 +15,8 @@ class SuperAdminMiddleware
      * @return mixed
      */
     public function handle(Request $request, Closure $next) {
-      if ($request->user() && $request->user()->role != 'SA') {
+      if ($request->user() && $request->user()->role != 'SA' && $request->user()->role != 'GA') {
+        echo 'came in';
         abort(403, 'Unauthorized action.');
       }
       return $next($request);

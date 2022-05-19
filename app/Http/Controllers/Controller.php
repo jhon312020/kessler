@@ -13,6 +13,7 @@ use App\Models\General;
 use App\Models\Contextual;
 use App\Models\Category;
 use DB;
+use Auth;
 
 class Controller extends BaseController
 {
@@ -22,20 +23,23 @@ class Controller extends BaseController
   private $booster = array();
   public $directionBoosterID;
   private $selectTable = array();
+  public $configValue = '';
   public function __construct() {
+  $roles = array('SA', 'GA');
   $sideMenu = array('dashboard'=>array('name'=>'Dashboard', 'url'=>'/dashboard','icon'=>'fa-tachometer-alt', 'role'=>''),
                 'trainee'=>array('name'=>'Trainee Information', 'url'=>'/trainee','icon'=>'fa-table', 'role'=>''), 
-                'trainer'=>array('name'=>'Trainer', 'url'=>'/trainer','icon'=>'fa-table', 'role'=>'SA'), 
-                'overview'=>array('name'=>'Overview', 'url'=>'/overview','icon'=>'fa-table', 'role'=>'SA'),
-                'instruction'=>array('name'=>'Instruction', 'url'=>'/instruction','icon'=>'fa-table', 'role'=>'SA'),
-                'story'=>array('name'=>'Story', 'url'=>'/story','icon'=>'fa-table', 'role'=>'SA'),
-                'word'=>array('name'=>'Word', 'url'=>'/word','icon'=>'fa-table', 'role'=>'SA'),
-                'type'=>array('name'=>'Session Type', 'url'=>'/type','icon'=>'fa-table', 'role'=>'SA'),
-                'booster'=>array('name'=>'Booster Category', 'url'=>'/booster','icon'=>'fa-table', 'role'=>'SA'),
+                'trainer'=>array('name'=>'Trainer', 'url'=>'/trainer','icon'=>'fa-table', 'role'=>$roles), 
+                'overview'=>array('name'=>'Overview', 'url'=>'/overview','icon'=>'fa-table', 'role'=>$roles),
+                'instruction'=>array('name'=>'Instruction', 'url'=>'/instruction','icon'=>'fa-table', 'role'=>$roles),
+                'story'=>array('name'=>'Story', 'url'=>'/story','icon'=>'fa-table', 'role'=>$roles),
+                'word'=>array('name'=>'Word', 'url'=>'/word','icon'=>'fa-table', 'role'=>$roles),
+                'type'=>array('name'=>'Session Type', 'url'=>'/type','icon'=>'fa-table', 'role'=>$roles),
+                'booster'=>array('name'=>'Booster Category', 'url'=>'/booster','icon'=>'fa-table', 'role'=>$roles),
                
-                'Booster Section'=>array('name'=>'Booster Session', 'url'=>'#', 'icon'=>'fa-columns', 'role'=>'SA', 'subitems'=>array('direction'=>array('name'=>'Direction', 'url'=>'/direction', 'icon'=>'fa-table', 'role'=>'SA',), 'shopping'=>array('name'=>'Shopping', 'url'=>'/shopping','icon'=>'fa-table','role'=>'SA'), 'to-do'=>array('name'=>'To-Do', 'url'=>'/todo','icon'=>'fa-table', 'role'=>'SA')))
+                'Booster Section'=>array('name'=>'Booster Session', 'url'=>'#', 'icon'=>'fa-columns', 'role'=>$roles, 'subitems'=>array('direction'=>array('name'=>'Direction', 'url'=>'/direction', 'icon'=>'fa-table', 'role'=>$roles), 'shopping'=>array('name'=>'Shopping', 'url'=>'/shopping','icon'=>'fa-table','role'=>$roles), 'to-do'=>array('name'=>'To-Do', 'url'=>'/todo','icon'=>'fa-table', 'role'=>$roles)))
               );
-
+    //$this->getRoleBasedConfig();
+    $this->configValue =  \Config::get('constants.GA');
     \View::share('sideMenu', $sideMenu);
     
   }
@@ -400,5 +404,16 @@ class Controller extends BaseController
 
       return compact('queryObj', 'totalRecordswithFilter', 'totalRecords');
          
+  }
+
+  function getRoleBasedConfig() {
+    $user = Auth::user();
+    $this->pr($user);
+    exit;
+    if ($user->role === "SA") {
+      $this->configValue =  \Config::get('constants.SA');
+    } else {
+      $this->configValue =  \Config::get('constants.GA');
+    }
   }
 }

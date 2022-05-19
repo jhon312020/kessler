@@ -13,9 +13,9 @@
       <div class="card-header">
         <i class="fa fa-table mr-1"></i>
         View Details of Trainee Information  
-        @if(Auth::user()->role == "TA")
+       {{--  @if(Auth::user()->role == "TA") --}}
         <a href="{{ route('trainee.create')}}" class="btn btn-primary btn-block bg-gradient-primary float-right add-tab" ><i class="fas fa-plus">&nbsp;</i> Add Trainee</a>
-        @endif
+        {{-- @endif --}}
       </div>
       <div class="card-body">
         <div class="form-group">
