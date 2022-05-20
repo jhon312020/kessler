@@ -57,7 +57,7 @@ class TraineeController extends Controller
       $oldDate = $request->get('oldDate');
       $date = $request->get('date');
       $queryObj = Trainee::select('id', 'trainee_id','session_pin', 'session_type', 'session_number', 'session_current_position', 'session_start_time', 'session_end_time', 'session_state','completed');
-      if ($user->role != "SA") {
+      if ($user->role != "SA" && $user->role != "GA") {
         $queryObj = $queryObj->where('trainer_id', $user->id);
         $traineesOfTrainer = Trainee::select('trainee_id')->distinct('trainee_id')->where('trainer_id', $user->id)->groupBy('trainee_id')->get();
       } else {
@@ -98,7 +98,7 @@ class TraineeController extends Controller
         // Fetch records
         $queryObj = with(clone $totalRecordswithFilters)->skip($start)->take($rowperpage);
 
-        if ($user->role != "SA") {
+        if ($user->role != "SA" && $user->role != "GA") {
           $queryObj = $queryObj->where('trainer_id', $user->id);
           $totalRecords = Trainee::select('*')->where('trainer_id',$user->id)->count();
           $totalRecordswithFilter = with(clone $totalRecordswithFilters)->where('trainer_id',$user->id)->count();

@@ -63,7 +63,7 @@ class AjaxController extends Controller
             $traineeTransaction['story_id'] = $trainee['session_number'];
             $traineeTransaction['word_id'] = $wordID;
             $traineeTransaction['session_pin'] = $trainee['session_pin'];
-            $traineeTransaction['category'] = $trainee['session_type'];
+            $traineeTransaction['category_id'] = $trainee['session_type'];
             $traineeTransaction['time_taken'] = $timeTaken;
             $traineeTransaction['round'] = $trainee['round'];
             $traineeTransaction['type'] = 'contextual';
@@ -178,7 +178,7 @@ class AjaxController extends Controller
             $traineeTransaction['story_id'] = $trainee['session_number'];
             $traineeTransaction['word_id'] = $wordID;
             $traineeTransaction['session_pin'] = $trainee['session_pin'];
-            $traineeTransaction['category'] = $trainee['session_type'];
+            $traineeTransaction['category_id'] = $trainee['session_type'];
             $traineeTransaction['time_taken'] = $timeTaken;
             $traineeTransaction['round'] = $trainee['round'];
             $traineeTransaction['type'] = 'contextual';
