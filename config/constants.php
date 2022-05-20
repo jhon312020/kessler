@@ -10,7 +10,9 @@ return[
 		'STORY'=>range(1, 4),
 		'WRITE'=>range(1, 4),
 		'GENERAL'=>range(1, 2),
-		'BOOSTER'=> 'Booster'
+		'BOOSTER'=> 'Booster',
+		'BOOSTER_RANGE'=>range(1,3),
+		'CATEGORY'=>range(1,4),
 	],
 	'SA'=>[
 		'DIRECTION_BOOSTER_ID'=>1,

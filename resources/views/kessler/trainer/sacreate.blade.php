@@ -27,7 +27,7 @@
                 <input type="email" class="form-control py-4" id="email" name="email" placeholder="Enter email address" value="{{old('email')}}" required>
               </div>
               <div class="form-group" >
-                <label class="small mb-1" for="category">Category Type</label><br>
+                <label class="small mb-1" for="category">Session Type</label><br>
                 <select class="form-control select2" id="jsCategory" name="category[]" multiple="multiple" >
                 @foreach($categories as $category)
                   <option value="{{ $category->id }}">{{ $category->name }}</option>
