@@ -31,6 +31,29 @@ class TrainerController extends Controller
       $this->middleware('auth');
       parent::__construct();
       //$this->selectSessions = (object)array('story'=>'', 'contextual'=>'', 'general'=>'', 'booster'=>'');
+      $this->trainerRequired = array (
+          'name'=>'required',
+          'email'=>'required|unique:users',
+        );
+      $this->trainerErrorMessages = array (
+          'name.required'=>'Please enter the name',
+          'email.required'=>'Please enter the email',
+          'email.unique'=>'The email ID already exists',
+        );
+      $this->trainereSaRequired = array (
+            'category' => 'required|array|min:1',
+            'story'  => 'required_if:1.*,in:category|min:1',
+            'contextual'  => 'required_if:2.*,in:category|min:1',
+            'general'  => 'required_if:3.*,in:category|min:1',
+            'booster'  => 'required_if:4.*,in:category|min:1'
+          );
+      $this->trainerSaErrorMessages = array (
+            'category.required'=>'Please select the category',
+            'story.required'=>'Please select the story session',
+            'contextual.required'=>'Please select the contextual session',
+            'general.required'=>'Please select the general session',
+            'booster.required'=>'Please select the booster session'
+          );
       $this->storySession = $this->configValue['STORY'];
       $this->writeSession = $this->configValue['WRITE'];
       $this->generalSession = $this->configValue['GENERAL'];
@@ -75,32 +98,20 @@ class TrainerController extends Controller
       //echo '<pre>'; print_r($request->all()); echo '</pre>'; //exit;
         $user = Auth::user();
         $session = [];
-        $required = array (
+        /*$required = array (
           'name'=>'required',
           'email'=>'required|unique:users',
-        );
-        $errorMessages = array (
+        );*/
+        /*$errorMessages = array (
           'name.required'=>'Please enter the name',
           'email.required'=>'Please enter the email',
           'email.unique'=>'The email ID already exists',
-        );
+        );*/
+        $required = array_merge($this->trainerRequired,  $this->trainereSaRequired);
+        $errorMessages = array_merge($this->trainerErrorMessages, $this->trainerSaErrorMessages);
         if ($user->role === "SA") {
           $this->configValue =  \Config::get('constants.SA');
-          $saRequired = array (
-            'story'  => 'required_if:1.*,in:category|min:1',
-            'contextual'  => 'required_if:2.*,in:category|min:1',
-            'general'  => 'required_if:3.*,in:category|min:1',
-            'booster'  => 'required_if:4.*,in:category|min:1'
-          );
-          $saErrorMessages = array (
-            'category.required'=>'Please select the category',
-            'story.required'=>'Please select the story session',
-            'contextual.required'=>'Please select the contextual session',
-            'general.required'=>'Please select the general session',
-            'booster.required'=>'Please select the booster session'
-          );
-          $required = array_merge($required, $saRequired);
-          $errorMessages = array_merge($errorMessages, $saErrorMessages);
+   
           $category = $request->get('category');
         
           $session[] = [
@@ -233,7 +244,15 @@ class TrainerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-      $request->validate([
+      $this->trainerRequired = array (
+          'name'=>'required',
+          'email'=>'required',
+      );
+      $required = array_merge($this->trainerRequired,$this->trainereSaRequired);
+      $errorMessages = array_merge($this->trainerErrorMessages, $this->trainerSaErrorMessages);
+      $request->validate($required, $errorMessages);
+      
+      /*$request->validate([
         'name'=>'required',
         'email'=>'required',
         'category' => 'required|array|min:1',
@@ -241,6 +260,16 @@ class TrainerController extends Controller
         'contextual'  => 'required_if:2.*,in:category|min:1',
         'general'  => 'required_if:3.*,in:category|min:1',
         'booster'  => 'required_if:4.*,in:category|min:1',
+        ],
+        [
+          'name.required'=>'Please enter the name',
+          'email.required'=>'Please enter the email',
+          'category.required'=>'Please select the category',
+          'story.required'=>'Please select the story session',
+          'contextual.required'=>'Please select the contextual session',
+          'general.required'=>'Please select the general session',
+          'booster.required'=>'Please select the booster session',
+        ]);*/
         //'category.0' =>'required|array',
        /* 'story' => 'array',
         'story.0'=>Rule::requiredIf(function() use ($request) {
@@ -258,16 +287,8 @@ class TrainerController extends Controller
         'booster.0'=>Rule::requiredIf(function() use ($request) {
                       return in_array(4, $request->category);
                     }),*/
-      ],
-      [
-          'name.required'=>'Please enter the name',
-          'email.required'=>'Please enter the email',
-          'category.required'=>'Please select the category',
-          'story.required'=>'Please select the story session',
-          'contextual.required'=>'Please select the contextual session',
-          'general.required'=>'Please select the general session',
-          'booster.required'=>'Please select the booster session',
-      ]);
+      
+      
       //dd($request->input());
       $session = [];
       $trainer = User::find($id);
@@ -375,7 +396,7 @@ class TrainerController extends Controller
           );
         }
         $response = array(
-          "action" => $action,
+          //"action" => $action,
           "draw" => intval($draw),
           "iTotalRecords" => $totalRecords,
           "iTotalDisplayRecords" => $totalRecordswithFilter,
