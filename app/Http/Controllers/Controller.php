@@ -24,11 +24,14 @@ class Controller extends BaseController
   public $directionBoosterID;
   private $selectTable = array();
   public $configValue = '';
+  public $commonConfigValue = '';
   public $adminRoles = '';
   public function __construct() {
-  $this->adminRoles = \Config::get('constants.ADMIN_ROLES');
-  $sideMenu = array('dashboard'=>array('name'=>'Dashboard', 'url'=>'/dashboard','icon'=>'fa-tachometer-alt', 'role'=>''),
-                'trainee'=>array('name'=>'Trainee Information', 'url'=>'/trainee','icon'=>'fa-table', 'role'=>''), 
+    $this->configValue =  \Config::get('constants.GA');
+    $this->commonConfigValue =  \Config::get('constants.COMMON');
+    $this->adminRoles = $this->commonConfigValue['ADMIN_ROLES'];
+    $sideMenu = array('dashboard'=>array('name'=>'Dashboard', 'url'=>'/dashboard','icon'=>'fa-tachometer-alt', 'role'=>''),
+                  'trainee'=>array('name'=>'Trainee Information', 'url'=>'/trainee','icon'=>'fa-table', 'role'=>''), 
                 'trainer'=>array('name'=>'Trainer', 'url'=>'/trainer','icon'=>'fa-table', 'role'=>$this->adminRoles), 
                 'overview'=>array('name'=>'Overview', 'url'=>'/overview','icon'=>'fa-table', 'role'=>$this->adminRoles),
                 'instruction'=>array('name'=>'Instruction', 'url'=>'/instruction','icon'=>'fa-table', 'role'=>$this->adminRoles),
@@ -40,7 +43,7 @@ class Controller extends BaseController
                 'Booster Section'=>array('name'=>'Booster Session', 'url'=>'#', 'icon'=>'fa-columns', 'role'=>$this->adminRoles, 'subitems'=>array('direction'=>array('name'=>'Direction', 'url'=>'/direction', 'icon'=>'fa-table', 'role'=>$this->adminRoles), 'shopping'=>array('name'=>'Shopping', 'url'=>'/shopping','icon'=>'fa-table','role'=>$this->adminRoles), 'to-do'=>array('name'=>'To-Do', 'url'=>'/todo','icon'=>'fa-table', 'role'=>$this->adminRoles)))
               );
     //$this->getRoleBasedConfig();
-    $this->configValue =  \Config::get('constants.GA');
+    
     \View::share('sideMenu', $sideMenu);
     
   }
@@ -99,12 +102,12 @@ class Controller extends BaseController
         $modelObj = new Word();
       break;
     }
-    //$this->pr($modelObj);
-    //$this->pr($conditions);
-    //echo $selectFields;
+    // $this->pr($modelObj);
+    // $this->pr($conditions);
+    // echo $selectFields;
     $wordObj = $modelObj::where($conditions)->get($selectFields);
-    //$this->pr($wordObj->toArray()); 
-    //exit;
+    // $this->pr($wordObj->toArray()); 
+    // exit;
     //
   /*} */
     //dd($wordObj);    
@@ -354,7 +357,7 @@ class Controller extends BaseController
     $selectFields = 'word';
 
     try {
-      switch ($transactionDetail['category']) {
+      switch ($transactionDetail['category_id']) {
         case 4:
           $modelObj = new Task();
           $selectFields = $this->wordsAs;
@@ -383,6 +386,7 @@ class Controller extends BaseController
     }
     //dd($modelObj);
     $wordObj = $modelObj::where($conditions)->firstOrFail($selectFields);
+    //$this->pr($wordObj);
     return $wordObj;
   }
   

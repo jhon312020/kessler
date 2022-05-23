@@ -115,7 +115,9 @@
                 <td>{{$trainee->session_state}}</td>
                 @endif
                 <td>
+                   @if(Auth::user()->role == "TA")
                    <a href="{{ route('trainee.add', $trainee->id)}}" class="btn btn-primary" role="button" title="Add"><i class="fas fa-plus" title="Add">&nbsp;</i></a>
+                   @endif
                    @if ($trainee->completed == 0)
                   <a href="{{ route('trainee.edit', $trainee->id)}}" class="btn btn-primary" role="button" title="Edit"><i class="fas fa-edit" title="Edit">&nbsp;</i></a>
                    @endif

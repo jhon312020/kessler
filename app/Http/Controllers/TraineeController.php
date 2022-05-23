@@ -34,13 +34,13 @@ class TraineeController extends Controller
     public function __construct() {
       $this->middleware('auth');
       parent::__construct();
-      $this->totalSessions = \Config::get('constants.RANGE');
-      $this->totalSessions[] = 'Booster';
-      $this->boosterRange = range(1, 3);
+      $this->totalSessions = $this->commonConfigValue['RANGE'];
+      $this->totalSessions[] = $this->commonConfigValue['BOOSTER'];
+      $this->boosterRange = $this->commonConfigValue['BOOSTER_RANGE'];
       $this->traineeCurrentPosition = (object) array('word_id'=>'', 'position'=>'tale', 'user_word_id'=>0, 'sentence'=>0);
-      $this->minSession = \Config::get('constants.MIN_SESSION_NO');
-      $this->maxSession = \Config::get('constants.MAX_SESSION_NO');
-      $this->boosterSession = \Config::get('constants.BOOSTER');
+      $this->minSession = $this->commonConfigValue['MIN_SESSION_NO'];
+      $this->maxSession = $this->commonConfigValue['MAX_SESSION_NO'];
+      $this->boosterSession = $this->commonConfigValue['BOOSTER'];
 
     }
 
@@ -91,7 +91,7 @@ class TraineeController extends Controller
 
         // Total records
 
-        $totalRecordswithFilters = Trainee::select('*')->where(function($search) use ($searchValue){
+        $totalRecordswithFilters = Trainee::select('*')->where(function($search) use ($searchValue) {
           $search->orWhere('trainee_id', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_pin', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_type', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_number', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_start_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_end_time', 'like', '%' .$searchValue . '%')->orWhere('trainees.session_state', 'like', '%' .$searchValue . '%');
         });
         
@@ -114,11 +114,11 @@ class TraineeController extends Controller
 
         $trainees = $queryObj->get();
         $data_arr =  array();
-        
+        $session_types = Category::pluck('name','id');
         foreach ($trainees as $records) {
           $trainee_id = $records->trainee_id;
           $session_pin = $records->session_pin;
-          $session_type = $records->session_type;
+          $session_type = $session_types[$records->session_type];
           $session_number = $records->session_number;
           $session_start_time = '';
           $session_end_time = '';
@@ -136,7 +136,7 @@ class TraineeController extends Controller
           
           if ($records->completed === 1) {
             $session_state = $records->session_state;
-          }else{
+          } else {
             $session_state = $records->session_state;
           }
           $add = route('trainee.add', $records->id);
@@ -147,8 +147,11 @@ class TraineeController extends Controller
           $approve = url('trainee/approve', $records->id);
           $csrf = csrf_token();
           $id = $records->id;
+          $action = '';
           
-          $action =  "<a href='$add' class='btn btn-primary' role='button' title='Add'><i class='fas fa-plus' title='Add'></i></a>&nbsp;";
+          if ($user->role == "TA") {
+             $action =  "<a href='$add' class='btn btn-primary' role='button' title='Add'><i class='fas fa-plus' title='Add'></i></a>&nbsp;";
+          }
           $action .= "<a href='$view' class='btn btn-primary' role='button' title='View'><i class='fas fa-eye' title='View'></i></a>&nbsp;";
            if (($records->session_type >= 2  || $records->session_type <= 4) ) {
             $traineeCurrentPosition = json_decode($records->session_current_position);
@@ -199,7 +202,7 @@ class TraineeController extends Controller
       $user = Auth::user();
       $types = Type::all();
       $boosters = Booster::all();
-      if($user->role != 'SA' && $user->role != 'GA'){
+      if($user->role != 'SA' && $user->role != 'GA') {
         $categoryList = json_decode($user->category);
         $category = json_decode($user->sessions, true);
         $categories = Category::whereIn('id', $categoryList)->pluck('name','id');
@@ -675,7 +678,7 @@ class TraineeController extends Controller
         if ($transactionID) { 
           try {
             $transactionDetail = TraineeTransaction::where('id', $transactionID)->firstOrFail();
-            
+            //$this->pr($transactionDetail); 
             $wordObj = $this->getWord($transactionDetail);
             if ($wordObj['word'] === $answer) {
               if ($transactionDetail->type == 'contextual') {

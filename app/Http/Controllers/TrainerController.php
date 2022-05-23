@@ -25,12 +25,10 @@ class TrainerController extends Controller
      * @return void
      */
     private $pageTrainer = '/trainer';
-    var $storySession = array();
-    protected $userInfo;
     protected $trainerRequired;
     protected $trainerErrorMessages;
     protected $trainerSARequired;
-    protected $trainerSaErrorMessages;
+    protected $trainerSAErrorMessages;
     public function __construct() {
       $this->middleware('auth');
       parent::__construct();
@@ -58,9 +56,9 @@ class TrainerController extends Controller
             'general.required'=>'Please select the general session',
             'booster.required'=>'Please select the booster session'
           );
-      $this->storySession = $this->configValue['STORY'];
-      $this->writeSession = $this->configValue['WRITE'];
-      $this->generalSession = $this->configValue['GENERAL'];
+      // $this->storySession = $this->configValue['STORY'];
+      // $this->writeSession = $this->configValue['WRITE'];
+      // $this->generalSession = $this->configValue['GENERAL'];
     }
     /**
      * Display a listing of the resource.
@@ -79,9 +77,9 @@ class TrainerController extends Controller
      */
     public function create() {
       $categories = Category::all();
-      $storySession = $this->storySession;
-      $writeSession = $this->writeSession;
-      $generalSession = $this->generalSession;
+      $storySession = $this->configValue['STORY'];
+      $writeSession = $this->configValue['WRITE'];
+      $generalSession = $this->configValue['GENERAL'];
       $boosterSession = Booster::all();
       $user = Auth::user();
       if ($user->role === "SA") {
@@ -117,12 +115,12 @@ class TrainerController extends Controller
         $required = $this->trainerRequired;
         $errorMessages = $this->trainerErrorMessages;
         $request->validate($required, $errorMessages);
-        $category = $this->configValue['CATEGORY']; 
+        $category = $this->commonConfigValue['CATEGORY']; 
         $session[] = array (
           'stories' => $this->configValue['STORY'],
           'contextual' => $this->configValue['WRITE'],
           'general' => $this->configValue['GENERAL'],
-          'booster' => $this->configValue['BOOSTER_RANGE']
+          'booster' => $this->commonConfigValue['BOOSTER_RANGE']
         );
       }
       $password = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTVWXYZabcdefghijklmnopqrstvwxyz"), 0, 8);

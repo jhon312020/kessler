@@ -27,8 +27,9 @@ class AjaxController extends Controller
     private $tryAgainHtml = "<span class='wrong'>Your response is incorrect.</span> Please try again.<br/>";
     const ALTERNATETEXT = 'abcxyz';
     public function __construct() {
+      parent::__construct();
       $this->traineeCurrentPosition = (object) array('word_id'=>'', 'position'=>'', 'user_word_id'=>0, 'sentence'=>0);
-      $this->directionBoosterID = \Config::get('constants.DIRECTION_BOOSTER_ID');
+      $this->directionBoosterID = $this->commonConfigValue['DIRECTION_BOOSTER_ID'];
     }
     /**
      * Store the recorded list of words

@@ -30,13 +30,14 @@ class TraineeSessionController extends Controller
     private $recallRem = 'msmt.sessions.recallwords.remember';
 
     public function __construct() {
+      parent::__construct();
       $this->traineeCurrentPosition = (object)array('word_id'=>'', 'position'=>'', 'user_word_id'=>'', 'sentence'=>'');
       $this->sessionStartTime = (object)array('roundOne'=>'', 'roundTwo'=>'');
       $this->sessionEndTime = (object)array('roundOne'=>'', 'roundTwo'=>'');
-      $this->directionBoosterID = \Config::get('constants.DIRECTION_BOOSTER_ID');
-      $this->minSession = \Config::get('constants.MIN_SESSION_NO');
-      $this->minWrite = \Config::get('constants.MIN_WRITE_NO');
-      $this->maxSession = \Config::get('constants.MAX_SESSION_NO');
+      $this->directionBoosterID = $this->commonConfigValue['DIRECTION_BOOSTER_ID'];
+      $this->minSession = $this->commonConfigValue['MIN_SESSION_NO'];
+      $this->minWrite = $this->commonConfigValue['MIN_WRITE_NO'];
+      $this->maxSession =$this->commonConfigValue['MAX_SESSION_NO'];
     }
     /**
      * Show the application dashboard.
@@ -147,11 +148,11 @@ class TraineeSessionController extends Controller
         $trainee = $request->session()->get('trainee');
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
 
-          if($traineeRecord['session_type'] == '1' && $traineeRecord['session_type'] != '4'){
+          if($traineeRecord['session_type'] == '1' && $traineeRecord['session_type'] != '4') {
             return redirect('/sessions');
           }
           
-        if($traineeRecord){
+        if($traineeRecord) {
           $traineeCurrentPosition = $traineeRecord->session_current_position !== null?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
           $wordStory = $this->getWords($traineeRecord);
           $words = $wordStory->where('question', '<>', 'D')->pluck('word')->toArray();
@@ -163,7 +164,6 @@ class TraineeSessionController extends Controller
           } else {
             $allWords = $wordStory->pluck('word')->toArray();
           }
-          
           if ($traineeCurrentPosition->position === 'review' || $traineeCurrentPosition->position === 'tale' ) {
             return redirect('/review');
           } else if ($traineeCurrentPosition->position === 'recall' ) {
@@ -385,6 +385,7 @@ class TraineeSessionController extends Controller
         $data = $request->only('words');
         $traineeTransaction['answer'] = json_encode($data);
         $traineeTransaction['trainee_id'] = $trainee['trainee_id'];
+        $traineeTransaction['category_id'] = $trainee['session_type'];
         $traineeTransaction['story_id'] = $trainee['session_number'];
         $traineeTransaction['session_pin'] = $trainee['session_pin'];
         $traineeTransaction['round'] = $trainee['round'];
@@ -431,6 +432,7 @@ class TraineeSessionController extends Controller
           
           $traineeTransaction['answer'] = json_encode($data);
           $traineeTransaction['trainee_id'] = $trainee['trainee_id'];
+          $traineeTransaction['category_id'] = $trainee['session_type'];
           $traineeTransaction['story_id'] = $trainee['session_number'];
           $traineeTransaction['session_pin'] = $trainee['session_pin'];
           $traineeTransaction['round'] = $trainee['round'];
