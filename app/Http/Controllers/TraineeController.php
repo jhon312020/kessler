@@ -326,7 +326,7 @@ class TraineeController extends Controller
     public function view($id) {  
       $trainee = Trainee::find($id);
       $user = Auth::user();
-      if ($trainee->trainer_id == $user->id || $user->role == 'SA') {
+      if ($trainee->trainer_id == $user->id || in_array($user->role, $this->adminRoles)) {
         $trainer_traines = Trainee::where('trainer_id', $user->id)->pluck('id', 'id')->all();
         $trainee = Trainee::find($id);
         $roundOneReport = array();
@@ -342,7 +342,7 @@ class TraineeController extends Controller
         $traineeID = $traineeReport->trainee_id;
         $sessionNumber = $traineeReport->session_number;
 
-        if ($trainee && ($user->role == 'SA' || in_array($trainee->id, $trainer_traines))) {
+        if ($trainee && (in_array($user->role, $this->adminRoles) || in_array($trainee->id, $trainer_traines))) {
           $storyWords = $this->getWordAndIDObj($trainee);
 
           $queryObj = TraineeTransaction::select('id', 'word_id', 'trainee_id', 'session_pin', 'type', 'answer', 'correct_or_wrong','round','time_taken')->where('trainee_id', $trainee->trainee_id)->where('session_pin', $trainee->session_pin);
@@ -484,7 +484,7 @@ class TraineeController extends Controller
     public function review($id) {
       $trainee = Trainee::find($id);
       $user = Auth::user();
-      if ($trainee->trainer_id == $user->id || $user->role == 'SA') {
+      if ($trainee->trainer_id == $user->id || in_array($user->role, $this->adminRoles)) {
         $traineeStory = TraineeStory::select('id', 'trainee_id', 'story_id', 'session_pin', 'original_story','round')->where('story_id', $trainee->session_number)->where('session_pin', $trainee->session_pin)->where('round', $trainee->round)->first();
         return view('kessler.trainee.approve', compact('traineeStory'));
       } else {
@@ -564,7 +564,7 @@ class TraineeController extends Controller
       $trainee = Trainee::find($id);
       $user = Auth::user();
       //dd($user);
-      if ($trainee->trainer_id == $user->id || $user->role == 'SA') {
+      if ($trainee->trainer_id == $user->id || in_array($user->role, $this->adminRoles)) {
         $types = Type::all();
         $boosters = Booster::all();
         $categoryList = json_decode($user->category);
@@ -594,7 +594,7 @@ class TraineeController extends Controller
     public function report($id) {
       $trainee = Trainee::find($id);
       $user = Auth::user();
-      if ($trainee->trainer_id == $user->id || $user->role == 'SA') {
+      if ($trainee->trainer_id == $user->id || in_array($user->role, $this->adminRoles)) {
         $traineeReport = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed','session_start_time', 'session_end_time')->where('id', $trainee->id)->first();
       $traineeID = $traineeReport->trainee_id;
       $sessionNumber = $traineeReport->session_number;

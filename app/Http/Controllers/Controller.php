@@ -24,19 +24,20 @@ class Controller extends BaseController
   public $directionBoosterID;
   private $selectTable = array();
   public $configValue = '';
+  public $adminRoles = '';
   public function __construct() {
-  $roles = array('SA', 'GA');
+  $this->adminRoles = \Config::get('constants.ADMIN_ROLES');
   $sideMenu = array('dashboard'=>array('name'=>'Dashboard', 'url'=>'/dashboard','icon'=>'fa-tachometer-alt', 'role'=>''),
                 'trainee'=>array('name'=>'Trainee Information', 'url'=>'/trainee','icon'=>'fa-table', 'role'=>''), 
-                'trainer'=>array('name'=>'Trainer', 'url'=>'/trainer','icon'=>'fa-table', 'role'=>$roles), 
-                'overview'=>array('name'=>'Overview', 'url'=>'/overview','icon'=>'fa-table', 'role'=>$roles),
-                'instruction'=>array('name'=>'Instruction', 'url'=>'/instruction','icon'=>'fa-table', 'role'=>$roles),
-                'story'=>array('name'=>'Story', 'url'=>'/story','icon'=>'fa-table', 'role'=>$roles),
-                'word'=>array('name'=>'Word', 'url'=>'/word','icon'=>'fa-table', 'role'=>$roles),
-                'type'=>array('name'=>'Session Type', 'url'=>'/type','icon'=>'fa-table', 'role'=>$roles),
-                'booster'=>array('name'=>'Booster Category', 'url'=>'/booster','icon'=>'fa-table', 'role'=>$roles),
+                'trainer'=>array('name'=>'Trainer', 'url'=>'/trainer','icon'=>'fa-table', 'role'=>$this->adminRoles), 
+                'overview'=>array('name'=>'Overview', 'url'=>'/overview','icon'=>'fa-table', 'role'=>$this->adminRoles),
+                'instruction'=>array('name'=>'Instruction', 'url'=>'/instruction','icon'=>'fa-table', 'role'=>$this->adminRoles),
+                'story'=>array('name'=>'Story', 'url'=>'/story','icon'=>'fa-table', 'role'=>$this->adminRoles),
+                'word'=>array('name'=>'Word', 'url'=>'/word','icon'=>'fa-table', 'role'=>$this->adminRoles),
+                'type'=>array('name'=>'Session Type', 'url'=>'/type','icon'=>'fa-table', 'role'=>$this->adminRoles),
+                'booster'=>array('name'=>'Booster Category', 'url'=>'/booster','icon'=>'fa-table', 'role'=>$this->adminRoles),
                
-                'Booster Section'=>array('name'=>'Booster Session', 'url'=>'#', 'icon'=>'fa-columns', 'role'=>$roles, 'subitems'=>array('direction'=>array('name'=>'Direction', 'url'=>'/direction', 'icon'=>'fa-table', 'role'=>$roles), 'shopping'=>array('name'=>'Shopping', 'url'=>'/shopping','icon'=>'fa-table','role'=>$roles), 'to-do'=>array('name'=>'To-Do', 'url'=>'/todo','icon'=>'fa-table', 'role'=>$roles)))
+                'Booster Section'=>array('name'=>'Booster Session', 'url'=>'#', 'icon'=>'fa-columns', 'role'=>$this->adminRoles, 'subitems'=>array('direction'=>array('name'=>'Direction', 'url'=>'/direction', 'icon'=>'fa-table', 'role'=>$this->adminRoles), 'shopping'=>array('name'=>'Shopping', 'url'=>'/shopping','icon'=>'fa-table','role'=>$this->adminRoles), 'to-do'=>array('name'=>'To-Do', 'url'=>'/todo','icon'=>'fa-table', 'role'=>$this->adminRoles)))
               );
     //$this->getRoleBasedConfig();
     $this->configValue =  \Config::get('constants.GA');

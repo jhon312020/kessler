@@ -27,6 +27,7 @@ return[
 		'GENERAL'=>range(1, 2),
 		'BOOSTER'=> 'Booster',
 		'CATEGORY'=>range(1,4),
-	]
+	],
+	'ADMIN_ROLES'=>['SA', 'GA']
 ];
 ?>
