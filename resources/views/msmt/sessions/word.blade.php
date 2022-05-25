@@ -85,10 +85,11 @@
         writeUp = writeUp.slice(subStringLen);
         console.log('findFirstPosition',writeUp);
         console.log('findFirstPosition',writeUp.length);
-        if (writeup.length > subStringLen) {
+        console.log('subStringLen',subStringLen);
+        if (writeup.length >= subStringLen) {
           return findFirstPosition(writeUp, findWord, subStringLen);
         } 
-        return -1;
+        return position;
       }
     }
     $(document).on("keyup", "form", function(event) { 
@@ -104,27 +105,33 @@
           // if (writeup.indexOf(wordCombination) > -1) {
           //   wordPosition = findFirstPosition(writeup, wordCombination);
           // }
+          
           startWordCounter = parseInt(wordPosition);
           if (startWordCounter > 0) {
-            startOfWord = writeup[wordPosition] ;
+            startOfWord = writeup[wordPosition];
           } else {
             startOfWord = '';
           }
           if (wordPosition > -1) {
             if (wordPosition) {
                matchingCombo = ' ';
+               replaceCombo = ' ';
             } else {
               matchingCombo = '';
+              replaceCombo = '';
             }
             if (writeup.indexOf(wordCombination+'.') > -1) {
               wordPosition = writeup.indexOf(wordCombination+'.');
-              matchingCombo += wordCombination+'.';
+              matchingCombo += wordCombination+'\\.';
+              replaceCombo +=  wordCombination+'.';
             } else if (writeup.indexOf(wordCombination+',') > -1) {
                wordPosition = writeup.indexOf(wordCombination+',');
                matchingCombo += wordCombination+',';
+               replaceCombo +=  wordCombination+',';
             } else if (writeup.indexOf(wordCombination+' ') > -1) {
                wordPosition = writeup.indexOf(wordCombination+' ');
                matchingCombo += wordCombination+' ';
+               replaceCombo +=  wordCombination+' ';
             }
           }
           subStringLen = parseInt(wordPosition) + parseInt(wordCombination.length);
@@ -133,14 +140,16 @@
             subStringLen = parseInt(wordPosition) + parseInt(wordCombination.length);
             //For left user types lefthand in this case word left is getting matched so restting the substring
             if ((startOfWord == '' || startOfWord == ' ') && (endOfWord =='.' || endOfWord == ',' || endOfWord == ' ' || endOfWord == '') && typeof(endOfWord) !== 'undefined') {
-              console.log('matchingCombo', matchingCombo);
+              console.log("updateWriteUp", updateWriteUp);
+              console.log('matchingCombo', matchingCombo, 'wordPosition',wordPosition);
               $('#jsWord-'+counter).addClass('strikeThrough');
               var regExp = new RegExp(matchingCombo,"i");
-              updateWriteUp = updateWriteUp.replace(regExp, matchingCombo);
+              updateWriteUp = updateWriteUp.replace(regExp, replaceCombo);
               userUsedWordCount++;
           } else {
             var regExp = new RegExp(allWords[counter],"gi");
             updateWriteUp = updateWriteUp.replace(regExp, allWords[counter].toLowerCase());
+            console.log(updateWriteUp);
           }
         } 
       }
