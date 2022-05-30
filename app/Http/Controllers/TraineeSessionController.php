@@ -97,7 +97,6 @@ class TraineeSessionController extends Controller
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee'); 
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
-        
         /*if($traineeRecord['session_type'] == '2' && $traineeRecord['session_type']== '3' && $traineeRecord['session_type'] == '4')*/
         if($traineeRecord['session_type'] != '1'){
           return redirect('/write');
