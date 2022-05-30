@@ -141,6 +141,24 @@ class TraineeSessionController extends Controller
      * Story writing by trainee
      * @return \Illuminate\Http\Response
      */
+    /*public function controlSession(Request $request){
+      $instructions = '<p>You are going to see a story, which will stay on the screen for a set period of time. Please pay careful attention, as we will be asking you questions about it later. </p>'
+
+      if ($request->session()->has('trainee')) {
+        $trainee = $request->session()->get('trainee');
+        $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
+
+          if($traineeRecord['session_type'] =='5') {
+            return redirect('/controlsessions');
+          }
+
+      
+      }    
+    }*/
+    /**
+     * Story writing by trainee
+     * @return \Illuminate\Http\Response
+     */
     public function writing(Request $request) {
       $instructions = '<p>On the same page below you are going to see a set of 20 words. The words will be capitalized like <span class="emboss">THIS</span>. <p>Build a story of your own using these words. Try to use several of the words in each sentence. This story is to help you remember the capitalized words. Try to make a picture of each storyline in your head. </p>';
       

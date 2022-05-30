@@ -74,6 +74,7 @@
               </select>
              </div>
             @endif
+            
             @if(is_array($boosterSes) && count($boosterSes) > 0)
             <div class="form-group" id="jsBooster">
                <label class="small mb-1" for="booster">Booster Sessions</label>
@@ -84,6 +85,20 @@
                 @endforeach;
               </select>
             </div>
+            @endif
+
+            @if(is_array($other[0]) && count($other[0]) > 0)
+            <div class="form-group" id="jsGeneral">
+              <label class="small mb-1" for="general_session">Control Sessions</label>
+              <select class="form-control select2 category" id="general_session" name="general[]" multiple="multiple" placeholder="Select General Session">
+                <option value='' >Control Sessions</option>
+                
+                @foreach($other[0] as $other)
+                  <option value="{{ $other }}" selected="selected">{{ $other }}</option>
+                @endforeach;
+              
+              </select>
+             </div>
             @endif
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-sync">&nbsp;</i> Update</button>

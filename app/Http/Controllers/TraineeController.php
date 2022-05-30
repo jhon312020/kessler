@@ -211,13 +211,14 @@ class TraineeController extends Controller
         $contextual = collect($collect)->pluck('contextual');
         $general = collect($collect)->pluck('general');
         $boosterNo = collect($collect)->pluck('booster');
+        $other = collect($collect)->pluck('other');
         $decode = json_decode($boosterNo,true);
         $boosterSession = $this->boosterSession;
       } else {
         return redirect($this->traineePage)->with('error','Administrator cannot create trainees!!');
       }
       
-      return view('kessler.trainee.create', array('types'=>$types, 'boosterRange'=>$this->boosterRange, 'story'=>$story,'contextual'=>$contextual,'general'=>$general,'boosterSession' => $boosterSession,'boosterNo'=>$boosterNo,'categories' => $categories,'totalSessions'=>$this->totalSessions,'boosters'=>$boosters));
+      return view('kessler.trainee.create', array('types'=>$types, 'boosterRange'=>$this->boosterRange, 'story'=>$story,'contextual'=>$contextual,'general'=>$general,'boosterSession' => $boosterSession,'other'=>$other,'boosterNo'=>$boosterNo,'categories' => $categories,'totalSessions'=>$this->totalSessions,'boosters'=>$boosters));
     }
 
     /**
@@ -577,11 +578,12 @@ class TraineeController extends Controller
         $story = collect($collect)->pluck('stories');
         $contextual = collect($collect)->pluck('contextual');
         $general = collect($collect)->pluck('general');
+        $other = collect($collect)->pluck('other');
         $boosterNo = collect($collect)->pluck('booster');
         $decode = json_decode($boosterNo,true);
         $boosterSession = $this->boosterSession;  
         
-        return view('kessler.trainee.add', array('trainee'=>$trainee, 'types'=>$types, 'boosterRange'=>$this->boosterRange, 'story'=>$story,'contextual'=>$contextual,'general'=>$general,'boosterSession' => $boosterSession,'boosterNo'=>$boosterNo,'categories' => $categories,'totalSessions'=>$this->totalSessions,'boosters'=>$boosters));
+        return view('kessler.trainee.add', array('trainee'=>$trainee, 'types'=>$types, 'boosterRange'=>$this->boosterRange, 'story'=>$story,'contextual'=>$contextual,'general'=>$general,'other'=>$other,'boosterSession' => $boosterSession,'boosterNo'=>$boosterNo,'categories' => $categories,'totalSessions'=>$this->totalSessions,'boosters'=>$boosters));
 
       } else {
           return view($this->error);

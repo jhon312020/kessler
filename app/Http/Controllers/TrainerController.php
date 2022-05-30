@@ -81,13 +81,14 @@ class TrainerController extends Controller
       $writeSession = $this->configValue['WRITE'];
       $generalSession = $this->configValue['GENERAL'];
       $boosterSession = Booster::all();
+      $otherSession = $this->configValue['OTHER'];
       $user = Auth::user();
       if ($user->role === "SA") {
         $viewName= 'kessler.trainer.sacreate';
       } else {
         $viewName= 'kessler.trainer.create';
       }
-      return view($viewName, compact('categories','storySession','writeSession','generalSession','boosterSession'));
+      return view($viewName, compact('categories','storySession','writeSession','generalSession','boosterSession','otherSession'));
     }
 
     /**
@@ -110,6 +111,7 @@ class TrainerController extends Controller
           'contextual' => $request->get('contextual'),
           'general' => $request->get('general'),
           'booster' => $request->get('booster'),
+          'other' => $request->get('other'),
         ];
       } else {
         $required = $this->trainerRequired;
@@ -120,7 +122,8 @@ class TrainerController extends Controller
           'stories' => $this->configValue['STORY'],
           'contextual' => $this->configValue['WRITE'],
           'general' => $this->configValue['GENERAL'],
-          'booster' => $this->commonConfigValue['BOOSTER_RANGE']
+          'booster' => $this->commonConfigValue['BOOSTER_RANGE'],
+          'other' => $this->configValue['OTHER']
         );
       }
       $password = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTVWXYZabcdefghijklmnopqrstvwxyz"), 0, 8);
@@ -166,14 +169,16 @@ class TrainerController extends Controller
         $story = collect($collect)->pluck('stories');
         $contextual = collect($collect)->pluck('contextual');
         $general = collect($collect)->pluck('general');
+        $other = collect($collect)->pluck('other');
         $boosterNo = collect($collect)->pluck('booster')->toArray();
+        
         $boosterSes = [];
         if (!is_null($boosterNo[0]) && count($boosterNo[0]) > 0) {
           $boosterSes = Booster::whereIn('id',$boosterNo[0])->pluck('category','id')->toArray();
         } else {
           $boosterSes = [];
         }
-        return view('kessler.trainer.saedit', compact('trainer','categories','story','contextual','general','boosterSes','boosters'));
+        return view('kessler.trainer.saedit', compact('trainer','categories','story','contextual','general','other','boosterSes','boosters'));
       } else {
         return view('kessler.trainer.edit', compact('trainer'));
       }

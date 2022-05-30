@@ -5,12 +5,14 @@ return[
 		'STORY'=>range(1, 4),
 		'WRITE'=>range(1, 4),
 		'GENERAL'=>range(1, 2),
+		'OTHER'=>range(1,10),
 	],
 	'SA'=>[
 		'RANGE'=>range(1, 18),
 		'STORY'=>range(1, 8),
 		'WRITE'=>range(1, 8),
 		'GENERAL'=>range(1, 2),
+		'OTHER'=>range(1,10),
 	],
 	'COMMON'=>[
 		'ADMIN_ROLES'=>['SA', 'GA'],

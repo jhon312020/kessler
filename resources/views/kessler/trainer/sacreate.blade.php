@@ -76,6 +76,15 @@
                 </select>
               </div>
               
+              <div class="form-group d-none session" id="jsOther">
+                <label class="small mb-1" for="other">Control sessions</label>
+                <select class="form-control select2" id="jsOtherIn" name="other[]" multiple="multiple">
+                  @foreach($otherSession as $other)
+                    <option value="{{ $other }}">{{ $other }}</option>
+                  @endforeach;
+                </select>
+              </div>
+
               </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-plus">&nbsp;</i> Add</button>
@@ -135,6 +144,13 @@
           $('#jsBoosterIn').attr('required',true);
           $('#jsBooster').removeClass('d-none');
           $('#jsBoosterIn').attr('disabled',false);
+          break;
+
+        //case general:
+        case '5':
+          $('#jsOtherIn').attr('required',true);
+          $('#jsOther').removeClass('d-none');
+          $('#jsOtherIn').attr('disabled',false);
           break;
       }
     }  
