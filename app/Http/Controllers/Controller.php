@@ -12,6 +12,7 @@ use App\Models\Booster;
 use App\Models\General;
 use App\Models\Contextual;
 use App\Models\Category;
+use App\Models\ControlWord;
 use DB;
 use Auth;
 
@@ -81,6 +82,10 @@ class Controller extends BaseController
     //dd($res) DB::table($names[0]);
       //dd($name);
     switch ($trainee['session_type']) {
+      case 5:
+        $modelObj = new ControlWord();
+        $selectFields = ['answers as word','questions'];
+      break;
       case 4:
         $modelObj = new Task();
         $selectFields = ['task as word', 'question', 'words'];
@@ -128,6 +133,11 @@ class Controller extends BaseController
     $selectField2 = 'id';
 
     switch ($trainee['session_type']) {
+      case 5:
+        $modelObj = new ControlWord();
+        $selectField1 = 'answers as word';
+        $selectField2 = 'id';
+      break;
       case 4:
         $modelObj = new Task();
         $conditions = ['booster_id'=> $trainee['booster_id'],'booster_range'=> $trainee['booster_range']];
@@ -185,6 +195,10 @@ class Controller extends BaseController
     $selectFields = ['id', 'word', 'words', 'question', 'categorical_cue'];
 
     switch ($trainee['session_type']) {
+      case 5: 
+        $modelObj = new ControlWord();
+        $selectFields = ['id','answers as word','questions'];
+      break;
       case 4:
         $modelObj = new Task();
         $selectFields = ['id', $this->wordsAs, 'task as question', 'categorical_cue'];
@@ -228,8 +242,16 @@ class Controller extends BaseController
     $this->booster = Booster::pluck('category','id');
     $selectFields = ['id','word'];
     $conditions = ['story_id' => $traineeObj['session_number']];
-
+    
     switch ($traineeObj['session_type']) {
+
+      case 5: 
+        $modelObj = new ControlWord();
+        $selectFields = ['id','answers as word'];
+      break;
+        //$conditions = ['story_id' => $traineeObj['session_number']];
+        //$wordObj = ControlWord::select('id', 'answers')->where('story_id', $traineeObj['session_number'])->orderBy('id', 'asc')->get();
+        
       case 4:
         $modelObj = new Task();
         $selectFields = ['id', $this->wordsAs];
@@ -256,6 +278,7 @@ class Controller extends BaseController
       break;
     }
     $wordObj = $modelObj::where($conditions)->orderBy('id', 'asc')->get($selectFields);
+
     return $wordObj;
   }
   /**
@@ -358,6 +381,10 @@ class Controller extends BaseController
 
     try {
       switch ($transactionDetail['category_id']) {
+        case 5:
+          $modelObj = new ControlWord();
+          $selectFields = 'answers as word';
+        break;
         case 4:
           $modelObj = new Task();
           $selectFields = $this->wordsAs;

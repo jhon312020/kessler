@@ -345,6 +345,7 @@ class TraineeController extends Controller
 
         $traineeID = $traineeReport->trainee_id;
         $sessionNumber = $traineeReport->session_number;
+        $sessionType = $traineeReport->session_type;
 
         if ($trainee && (in_array($user->role, $this->adminRoles) || in_array($trainee->id, $trainer_traines))) {
           $storyWords = $this->getWordAndIDObj($trainee);
@@ -398,8 +399,11 @@ class TraineeController extends Controller
           }
         }
         $submitURL = url('/trainee/answerSave');
-        
-        return view('kessler.trainee.view')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords','traineeID','sessionNumber', 'roundOneTimeTaken', 'roundTwoTimeTaken', 'sessionTime','submitURL'));
+        if($sessionType != '5'){
+        return view('kessler.trainee.view')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords','traineeID','sessionNumber','sessionType', 'roundOneTimeTaken', 'roundTwoTimeTaken', 'sessionTime','submitURL'));
+        }else{
+          return view('kessler.trainee.controlview')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords','traineeID','sessionNumber','sessionType', 'roundOneTimeTaken', 'roundTwoTimeTaken', 'sessionTime','submitURL'));
+        }
         } else {
            return view($this->error);
         }
@@ -682,7 +686,7 @@ class TraineeController extends Controller
             $transactionDetail = TraineeTransaction::where('id', $transactionID)->firstOrFail();
             //$this->pr($transactionDetail); 
             $wordObj = $this->getWord($transactionDetail);
-            if ($wordObj['word'] === $answer) {
+            if (strtoupper($wordObj['word']) === $answer) {
               if ($transactionDetail->type == 'contextual') {
                  TraineeTransaction::where('trainee_id', '=', "$transactionDetail->trainee_id")->where('session_pin','=',"$transactionDetail->session_pin")->where('word_id', '=', $transactionDetail->word_id)->where('round','=',$transactionDetail->round)->where('type', '=', 'categorical')->delete();
               }

@@ -7,6 +7,8 @@ use Illuminate\Support\Carbon;
 use App\Models\TraineeTransaction;
 use App\Models\TraineeStory;
 use App\Models\Trainee;
+use App\Models\ControlWord;
+use App\Models\ControlStory;
 use Redirect,Response;
 use Auth;
 use DB;
@@ -70,11 +72,14 @@ class TraineeSessionController extends Controller
             $record->save(); 
             $request->session()->put('trainee', $record);
             
-            if($record['session_type'] == '1' && $record['session_type'] != '4'){
+            if($record['session_type'] == '1' ){
               return redirect('/sessions');
-            } else {
+            } elseif($record['session_type'] == '5') {
+              return redirect('/controlsessions');
+            }else{
               return redirect('/write');
             }
+
           } else {
              $validator->errors()->add('sessionpin', 'INVALID PIN! Please contact your trainer..');
           } 
@@ -99,9 +104,11 @@ class TraineeSessionController extends Controller
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
         
         /*if($traineeRecord['session_type'] == '2' && $traineeRecord['session_type']== '3' && $traineeRecord['session_type'] == '4')*/
-        if($traineeRecord['session_type'] != '1'){
+        if($traineeRecord['session_type'] == '2' || $traineeRecord['session_type']== '3' || $traineeRecord['session_type'] == '4'){
           return redirect('/write');
-        }
+        }/*elseif($traineeRecord['session_type'] == '5'){
+            return redirect('/controlsessions');
+        }*/
 
         $traineeCurrentPosition = $traineeRecord->session_current_position?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
         if ($traineeCurrentPosition->position === 'recall' || $traineeCurrentPosition->position === '') {
@@ -129,7 +136,7 @@ class TraineeSessionController extends Controller
             $question = str_replace($word['word'], "<input class='fill-ups' name='answer-".$wordID."' id='answer' autocomplete='off'>", $question);
             $question = str_replace("$$", str_repeat("_", 15), $question);
             $submitURL = url('next');
-            return view($this->queshow, compact('question', 'showTraineeMessage', 'submitURL'));
+            return view($this->queshow, compact('question','showTraineeMessage', 'submitURL'));
           }
         }
       } else {
@@ -138,23 +145,57 @@ class TraineeSessionController extends Controller
     }
 
     /**
-     * Story writing by trainee
+     * Control Session
      * @return \Illuminate\Http\Response
      */
-    /*public function controlSession(Request $request){
-      $instructions = '<p>You are going to see a story, which will stay on the screen for a set period of time. Please pay careful attention, as we will be asking you questions about it later. </p>'
-
+    public function controlSession(Request $request){
+      $instructions = '<p>You are going to see a story, which will stay on the screen for a set period of time. Please pay careful attention, as we will be asking you questions about it later. </p>';
       if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee');
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
-
-          if($traineeRecord['session_type'] =='5') {
+        /*$story = ControlStory::select('story')->where('id', $trainee['session_number'])->first();
+        dd($story);
+        exit();*/
+        /*if($traineeRecord['session_type'] == '5') {
             return redirect('/controlsessions');
-          }
-
+          }*/
+      $traineeCurrentPosition = $traineeRecord->session_current_position?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
       
+        if ($traineeCurrentPosition->position === 'recall' || $traineeCurrentPosition->position === '') {
+          $allWords = ControlWord::where('story_id', $trainee['session_number'])->pluck('answers');
+          $story = ControlStory::select('story')->where('id', $trainee['session_number'])->first(); 
+          /*foreach ($allWords as $word) {
+            $story->story = str_replace($word, "<span class='emboss'>$word</span>", $story->story);
+          }*/
+          $linkURL = url('recallwords');
+          return view('msmt.sessions.controlstory', compact('story', 'trainee', 'linkURL','instructions'));
+        } else {
+          $startWord = ControlWord::select('id', 'answers', 'questions')->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->first();
+          $word = ControlWord::select('id', 'answers', 'questions')->where('story_id', $trainee['session_number'])->where('id', $traineeCurrentPosition->word_id)->orderBy('id', 'asc')->first();
+          if ($word) {
+            TraineeTransaction::where('story_id', $trainee['session_number'])->where('word_id', $traineeCurrentPosition->word_id)->where('round', $traineeRecord->round)->delete();
+            $showTraineeMessage = ($startWord['id']==$word['id']) ? true : false;
+            $this->traineeCurrentPosition->word_id = $word['id'];
+            $this->traineeCurrentPosition->position = 'answer';
+            $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
+            $traineeRecord->session_state = 'continue';
+            $traineeRecord->save();
+            $wordID = $word['id'];
+            $question = $word['questions'];
+            $question .= "<br/><input class='control-textbox fill-ups' name='answer-".$wordID."' id='answer' autocomplete='off'>";
+            $session_type = $traineeRecord->session_type;
+            //$question = str_replace($word['answers'], "<input class='fill-ups' name='answer-".$wordID."' id='answer' autocomplete='off'>", $question);
+            //$question = str_replace("$$", str_repeat("_", 15), $question);
+            $submitURL = url('controlnext');
+            return view('msmt.sessions.questions.controlshow', compact('question', 'session_type', 'showTraineeMessage', 'submitURL'));
+          }
+        }
+      } else {
+        return redirect($this->index);
       }    
-    }*/
+
+          
+    }
     /**
      * Story writing by trainee
      * @return \Illuminate\Http\Response
@@ -166,7 +207,7 @@ class TraineeSessionController extends Controller
         $trainee = $request->session()->get('trainee');
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
 
-          if($traineeRecord['session_type'] == '1' && $traineeRecord['session_type'] != '4') {
+          if($traineeRecord['session_type'] == '1') {
             return redirect('/sessions');
           }
           
@@ -360,8 +401,13 @@ class TraineeSessionController extends Controller
           $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
           $traineeRecord->session_state = 'continue';
           $traineeRecord->save();
+          if($traineeRecord->session_type == '5'){
+          $submitURL = url('controlsessions');
+          return view($this->recallRem, compact('allWords','traineeRecord', 'submitURL'));
+        }else{
           $submitURL = url('sessions');
           return view($this->recallRem, compact('allWords','traineeRecord', 'submitURL'));
+        }
         } 
       }
       return redirect($this->index);
@@ -386,6 +432,48 @@ class TraineeSessionController extends Controller
         } 
       }
       return redirect($this->index);
+    }
+
+    /**
+     * Store the recorded list of words of session 1-8
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */   
+    public function controlStore(Request $request) {
+      if ($request->session()->has('trainee')) {
+        $timeTaken = (int)(($request->endTime - $request->startTime)/1000);
+        $trainee = $request->session()->get('trainee');
+        $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
+        
+        $data = $request->only('words');
+        $traineeTransaction['answer'] = json_encode($data);
+        $traineeTransaction['trainee_id'] = $trainee['trainee_id'];
+        $traineeTransaction['category_id'] = $trainee['session_type'];
+        $traineeTransaction['story_id'] = $trainee['session_number'];
+        $traineeTransaction['session_pin'] = $trainee['session_pin'];
+        $traineeTransaction['round'] = $trainee['round'];
+        $traineeTransaction['time_taken'] = $timeTaken;
+        $traineeTransaction['type'] = 'recall';
+        TraineeTransaction::insert($traineeTransaction);
+        $word = ControlWord::select('id', 'answers', 'questions')->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->first();
+        if ($word) {
+          $showTraineeMessage = true;
+          $this->traineeCurrentPosition->word_id = $word['id'];
+          $this->traineeCurrentPosition->position = 'question';
+          $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
+          $traineeRecord->session_state = 'continue';
+          $traineeRecord->save();
+          $wordID = $word['id'];
+          $question = $word['questions'];
+          $session_type = $traineeRecord->session_type;
+          $question .= "<br/><input class='fill-ups' name='answer-".$wordID."' id='answer' autocomplete='off'>";
+        } 
+        $submitURL = url('controlnext');
+        return view('msmt.sessions.questions.controlshow', compact('question','session_type', 'showTraineeMessage', 'submitURL'));
+      } else {
+        return redirect($this->index);
+      }
     }
 
     /**

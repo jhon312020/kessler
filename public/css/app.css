@@ -119,8 +119,11 @@
   outline-color: blue;
   color: teal;
   text-transform: uppercase;
+  width:  250px;
 }
-
+#answer.fill-ups.control-textbox {
+  width: 90%;
+}
 .categorical.correct {
  color: orange;
 }

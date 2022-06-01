@@ -7,6 +7,7 @@ use App\Models\TraineeTransaction;
 use App\Models\TraineeJourney;
 use App\Models\TraineeStory;
 use App\Models\Trainee;
+use App\Models\ControlWord;
 use Redirect, Response;
 use Auth;
 use DB;
@@ -124,7 +125,93 @@ class AjaxController extends Controller
       }
   }
 
+  /**
+     * Store the control session recorded list of words
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */ 
+  public function controlStore(Request $request) {
+      $response['reload'] = true;
+      $showAnswer = 1;
+      $iconWrongORRight = '<i class="fa fa-times" style="color:#721c24"></i>';
 
+      if ($request->session()->has('trainee')) {
+        $timeTaken = (int)(($request->endTime - $request->startTime)/1000);
+        $trainee = $request->session()->get('trainee');
+        $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
+        $remove = ['_token', '_method', 'endTime', 'startTime', 'showedAnswer'];
+        //$this->pr($request->all());
+        $traineeAnswer = array_diff_key($request->all(), array_flip($remove));
+        foreach($traineeAnswer as $key=>$answer) {
+          $wordKey = explode('-', $key);
+          $wordID = array_pop($wordKey);
+          
+        }
+        $lastWord = ControlWord::select('id')->where('story_id', $trainee['session_number'])->orderBy('id', 'desc')->first();
+        $word = ControlWord::select('id', 'answers', 'questions')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
+        //$this->pr($word->toArray);
+        if ($word) {
+            $answer = strtoupper(trim($answer));
+            $traineeTransaction['correct_or_wrong'] = 0;
+            $traineeTransaction['round'] = 1;
+            $traineeTransaction['trainee_id'] = $trainee['trainee_id'];
+            $traineeTransaction['story_id'] = $trainee['session_number'];
+            $traineeTransaction['word_id'] = $wordID;
+            $traineeTransaction['session_pin'] = $trainee['session_pin'];
+            $traineeTransaction['category_id'] = $trainee['session_type'];
+            $traineeTransaction['time_taken'] = $timeTaken;
+            $traineeTransaction['round'] = $trainee['round'];
+            $traineeTransaction['type'] = 'contextual';
+            $traineeTransaction['answer'] = $answer;
+            $answers = strtoupper(trim($word['answers']));
+            $answers = explode(', ', $answers);
+            if (in_array($answer, $answers)) {
+              $traineeTransaction['correct_or_wrong'] = 1;
+              $iconWrongORRight = '<i class="fa fa-check" style="color:#155724"></i>';
+              $response['answer'] = 'The answer is: '.$word['answers'];
+              $response['is_answer_correct'] = 1;
+            } else if($word['answers'] != $answer) {
+              $response['answer'] = 'The answer is: '.$word['answers'];
+              $response['is_answer_correct'] = 0;
+            }
+  
+            TraineeTransaction::insert($traineeTransaction);
+    
+          if ($request->showedAnswer) {
+            $word = ControlWord::select('id', 'answers', 'questions')->where('id','>', $wordID)->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->first();
+            $showAnswer = 0;
+          } 
+        }
+        if ($word) {
+          $this->traineeCurrentPosition->word_id = $word['id'];
+          $this->traineeCurrentPosition->position = 'answer';
+          $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
+          $traineeRecord->save();
+          $question = $word['questions'];
+
+          if (!$showAnswer) {
+            $question .= "<p><input class='control-textbox fill-ups' name='answer-".$word['id']."' id='answer' autocomplete='off'></p>";
+          } else {
+            $question .= "<p><input class='control-textbox fill-ups' name='answer-".$word['id']."' id='answer' autocomplete='off' value='".$answer."'></p>";
+          }
+          $response['question'] = $question;
+          //$response['categorical_cue'] = null;
+          $response['reload'] = false;
+          $response['show_answer'] = $showAnswer;
+          return $response;
+        } else if ($wordID == $lastWord->id) {
+          $traineeRecord->session_current_position = null;
+          $response['completed'] = true;
+          $response['redirectURL'] = url("/complete");
+          $request->session()->put('completed', true);
+        }
+        $traineeRecord->save();
+        return $response;
+      } else {
+        return $respone;
+      }
+  }
     /**
      * Store the recorded list of words
      *
