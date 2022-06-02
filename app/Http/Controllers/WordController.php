@@ -17,9 +17,10 @@ class WordController extends Controller
     private $pageWord = '/word';
     var $totalSessions = array();
     public function __construct() {
-      $this->totalSessions = \Config::get('constants.RANGE');
       $this->middleware('auth');
       parent::__construct();
+      $this->totalSessions = $this->commonConfigValue['RANGE'];
+      
     }
 
     /**

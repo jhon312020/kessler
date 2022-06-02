@@ -135,7 +135,7 @@ class OverviewController extends Controller
         $delete = route('overview.destroy', $records->id);
         
         $action = "<a href='$edit' class='btn btn-primary' role='button' title='Edit'><i class='fas fa-edit' title='Edit'></i> Edit</a>&nbsp;";
-        $action .="<form action='$delete' method='post' class='d-inline' id='jsStatusForm-$records->id'>
+        $action .="<form action='$delete' method='post' class='d-inline' id='jsSubmitForm-$records->id'>
                   <input type='hidden' name='_token' value='$csrf'>
                   <input type='hidden' name='_method' value='delete'>
                   <button class='btn btn-danger jsConfirmButton' type='button' data-value='$records->id' title='Delete'><i class='fa fa-trash' title='Delete'></i> Delete</button>
