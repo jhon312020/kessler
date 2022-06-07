@@ -349,10 +349,10 @@ class TraineeController extends Controller
 
         if ($trainee && (in_array($user->role, $this->adminRoles) || in_array($trainee->id, $trainer_traines))) {
           $storyWords = $this->getWordAndIDObj($trainee);
-
           $queryObj = TraineeTransaction::select('id', 'word_id', 'trainee_id', 'session_pin', 'type', 'answer', 'correct_or_wrong','round','time_taken')->where('trainee_id', $trainee->trainee_id)->where('session_pin', $trainee->session_pin);
-          $allStoryWords = $storyWords->pluck('word')->toArray();
+          //$allStoryWords = $storyWords->pluck('word')->toArray();
           
+          $allStoryWords = $this->_allwords($storyWords);
           
           $timeOverall = with(clone $queryObj);
           $overallTotal = $timeOverall->sum('time_taken');
@@ -387,7 +387,6 @@ class TraineeController extends Controller
               $roundTwoTimeTaken = gmdate($this->timeFormat, $roundTwoTime).' sec';
               $recallWords = $roundTwoReport->shift();
               $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
-              
               $roundTwoReport = $roundTwoReport->groupBy('word_id', 'type');
               $contextual = $this->_totalTime( $roundTwoReport, 'contextual');
               $categorical = $this->_totalTime( $roundTwoReport, 'categorical');
@@ -426,6 +425,7 @@ class TraineeController extends Controller
         $recallWords = array_unique($recallWords);
         
         $foundWords = array_intersect($allStoryWords, $recallWords);
+        
         foreach($recallWords as $key=>$recallWord) {
           if (in_array($recallWord, $foundWords)) {
             $recallReport['words'][$key] = '<span class="correct"><i class="fa fa-check" aria-hidden="true">&nbsp;</i> '.$recallWord.'</span>';
@@ -481,6 +481,7 @@ class TraineeController extends Controller
       });
       return $total = $collectionObj->sum('total');
     }
+    
     
 
      /**
@@ -686,7 +687,9 @@ class TraineeController extends Controller
             $transactionDetail = TraineeTransaction::where('id', $transactionID)->firstOrFail();
             //$this->pr($transactionDetail); 
             $wordObj = $this->getWord($transactionDetail);
-            if (strtoupper($wordObj['word']) === $answer) {
+            $allWords = $wordObj['word'];
+            $allWords = explode(', ',$allWords);
+              if(in_array($answer, $allWords)){
               if ($transactionDetail->type == 'contextual') {
                  TraineeTransaction::where('trainee_id', '=', "$transactionDetail->trainee_id")->where('session_pin','=',"$transactionDetail->session_pin")->where('word_id', '=', $transactionDetail->word_id)->where('round','=',$transactionDetail->round)->where('type', '=', 'categorical')->delete();
               }

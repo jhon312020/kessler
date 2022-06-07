@@ -448,4 +448,17 @@ class Controller extends BaseController
       $this->configValue =  \Config::get('constants.GA');
     }
   }
+
+  function _allwords($storyWords){
+    /*$allStoryWords = $storyWords->pluck('word');
+    $allStoryWords = explode(',',$allStoryWords);
+    $allStoryWords = str_replace(array('"','[',']'),'',$allStoryWords);
+    $allStoryWords = array_map('trim', $allStoryWords);*/
+
+    $allStoryWords = $storyWords->pluck('word')->toArray();
+    $allStoryWords = implode(', ', $allStoryWords);
+    $allStoryWords = explode(', ', $allStoryWords);
+    
+    return $allStoryWords;
+  }
 }
