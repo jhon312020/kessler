@@ -24,6 +24,11 @@ class TrainerController extends Controller
      *
      * @return void
      */
+    var $story;
+    var $contextual;
+    var $general;
+    var $booster;
+    var $other;
     private $pageTrainer = '/trainer';
     protected $trainerRequired;
     protected $trainerErrorMessages;
@@ -43,23 +48,46 @@ class TrainerController extends Controller
           'email.unique'=>'The email ID already exists',
         );
       $this->trainerSARequired = array (
-            'category' => 'required|array|min:1',
-            'story'  => 'required_if:1.*,in:category|min:1',
+            'category' => 'bail|required|array|min:1',
+            'story' => [Rule::requiredIf(function(){
+              return $this->ruleToCheckValidation(1, 'category');  
+            })],
+            'contextual' => [Rule::requiredIf(function(){
+              return $this->ruleToCheckValidation(2, 'category');  
+            })],
+            'general' => [Rule::requiredIf(function(){
+              return $this->ruleToCheckValidation(3, 'category');  
+            })],
+            'booster' => [Rule::requiredIf(function(){
+              return $this->ruleToCheckValidation(4, 'category');  
+            })],
+            'other' => [Rule::requiredIf(function(){
+              return $this->ruleToCheckValidation(5, 'category');  
+            })]
+            /*'story'  => 'required_if:1.*,in:category|min:1',
             'contextual'  => 'required_if:2.*,in:category|min:1',
             'general'  => 'required_if:3.*,in:category|min:1',
-            'booster'  => 'required_if:4.*,in:category|min:1'
+            'booster'  => 'required_if:4.*,in:category|min:1',
+            'other'  => 'required_if:5.*,in:category|min:1'*/
           );
       $this->trainerSAErrorMessages = array (
             'category.required'=>'Please select the category',
             'story.required'=>'Please select the story session',
             'contextual.required'=>'Please select the contextual session',
             'general.required'=>'Please select the general session',
-            'booster.required'=>'Please select the booster session'
+            'booster.required'=>'Please select the booster session',
+            'other.required'=>'Please select the control session'
           );
       // $this->storySession = $this->configValue['STORY'];
       // $this->writeSession = $this->configValue['WRITE'];
       // $this->generalSession = $this->configValue['GENERAL'];
     }
+
+    public function ruleToCheckValidation($value, $field) {
+      $validate = is_array(request()->input($field)) && in_array($value, request()->input($field));
+      return $validate;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -164,9 +192,9 @@ class TrainerController extends Controller
       if ($user->role === "SA") {
         $boosters = Booster::all();
         $categoryList = json_decode($trainer->category);
-        $categories = Category::wherein('id', $categoryList)->pluck('name','id');
+        $categoriesSelect = Category::wherein('id', $categoryList)->pluck('name','id')->toArray();
         $collect = json_decode($trainer->sessions,true);
-        $story = collect($collect)->pluck('stories');
+        $story = collect($collect)->pluck('story');
         $contextual = collect($collect)->pluck('contextual');
         $general = collect($collect)->pluck('general');
         $other = collect($collect)->pluck('other');
@@ -178,7 +206,14 @@ class TrainerController extends Controller
         } else {
           $boosterSes = [];
         }
-        return view('kessler.trainer.saedit', compact('trainer','categories','story','contextual','general','other','boosterSes','boosters'));
+        $categories = Category::all();
+        $storySession = $this->configValue['STORY'];
+        $writeSession = $this->configValue['WRITE'];
+        $generalSession = $this->configValue['GENERAL'];
+        $boosterSession = Booster::all();
+        $otherSession = $this->configValue['OTHER'];
+        //return view('kessler.trainer.saedit', compact('trainer','categories','story','contextual','general','other','boosterSes','boosters'));
+        return view('kessler.trainer.saedit', compact('trainer','categoriesSelect','story','contextual','general','other','boosterSes','categories','storySession','writeSession','generalSession','boosterSession','otherSession','boosters'));
       } else {
         return view('kessler.trainer.edit', compact('trainer'));
       }
@@ -199,16 +234,35 @@ class TrainerController extends Controller
       $required = $this->trainerRequired;
       unset($required['email']);
       if ($user->role === "SA") {
-        $required = array_merge($required,  $this->trainerSARequired);
+        $required = array_merge($required, $this->trainerSARequired);
         $errorMessages = array_merge($this->trainerErrorMessages, $this->trainerSAErrorMessages);
+        
         $request->validate($required, $errorMessages);
         $this->configValue =  \Config::get('constants.SA');
-        $category = $request->get('category');    
+        $category = $request->get('category'); 
+        /*$categoryList = json_decode($trainer->category);
+        $categoriesSelect = Category::wherein('id', $categoryList)->pluck('name','id')->toArray();*/
+        if(in_array('1', $category)){
+          $this->story = $request->get('story');
+        };
+        if(in_array('2', $category)){
+          $this->contextual = $request->get('contextual');
+        };
+        if(in_array('3', $category)){
+          $this->general = $request->get('general');
+        };
+        if(in_array('4', $category)){
+          $this->booster = $request->get('booster');
+        };
+        if(in_array('5', $category)){
+          $this->other = $request->get('other');
+        };
         $session[] = [
-          'stories' => $request->get('story'),
-          'contextual' => $request->get('contextual'),
-          'general' => $request->get('general'),
-          'booster' => $request->get('booster'),
+          'stories' => $this->story,
+          'contextual' => $this->contextual,
+          'general' => $this->general,
+          'booster' => $this->booster,
+          'other' => $this->other
         ];
         $trainer->category = json_encode($category);
         $trainer->sessions = json_encode($session);

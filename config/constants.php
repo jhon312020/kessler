@@ -24,7 +24,7 @@ return[
 		'MIN_SESSION_NO'=>8,
 		'MIN_WRITE_NO'=>9,
 		'MAX_SESSION_NO'=>18,
-		'CATEGORY'=>range(1,4),
+		'CATEGORY'=>range(1,5),
 		'BOOSTER'=> 'Booster',
 		'BOOSTER_RANGE'=>range(1,3),
 		'RANGE'=>range(1, 18),

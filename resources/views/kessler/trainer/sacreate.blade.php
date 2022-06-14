@@ -1,6 +1,8 @@
 @extends('kessler.layouts.master')
 @section('content')
-<link href="{{asset('css/bootstrap-multiselect.css')}}" rel="stylesheet" />
+<!-- <link href="{{asset('css/bootstrap-multiselect.css')}}" rel="stylesheet" /> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href="{{asset('css/multiselect.css')}}" rel="stylesheet" />
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-lg-8">
@@ -37,9 +39,9 @@
               <div>
               <label class="small mb-1" for="sessions" name="sessions"></label>
               <div class="form-group d-none session" id="jsStory">
-                <label class="small mb-1" for="story">Story sessions</label>
-                <select class="form-control select2" id="jsStoryIn" name="story[]" multiple="multiple">
-                  <!-- <option value= '' selected="selected">Select Story Session</option> -->
+                <label class="small mb-1 d-block" for="story">Story sessions</label>
+                <select class="form-control select2" id="jsStoryIn" name="story[]" multiple="multiple" >
+                  <br>
                   @foreach($storySession as $story)
                     <option value="{{ $story }}">{{ $story }}</option>
                   @endforeach;
@@ -47,7 +49,7 @@
               </div>
               
               <div class="form-group d-none session" id="jsWrite">
-                <label class="small mb-1" for="write">Contextual sessions</label>
+                <label class="small mb-1 d-block" for="write">Contextual sessions</label>
                 <select class="form-control select2" id="jsWriteIn" name="contextual[]" multiple="multiple">
                  <!--  <option value= '' selected="selected">Select Contextual Session</option> -->
                   @foreach($writeSession as $write)
@@ -57,7 +59,7 @@
               </div>
                            
               <div class="form-group d-none session" id="jsGeneral">
-                <label class="small mb-1" for="general">General sessions</label>
+                <label class="small mb-1 d-block" for="general">General sessions</label>
                 <select class="form-control select2" id="jsGeneralIn" name="general[]" multiple="multiple">
                   <!-- <option value= '' selected="selected">Select General Session</option> -->
                   @foreach($generalSession as $general)
@@ -67,7 +69,7 @@
               </div>
               
               <div class="form-group d-none session" id="jsBooster">
-                <label class="small mb-1" for="booster">Booster sessions</label>
+                <label class="small mb-1 d-block" for="booster">Booster sessions</label>
                 <select class="form-control select2" id="jsBoosterIn" name="booster[]" multiple="multiple">
                   <!-- <option value= '' selected="selected">Select Booster Session</option> -->
                   @foreach($boosterSession as $booster)
@@ -77,7 +79,7 @@
               </div>
               
               <div class="form-group d-none session" id="jsOther">
-                <label class="small mb-1" for="other">Control sessions</label>
+                <label class="small mb-1 d-block" for="other">Control sessions</label>
                 <select class="form-control select2" id="jsOtherIn" name="other[]" multiple="multiple">
                   @foreach($otherSession as $other)
                     <option value="{{ $other }}">{{ $other }}</option>
@@ -98,11 +100,15 @@
 </div>
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script type="text/javascript" src="{{asset('js/bootstrap-multiselect.js')}}"></script>
+<!-- <script type="text/javascript" src="{{asset('js/bootstrap-multiselect.js')}}"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- <script type="text/javascript" src="{{asset('js/multiselect.min.js')}}"></script> -->
 <script type="text/javascript">
     $(document).ready(function() {
-      $('#jsCategory').val([]).multiselect('refresh');
-      $('#jsCategory').multiselect();
+      /*$('#jsCategory').val([]).multiselect('refresh');
+      $('#jsCategory').multiselect();*/
+      //$('#jsCategory').val([]).select2('refresh');
+      $('#jsCategory').select2();
       
       $('#jsCategory').bind('change',function() {
       var select = $("#jsCategory option:selected");
@@ -123,6 +129,7 @@
           $('#jsStoryIn').attr('required',true);
           $('#jsStory').removeClass('d-none'); 
           $('#jsStoryIn').attr('disabled',false); 
+          $('#jsStoryIn').select2();
           break;
 
         //case write:
@@ -130,6 +137,7 @@
           $('#jsWriteIn').attr('required',true);
           $('#jsWrite').removeClass('d-none');
           $('#jsWriteIn').attr('disabled',false);
+          $('#jsWriteIn').select2();
           break;
 
         //case general:
@@ -137,6 +145,7 @@
           $('#jsGeneralIn').attr('required',true);
           $('#jsGeneral').removeClass('d-none');
           $('#jsGeneralIn').attr('disabled',false);
+          $('#jsGeneralIn').select2();
           break;
 
         //case booster  
@@ -144,13 +153,15 @@
           $('#jsBoosterIn').attr('required',true);
           $('#jsBooster').removeClass('d-none');
           $('#jsBoosterIn').attr('disabled',false);
+          $('#jsBoosterIn').select2();
           break;
 
-        //case general:
+        //case other:
         case '5':
           $('#jsOtherIn').attr('required',true);
           $('#jsOther').removeClass('d-none');
           $('#jsOtherIn').attr('disabled',false);
+          $('#jsOtherIn').select2();
           break;
       }
     }  
