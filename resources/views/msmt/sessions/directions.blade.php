@@ -83,6 +83,7 @@
     var startOfWord = '';
     var regExp = '';
     var findWord = '';
+    var matchingCombo = '';
     var wordFound = false;
     //var combinations = ['spaceanddot', 'spaceandcomma', 'spaceandspace', 'wordandspace'];
     //var combLength = combinations.length;
@@ -100,22 +101,55 @@
       for (counter = 0; counter < wordCount; counter++) {
         wordPostion = '';
         checkKey = '';
-        wordCombination = allWords[counter];
+        matchingCombo = wordCombination = allWords[counter];
         wordPostion = writeup.indexOf(wordCombination);
         subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
         startWordCounter = parseInt(wordPostion);
         startOfWord = '';
-        if (startWordCounter > 0) {
+        /*if (startWordCounter > 0) {
           startOfWord = writeup[wordPostion - 1] ;
-        }
+        }*/
+
+          if (startWordCounter > 0) {
+            startOfWord = writeup[wordPostion -1];
+          } 
+          if (wordPostion > -1) {
+            if (wordPostion) {
+               matchingCombo = ' ';
+               replaceCombo = ' ';
+            } else {
+              matchingCombo = '';
+              replaceCombo = '';
+            }
+            if (writeup.indexOf(wordCombination+' ') > -1) {
+              wordPostion = writeup.indexOf(wordCombination+' ');
+              matchingCombo += wordCombination+' ';
+              replaceCombo +=  wordCombination+' ';
+            } else if (writeup.indexOf(wordCombination+',') > -1) {
+              wordPostion = writeup.indexOf(wordCombination+',');
+              matchingCombo += wordCombination+',';
+              replaceCombo +=  wordCombination+',';
+            } else if (writeup.indexOf(wordCombination+'.') > -1) {
+               
+              wordPostion = writeup.indexOf(wordCombination+'.');
+              matchingCombo += wordCombination+'\\.';
+              replaceCombo +=  wordCombination+'.';
+            }
+          }
+          subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
+
         endOfWord = writeup[subStringLen];
         if (wordPostion != -1) {
           subStringLen = parseInt(wordPostion) + parseInt(wordCombination.length);
           //For left user types lefthand in this case word left is getting matched so restting the substring
           if ((startOfWord == '' || startOfWord == ' ') && (endOfWord =='.' || endOfWord == ',' || endOfWord ==' ' || endOfWord == '') && typeof(endOfWord) !== 'undefined') {
             writeup = writeup.substring(subStringLen, writeup.length);
-            regExp = new RegExp(allWords[counter],"i");
+            /*regExp = new RegExp(allWords[counter],"i");
             updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
+            userUsedWordCount++;*/
+            console.log('Matcing Combo ',matchingCombo);
+            var regExp = new RegExp(matchingCombo,"i");
+            updateWriteUp = updateWriteUp.replace(regExp, replaceCombo);
             userUsedWordCount++;
             writeUpWords.push(allWords[counter]); 
             delete allWords[counter];
