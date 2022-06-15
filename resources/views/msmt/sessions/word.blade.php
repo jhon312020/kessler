@@ -119,7 +119,7 @@
               matchingCombo = '';
               replaceCombo = '';
             }
-            if (writeup.indexOf(wordCombination+'.') > -1) {
+            /*if (writeup.indexOf(wordCombination+'.') > -1) {
               wordPosition = writeup.indexOf(wordCombination+'.');
               matchingCombo += wordCombination+'\\.';
               replaceCombo +=  wordCombination+'.';
@@ -131,6 +131,20 @@
                wordPosition = writeup.indexOf(wordCombination+' ');
                matchingCombo += wordCombination+' ';
                replaceCombo +=  wordCombination+' ';
+            }*/
+            if (writeup.indexOf(wordCombination+' ') > -1) {
+              wordPosition = writeup.indexOf(wordCombination+' ');
+              matchingCombo += wordCombination+' ';
+              replaceCombo +=  wordCombination+' ';
+            } else if (writeup.indexOf(wordCombination+',') > -1) {
+              wordPosition = writeup.indexOf(wordCombination+',');
+              matchingCombo += wordCombination+',';
+              replaceCombo +=  wordCombination+',';
+            } else if (writeup.indexOf(wordCombination+'.') > -1) {
+               
+              wordPosition = writeup.indexOf(wordCombination+'.');
+              matchingCombo += wordCombination+'\\.';
+              replaceCombo +=  wordCombination+'.';
             }
           }
           subStringLen = parseInt(wordPosition) + parseInt(wordCombination.length);
