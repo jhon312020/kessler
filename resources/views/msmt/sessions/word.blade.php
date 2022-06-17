@@ -101,68 +101,99 @@
       userUsedWordCount = 0;
       for (counter = 0; counter < wordCount; counter++) {
           matchingCombo = wordCombination = allWords[counter];
-          wordPosition = writeup.indexOf(' '+wordCombination);
+         // wordPosition = writeup.indexOf(' '+wordCombination);
+          pattern = `\\b(${matchingCombo})[\s\,\.]`;
+            pattern = new RegExp(pattern);
+            result = pattern.exec(writeup);
+            console.log(result);
+            //console.log(pattern);
+          console.log(wordPosition);
+          continue;
+          //console.log(writeup);
+          //console.log(wordPosition);
           // if (writeup.indexOf(wordCombination) > -1) {
           //   wordPosition = findFirstPosition(writeup, wordCombination);
           // }
           startWordCounter = parseInt(wordPosition);
           if (startWordCounter > 0) {
             startOfWord = writeup[wordPosition];
+            console.log('cameein');
           } else {
             startOfWord = '';
           }
           if (wordPosition > -1) {
             if (wordPosition) {
+              console.log('hai');
                matchingCombo = ' ';
                replaceCombo = ' ';
             } else {
               matchingCombo = '';
               replaceCombo = '';
             }
-            /*if (writeup.indexOf(wordCombination+'.') > -1) {
+            
+            /*console.log(writeup.indexOf(wordCombination+' '));
+            console.log(writeup.indexOf(wordCombination+','));
+            console.log(writeup.indexOf(wordCombination+'.'));*/
+            
+            /*updatePosition = updateWriteUp.indexOf(wordCombination);
+            if (writeup.indexOf(' '+ wordCombination+'.') > -1) {
+              console.log(updatePosition);
+              console.log(writeup.indexOf(' '+ wordCombination+'.'));
+              console.log(writeup.indexOf(' '+ wordCombination+'.') == updatePosition);
+              console.log('came in for period');
+              //console.log(writeup.indexOf(wordCombination+'.'));
               wordPosition = writeup.indexOf(wordCombination+'.');
               matchingCombo += wordCombination+'\\.';
               replaceCombo +=  wordCombination+'.';
-            } else if (writeup.indexOf(wordCombination+',') > -1) {
-               wordPosition = writeup.indexOf(wordCombination+',');
-               matchingCombo += wordCombination+',';
-               replaceCombo +=  wordCombination+',';
-            } else if (writeup.indexOf(wordCombination+' ') > -1) {
-               wordPosition = writeup.indexOf(wordCombination+' ');
-               matchingCombo += wordCombination+' ';
-               replaceCombo +=  wordCombination+' ';
-            }*/
-            if (writeup.indexOf(wordCombination+' ') > -1) {
-              wordPosition = writeup.indexOf(wordCombination+' ');
-              matchingCombo += wordCombination+' ';
-              replaceCombo +=  wordCombination+' ';
-            } else if (writeup.indexOf(wordCombination+',') > -1) {
+            } else if (writeup.indexOf(' '+ wordCombination+',') > -1) {
+              console.log(updatePosition);
+              console.log(writeup.indexOf(' '+ wordCombination+','));
+              console.log(writeup.indexOf(' ' + wordCombination+',') == updatePosition);
+              console.log('came in for comma');
+              //console.log(writeup.indexOf(wordCombination+','));
               wordPosition = writeup.indexOf(wordCombination+',');
               matchingCombo += wordCombination+',';
               replaceCombo +=  wordCombination+',';
-            } else if (writeup.indexOf(wordCombination+'.') > -1) {
-               
-              wordPosition = writeup.indexOf(wordCombination+'.');
-              matchingCombo += wordCombination+'\\.';
-              replaceCombo +=  wordCombination+'.';
-            }
+            } else if (writeup.indexOf(' '+ wordCombination+' ') > -1) {
+              console.log(updatePosition);
+              console.log(writeup.indexOf(' '+ wordCombination+' '));
+              console.log(writeup.indexOf(' ' + wordCombination+' ') == updatePosition);
+               console.log('came in for space');
+               //console.log(writeup.indexOf(wordCombination+' '));
+              wordPosition = writeup.indexOf(wordCombination+' ');
+              matchingCombo += wordCombination+' ';
+              replaceCombo +=  wordCombination+' ';
+            }*/
           }
           subStringLen = parseInt(wordPosition) + parseInt(wordCombination.length);
           endOfWord = writeup[subStringLen];
           if (wordPosition != -1) {
             subStringLen = parseInt(wordPosition) + parseInt(wordCombination.length);
+
+            $('#jsWord-'+counter).addClass('strikeThrough');
+              var regExp = new RegExp(pattern,"i");
+              console.log(pattern);
+              console.log(regExp.exec(updateWriteUp));
+              console.log(allWords[counter]);
+              updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
+              console.log(updateWriteUp);
+              console.log('Won');
+              userUsedWordCount++;
             //For left user types lefthand in this case word left is getting matched so restting the substring
             if ((startOfWord == '' || startOfWord == ' ') && (endOfWord =='.' || endOfWord == ',' || endOfWord == ' ' || endOfWord == '') && typeof(endOfWord) !== 'undefined') {
+              console.log('Hello World I Won!');
               // console.log("updateWriteUp", updateWriteUp);
               // console.log('matchingCombo', matchingCombo, 'wordPosition',wordPosition);
               $('#jsWord-'+counter).addClass('strikeThrough');
-              var regExp = new RegExp(matchingCombo,"i");
-              updateWriteUp = updateWriteUp.replace(regExp, replaceCombo);
+              var regExp = new RegExp(pattern,"i");
+              /*console.log(regExp);
+              replaceCombo = pattern.toUpperCase();*/
+              updateWriteUp = updateWriteUp.replace(regExp, allWords[counter].toUpperCase());
               userUsedWordCount++;
           } else {
             var regExp = new RegExp(allWords[counter],"gi");
             updateWriteUp = updateWriteUp.replace(regExp, allWords[counter].toLowerCase());
-            // console.log(updateWriteUp);
+            //console.log(updateWriteUp);
           }
         } 
       }
