@@ -139,6 +139,7 @@ $(document).ready( function() { // Wait until document is fully parsed
   $('#jsCategory').on('change',function(){
     var category = $("#category_type option:selected").val().toLowerCase();
     console.log('Category',category);
+    resetSelect();
     $('.session').removeClass('d-none').hide();
     //$('.category').attr('disabled',true);
     switch(category){
@@ -182,6 +183,22 @@ $(document).ready( function() { // Wait until document is fully parsed
       break;
     }
   });
+  function resetSelect() {
+    let allSessions = $("[id$='_session']");
+    for(session of allSessions) {
+      console.log(session.disabled);
+      session.disabled = false;      
+      session.required = false;
+    }
+    // $('#jsFormType').addClass('d-none');
+    // $("#jsFormType option:selected").val('');
+    $('#jsBooster').addClass('d-none');
+    $('#jsBoosterRange').addClass('d-none'); 
+    $('#booster_id').attr('required',false);
+    $('#booster_range').attr('required',false);
+    $("#booster_id option:first").prop('selected', true);
+    $("#booster_range option:first").prop('selected', true);
+  }
   
   });
 </script>
