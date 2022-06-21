@@ -124,12 +124,16 @@
           }
           if (wordPosition > -1) {
             if (wordPosition) {
-               matchingCombo = ' ';
-               replaceCombo = ' ';
-            } else {
               matchingCombo = '';
               replaceCombo = '';
-            }
+            }  
+            //{
+               //matchingCombo = ' ';
+               //replaceCombo = ' ';
+            //} else {
+              //matchingCombo = '';
+              //replaceCombo = '';
+            //}
             
             console.log(writeup.indexOf(wordCombination+' '));
             console.log(writeup.indexOf(wordCombination+','));
@@ -184,7 +188,7 @@
               updateWriteUp = updateWriteUp.replace(regExp, replaceCombo);
               userUsedWordCount++;
           } else {
-            var regExp = new RegExp(allWords[counter],"g");
+            var regExp = new RegExp(allWords[counter],"gi");
             updateWriteUp = updateWriteUp.replace(regExp, allWords[counter].toLowerCase());
             //console.log(updateWriteUp);
           }
