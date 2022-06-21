@@ -155,8 +155,8 @@
             } else {
               console.log('Came into else part');
               console.log(writeup.indexOf(' '+wordCombination+' '));
-            console.log(writeup.indexOf(' '+wordCombination+','));
-            console.log(writeup.indexOf(' '+wordCombination+'.'));
+              console.log(writeup.indexOf(' '+wordCombination+','));
+              console.log(writeup.indexOf(' '+wordCombination+'.'));
               if (writeup.indexOf(singleSpace+wordCombination+'.') > -1) {
                 console.log(writeup.indexOf(wordCombination+'.'));
                 matchingCombo += singleSpace+wordCombination+'\\.';
