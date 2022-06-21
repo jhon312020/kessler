@@ -194,7 +194,7 @@ class TrainerController extends Controller
         $categoryList = json_decode($trainer->category);
         $categoriesSelect = Category::wherein('id', $categoryList)->pluck('name','id')->toArray();
         $collect = json_decode($trainer->sessions,true);
-        $story = collect($collect)->pluck('story');
+        $story = collect($collect)->pluck('stories');
         $contextual = collect($collect)->pluck('contextual');
         $general = collect($collect)->pluck('general');
         $other = collect($collect)->pluck('other');

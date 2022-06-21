@@ -38,7 +38,7 @@
             <div class="form-group d-none session" id="jsStory">
               <label class="small mb-1" for="session_number">Session Number</label>
               <select class="form-control select2 category" id="story_session" name="session_number"  placeholder="Select Story Session" disabled = "true">
-                <option value='' selected="selected">Session Number</option>
+                <option value='' selected="selected">Story Sessions</option>
                 
                 @foreach($story[0] as $story)
                   <option value="{{ $story }}">{{ $story }}</option>
@@ -188,12 +188,11 @@ $(document).ready( function() { // Wait until document is fully parsed
   function resetSelect() {
     let allSessions = $("[id$='_session']");
     for(session of allSessions) {
-      console.log(session);
-      console.log(session.disabled);
+      //console.log(session);
+      //console.log(session.disabled);
       session.disabled = true;      
       session.required = false;
     }
-    console.log(session);
     // $('#jsFormType').addClass('d-none');
     // $("#jsFormType option:selected").val('');
 
@@ -206,6 +205,7 @@ $(document).ready( function() { // Wait until document is fully parsed
     $('#booster_range').attr('required',false);
     $("#booster_id option:first").prop('selected', true);
     $("#booster_id1 option:first").prop('selected', true);
+    $("#booster_range option:first").prop('selected', true);
     $("#general_session option:first").prop('selected', true);
   }
   

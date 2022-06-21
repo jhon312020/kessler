@@ -95,19 +95,7 @@
               </select>
              </div>
             @endif
-            @if(is_array($general[0]) && count($general[0]) > 0)
-            <div class="form-group d-none session" id="jsGeneral">
-              <label class="small mb-1" for="general_session">General Sessions</label>
-              <select class="form-control select2 category" id="general_session" name="session_number"  placeholder="Select General Session" disabled = "true">
-                <option value='' selected="selected">General Sessions</option>
-                
-                @foreach($general[0] as $general)
-                  <option value="{{ $general }}">{{ $general }}</option>
-                @endforeach;
-              
-              </select>
-             </div>
-            @endif
+
             @if(is_array($other[0]) && count($other[0]) > 0)
             <div class="form-group d-none session" id="jsOther">
               <label class="small mb-1" for="other_session">Contol Sessions</label>
@@ -131,6 +119,21 @@
                 @endforeach;
               </select>
             </div>
+            
+            
+            @if(is_array($general[0]) && count($general[0]) > 0)
+            <div class="form-group d-none session" id="jsGeneral">
+              <label class="small mb-1" for="general_session">General Sessions</label>
+              <select class="form-control select2 category" id="general_session" name="session_number"  placeholder="Select General Session" disabled = "true">
+                <option value='' selected="selected">General Sessions</option>
+                
+                @foreach($general[0] as $general)
+                  <option value="{{ $general }}">{{ $general }}</option>
+                @endforeach;
+              
+              </select>
+             </div>
+            @endif
             
             <div class="form-group d-none " id="jsBoosterSes">
               <label class="small mb-1" for="booster_session">Booster Sessions</label>
@@ -173,6 +176,7 @@
   $('#jsCategory').on('change',function(){
     var category = $("#category_type option:selected").val().toLowerCase();
     console.log('Category',category);
+    resetSelect();
     $('.session').removeClass('d-none').hide();
     //$('.category').attr('disabled',true);
     switch(category){
@@ -217,6 +221,29 @@
     }
   });
   
+  function resetSelect() {
+    let allSessions = $("[id$='_session']");
+    for(session of allSessions) {
+      //console.log(session);
+      //console.log(session.disabled);
+      session.disabled = true;      
+      session.required = false;
+    }
+    // $('#jsFormType').addClass('d-none');
+    // $("#jsFormType option:selected").val('');
+
+    $('#jsBooster').addClass('d-none');
+    $('#jsBoosterRange').addClass('d-none'); 
+    $('#booster_id').attr('required',false);
+    $('#booster_id').attr('disabled',true);
+    $('#booster_id1').attr('required',false);
+    $('#booster_id1').attr('disabled',true);
+    $('#booster_range').attr('required',false);
+    $("#booster_id option:first").prop('selected', true);
+    $("#booster_id1 option:first").prop('selected', true);
+    $("#booster_range option:first").prop('selected', true);
+    $("#general_session option:first").prop('selected', true);
+  }
   });
 /*$(document).ready( function() { // Wait until document is fully parsed
   $('#jsSessionNumber').on('change', function() {

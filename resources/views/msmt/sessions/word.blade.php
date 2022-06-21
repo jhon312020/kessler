@@ -119,13 +119,11 @@
           startWordCounter = parseInt(wordPosition);
           if (startWordCounter > 0) {
             startOfWord = writeup[wordPosition - 1];
-            console.log('cameein');
           } else {
             startOfWord = '';
           }
           if (wordPosition > -1) {
             if (wordPosition) {
-              console.log('hai');
                matchingCombo = ' ';
                replaceCombo = ' ';
             } else {
@@ -153,7 +151,6 @@
                 replaceCombo +=  wordCombination+singleSpace;
               }
             } else {
-              console.log('Came into else part');
               console.log(writeup.indexOf(' '+wordCombination+' '));
               console.log(writeup.indexOf(' '+wordCombination+','));
               console.log(writeup.indexOf(' '+wordCombination+'.'));
@@ -180,24 +177,20 @@
               console.log('Start', startOfWord, 'endOfWord', endOfWord);
             //For left user types lefthand in this case word left is getting matched so restting the substring
             if ((startOfWord == '' || startOfWord == ' ') && (endOfWord =='.' || endOfWord == ',' || endOfWord == ' ' || endOfWord == '') && typeof(endOfWord) !== 'undefined') {
-              console.log('Hello World I Won!');
               // console.log("updateWriteUp", updateWriteUp);
               console.log('matchingCombo', matchingCombo, 'wordPosition',wordPosition);
               $('#jsWord-'+counter).addClass('strikeThrough');
               var regExp = new RegExp(matchingCombo,"i");
-              /*console.log(regExp);
-              replaceCombo = pattern.toUpperCase();*/
               updateWriteUp = updateWriteUp.replace(regExp, replaceCombo);
-              console.log(updateWriteUp);
               userUsedWordCount++;
           } else {
-            var regExp = new RegExp(allWords[counter],"gi");
+            var regExp = new RegExp(allWords[counter],"g");
             updateWriteUp = updateWriteUp.replace(regExp, allWords[counter].toLowerCase());
             //console.log(updateWriteUp);
           }
         } 
       }
-      $('#jsWriteup').val(updateWriteUp)
+      $('#jsWriteup').val(updateWriteUp);
     });
     $(document).on('click touchstart', '#jsStartSession', function() {
       $('#jsTraineeSession').slideUp();
@@ -219,8 +212,8 @@
         $('#jsWriteup').focus();
         $(this).prop("disabled", false);
       }
-    })
+    });
 
-  })
+  });
 </script>
 @endsection
