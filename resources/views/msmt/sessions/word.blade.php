@@ -158,7 +158,6 @@
           
           if (wordPosition != -1) {
             //subStringLen = parseInt(wordPosition) + parseInt(wordCombination.length);
-            userUsedWordCount++;
             console.log('Start', startOfWord, 'endOfWord', endOfWord);
             //For left user types lefthand in this case word left is getting matched so restting the substring
             if ((startOfWord == '' || startOfWord == ' ') && (endOfWord =='.' || endOfWord == ',' || endOfWord == ' ' || endOfWord == '') && typeof(endOfWord) !== 'undefined') {
@@ -186,6 +185,8 @@
       $('#jsUserMessage').addClass('d-none');
       $("#jsLoader").removeClass('d-none');
       $(this).prop("disabled", true);
+      //console.log('wordCount', wordCount);
+      //console.log('userUsedWordCount', userUsedWordCount);
       if (wordCount == userUsedWordCount) {
         $("#jsFormWriteup").submit();
       } else {
