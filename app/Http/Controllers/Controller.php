@@ -96,7 +96,7 @@ class Controller extends BaseController
         $modelObj = new General();
         $type = strtolower($this->booster[$trainee['booster_id']]);
         $conditions['type'] = $type;
-        $selectFields = ['word', 'contextual_cue', 'question', 'words'];
+        $selectFields = ['word', 'categorical_cue', 'question', 'words'];
         //$selectFields = "'".implode("','", $selectFields)."'";
         //$wordObj = $name::select()->get('word');
       break;
