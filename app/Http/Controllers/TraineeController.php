@@ -532,18 +532,28 @@ class TraineeController extends Controller
         }
         
         if ($traineeObj->booster_id != 1) {
-          $revisedStory = $this->getRevisedStory($storyWords, $newString);
-          preg_match_all('/\b([A-Z-]+)\b/', $revisedStory, $userWords);
+          //$revisedStory = $this->getRevisedStory($storyWords, $newString);
+          foreach($storyWords as $word) {
+          $searchWord = strtolower($word);
+                
+          $findWord = '/\b'.$searchWord.'\b/i';
+        
+          $newString = preg_replace($findWord, $word, $newString);
+          }
+
+          preg_match_all('/\b([A-Z-]+)\b/', $newString, $userWords);
           $storyWords = $storyWords->toArray();
-          $userStoryWords = array();
           if ($userWords) {
-            foreach($userWords[0] as $word) {
-              $word = strtoupper($word);
-              if (in_array($word, $storyWords)) {
-                $userStoryWords[] = $word;
-              }
+          foreach($userWords[0] as $word) {
+            $word = strtoupper($word);
+            if (in_array($word, $storyWords)) {
+              $userStoryWords[] = $word;
             }
           }
+        }
+
+          $revisedStory = $story;
+
         } else {
           $revisedStory = $this->getRevisedStoryForDirection($storyWords, $newString);
           $userStoryWords = array_values($storyWords->toArray());
@@ -551,6 +561,8 @@ class TraineeController extends Controller
         $traineeStory->updated_story = $revisedStory;
         $traineeStory->user_story_words = $userStoryWords;
         $traineeStory->reviewed = 1;
+        /*dd($traineeStory);
+        exit();*/
         if ($traineeStory->save()) {
           $traineeRecord = Trainee::where('session_pin', $traineeStory->session_pin)->first();
           if ($traineeRecord) {

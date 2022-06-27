@@ -296,7 +296,7 @@ class TraineeSessionController extends Controller
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
 
         $storyObj = $this->getWords($trainee);
-         
+
         $storyWords = $this->getStoryWords($trainee, $storyObj);
         
         $story = $request->get('story');
@@ -307,7 +307,6 @@ class TraineeSessionController extends Controller
         //Removing extra spaces.
         $fullStory = trim(preg_replace('/\s+/', ' ', $fullStory));
         $sentences = preg_split('/([.?!]+)/', $fullStory, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-
         $newString = '';
         foreach ($sentences as $key => $sentence) {
           $newString .= ($key & 1) == 0 ? ucfirst(strtolower(trim($sentence))) : $sentence.' ';
@@ -315,17 +314,19 @@ class TraineeSessionController extends Controller
         
         foreach($storyWords as $word) {
           $searchWord = strtolower($word);
-        
+                
           $findWord = '/\b'.$searchWord.'\b/i';
         
           $newString = preg_replace($findWord, $word, $newString);
         }
+        
         $wordsArr = $storyObj->pluck("word","question");
         
         preg_match_all('/\b([A-Z-]+)\b/', $newString, $userWords);
-
+        
         $storyWords = $storyWords->toArray();
-        $userStoryWords = array();
+        
+        $userStoryWords = array(); 
         if ($userWords) {
           foreach($userWords[0] as $word) {
             $word = strtoupper($word);
@@ -340,9 +341,13 @@ class TraineeSessionController extends Controller
         $traineeStory['session_pin'] = $trainee['session_pin'];
         $traineeStory['round'] = $trainee['round'];
         $traineeStory['original_story'] = $story;
-        $traineeStory['updated_story'] = $newString;
+        /*$traineeStory['updated_story'] = $newString;
         $userStoryWords = array_values(array_unique($userStoryWords));
+        $traineeStory['user_story_words'] = json_encode($userStoryWords);*/
+        $traineeStory['updated_story'] = $story;
         $traineeStory['user_story_words'] = json_encode($userStoryWords);
+        /*dd($traineeStory);
+        exit();*/
         $this->traineeCurrentPosition->position = 'review';
         if (TraineeStory::insert($traineeStory)) {
           $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
@@ -369,7 +374,7 @@ class TraineeSessionController extends Controller
         if ($story && $story['reviewed']) {
           $storyObj = $this->getWords($trainee);
           $storyWords = $this->getStoryWords($trainee, $storyObj);
-        
+
           foreach ($storyWords as $word) {
             $story->story = str_replace($word, "<span class='emboss'>$word</span>", $story->story);
           }
@@ -583,7 +588,6 @@ class TraineeSessionController extends Controller
         $userStoryWords = json_decode($story->user_story_words);
         
         $userWordKey = $traineeCurrentPosition->user_word_id;
-      
         $nextWordKey = $userWordKey + 1;
         $completedWords = array_slice($userStoryWords, 0, $nextWordKey, true);
         $sentenceKey = $this->getSentenceKey($storySentences, $completedWords);

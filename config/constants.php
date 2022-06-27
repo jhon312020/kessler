@@ -3,7 +3,7 @@ return[
 	'GA'=>[
 		'RANGE'=>range(1, 10),
 		'STORY'=>range(1, 4),
-		'WRITE'=>range(1, 4),
+		'WRITE'=>range(1, 8),
 		'GENERAL'=>range(1, 2),
 		'OTHER'=>range(1,10),
 	],
