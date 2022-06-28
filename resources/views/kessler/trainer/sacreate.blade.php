@@ -1,8 +1,9 @@
 @extends('kessler.layouts.master')
 @section('content')
 <!-- <link href="{{asset('css/bootstrap-multiselect.css')}}" rel="stylesheet" /> -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link href="{{asset('css/multiselect.css')}}" rel="stylesheet" />
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/1.1.1/css/bootstrap-multiselect.css" integrity="sha512-Lif7u83tKvHWTPxL0amT2QbJoyvma0s9ubOlHpcodxRxpZo4iIGFw/lDWbPwSjNlnas2PsTrVTTcOoaVfb4kwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href="{{asset('css/style.css')}}" rel="stylesheet" />
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-lg-8">
@@ -30,18 +31,16 @@
               </div>
               <div class="form-group" >
                 <label class="small mb-1" for="category">Session Type</label><br>
-                <select class="form-control select2" id="jsCategory" name="category[]" multiple="multiple" >
+                <select class="form-control py-4" id="jsCategory" name="category[]" multiple="multiple">
                 @foreach($categories as $category)
                   <option value="{{ $category->id }}">{{ $category->name }}</option>
                 @endforeach;
                 </select>
               </div>
-              <div>
-              <label class="small mb-1" for="sessions" name="sessions"></label>
+              
               <div class="form-group d-none session" id="jsStory">
                 <label class="small mb-1 d-block" for="story">Story sessions</label>
                 <select class="form-control select2" id="jsStoryIn" name="story[]" multiple="multiple" >
-                  <br>
                   @foreach($storySession as $story)
                     <option value="{{ $story }}">{{ $story }}</option>
                   @endforeach;
@@ -87,7 +86,6 @@
                 </select>
               </div>
 
-              </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-plus">&nbsp;</i> Add</button>
                 <a href="{{ url('/trainer')}}" class="ml-2 btn btn-danger" role="button"><i class="fas fa-times">&nbsp;</i> Cancel</a>
@@ -101,14 +99,17 @@
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 <!-- <script type="text/javascript" src="{{asset('js/bootstrap-multiselect.js')}}"></script> -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/1.1.1/js/bootstrap-multiselect.min.js" integrity="sha512-fp+kGodOXYBIPyIXInWgdH2vTMiOfbLC9YqwEHslkUxc8JLI7eBL2UQ8/HbB5YehvynU3gA3klc84rAQcTQvXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <!-- <script type="text/javascript" src="{{asset('js/multiselect.min.js')}}"></script> -->
 <script type="text/javascript">
     $(document).ready(function() {
       /*$('#jsCategory').val([]).multiselect('refresh');
       $('#jsCategory').multiselect();*/
       //$('#jsCategory').val([]).select2('refresh');
-      $('#jsCategory').select2();
+      $('#jsCategory').multiselect({
+          includeSelectAllOption: true,
+        });
       
       $('#jsCategory').bind('change',function() {
       var select = $("#jsCategory option:selected");
@@ -129,7 +130,9 @@
           $('#jsStoryIn').attr('required',true);
           $('#jsStory').removeClass('d-none'); 
           $('#jsStoryIn').attr('disabled',false); 
-          $('#jsStoryIn').select2();
+          $('#jsStoryIn').multiselect({
+          includeSelectAllOption: true,
+        });
           break;
 
         //case write:
@@ -137,7 +140,9 @@
           $('#jsWriteIn').attr('required',true);
           $('#jsWrite').removeClass('d-none');
           $('#jsWriteIn').attr('disabled',false);
-          $('#jsWriteIn').select2();
+          $('#jsWriteIn').multiselect({
+          includeSelectAllOption: true,
+        });
           break;
 
         //case general:
@@ -145,7 +150,9 @@
           $('#jsGeneralIn').attr('required',true);
           $('#jsGeneral').removeClass('d-none');
           $('#jsGeneralIn').attr('disabled',false);
-          $('#jsGeneralIn').select2();
+          $('#jsGeneralIn').multiselect({
+          includeSelectAllOption: true,
+        });
           break;
 
         //case booster  
@@ -153,7 +160,9 @@
           $('#jsBoosterIn').attr('required',true);
           $('#jsBooster').removeClass('d-none');
           $('#jsBoosterIn').attr('disabled',false);
-          $('#jsBoosterIn').select2();
+          $('#jsBoosterIn').multiselect({
+          includeSelectAllOption: true,
+        });
           break;
 
         //case other:
@@ -161,7 +170,9 @@
           $('#jsOtherIn').attr('required',true);
           $('#jsOther').removeClass('d-none');
           $('#jsOtherIn').attr('disabled',false);
-          $('#jsOtherIn').select2();
+          $('#jsOtherIn').multiselect({
+          includeSelectAllOption: true,
+        });
           break;
       }
     }  

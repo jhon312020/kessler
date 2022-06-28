@@ -1,3 +1,9 @@
+.custom-select {
+  width: 670px;
+ /* padding-bottom: 1.5rem;
+  padding-top: 1.5rem !important;*/
+}
+
 .add-tab {
   width: max-content;
   margin-left: 25px;

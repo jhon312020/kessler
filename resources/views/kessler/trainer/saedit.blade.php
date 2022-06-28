@@ -1,7 +1,8 @@
 @extends('kessler.layouts.master')
 @section('content')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link href="{{asset('css/multiselect.css')}}" rel="stylesheet" />
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/1.1.1/css/bootstrap-multiselect.css" integrity="sha512-Lif7u83tKvHWTPxL0amT2QbJoyvma0s9ubOlHpcodxRxpZo4iIGFw/lDWbPwSjNlnas2PsTrVTTcOoaVfb4kwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href="{{asset('css/style.css')}}" rel="stylesheet" />
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-lg-8">
@@ -124,24 +125,36 @@
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 <!-- <script type="text/javascript" src="{{asset('js/multiselect.min.js')}}"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/1.1.1/js/bootstrap-multiselect.min.js" integrity="sha512-fp+kGodOXYBIPyIXInWgdH2vTMiOfbLC9YqwEHslkUxc8JLI7eBL2UQ8/HbB5YehvynU3gA3klc84rAQcTQvXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-      $('#jsCategory').select2();
+      $('#jsCategory').multiselect({
+          includeSelectAllOption: true,
+        });
       $('#jsCategory').bind('change',function() {
-        $('#story_session').val([]).select2();
-        $('#context_session').val([]).select2();
-        $('#general_session').val([]).select2();
-        $('#booster_session').val([]).select2();
-        $('#other_session').val([]).select2();
+        $('#story_session').multiselect().val([]);
+        $('#context_session').multiselect().val([]);
+        $('#general_session').multiselect().val([]);
+        $('#booster_session').multiselect().val([]);
+        $('#other_session').multiselect().val([]);
       });      
       
-      $('#story_session').select2();
-      $('#context_session').select2();
-      $('#general_session').select2();
-      $('#booster_session').select2();
-      $('#other_session').select2();
+      $('#story_session').multiselect({
+          includeSelectAllOption: true,
+        });
+      $('#context_session').multiselect({
+          includeSelectAllOption: true,
+        });
+      $('#general_session').multiselect({
+          includeSelectAllOption: true,
+        });
+      $('#booster_session').multiselect({
+          includeSelectAllOption: true,
+        });
+      $('#other_session').multiselect({
+          includeSelectAllOption: true,
+        });
 
       /*$('#jsCategory').multiselect();
       $('#story_session').multiselect();
