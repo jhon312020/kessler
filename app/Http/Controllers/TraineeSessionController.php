@@ -312,11 +312,14 @@ class TraineeSessionController extends Controller
           $newString .= ($key & 1) == 0 ? ucfirst(strtolower(trim($sentence))) : $sentence.' ';
         }
         
+        
+        /*dd($resultValue);
+        exit();*/
         foreach($storyWords as $word) {
           $searchWord = strtolower($word);
-                
+              
           $findWord = '/\b'.$searchWord.'\b/i';
-        
+
           $newString = preg_replace($findWord, $word, $newString);
         }
         
@@ -325,7 +328,7 @@ class TraineeSessionController extends Controller
         preg_match_all('/\b([A-Z-]+)\b/', $newString, $userWords);
         
         $storyWords = $storyWords->toArray();
-        
+
         $userStoryWords = array(); 
         if ($userWords) {
           foreach($userWords[0] as $word) {
@@ -335,7 +338,8 @@ class TraineeSessionController extends Controller
             }
           }
         }
-        
+        //$userStoryWords = array_unique($userStoryWords);
+        $userStoryWords = array_values(array_unique($userStoryWords));
         $traineeStory['trainee_id'] = $trainee['trainee_id'];
         $traineeStory['story_id'] = $trainee['session_number'];
         $traineeStory['session_pin'] = $trainee['session_pin'];

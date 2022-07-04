@@ -551,8 +551,8 @@ class TraineeController extends Controller
             }
           }
         }
-
-          $revisedStory = $story;
+        $userStoryWords = array_values(array_unique($userStoryWords));
+        $revisedStory = $story;
 
         } else {
           $revisedStory = $this->getRevisedStoryForDirection($storyWords, $newString);

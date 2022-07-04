@@ -155,7 +155,6 @@
               }
             }
           }
-          
           if (wordPosition != -1) {
             //subStringLen = parseInt(wordPosition) + parseInt(wordCombination.length);
             console.log('Start', startOfWord, 'endOfWord', endOfWord);
@@ -172,7 +171,7 @@
             updateWriteUp = updateWriteUp.replace(regExp, allWords[counter].toLowerCase());
             //console.log(updateWriteUp);
           }
-        } 
+        }
       }
       $('#jsWriteup').val(updateWriteUp);
     });
@@ -199,7 +198,6 @@
         $(this).prop("disabled", false);
       }
     });
-
   });
 </script>
 @endsection

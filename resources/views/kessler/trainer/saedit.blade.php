@@ -132,12 +132,13 @@
       $('#jsCategory').multiselect({
           includeSelectAllOption: true,
         });
-      $('#jsCategory').bind('change',function() {
-        $('#story_session').multiselect().val([]);
-        $('#context_session').multiselect().val([]);
-        $('#general_session').multiselect().val([]);
-        $('#booster_session').multiselect().val([]);
-        $('#other_session').multiselect().val([]);
+      $('#jsCategory').bind('change', function() {
+        window.location.reload();
+        $('#story_session').val("");
+        $('#context_session').val("");
+        $('#general_session').val("");
+        $('#booster_session').val("");
+        $('#other_session').val("");
       });      
       
       $('#story_session').multiselect({
