@@ -36,6 +36,7 @@
     var categoryCueShowed = 0;
     var showedAnswer = 0;
     $('#answer').focus();
+    //highlightCaptializedWords();
     $(document).on("keydown", "form", function(event) { 
       var key;
       if (window.event)
@@ -94,6 +95,7 @@
            } else {
             timer = performance.now();
             $('#question').html(response.question);
+            highlightCaptializedWords();
             if (response.categorical_cue && !response.show_answer) {
               $('#jsUserMessage').addClass('alert-info');
               $('#jsUserMessage').html(response.categorical_cue);
@@ -147,6 +149,12 @@
       document.getElementById("answer").focus();
       timer = performance.now();
     });
+    function highlightCaptializedWords() {
+      var div = document.querySelector("#question");
+      var html = div.innerHTML;
+      html = html.replace(/(\b[A-Z]{2,}\b)/g,"<strong>$1</strong>");
+      div.innerHTML = html;
+    }
   })
   
 </script>

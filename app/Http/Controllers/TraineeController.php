@@ -367,6 +367,9 @@ class TraineeController extends Controller
               $recallWords = $roundOneReport->shift();
               if ($traineeReport->booster_id == 1) {
                 $recallReport[] = $this->_directionsRecallReport($recallWords, $allStoryWords);
+              } else if ($sessionType == '5') {
+                $recallReport[] = json_decode($recallWords->answer);
+                //$recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
               } else {
                 $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
               }
@@ -377,7 +380,7 @@ class TraineeController extends Controller
               $roundOneTotal['contextual'] = gmdate($this->timeFormat, $contextual).' sec';
               $roundOneTotal['categorical'] = gmdate($this->timeFormat, $categorical).' sec';
               $roundOneReport = collect(array_map('array_values', $roundOneReport->toArray()));
-              }
+            }
           }
          
           if ($trainee->round > 1 && $trainee->completed == 1 ) {
@@ -386,7 +389,14 @@ class TraineeController extends Controller
               $roundTwoTime = $roundTwoReport->sum('time_taken');
               $roundTwoTimeTaken = gmdate($this->timeFormat, $roundTwoTime).' sec';
               $recallWords = $roundTwoReport->shift();
-              $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
+              //$recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
+               if ($traineeReport->booster_id == 1) {
+                $recallReport[] = $this->_directionsRecallReport($recallWords, $allStoryWords);
+              } else if ($sessionType == '5') {
+                $recallReport[] = json_decode($recallWords->answer);
+              } else {
+                $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
+              }
               $roundTwoReport = $roundTwoReport->groupBy('word_id', 'type');
               $contextual = $this->_totalTime( $roundTwoReport, 'contextual');
               $categorical = $this->_totalTime( $roundTwoReport, 'categorical');
@@ -420,8 +430,8 @@ class TraineeController extends Controller
       $recallReport = array();
       if ($recallWords) {
         $timeTaken = $recallWords->time_taken;
-        $recallAnwers = json_decode($recallWords->answer);
-        $recallWords = explode(' ', $recallAnwers->words);
+        $recallAnswers = json_decode($recallWords->answer);
+        $recallWords = explode(' ', $recallAnswers->words);
         $recallWords = array_unique($recallWords);
         
         $foundWords = array_intersect($allStoryWords, $recallWords);
@@ -445,8 +455,8 @@ class TraineeController extends Controller
       $recallReport = array();
       if ($recallWords) {
         $timeTaken = $recallWords->time_taken;
-        $recallAnwers = json_decode($recallWords->answer);
-        $recallWords = explode(' ', $recallAnwers->words);
+        $recallAnswers = json_decode($recallWords->answer);
+        $recallWords = explode(' ', $recallAnswers->words);
 
         $wordsCount = array_count_values($allStoryWords);
         $foundWords = 0;

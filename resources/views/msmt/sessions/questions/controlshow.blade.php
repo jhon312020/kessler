@@ -31,7 +31,7 @@
 <script type="text/javascript">
   $(document).ready( function() { // Wait until document is fully parsed
     var showTraineeMessage = '{{ $showTraineeMessage }}';
-    var timer = performance.now();;
+    var timer = performance.now();
     var requestInProcess = false;
     //var categoryCueShowed = 0;
     var showedAnswer = 0;
@@ -83,7 +83,6 @@
         url: form.attr("action"),
         data: formData,
         success: function(response) {
-          console.log(response);
           $("#jsQueContainer").slideDown();
           $("#jsNext").prop("disabled", false);
           $("#jsLoader").addClass('d-none');
@@ -132,15 +131,6 @@
         },
         dataType: 'json'
       });
-    });
-
-    $('#jsStartSession').on('click touchstart', function(event) { 
-      $('#jsTraineeMessage').slideUp();
-      $('#jsTraineeMessage').html('');
-      $('#jsQuestions').removeClass('d-none').show();
-      $('#answer').focus();
-      document.getElementById("answer").focus();
-      timer = performance.now();
     });
   })
   
