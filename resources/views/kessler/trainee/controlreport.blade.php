@@ -1,0 +1,145 @@
+@extends('kessler.layouts.master')
+@section('content')
+  <!-- Content Wrapper. Contains page content -->
+<link href="{{asset('css/style.css')}}" rel="stylesheet" />
+  <div class="container-fluid">
+    <h1 class="mt-4">Trainee Graphical Report</h1>
+    <!-- <div class="card mb-4">
+    <div class="card-body">
+      Trainee ID : &emsp; Session Number :
+    </div>
+    </div> -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="fas fa-table mr-1"></i> Trainee ID : {{ $traineeID }} &emsp; Session Number : {{ $sessionNumber }}
+      <a href="{{ url('/trainee')}}" class="btn btn-primary float-right" role="button"><i class="fas fa-step-backward"></i> BACK</a>
+      </div>
+      <br>
+      <div class="row">
+      	<div class="col-lg-6">
+	        <div class="card mb-4">
+	            <div class="card-header">
+	                <i class="fas fa-chart-pie mr-1"></i>
+              @php
+                  $sessionStartTime = json_decode($startTime);
+                  $sessionEndTime = json_decode($endTime);
+              @endphp
+              Round One  <p>Start Time: {{ date('m/d/Y h:i a', strtotime($sessionStartTime->roundOne)) }}
+	             &emsp; End Time: {{ date('m/d/Y h:i a', strtotime($sessionEndTime->roundOne)) }}</p>
+               @php
+                  $sessionStartTime = json_decode($startTime);
+                  $sessionEndTime = json_decode($endTime);
+              @endphp
+              Round Two  <p>Start Time: {{ date('m/d/Y h:i a', strtotime($sessionStartTime->roundTwo)) }}
+               &emsp; End Time: {{ date('m/d/Y h:i a', strtotime($sessionEndTime->roundTwo)) }}</p>
+	            </div>
+	            <div class="card-body"><canvas id="jsPieChartOne" width="100%" height="50"></canvas></div>
+	            <div class="card-footer small text-muted ">Time Taken: Round One - {{ $roundOneTotalTime }}  Round Two - {{ $roundTwoTotalTime }}</div>
+	        </div>
+	   	  </div>
+        
+        <div class="col-lg-6">
+          <div class="card mb-4">
+              <div class="card-header">
+                  <i class="fas fa-chart-pie mr-1"></i>
+              @php
+                  $sessionStartTime = json_decode($startTime);
+                  $sessionEndTime = json_decode($endTime);
+              @endphp
+              Overall Report  <p>Start Time: {{ date('m/d/Y h:i a', strtotime($sessionStartTime->roundOne)) }}
+               &emsp; End Time: {{ date('m/d/Y h:i a', strtotime($sessionEndTime->roundTwo)) }}</p>
+              </div>
+              <div class="card-body"><canvas id="jsPieChart" width="100%" height="50"></canvas></div>
+              <div class="card-footer small text-muted text-center">Time Taken : {{ $overallTotalTime }}</div>
+          </div>
+        </div>
+     </div>  
+   </div>
+</div>
+<script type="text/javascript">
+
+
+
+   $(document).ready( function() { // Wait until document is fully parsed
+    var contextualRoundOneCount = '{{ $contextualRoundOneCount }}';
+    var contextualRoundTwoCount = '{{ $contextualRoundTwoCount }}';
+    var totalWordsCount = '{{ $totalWords }}';
+    const barColors = ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'];
+    const borderColors = ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'];
+    const barWidth = 1;
+    const barDataLabels = { color: 'black', labels: {
+                    render: 'value',
+                    fontSize: 14,
+                    fontStyle: 'bold',
+                    fontColor: '#000'
+                    }
+                  }
+    var ctx = $("#jsPieChartOne");
+    var PieChartOne = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ["Answers"],
+        datasets: [{
+          label: 'Round 1',
+          data: [contextualRoundOneCount],
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: barWidth,
+        },
+        {
+          label: 'Round 2',
+          data: [contextualRoundTwoCount],
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: barWidth,
+        }],
+      },
+    options: {
+        plugins: {
+          datalabels: barDataLabels
+        },
+        scales: {
+          yAxes: [{
+            display: true,
+            ticks: {
+              beginAtZero: true,
+              max: Math.abs(totalWordsCount)
+            }
+          }]
+        }
+      },
+        
+    });
+    
+    var contextualOverallCount = {{ $contextualOverallCount }};
+    var ctx = $("#jsPieChart");
+    var PieChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels:  ["Answers"],
+        datasets: [{
+          label: 'Overall',
+          data: [contextualOverallCount],
+          backgroundColor: 'rgba(255, 206, 86, 0.2)',
+          borderColor: 'rgba(255, 206, 86, 1)',
+          borderWidth: barWidth,
+        }],
+      },
+    options: {
+      plugins: {
+        datalabels: barDataLabels
+        },
+        scales: {
+          yAxes: [{
+            display: true,
+            ticks: {
+              beginAtZero: true,
+              max: Math.abs(totalWordsCount * 2)
+            }
+          }]
+        }
+      }
+    });
+  });
+</script>
+@endsection
