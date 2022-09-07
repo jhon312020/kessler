@@ -22,54 +22,48 @@
             <thead>
               <tr align="center">
                 <th>Word</th>
-                <th colspan="2">Round 1</th>
-                <th colspan="2">Round 2</th>
-                </tr>                
-                <tr align="center">
+                <th>Round 1</th>
+                <th>Round 2</th>
+              </tr>                
+              <tr align="center">
                 <th width="20%"></th>
-                <th width="20%">Words</th>
-                <th width="20%">Recall</th>
-                <th width="20%">Words</th>
-                <th width="20%">Recall</th>
-                </tr>
+                <th width="40%">Recall Story</th>
+                <th width="40%">Recall Story</th>
+              </tr>
             </thead>
             <tfoot>
               <tr align="center">
                 <th width="20%"></th>
-                <th width="20%">Contextual</th>
-                <th></th>
-                <th width="20%">Contextual</th>
-                <th></th>
+                <th width="40%">Answers</th>
+                <th width="40%">Answers</th>
               </tr>
               <tr align="center">
                 <th>Word</th>
-                <th colspan="2">Round 1</th>
-                <th colspan="2">Round 2</th>
+                <th>Round 1</th>
+                <th>Round 2</th>
               </tr>
             </tfoot>
 
             <tbody>
               @if(count($roundOneReport))
               <tr>
-                {{-- <td>Recall Words {{ $roundOneReport->count() }}</td> --}}
+                {{-- <td>Recall Words {{ $roundOneReport->count() }}</td> 
                 <td>Recall Words {{ $storyWords->count() }}</td>
                 <td>{!! $recallReport[0]['words'] !!}</td>
-                <td>Remember: {{ $recallReport[0]['found_count'] }} <br> Forgot: {{ $recallReport[0]['unfound_count']  }}</td>
+                <td>Remember: {{ $recallReport[0]['found_count'] }} <br> Forgot: {{ $recallReport[0]['unfound_count']  }}</td>--}}
+                <td>Recall Story</td>
+                <td>{{ $recallReport[0]->words }}</td>
                 @if (count($roundTwoReport))
-                <td>{!! $recallReport[1]['words'] !!}</td>
-                <td>Remember: {{ $recallReport[1]['found_count'] }} <br> Forgot: {{ $recallReport[1]['unfound_count']  }}</td>
+                <td>{!! $recallReport[1]->words !!}</td>
                 @else
-                <td></td>
                 <td></td>
                 @endif
               </tr>
               <thead>
               <tr align="center">
                 <th width="20%"></th>
-                <th width="20%">Contextual</th>
-                <th></th>
-                <th width="20%">Contextual</th>
-                <th></th>
+                <th width="40%">Answers</th>
+                <th width="40%">Answers</th>
                 </tr>
               </thead>
               @foreach($storyWords as $storyWord)
@@ -89,8 +83,6 @@
                   @else
                      <td class="type text-center"></td>
                   @endif
-               
-                   <td></td>
                   
                   @if (count($roundTwoReport))
                     @if (isset($roundTwoReport[$storyWord->id])) 
@@ -103,13 +95,11 @@
                             <i class="fa fa-times" aria-hidden="true"> </i>
                         @endif
                             {{$roundTwoReport[$storyWord->id][0]['answer']}} ({{ $roundTwoReport[$storyWord->id][0]['time_taken']}} sec)</td>
-                      <td></td>  
+ 
                       @else
-                      <td></td>
-                      <td></td>
+                        <td class="type text-center"></td>
                     @endif
                     @else
-                    <td></td>
                     <td></td>
                   @endif
                 </tr>
@@ -119,24 +109,21 @@
                 <th>Total Time</th>
                 @if(count($roundOneReport))
                   <th class="text-center">{{ $roundOneTotal['contextual'] }}</th>
-                  <th></th>
                 @endif
                 @if(count($roundTwoTotal))
                   <th class="text-center">{{ $roundTwoTotal['contextual'] }}</th>
-                  <th></th>
                 @else
-                  <th></th>
                   <th></th>
                 @endif
               </tr>
               <tr>
                 <th>Overall Time</th>
-                <th class="text-center" colspan="2">{{ $roundOneTimeTaken }}</th>
-                <th class="text-center" colspan="2">{{ $roundTwoTimeTaken }}</th>
+                <th class="text-center">{{ $roundOneTimeTaken }}</th>
+                <th class="text-center">{{ $roundTwoTimeTaken }}</th>
               </tr>
               <tr>
                 <th>Session Total Time</th>
-                <th class="text-center" colspan="4">{{ $sessionTime }}</th>
+                <th class="text-center" colspan="2">{{ $sessionTime }}</th>
               </tr>
               @endif
             </tbody>

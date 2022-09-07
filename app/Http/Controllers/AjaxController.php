@@ -26,6 +26,7 @@ class AjaxController extends Controller
     private $successHtml = "Excellent. Your answer is correct: ";
     private $errorHtml = "Oops sorry! The correct answer is: ";
     private $tryAgainHtml = "<span class='wrong'>Your response is incorrect.</span> Please try again.<br/>";
+    private $controlHtml = "Correct Answer(s): ";
     const ALTERNATETEXT = 'abcxyz';
     public function __construct() {
       parent::__construct();
@@ -121,16 +122,16 @@ class AjaxController extends Controller
         $traineeRecord->save();
         return $response;
       } else {
-        return $respone;
+        return $response;
       }
   }
 
   /**
-     * Store the control session recorded list of words
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */ 
+   * Store the control session recorded list of words
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\Response
+   */ 
   public function controlStore(Request $request) {
       $response['reload'] = true;
       $showAnswer = 1;
@@ -169,10 +170,10 @@ class AjaxController extends Controller
             if (in_array($answer, $answers)) {
               $traineeTransaction['correct_or_wrong'] = 1;
               $iconWrongORRight = '<i class="fa fa-check" style="color:#155724"></i>';
-              $response['answer'] = 'The answer is: '.$word['answers'];
+              $response['answer'] = $this->controlHtml.$word['answers'];
               $response['is_answer_correct'] = 1;
             } else if($word['answers'] != $answer) {
-              $response['answer'] = 'The answer is: '.$word['answers'];
+              $response['answer'] = $this->controlHtml.$word['answers'];
               $response['is_answer_correct'] = 0;
             }
   

@@ -30,6 +30,7 @@ class TraineeSessionController extends Controller
     private $index = '/index';
     private $queshow = 'msmt.sessions.questions.show';
     private $recallRem = 'msmt.sessions.recallwords.remember';
+    private $recallControlRem = 'msmt.sessions.controlsessions.remember';
 
     public function __construct() {
       parent::__construct();
@@ -406,17 +407,17 @@ class TraineeSessionController extends Controller
         $allWords = count($allWords);
         $traineeCurrentPosition = $traineeRecord->session_current_position?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
         if ($traineeCurrentPosition->position === 'recall' || $traineeCurrentPosition->position === '') {
-           $this->traineeCurrentPosition->position = 'recall';
+          $this->traineeCurrentPosition->position = 'recall';
           $traineeRecord->session_current_position = json_encode($this->traineeCurrentPosition);
           $traineeRecord->session_state = 'continue';
           $traineeRecord->save();
-          if($traineeRecord->session_type == '5'){
-          $submitURL = url('controlsessions');
-          return view($this->recallRem, compact('allWords','traineeRecord', 'submitURL'));
-        }else{
-          $submitURL = url('sessions');
-          return view($this->recallRem, compact('allWords','traineeRecord', 'submitURL'));
-        }
+          if($traineeRecord->session_type == '5') {
+            $submitURL = url('controlsessions');
+            return view($this->recallControlRem, compact('allWords','traineeRecord', 'submitURL'));
+          } else {
+            $submitURL = url('sessions');
+            return view($this->recallRem, compact('allWords','traineeRecord', 'submitURL'));
+          }
         } 
       }
       return redirect($this->index);
