@@ -368,7 +368,9 @@ class TraineeController extends Controller
               if ($traineeReport->booster_id == 1) {
                 $recallReport[] = $this->_directionsRecallReport($recallWords, $allStoryWords);
               } else if ($sessionType == '5') {
-                $recallReport[] = json_decode($recallWords->answer);
+                //$this->pr($recallWords);
+                //$this->pr(json_decode($recallWords->answer));
+                $recallReport[] = json_decode($recallWords->answer)->words .' ('.gmdate($this->timeFormat, $recallWords->time_taken).' sec)' ;
                 //$recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
               } else {
                 $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
@@ -382,7 +384,6 @@ class TraineeController extends Controller
               $roundOneReport = collect(array_map('array_values', $roundOneReport->toArray()));
             }
           }
-         
           if ($trainee->round > 1 && $trainee->completed == 1 ) {
             $roundTwoReport = with(clone $queryObj)->where('round', '=', '2')->get();
             if ($roundTwoReport) {
@@ -393,7 +394,7 @@ class TraineeController extends Controller
                if ($traineeReport->booster_id == 1) {
                 $recallReport[] = $this->_directionsRecallReport($recallWords, $allStoryWords);
               } else if ($sessionType == '5') {
-                $recallReport[] = json_decode($recallWords->answer);
+                $recallReport[] = json_decode($recallWords->answer)->words.' ('.gmdate($this->timeFormat, $recallWords->time_taken).' sec)';
               } else {
                 $recallReport[] = $this->_recallReport($recallWords, $allStoryWords);
               }
@@ -402,7 +403,6 @@ class TraineeController extends Controller
               $categorical = $this->_totalTime( $roundTwoReport, 'categorical');
               $roundTwoTotal['contextual'] = gmdate($this->timeFormat, $contextual).' sec';
               $roundTwoTotal['categorical'] = gmdate($this->timeFormat, $categorical).' sec';
-               
               $roundTwoReport = collect(array_map('array_values', $roundTwoReport->toArray()));
             }
           }
@@ -681,11 +681,7 @@ class TraineeController extends Controller
             $timeOverall = with(clone $queryObj);
             $overallTotal = $timeOverall->sum('time_taken');
             $overallTotalTime = gmdate('i', $overallTotal)." mins : ".gmdate('s', $overallTotal)." sec";
-            if($trainee->session_type == 5){
-              return view('kessler.trainee.controlreport', compact('sessionNumber','traineeID', 'contextualRoundOneCount','categoricalRoundOneCount', 'recallRoundOneCount','contextualRoundTwoCount','categoricalRoundTwoCount', 'recallRoundTwoCount', 'recallOverallCount', 'contextualOverallCount', 'categoricalOverallCount', 'roundOneTotalTime', 'roundTwoTotalTime', 'overallTotalTime','startTime', 'endTime','totalWords'));
-            } else{
-              return view('kessler.trainee.report', compact('sessionNumber','traineeID', 'contextualRoundOneCount','categoricalRoundOneCount', 'recallRoundOneCount','contextualRoundTwoCount','categoricalRoundTwoCount', 'recallRoundTwoCount', 'recallOverallCount', 'contextualOverallCount', 'categoricalOverallCount', 'roundOneTotalTime', 'roundTwoTotalTime', 'overallTotalTime','startTime', 'endTime','totalWords'));
-            }
+            return view('kessler.trainee.report', compact('sessionNumber','traineeID', 'contextualRoundOneCount','categoricalRoundOneCount', 'recallRoundOneCount','contextualRoundTwoCount','categoricalRoundTwoCount', 'recallRoundTwoCount', 'recallOverallCount', 'contextualOverallCount', 'categoricalOverallCount', 'roundOneTotalTime', 'roundTwoTotalTime', 'overallTotalTime','startTime', 'endTime','totalWords'));
           } else {
             return view($this->error);
           }

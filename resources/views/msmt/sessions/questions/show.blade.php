@@ -95,7 +95,7 @@
            } else {
             timer = performance.now();
             $('#question').html(response.question);
-            highlightCaptializedWords();
+            //highlightCaptializedWords();
             if (response.categorical_cue && !response.show_answer) {
               $('#jsUserMessage').addClass('alert-info');
               $('#jsUserMessage').html(response.categorical_cue);

@@ -52,9 +52,9 @@
                 <td>{!! $recallReport[0]['words'] !!}</td>
                 <td>Remember: {{ $recallReport[0]['found_count'] }} <br> Forgot: {{ $recallReport[0]['unfound_count']  }}</td>--}}
                 <td>Recall Story</td>
-                <td>{{ $recallReport[0]->words }}</td>
+                <td>{{ $recallReport[0] }}</td>
                 @if (count($roundTwoReport))
-                <td>{!! $recallReport[1]->words !!}</td>
+                <td>{!! $recallReport[1] !!}</td>
                 @else
                 <td></td>
                 @endif
