@@ -58,7 +58,9 @@ class TraineeSessionController extends Controller
             'sessionpin' => 'required'    
           ]);
         if (!$validator->fails()) {
-          $record = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_current_position', 'session_start_time', 'booster_id', 'booster_range')->where('session_pin', $request->sessionpin)->where('completed', 0)->first();
+          echo $request->sessionpin;
+          echo $record = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_current_position', 'session_start_time', 'booster_id', 'booster_range')->where('session_pin', $request->sessionpin)->where('completed', 0)->toSql();
+          exit;
           if ($record) {
             $sessionStartTime = $record->session_start_time? json_decode($record->session_start_time): $this->sessionStartTime;
             switch($record->round) {
@@ -608,7 +610,7 @@ class TraineeSessionController extends Controller
       foreach ($storySentences as $question) {
         foreach(array_slice($userStoryWords, $userWordKey, null, true) as $wordKey=>$word) {
           $findWord = '/\b'.$word.'\b/';
-          if ($fillUpWord === $word) {
+          if ($fillUpWord === $word && !$breakParentLoop) {
             $storyWordID = array_search($word, $allStoryWords);
             $question = preg_replace($findWord, "<input id='answer' class='fill-ups' autocomplete='off' name='answer-".$storyWordID."'>", $question, 1, $count);
             if ($count) {

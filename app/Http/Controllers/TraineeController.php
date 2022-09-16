@@ -681,7 +681,11 @@ class TraineeController extends Controller
             $timeOverall = with(clone $queryObj);
             $overallTotal = $timeOverall->sum('time_taken');
             $overallTotalTime = gmdate('i', $overallTotal)." mins : ".gmdate('s', $overallTotal)." sec";
-            return view('kessler.trainee.report', compact('sessionNumber','traineeID', 'contextualRoundOneCount','categoricalRoundOneCount', 'recallRoundOneCount','contextualRoundTwoCount','categoricalRoundTwoCount', 'recallRoundTwoCount', 'recallOverallCount', 'contextualOverallCount', 'categoricalOverallCount', 'roundOneTotalTime', 'roundTwoTotalTime', 'overallTotalTime','startTime', 'endTime','totalWords'));
+            if($trainee->session_type == 5){
+              return view('kessler.trainee.controlreport', compact('sessionNumber','traineeID', 'contextualRoundOneCount','categoricalRoundOneCount', 'recallRoundOneCount','contextualRoundTwoCount','categoricalRoundTwoCount', 'recallRoundTwoCount', 'recallOverallCount', 'contextualOverallCount', 'categoricalOverallCount', 'roundOneTotalTime', 'roundTwoTotalTime', 'overallTotalTime','startTime', 'endTime','totalWords'));
+            } else {
+              return view('kessler.trainee.report', compact('sessionNumber','traineeID', 'contextualRoundOneCount','categoricalRoundOneCount', 'recallRoundOneCount','contextualRoundTwoCount','categoricalRoundTwoCount', 'recallRoundTwoCount', 'recallOverallCount', 'contextualOverallCount', 'categoricalOverallCount', 'roundOneTotalTime', 'roundTwoTotalTime', 'overallTotalTime','startTime', 'endTime','totalWords'));
+            }
           } else {
             return view($this->error);
           }
