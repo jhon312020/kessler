@@ -55,7 +55,7 @@ class TraineeSessionController extends Controller
       $validator = [];
        if ($request->isMethod('post')) {
           $validator = Validator::make($request->all(), [
-            'sessionpin' => 'required'    
+            'sessionpin' => 'numeric|required'    
           ]);
         if (!$validator->fails()) {
           //echo $request->sessionpin;
