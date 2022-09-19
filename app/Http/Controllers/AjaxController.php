@@ -153,6 +153,7 @@ class AjaxController extends Controller
         $word = ControlWord::select('id', 'answers', 'questions')->where('id', $wordID)->where('story_id', $trainee['session_number'])->first();
         //$this->pr($word->toArray);
         if ($word) {
+          if (!$request->showedAnswer) {
             $answer = strtoupper(trim($answer));
             $traineeTransaction['correct_or_wrong'] = 0;
             $traineeTransaction['round'] = 1;
@@ -178,6 +179,7 @@ class AjaxController extends Controller
             }
   
             TraineeTransaction::insert($traineeTransaction);
+          }
     
           if ($request->showedAnswer) {
             $word = ControlWord::select('id', 'answers', 'questions')->where('id','>', $wordID)->where('story_id', $trainee['session_number'])->orderBy('id', 'asc')->first();

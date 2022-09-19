@@ -115,11 +115,21 @@ class TraineeController extends Controller
         $trainees = $queryObj->get();
         $data_arr =  array();
         $session_types = Category::pluck('name','id');
+        $booster_types = Booster::pluck('category','id');
         foreach ($trainees as $records) {
           $trainee_id = $records->trainee_id;
           $session_pin = $records->session_pin;
           $session_type = $session_types[$records->session_type];
-          $session_number = $records->session_number;
+          if ($records->session_number == 'Booster') 
+          {
+            //$session_number = $booster_types[$records->booster_id];
+            $session_number = $booster_types[$records->booster_id].'-'.$records->booster_range;
+          } else if ($records->booster_id) {
+            $session_number = $booster_types[$records->booster_id].'-'.$records->session_number;
+          } else {
+            $session_number = $records->session_number;
+          }
+          
           $session_start_time = '';
           $session_end_time = '';
           $sessionStartTime = isset($records->session_start_time)?json_decode($records->session_start_time): null;
