@@ -58,9 +58,9 @@ class TraineeSessionController extends Controller
             'sessionpin' => 'required'    
           ]);
         if (!$validator->fails()) {
-          echo $request->sessionpin;
-          echo $record = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_current_position', 'session_start_time', 'booster_id', 'booster_range')->where('session_pin', $request->sessionpin)->where('completed', 0)->toSql();
-          exit;
+          //echo $request->sessionpin;
+          $record = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'session_current_position', 'session_start_time', 'booster_id', 'booster_range')->where('session_pin', $request->sessionpin)->where('completed', 0)->first();
+          //exit;
           if ($record) {
             $sessionStartTime = $record->session_start_time? json_decode($record->session_start_time): $this->sessionStartTime;
             switch($record->round) {
