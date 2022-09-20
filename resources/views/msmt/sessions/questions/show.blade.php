@@ -1,7 +1,26 @@
 @extends('msmt.layouts.master')
 
 @section('content')
-<section class="text-center" id="jsQuestions">
+<section id="jsCueInstruction">
+  <div class="row">
+    <div class="col-lg-12 text-center">
+      <h1 class="heading">INSTRUCTIONS</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-offset-2 col-lg-8 mx-auto text-justify">
+       <p>For this next section, you will be given cues to help you remember the words.</p>
+       <p>Click on <span class="emboss">START</span> when you are ready.</p>
+       <br/>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+       <div class="form-group text-center"><button class="btn btn-primary btn-xl" id="jsStartSession" type="submit">START</button></div>
+    </div>
+  </div>
+</section>
+<section class="text-center d-none" id="jsQuestions">
   <div class="row">
     <div class="col-lg-8 mx-auto">
       <h1 class="heading">CUES<br/></h1>
@@ -142,8 +161,7 @@
     });
 
     $('#jsStartSession').on('click touchstart', function(event) { 
-      $('#jsTraineeMessage').slideUp();
-      $('#jsTraineeMessage').html('');
+      $('#jsCueInstruction').slideUp();
       $('#jsQuestions').removeClass('d-none').show();
       $('#answer').focus();
       document.getElementById("answer").focus();

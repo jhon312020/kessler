@@ -78,7 +78,7 @@ class TraineeSessionController extends Controller
             if($record['session_type'] == '1' ){
               return redirect('/sessions');
             } elseif($record['session_type'] == '5') {
-              return redirect('/controlsessions');
+              return redirect('/other');
             }else{
               return redirect('/write');
             }
@@ -110,7 +110,7 @@ class TraineeSessionController extends Controller
         if($traineeRecord['session_type'] == '2' || $traineeRecord['session_type']== '3' || $traineeRecord['session_type'] == '4'){
           return redirect('/write');
         }/*elseif($traineeRecord['session_type'] == '5'){
-            return redirect('/controlsessions');
+            return redirect('/other');
         }*/
 
         $traineeCurrentPosition = $traineeRecord->session_current_position?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
@@ -160,7 +160,7 @@ class TraineeSessionController extends Controller
         dd($story);
         exit();*/
         /*if($traineeRecord['session_type'] == '5') {
-            return redirect('/controlsessions');
+            return redirect('/other');
           }*/
       $traineeCurrentPosition = $traineeRecord->session_current_position?json_decode($traineeRecord->session_current_position):$this->traineeCurrentPosition;
       
@@ -414,7 +414,7 @@ class TraineeSessionController extends Controller
           $traineeRecord->session_state = 'continue';
           $traineeRecord->save();
           if($traineeRecord->session_type == '5') {
-            $submitURL = url('controlsessions');
+            $submitURL = url('other');
             return view($this->recallControlRem, compact('allWords','traineeRecord', 'submitURL'));
           } else {
             $submitURL = url('sessions');

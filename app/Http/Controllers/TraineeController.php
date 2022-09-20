@@ -306,7 +306,7 @@ class TraineeController extends Controller
         $trainee->completed = 0;
         TraineeTransaction::where('story_id', $trainee['session_number'])->where('trainee_id', $trainee['trainee_id'])->where('session_pin', $trainee['session_pin'])->delete();
         /*if ( $trainee['session_number'] > $this->minSession &&  $trainee['session_number'] <= $this->maxSession) */
-          if($trainee['session_type'] == '2' && $trainee['session_type'] == '3' ){
+          if($trainee['session_type'] == '2' || $trainee['session_type'] == '3' ||$trainee['session_type'] == '4'){
           TraineeStory::where('story_id', $trainee['session_number'])->where('trainee_id', $trainee['trainee_id'])->where('session_pin', $trainee['session_pin'])->delete();
         }
       }
