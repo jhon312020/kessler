@@ -13,9 +13,6 @@ use Auth;
 use DB;
 
 use Illuminate\Validation\Rule;
- 
-
-
 
 class TrainerController extends Controller
 {
@@ -212,8 +209,9 @@ class TrainerController extends Controller
         $generalSession = $this->configValue['GENERAL'];
         $boosterSession = Booster::all();
         $otherSession = $this->configValue['OTHER'];
+        $jsCatSelected = json_encode(array_keys($categoriesSelect));
         //return view('kessler.trainer.saedit', compact('trainer','categories','story','contextual','general','other','boosterSes','boosters'));
-        return view('kessler.trainer.saedit', compact('trainer','categoriesSelect','story','contextual','general','other','boosterSes','categories','storySession','writeSession','generalSession','boosterSession','otherSession','boosters'));
+        return view('kessler.trainer.saedit', compact('trainer','categoriesSelect','story','contextual','general','other','boosterSes','categories','storySession','writeSession','generalSession','boosterSession','otherSession','boosters', 'jsCatSelected'));
       } else {
         return view('kessler.trainer.edit', compact('trainer'));
       }

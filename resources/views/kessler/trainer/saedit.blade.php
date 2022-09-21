@@ -37,78 +37,73 @@
                     <option selected="selected" value="{{ $category->id }}">{{ $category->name }}</option>
                     @else
                     <option value="{{ $category->id }}">{{ $category->name }}</option>
-                    @endif;
-                  @endforeach;
+                    @endif
+                  @endforeach
                 </select>
               </div>        
             
-              <div class="form-group " id="jsStory">
-              <label class="small mb-1" for="story_session">Story Sessions</label>
-              <select class="form-control select2 " id="story_session" name="story[]"  multiple="multiple">
+              <div class="form-group session" id="jsStory">
+              <label class="small mb-1" for="story">Story Sessions</label>
+              <select class="form-control select2 " id="jsStorySel" name="story[]"  multiple="multiple">
                 @foreach($storySession as $storyID)
                   @if(is_array($story[0]) && in_array($storyID, $story[0]))
                     <option selected="selected" value="{{ $storyID }}">{{ $storyID }}</option>
                   @else
                     <option value="{{ $storyID }}">{{ $storyID }}</option>
-                  @endif;
-                @endforeach;
+                  @endif
+                @endforeach
               </select>
               </div>
-            
-            
-            <div class="form-group" id="jsContext">
+            <div class="form-group session" id="jsContext">
               <label class="small mb-1 d-block" for="context_session">Contextual Sessions</label>
-              <select class="form-control select2 category" id="context_session" name="contextual[]" multiple="multiple">
+              <select class="form-control select2 category" id="jsContextSel" name="contextual[]" multiple="multiple">
                 @foreach($writeSession as $writeID)
                   @if(is_array($contextual[0]) && in_array($writeID, $contextual[0]))
                     <option selected="selected" value="{{ $writeID }}">{{ $writeID }}</option>
                   @else
                     <option value="{{ $writeID }}">{{ $writeID }}</option>
-                  @endif;
-                @endforeach;
+                  @endif
+                @endforeach
               </select>
              </div>
             
             
-            <div class="form-group" id="jsGeneral">
+            <div class="form-group session" id="jsGeneral">
               <label class="small mb-1 d-block" for="general_session">General Sessions</label>
-              <select class="form-control select2 category" id="general_session" name="general[]" multiple="multiple" >
+              <select class="form-control select2 category" id="jsGeneralSel" name="general[]" multiple="multiple" >
                 @foreach($generalSession as $generalID)
                   @if(is_array($general[0]) && in_array($generalID, $general[0]))
                     <option selected="selected" value="{{ $generalID }}">{{ $generalID }}</option>
                   @else
                     <option value="{{ $generalID }}">{{ $generalID }}</option>
-                  @endif;
-                @endforeach;
+                  @endif
+                @endforeach
               </select>
              </div>
-            
-            
-            
-            <div class="form-group" id="jsBooster">
+            <div class="form-group session" id="jsBooster">
                <label class="small mb-1 d-block" for="booster">Booster Sessions</label>
-              <select class="form-control select2 category" id="booster_session" name="booster[]" multiple="multiple">
+              <select class="form-control select2 category" id="jsBoosterSel" name="booster[]" multiple="multiple">
                 <!-- <option value= '' >Booster Sessions</option> -->
                 @foreach($boosterSession as $booster)
                   @if(is_array($boosterSes) && in_array($booster->category, $boosterSes))
                     <option selected="selected" value="{{ $booster->id }}">{{ $booster->category }}</option>
                   @else
                     <option value="{{ $booster->id }}">{{ $booster->category }}</option>
-                  @endif;
-                @endforeach;
+                  @endif
+                @endforeach
               </select>
             </div>
             
-            <div class="form-group" id="jsOther">
+            <div class="form-group session" id="jsOther">
               <label class="small mb-1 d-block" for="other_session">Control Sessions</label>
-              <select class="form-control select2 category" id="other_session" name="other[]" multiple="multiple">
+              <select class="form-control select2 category" id="jsOtherSel" name="other[]" multiple="multiple">
                 @foreach($otherSession as $otherID)
                   @if(is_array($other[0]) && in_array($otherID, $other[0]))
                     <option selected="selected" value="{{ $otherID }}">{{ $otherID }}</option>
                   @else
                     <option value="{{ $otherID }}">{{ $otherID }}</option>
-                  @endif;
-                @endforeach;
+                  @endif
+                @endforeach
               </select>
              </div>
             
@@ -129,40 +124,79 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/1.1.1/js/bootstrap-multiselect.min.js" integrity="sha512-fp+kGodOXYBIPyIXInWgdH2vTMiOfbLC9YqwEHslkUxc8JLI7eBL2UQ8/HbB5YehvynU3gA3klc84rAQcTQvXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+      resetSession();
       $('#jsCategory').multiselect({
-          includeSelectAllOption: true,
-        });
+        includeSelectAllOption: true,
+      });
       $('#jsCategory').bind('change', function() {
-        window.location.reload();
-        $('#story_session').val("");
-        $('#context_session').val("");
-        $('#general_session').val("");
-        $('#booster_session').val("");
-        $('#other_session').val("");
+        //window.location.reload();
+        resetSession();
       });      
       
-      $('#story_session').multiselect({
-          includeSelectAllOption: true,
-        });
-      $('#context_session').multiselect({
-          includeSelectAllOption: true,
-        });
-      $('#general_session').multiselect({
-          includeSelectAllOption: true,
-        });
-      $('#booster_session').multiselect({
-          includeSelectAllOption: true,
-        });
-      $('#other_session').multiselect({
-          includeSelectAllOption: true,
-        });
+      $('#jsStorySel').multiselect({
+        includeSelectAllOption: true,
+      });
+      $('#jsContextSel').multiselect({
+        includeSelectAllOption: true,
+      });
+      $('#jsGeneralSel').multiselect({
+        includeSelectAllOption: true,
+      });
+      $('#jsBoosterSel').multiselect({
+        includeSelectAllOption: true,
+      });
+      $('#jsOtherSel').multiselect({
+        includeSelectAllOption: true,
+      });
 
-      /*$('#jsCategory').multiselect();
-      $('#story_session').multiselect();
-      $('#context_session').multiselect();
-      $('#general_session').multiselect();
-      $('#booster_session').multiselect();
-      $('#other_session').multiselect();*/
+      function resetSession() {
+        var select = $("#jsCategory option:selected");
+        var selected = $.map(select, function(option){
+          return option.value;
+        });
+        const iterator = selected.values();
+        $('.session').addClass('d-none');
+        $('.session').find('select').attr('disabled', true);
+
+        for (const value of iterator) {
+          let containerID = '';
+          switch(value) {
+            //case story:
+            case '1':
+              containerID = '#jsStory';
+            break;
+            //case write:
+            case '2':
+              containerID = '#jsContext';
+            break;
+            //case general:
+            case '3':
+              containerID = '#jsGeneral';
+            break;
+            //case booster  
+            case '4':
+              containerID = '#jsBooster';
+            break;
+            //case other:
+            case '5':
+              containerID = '#jsOther';
+            break;
+          }
+          enableMulSelButton(containerID);
+        } 
+      }
+      function enableMulSelButton(containerID) {
+        let elementID = containerID + 'Sel';
+        $(containerID).removeClass('d-none');
+        $(elementID).attr('required', true);
+        $(elementID).attr('disabled', false);
+        $(elementID).multiselect({
+          includeSelectAllOption: true,
+        });
+        let $buttonObj = $(elementID).parent().find('button');
+        $buttonObj.attr('disabled',false);
+        $buttonObj.removeClass('disabled');
+      }
       
   });
 </script>

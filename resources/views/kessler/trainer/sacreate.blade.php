@@ -34,7 +34,7 @@
                 <select class="form-control py-4" id="jsCategory" name="category[]" multiple="multiple">
                 @foreach($categories as $category)
                   <option value="{{ $category->id }}">{{ $category->name }}</option>
-                @endforeach;
+                @endforeach
                 </select>
               </div>
               
@@ -43,7 +43,7 @@
                 <select class="form-control select2" id="jsStoryIn" name="story[]" multiple="multiple" >
                   @foreach($storySession as $story)
                     <option value="{{ $story }}">{{ $story }}</option>
-                  @endforeach;
+                  @endforeach
                 </select>
               </div>
               
@@ -53,7 +53,7 @@
                  <!--  <option value= '' selected="selected">Select Contextual Session</option> -->
                   @foreach($writeSession as $write)
                     <option value="{{ $write }}">{{ $write }}</option>
-                  @endforeach;
+                  @endforeach
                 </select>
               </div>
                            
@@ -63,7 +63,7 @@
                   <!-- <option value= '' selected="selected">Select General Session</option> -->
                   @foreach($generalSession as $general)
                     <option value="{{ $general }}">{{ $general }}</option>
-                  @endforeach;
+                  @endforeach
                 </select>
               </div>
               
@@ -73,7 +73,7 @@
                   <!-- <option value= '' selected="selected">Select Booster Session</option> -->
                   @foreach($boosterSession as $booster)
                     <option value="{{ $booster->id }}" >{{ $booster->category }}</option>
-                  @endforeach;
+                  @endforeach
                 </select>
               </div>
               
@@ -82,7 +82,7 @@
                 <select class="form-control select2" id="jsOtherIn" name="other[]" multiple="multiple">
                   @foreach($otherSession as $other)
                     <option value="{{ $other }}">{{ $other }}</option>
-                  @endforeach;
+                  @endforeach
                 </select>
               </div>
 
@@ -104,26 +104,19 @@
 <!-- <script type="text/javascript" src="{{asset('js/multiselect.min.js')}}"></script> -->
 <script type="text/javascript">
     $(document).ready(function() {
-      /*$('#jsCategory').val([]).multiselect('refresh');
-      $('#jsCategory').multiselect();*/
-      //$('#jsCategory').val([]).select2('refresh');
       $('#jsCategory').multiselect({
-          includeSelectAllOption: true,
-        });
+        includeSelectAllOption: true,
+      });
       
       $('#jsCategory').bind('change',function() {
       var select = $("#jsCategory option:selected");
       var selected = $.map(select, function(option){
         return option.value;
       });
-      console.log(selected);
       const iterator = selected.values();
       $('.session').addClass('d-none');
       $('.session').find('select').attr('disabled',true);
-
       for (const value of iterator) {
-      console.log(value);
-
       switch(value) {
         //case story:
         case '1':
@@ -131,9 +124,9 @@
           $('#jsStory').removeClass('d-none'); 
           $('#jsStoryIn').attr('disabled',false); 
           $('#jsStoryIn').multiselect({
-          includeSelectAllOption: true,
-        });
-          break;
+            includeSelectAllOption: true,
+          });
+        break;
 
         //case write:
         case '2':
@@ -141,9 +134,9 @@
           $('#jsWrite').removeClass('d-none');
           $('#jsWriteIn').attr('disabled',false);
           $('#jsWriteIn').multiselect({
-          includeSelectAllOption: true,
-        });
-          break;
+            includeSelectAllOption: true,
+          });
+        break;
 
         //case general:
         case '3':
@@ -151,9 +144,9 @@
           $('#jsGeneral').removeClass('d-none');
           $('#jsGeneralIn').attr('disabled',false);
           $('#jsGeneralIn').multiselect({
-          includeSelectAllOption: true,
-        });
-          break;
+            includeSelectAllOption: true,
+          });
+        break;
 
         //case booster  
         case '4':
@@ -161,9 +154,9 @@
           $('#jsBooster').removeClass('d-none');
           $('#jsBoosterIn').attr('disabled',false);
           $('#jsBoosterIn').multiselect({
-          includeSelectAllOption: true,
-        });
-          break;
+            includeSelectAllOption: true,
+          });
+        break;
 
         //case other:
         case '5':
@@ -171,9 +164,9 @@
           $('#jsOther').removeClass('d-none');
           $('#jsOtherIn').attr('disabled',false);
           $('#jsOtherIn').multiselect({
-          includeSelectAllOption: true,
-        });
-          break;
+            includeSelectAllOption: true,
+          });
+        break;
       }
     }  
     });

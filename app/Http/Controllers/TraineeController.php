@@ -115,7 +115,7 @@ class TraineeController extends Controller
         $trainees = $queryObj->get();
         $data_arr =  array();
         $session_types = Category::pluck('name','id');
-        $booster_types = Booster::pluck('category','id');
+        $booster_types = Booster::pluck('category','id')->toArray();
         foreach ($trainees as $records) {
           $trainee_id = $records->trainee_id;
           $session_pin = $records->session_pin;
@@ -123,7 +123,8 @@ class TraineeController extends Controller
           if ($records->session_number == 'Booster') 
           {
             //$session_number = $booster_types[$records->booster_id];
-            $session_number = $booster_types[$records->booster_id].'-'.$records->booster_range;
+            $session_number = in_array($records->booster_id, $booster_types)?$booster_types[$records->booster_id]:'';
+            $session_number .= '-'.$records->booster_range;
           } else if ($records->booster_id) {
             $session_number = $booster_types[$records->booster_id].'-'.$records->session_number;
           } else {
