@@ -161,13 +161,13 @@
 }
 
 .page-section {
-  font-size: 30px;
+  font-size: 33px;
   line-height: 2em;
   font-family: robot
 }
 .writeup {
   /*text-transform: uppercase;*/
-  font-size: 30px;
+  font-size: 34px;
 }
 
 /*.writeup{
@@ -203,6 +203,39 @@
   transform: translate(-50%, -50%);
 }
 
+.color-0 {
+  color:  darkgreen;
+}
+.color-1 {
+  color:  navy;
+}
+.color-2 {
+  color:  maroon;
+}
+.color-3 {
+  color:  gold;
+}
+.color-4 {
+  color:  deepskyblue;
+}
+.color-5 {
+  color:  fuchsia;
+}
+.color-6 {
+  color:  black;
+}
+.color-7 {
+  color:  red;
+}
+.color-8 {
+  color:  orange;
+}
+.color-9 {
+  color:  limegreen;
+}
+.color-10 {
+  color:  bisque;
+}
 
 
 .lds-default {

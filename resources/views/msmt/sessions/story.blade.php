@@ -73,7 +73,6 @@
           return;
         } else {
           $('#time').text(counter);
-          console.log("Timer --> " + counter);
         }
       }, 1000);
       setTimeout(function() {

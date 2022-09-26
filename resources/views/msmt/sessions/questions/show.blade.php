@@ -1,7 +1,7 @@
 @extends('msmt.layouts.master')
 
 @section('content')
-<section id="jsCueInstruction">
+<section id="jsCueInstruction" class="{{ !$showTraineeMessage ? 'd-none' : '' }}">
   <div class="row">
     <div class="col-lg-12 text-center">
       <h1 class="heading">INSTRUCTIONS</h1>
@@ -20,7 +20,7 @@
     </div>
   </div>
 </section>
-<section class="text-center d-none" id="jsQuestions">
+<section class="text-center {{ $showTraineeMessage ? 'd-none' : '' }}" id="jsQuestions">
   <div class="row">
     <div class="col-lg-8 mx-auto">
       <h1 class="heading">CUES<br/></h1>

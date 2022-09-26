@@ -123,7 +123,7 @@ class TraineeController extends Controller
           if ($records->session_number == 'Booster') 
           {
             //$session_number = $booster_types[$records->booster_id];
-            $session_number = in_array($records->booster_id, $booster_types)?$booster_types[$records->booster_id]:'';
+            $session_number = array_key_exists($records->booster_id, $booster_types)? $booster_types[$records->booster_id]:'';
             $session_number .= '-'.$records->booster_range;
           } else if ($records->booster_id) {
             $session_number = $booster_types[$records->booster_id].'-'.$records->session_number;

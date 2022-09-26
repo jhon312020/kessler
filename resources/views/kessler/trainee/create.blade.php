@@ -64,9 +64,9 @@
 
             @if(is_array($other[0]) && count($other[0]) > 0)
             <div class="form-group d-none session" id="jsOther">
-              <label class="small mb-1" for="other_session">Control Sessions</label>
+              <label class="small mb-1" for="other_session">Other Sessions</label>
               <select class="form-control select2 category" id="other_session" name="session_number"  placeholder="Select Control Session" disabled = "true">
-                <option value='' selected="selected">Control Sessions</option>
+                <option value='' selected="selected">Other Sessions</option>
                 
                 @foreach($other[0] as $other)
                   <option value="{{ $other }}">{{ $other }}</option>

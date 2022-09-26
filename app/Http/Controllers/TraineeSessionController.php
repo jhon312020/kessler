@@ -38,6 +38,7 @@ class TraineeSessionController extends Controller
       $this->sessionStartTime = (object)array('roundOne'=>'', 'roundTwo'=>'');
       $this->sessionEndTime = (object)array('roundOne'=>'', 'roundTwo'=>'');
       $this->directionBoosterID = $this->commonConfigValue['DIRECTION_BOOSTER_ID'];
+      $this->holidayBoosterID = $this->commonConfigValue['HOLIDAY_BOOSTER_ID'];
       $this->minSession = $this->commonConfigValue['MIN_SESSION_NO'];
       $this->minWrite = $this->commonConfigValue['MIN_WRITE_NO'];
       $this->maxSession =$this->commonConfigValue['MAX_SESSION_NO'];
@@ -189,7 +190,7 @@ class TraineeSessionController extends Controller
             $session_type = $traineeRecord->session_type;
             //$question = str_replace($word['answers'], "<input class='fill-ups' name='answer-".$wordID."' id='answer' autocomplete='off'>", $question);
             //$question = str_replace("$$", str_repeat("_", 15), $question);
-            $submitURL = url('controlnext');
+            $submitURL = url('othernext');
             return view('msmt.sessions.questions.controlshow', compact('question', 'session_type', 'showTraineeMessage', 'submitURL'));
           }
         }
@@ -205,7 +206,7 @@ class TraineeSessionController extends Controller
      */
     public function writing(Request $request) {
       $instructions = '<p>On the same page below you are going to see a set of 20 words. The words will be capitalized like <span class="emboss">THIS</span>. <p>Build a story of your own using these words. Try to use several of the words in each sentence. This story is to help you remember the capitalized words. Try to make a picture of each storyline in your head. </p>';
-      
+      $includeViewName = "msmt.sessions.partials.word-all";
      if ($request->session()->has('trainee')) {
         $trainee = $request->session()->get('trainee');
         $traineeRecord = Trainee::where('session_pin', $trainee['session_pin'])->first();
@@ -221,8 +222,7 @@ class TraineeSessionController extends Controller
           if ($traineeRecord['booster_id']) {
             $words = $wordStory->where('question', '<>', 'D')->pluck('word')->toArray();
             $sentenceWords = $wordStory->where('question', '<>', 'D')->pluck('question')->toArray();
-            $allWords = $wordStory->pluck('words')->toArray();
-          
+            $allWords = $wordStory->pluck('words')->toArray(); 
           } else {
             $allWords = $wordStory->pluck('word')->toArray();
           }
@@ -246,7 +246,14 @@ class TraineeSessionController extends Controller
             }
             if ($traineeRecord['booster_id']) {
               $allWords = implode(',', $allWords);
-              $words = array_chunk($words, 5, true);
+              if ($traineeRecord['booster_id'] == $this->holidayBoosterID) { 
+                $words = array_chunk($words, 10, true);
+                //$this->pr($words);
+                $includeViewName = "msmt.sessions.partials.word-holidays";
+                $respClass = 'col-lg-6';
+              } else {
+                 $words = array_chunk($words, 5, true);
+              }
               switch($traineeRecord['booster_id']) {
                 case 1:
                    $instructions = '<p>Below you are going to see a list of directions, with capitalised word like <span class="emboss">THIS</span> in each item.</p><p>Use these words to make up a story of your own.  Remember to make up a story that is easy to picture in your mind.  Use what you have learned in previous sessions to visualise the story.  The visualisation will help you remember the words, which will then help you to remember the step in the directions.</p>';
@@ -255,7 +262,8 @@ class TraineeSessionController extends Controller
                  $instructions = '<p>Below you are going to see a list of things to do, with capitalised word like <span class="emboss">THIS</span> in each item.</p><p>Use these words to make up a story of your own.  Remember to make up a story that is easy to picture in your mind.  Use what you have learned in previous sessions to visualise the story.  The visualisation will help you remember the words, which will then help you to remember the "to do" item.</p>';
                 break;
               }
-             
+              
+              
               if ($traineeRecord['booster_id'] == $this->directionBoosterID) {
                 $respClass = 'col-lg-12';
                 $settings = Setting::pluck('booster_id','active')->toArray();
@@ -266,15 +274,15 @@ class TraineeSessionController extends Controller
                 }
                 $sentenceWords = implode('**', $sentenceWords);
                 $type = "directions";
-                return view($viewName, compact('words', 'allWords', 'respClass', 'type', 'sentenceWords', 'instructions'));
+                return view($viewName, compact('words', 'allWords', 'respClass', 'type', 'sentenceWords', 'instructions', 'includeViewName'));
               } else {
-                return view('msmt.sessions.word', compact('words', 'allWords', 'respClass', 'instructions'));
+                return view('msmt.sessions.word', compact('words', 'allWords', 'respClass', 'instructions', 'includeViewName'));
               }
               
             } else {
               $allWords = implode(',', $allWords);
               $words = array_chunk($words, 5, true);
-              return view('msmt.sessions.word', compact('words', 'allWords', 'respClass', 'instructions'));
+              return view('msmt.sessions.word', compact('words', 'allWords', 'respClass', 'instructions', 'includeViewName'));
             }
             
           }
@@ -481,7 +489,7 @@ class TraineeSessionController extends Controller
           $session_type = $traineeRecord->session_type;
           $question .= "<br/><input class='fill-ups' name='answer-".$wordID."' id='answer' autocomplete='off'>";
         } 
-        $submitURL = url('controlnext');
+        $submitURL = url('othernext');
         return view('msmt.sessions.questions.controlshow', compact('question','session_type', 'showTraineeMessage', 'submitURL'));
       } else {
         return redirect($this->index);

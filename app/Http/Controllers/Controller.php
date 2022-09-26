@@ -110,7 +110,11 @@ class Controller extends BaseController
     // $this->pr($modelObj);
     // $this->pr($conditions);
     // echo $selectFields;
-    $wordObj = $modelObj::where($conditions)->get($selectFields);
+    $wordObj = $modelObj::where($conditions);
+    if ($trainee['session_type'] == 3) {
+      $wordObj = $wordObj->orderBy('order_by', 'asc');
+    }
+    $wordObj = $wordObj->orderBy('id','asc')->get($selectFields);
     // $this->pr($wordObj->toArray()); 
     // exit;
     //
