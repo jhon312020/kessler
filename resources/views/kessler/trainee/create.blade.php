@@ -112,7 +112,9 @@
               <select class="form-control select2" id="booster_id" name="booster_id" placeholder="Select Category" disabled="true">
                 <option value= '' selected="selected">Select Category</option>
                 @foreach($boosters as $booster)
+                @if($booster->type == 'Booster')
                   <option value="{{ $booster->id }}">{{ $booster->category}}</option>
+                @endif
                 @endforeach;
               </select>
             </div>

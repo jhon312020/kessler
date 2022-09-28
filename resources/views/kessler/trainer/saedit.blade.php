@@ -88,7 +88,9 @@
                   @if(is_array($boosterSes) && in_array($booster->category, $boosterSes))
                     <option selected="selected" value="{{ $booster->id }}">{{ $booster->category }}</option>
                   @else
+                    @if($booster->type == 'Booster')
                     <option value="{{ $booster->id }}">{{ $booster->category }}</option>
+                    @endif
                   @endif
                 @endforeach
               </select>

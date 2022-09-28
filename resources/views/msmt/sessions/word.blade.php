@@ -68,6 +68,7 @@
       console.log(allWords);
       $('#jsUserMessage').addClass('d-none');
       $('#jsWordContainer p').removeClass('strikeThrough');
+      $('#jsWordContainer p span').removeClass('strikeThrough');
       writeup = $('#jsWriteup').val().toUpperCase();
       updateWriteUp = $('#jsWriteup').val();
       userUsedWordCount = 0;

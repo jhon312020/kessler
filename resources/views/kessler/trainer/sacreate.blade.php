@@ -72,7 +72,9 @@
                 <select class="form-control select2" id="jsBoosterIn" name="booster[]" multiple="multiple">
                   <!-- <option value= '' selected="selected">Select Booster Session</option> -->
                   @foreach($boosterSession as $booster)
+                  @if($booster->type == 'Booster')
                     <option value="{{ $booster->id }}" >{{ $booster->category }}</option>
+                  @endif
                   @endforeach
                 </select>
               </div>
