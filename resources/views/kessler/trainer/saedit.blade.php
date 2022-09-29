@@ -27,7 +27,7 @@
               </div>
               <div class="form-group">
                 <label class="small mb-1" for="email">Update email</label>
-                <input type="text" class="form-control py-4" name="email" id="email" placeholder="Update email" value="{{$trainer->email}}">
+                <input type="text" class="form-control py-4" name="email" id="email" placeholder="Update email" value="{{$trainer->email}}" disabled>
               </div>   
               <div class="form-group">
                 <label class="small mb-1" for="category">Update category</label>
