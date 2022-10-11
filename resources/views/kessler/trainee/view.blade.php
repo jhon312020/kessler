@@ -63,6 +63,21 @@
                 <td></td>
                 @endif
               </tr>
+              @if (count($traineeStories)) 
+              <tr>
+                <td>Story</td>
+                <td colspan="2">
+                  @if (count($traineeStories)) 
+                    {{ $traineeStories[0]['updated_story'] }}
+                  @endif
+                </td>
+                <td colspan="2">
+                  @if (count($traineeStories) > 1) 
+                    {{ $traineeStories[1]['updated_story'] }}
+                  @endif
+                </td>
+              </tr>
+              @endif
               <thead>
               <tr align="center">
                 <th width="20%"></th>

@@ -156,6 +156,7 @@ class TraineeController extends Controller
           $delete = route('trainee.destroy', $records->id);
           $report = url('trainee/report', $records->id);
           $approve = url('trainee/approve', $records->id);
+          $storyView = url('trainee/story/view', $records->id);
           $csrf = csrf_token();
           $id = $records->id;
           $action = '';
@@ -167,8 +168,10 @@ class TraineeController extends Controller
            if (($records->session_type >= 2  || $records->session_type <= 4) ) {
             $traineeCurrentPosition = json_decode($records->session_current_position);
             if ($traineeCurrentPosition && $traineeCurrentPosition->position == 'review') {
-            $action .= "<a href='$approve' class='btn btn-primary' role='button' title='Approve'><i class='fas fa-book' title='Approve'></i></a>&nbsp;";
-            }       
+            $action .= "<a href='$approve' class='btn btn-primary' role='button' title='Approve'><i class='fas fa-check-circle' title='Approve'></i></a>&nbsp;";
+            } else if ($records->round > 1) {
+              $action .= "<a href='$storyView' class='btn btn-primary' role='button' title='View'><i class='fas fa-newspaper' title='Trainee Story'></i></a>&nbsp;";
+            }      
           }
           if ($records->completed == 0) {
             if ($user->role == 'TA') {
@@ -350,6 +353,7 @@ class TraineeController extends Controller
         $roundOneTotal = array();
         $roundTwoTotal = array();
         $storyWords = array();
+        $traineeStories = array();
         $roundOneTimeTaken = 0;
         $roundTwoTimeTaken = 0;
         $traineeReport = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'booster_id', 'session_type', 'round', 'completed')->where('id', $trainee->id)->first();
@@ -370,6 +374,9 @@ class TraineeController extends Controller
           $sessionTime = gmdate($this->timeFormat, $overallTotal).' sec';
           if ($trainee->round > 1) {
             $roundOneReport = with(clone $queryObj)->where('round', '=', '1')->get();
+            if (($trainee->session_type >= 2  || $trainee->session_type <= 4) ) {
+              $traineeStories = TraineeStory::select('original_story', 'updated_story', 'round')->where('story_id', $trainee->session_number)->where('session_pin', $trainee->session_pin)->get()->toArray();
+            }
 
             if ($roundOneReport) {
               $roundOneTime = $roundOneReport->sum('time_taken');
@@ -420,7 +427,7 @@ class TraineeController extends Controller
         }
         $submitURL = url('/trainee/answerSave');
         if($sessionType != '5'){
-        return view('kessler.trainee.view')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords','traineeID','sessionNumber','sessionType', 'roundOneTimeTaken', 'roundTwoTimeTaken', 'sessionTime','submitURL'));
+        return view('kessler.trainee.view')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords','traineeID','sessionNumber','sessionType', 'roundOneTimeTaken', 'roundTwoTimeTaken', 'sessionTime','submitURL', 'traineeStories'));
         }else{
           return view('kessler.trainee.controlview')->with(compact('roundOneReport', 'recallReport', 'roundOneTotal', 'roundTwoReport', 'roundTwoTotal', 'storyWords','traineeID','sessionNumber','sessionType', 'roundOneTimeTaken', 'roundTwoTimeTaken', 'sessionTime','submitURL'));
         }
@@ -596,6 +603,27 @@ class TraineeController extends Controller
         redirect($this->traineePage)->with('error', 'Invalid request!');
       }
     }
+    /**
+     * Revise trainee story 
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function storyView($id) {
+      $trainee = Trainee::find($id);
+      $user = Auth::user();
+      if ($trainee->trainer_id == $user->id || in_array($user->role, $this->adminRoles)) {
+        //$traineeStory = TraineeStory::select('id', 'trainee_id', 'story_id', 'session_pin', 'original_story','round')->where('story_id', $trainee->session_number)->where('session_pin', $trainee->session_pin)->where('round', $trainee->round)->first();
+        $traineeStories = TraineeStory::select('original_story', 'updated_story', 'round')->where('story_id', $trainee->session_number)->where('session_pin', $trainee->session_pin)->get();
+        //$this->pr($traineeStories);
+        //exit;
+        return view('kessler.trainee.storyview', compact('traineeStories'));
+      } else {
+        return view($this->error);
+      }
+     
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -624,8 +652,8 @@ class TraineeController extends Controller
         return view('kessler.trainee.add', array('trainee'=>$trainee, 'types'=>$types, 'boosterRange'=>$this->boosterRange, 'story'=>$story,'contextual'=>$contextual,'general'=>$general,'other'=>$other,'boosterSession' => $boosterSession,'boosterNo'=>$boosterNo,'categories' => $categories,'totalSessions'=>$this->totalSessions,'boosters'=>$boosters));
 
       } else {
-          return view($this->error);
-        }
+        return view($this->error);
+      }
       
     }
 

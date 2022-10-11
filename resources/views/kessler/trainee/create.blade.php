@@ -112,7 +112,7 @@
               <select class="form-control select2" id="booster_id" name="booster_id" placeholder="Select Category" disabled="true">
                 <option value= '' selected="selected">Select Category</option>
                 @foreach($boosters as $booster)
-                @if($booster->type == 'Booster')
+                @if($booster->type == 'booster')
                   <option value="{{ $booster->id }}">{{ $booster->category}}</option>
                 @endif
                 @endforeach;
@@ -142,7 +142,6 @@
 $(document).ready( function() { // Wait until document is fully parsed
   $('#jsCategory').on('change',function(){
     var category = $("#category_type option:selected").val().toLowerCase();
-    console.log('Category',category);
     resetSelect();
     $('.session').removeClass('d-none').hide();
     //$('.category').attr('disabled',true);
