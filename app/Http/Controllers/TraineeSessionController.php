@@ -271,6 +271,7 @@ class TraineeSessionController extends Controller
                   $viewName = 'msmt.sessions.directions-final-review';
                 } else {
                   $viewName = 'msmt.sessions.directions';
+                  //$viewName = 'msmt.sessions.direction-new';
                 }
                 $sentenceWords = implode('**', $sentenceWords);
                 $type = "directions";

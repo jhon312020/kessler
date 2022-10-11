@@ -159,6 +159,7 @@
           }
           if (wordFound == true) {
             $('#jsWord-'+senCounter).addClass('strikeThrough');
+            console.log('testnew');
           }
         }
       }

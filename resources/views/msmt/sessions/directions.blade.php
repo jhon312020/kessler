@@ -184,9 +184,11 @@
           wordLength = words.length;
           wordFound = false;
           findWord = '';
+
           for (subSenCounter = 0; subSenCounter < wordLength; subSenCounter++) {
             findWord = words[subSenCounter];
             wordIndex = writeUpWords.indexOf(findWord);
+            console.log('word', wordIndex);
             if (wordIndex !== -1) {
               wordFound = true;
               delete writeUpWords[wordIndex];

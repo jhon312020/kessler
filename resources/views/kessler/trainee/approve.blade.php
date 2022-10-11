@@ -15,14 +15,15 @@
                 </ul>
               </div>
             @endif            
-            <form method="post" action="{{url('/trainee/approve/'.$traineeStory->id)}}">
+            <form method="post" action="{{url('/trainee/approve/'.$traineeStory->id)}}" id="jsFormWriteup">
               @method('POST') 
               @csrf
               <div class="form-group">
                 <label class="small mb-1" for="story">Approve Story</label>
-                <textarea class="form-control py-4" name="story"  style="height: 218px;" rows="30" cols="150" placeholder="Enter Story ..." autofocus>{{$traineeStory->original_story}}</textarea>
+                <textarea class="form-control py-4" name="story" id="jsWriteup" style="height: 218px;" rows="30" cols="150" placeholder="Enter Story ..." autofocus>{{$traineeStory->original_story}}</textarea>
               </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
+                <div class="alert d-none" role="alert" id="jsUserMessage"></div>
                 <button type="submit" class="btn btn-primary"><i class="fas fa-thumbs-up">&nbsp;</i> Approve</button>
                 <a href="{{ url('/trainee')}}" class="ml-2 btn btn-danger" role="button"><i class="fas fa-times">&nbsp;</i> Cancel</a>
               </div>
@@ -32,4 +33,27 @@
     </div>
   </div>
 </div>
+<!-- <script type="text/javascript">
+  $(document).ready( function(){
+    var words = "{{ $userWords }}";
+    var allWords = "{{ $allStoryWords }}";
+    var wordsCount = words.split(',').length;
+    var myString = $('#jsWriteup').val();
+    /*var myPattern = new RegExp('(\\w*'+allWords+'\\w*)','gi');
+    var matches = myString.match(myPattern);
+    console.log(myPattern);*/
+    var error = 0;
+
+      if (myString.split(' ').some(part => words.includes(part))) {
+            error = error + 1;
+      }
+      console.log('error', error);
+      if (error > 0) {
+        $('#jsUserMessage').removeClass('d-none').show();
+        $('#jsUserMessage').text('Please use all the words to build the story!');
+      }  else {
+        $("#jsFormWriteup").submit();
+      }
+  })
+</script> -->
 @endsection

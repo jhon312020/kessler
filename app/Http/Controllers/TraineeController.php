@@ -156,6 +156,7 @@ class TraineeController extends Controller
           $delete = route('trainee.destroy', $records->id);
           $report = url('trainee/report', $records->id);
           $approve = url('trainee/approve', $records->id);
+          $review = url('trainee/review', $records->id);
           $csrf = csrf_token();
           $id = $records->id;
           $action = '';
@@ -515,8 +516,20 @@ class TraineeController extends Controller
       $trainee = Trainee::find($id);
       $user = Auth::user();
       if ($trainee->trainer_id == $user->id || in_array($user->role, $this->adminRoles)) {
-        $traineeStory = TraineeStory::select('id', 'trainee_id', 'story_id', 'session_pin', 'original_story','round')->where('story_id', $trainee->session_number)->where('session_pin', $trainee->session_pin)->where('round', $trainee->round)->first();
-        return view('kessler.trainee.approve', compact('traineeStory'));
+        $traineeStory = TraineeStory::select('id', 'trainee_id', 'story_id', 'session_pin', 'original_story','user_story_words','round')->where('story_id', $trainee->session_number)->where('session_pin', $trainee->session_pin)->where('round', $trainee->round)->first();
+        $userWords = $traineeStory->user_story_words;
+        $allStoryWords = json_encode($userWords);
+        $allStoryWords = json_decode($allStoryWords); 
+        //$allStoryWords = explode(',',$userWords);
+        //$allStoryWords = str_replace(array('"','[',']'),'',$allStoryWords);
+        //$allStoryWords = implode($userWords, ', ');
+        //$allStoryWords = array_map('trim', $allStoryWords);
+        /*$traineeObj = Trainee::select('id', 'trainee_id', 'session_pin', 'session_number', 'session_type', 'round', 'completed', 'booster_id', 'booster_range')->where('trainee_id', $traineeStory->trainee_id)->where('session_pin', $traineeStory->session_pin)->first();
+        $storyWords = $this->getWordAndIDObj($traineeObj);
+        $storyWords = $storyWords->pluck('word', 'id');*/
+        dd($allStoryWords);
+        exit();
+        return view('kessler.trainee.approve', compact('traineeStory','userWords','allStoryWords'));
       } else {
         return view($this->error);
       }
@@ -593,7 +606,7 @@ class TraineeController extends Controller
         }
         return redirect($this->traineePage)->with('success', 'Trainee story has been reviewed Successfully!');
       } else {
-        redirect($this->traineePage)->with('error', 'Invalid request!');
+        return redirect($this->traineePage)->with('error', 'Invalid request!');
       }
     }
 
