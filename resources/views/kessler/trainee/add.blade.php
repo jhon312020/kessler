@@ -115,9 +115,7 @@
               <select class="form-control select2" id="booster_id1" name="booster_id" placeholder="Select Category" disabled="true">
                 <option value= '' selected="selected">Select Category</option>
                 @foreach($boosters as $booster)
-                @if($booster->type == 'booster')
                   <option value="{{ $booster->id }}">{{ $booster->category}}</option>
-                @endif
                 @endforeach;
               </select>
             </div>
@@ -149,7 +147,7 @@
               <select class="form-control select2" id="booster_id" name="booster_id" placeholder="Select Category" disabled="true">
                 <option value= '' selected="selected">Select Category</option>
                 @foreach($boosters as $booster)
-                @if($booster->type == 'Booster')
+                @if($booster->type == 'booster')
                   <option value="{{ $booster->id }}">{{ $booster->category}}</option>
                 @endif
                 @endforeach;
