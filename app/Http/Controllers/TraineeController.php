@@ -165,7 +165,7 @@ class TraineeController extends Controller
              $action =  "<a href='$add' class='btn btn-primary' role='button' title='Add'><i class='fas fa-plus' title='Add'></i></a>&nbsp;";
           }
           $action .= "<a href='$view' class='btn btn-primary' role='button' title='View'><i class='fas fa-eye' title='View'></i></a>&nbsp;";
-           if (($records->session_type >= 2  || $records->session_type <= 4) ) {
+           if (($records->session_type >= 2  && $records->session_type <= 4) ) {
             $traineeCurrentPosition = json_decode($records->session_current_position);
             if ($traineeCurrentPosition && $traineeCurrentPosition->position == 'review') {
             $action .= "<a href='$approve' class='btn btn-primary' role='button' title='Approve'><i class='fas fa-check-circle' title='Approve'></i></a>&nbsp;";
