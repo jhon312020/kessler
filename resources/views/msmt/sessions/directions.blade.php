@@ -78,7 +78,6 @@
     var writeup = '';
     var updateWriteUp = '';
     var newWriteUp = '';
-    var wordPostion = '';
     var checkKey = '';
     var startOfWord = '';
     var endOfWord = '';
@@ -102,83 +101,68 @@
       regExp = '';
       userUsedWordCount = 0;
       for (counter = 0; counter < wordCount; counter++) {
-          matchingWord = wordCombination = allWords[counter];
-         // wordPosition = writeup.indexOf(' '+wordCombination);
-         //Matching the pattern if it is the start of the sentence
-          pattern = `\\b(${matchingWord})[\\s\\,\\.]`;
-          pattern = new RegExp(pattern);
-          result = pattern.exec(writeup);
-          startOfWord = '';
-          if (result) {
-            wordPosition = result.index;
-            subStringLen = parseInt(wordPosition) + parseInt(wordCombination.length);
-            if (wordPosition != 0) {
-              //Changing the pattern if it is not the start of the sentence
-              pattern = `\(\\s)(${matchingWord})[\\s\\,\\.]`;
-              pattern = new RegExp(pattern);
-              result = pattern.exec(writeup);
-              if (result) {
-                wordPosition = result.index;
-                startOfWord = writeup[wordPosition];
-                subStringLen = parseInt(wordPosition) + parseInt(wordCombination.length);
-                subStringLen += 1; 
-              } else {
-                wordPosition = -1;
-                console.log(wordPosition);
-              }
-            }
-            endOfWord = writeup[subStringLen];
-          } else  {
-            wordPosition = -1;
-          }
-          if (wordPosition > -1) {          
-            updatePosition = updateWriteUp.indexOf(wordCombination);
-            if (wordPosition == 0) {
-              if (writeup.indexOf(wordCombination+'.') == wordPosition) {
-                matchingCombo = wordCombination+'\\.';
-                replaceCombo =  wordCombination+'.';
-              } else if (writeup.indexOf(wordCombination+',') == wordPosition) {
-                matchingCombo = wordCombination+',';
-                replaceCombo =  wordCombination+',';
-              } else if (writeup.indexOf(wordCombination+' ') == wordPosition) {
-                matchingCombo = wordCombination+singleSpace;
-                replaceCombo =  wordCombination+singleSpace;
-              }
+        wordPosition = '';
+        checkKey = '';
+        matchingCombo = wordCombination = allWords[counter];
+        wordPosition = writeup.indexOf(wordCombination);
+        subStringLen = parseInt(wordPosition) + parseInt(wordCombination.length);
+        startWordCounter = parseInt(wordPosition);
+        startOfWord = '';
+
+          if (startWordCounter > 0) {
+            startOfWord = writeup[wordPosition -1];
+          } 
+          if (wordPosition > -1) {
+            if (wordPosition) {
+               matchingCombo = ' ';
+               replaceCombo = ' ';
             } else {
-              if (writeup.indexOf(singleSpace+wordCombination+'.') == wordPosition) {
-                matchingCombo = singleSpace+wordCombination+'\\.';
-                replaceCombo =  singleSpace+wordCombination+'.';
-              } else if (writeup.indexOf(singleSpace+wordCombination+',') == wordPosition) {
-                matchingCombo = singleSpace+wordCombination+',';
-                replaceCombo =  singleSpace+wordCombination+',';
-              } else if (writeup.indexOf(singleSpace+wordCombination+singleSpace) == wordPosition) {
-                matchingCombo = singleSpace+wordCombination+singleSpace;
-                replaceCombo =  singleSpace+wordCombination+singleSpace;
-              }
+              matchingCombo = '';
+              replaceCombo = '';
+            }
+            
+            if (writeup.indexOf(wordCombination+',') == wordPosition) {
+              wordPosition = writeup.indexOf(wordCombination+',');
+              matchingCombo += wordCombination+',';
+              replaceCombo +=  wordCombination+',';
+            } else if (writeup.indexOf(wordCombination+' ') == wordPosition) {
+              wordPosition = writeup.indexOf(wordCombination+' ');
+              matchingCombo += wordCombination+' ';
+              replaceCombo +=  wordCombination+' ';  
+            } else if (writeup.indexOf(wordCombination+'.') == wordPosition) {  
+              wordPosition = writeup.indexOf(wordCombination+'.');
+              matchingCombo += wordCombination+'\\.';
+              replaceCombo +=  wordCombination+'.';
             }
           }
-          if (wordPosition != -1) {
-            //subStringLen = parseInt(wordPosition) + parseInt(wordCombination.length);
-            //console.log('Start', startOfWord, 'endOfWord', endOfWord);
-            //For left user types lefthand in this case word left is getting matched so restting the substring
-            if ((startOfWord == '' || startOfWord == ' ') && (endOfWord =='.' || endOfWord == ',' || endOfWord == ' ' || endOfWord == '') && typeof(endOfWord) !== 'undefined') {
-              // console.log("updateWriteUp", updateWriteUp);
-              console.log('matchingCombo', matchingCombo, 'wordPosition',wordPosition);
-              //$('#jsWord-'+counter).addClass('strikeThrough');
-              var regExp = new RegExp(matchingCombo,"i");
-              updateWriteUp = updateWriteUp.replace(regExp, replaceCombo);
-              userUsedWordCount++;
-              writeUpWords.push(allWords[counter]); 
-              delete allWords[counter];
+          subStringLen = parseInt(wordPosition) + parseInt(wordCombination.length);
+
+        endOfWord = writeup[subStringLen];
+        if (wordPosition != -1) {
+          subStringLen = parseInt(wordPosition) + parseInt(wordCombination.length);
+          //For left user types lefthand in this case word left is getting matched so restting the substring
+          if ((startOfWord == '' || startOfWord == ' ') && (endOfWord =='.' || endOfWord == ',' || endOfWord ==' ' || endOfWord == '') && typeof(endOfWord) !== 'undefined') {
+            writeup = writeup.substring(subStringLen, writeup.length);
+            //regExp = new RegExp(allWords[counter],"i");
+            //updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
+            //userUsedWordCount++;
+            console.log('Matcing Combo ',matchingCombo);
+            var regExp = new RegExp(matchingCombo,"i");
+            updateWriteUp = updateWriteUp.replace(regExp, replaceCombo);
+            userUsedWordCount++;
+            writeUpWords.push(allWords[counter]); 
+            delete allWords[counter];
           } else {
-            var regExp = new RegExp(allWords[counter],"gi");
-            updateWriteUp = updateWriteUp.replace(regExp, allWords[counter].toLowerCase());
+            writeup = writeup.substring(subStringLen, writeup.length);
             counter--;
-            //console.log(updateWriteUp);
           }
-        }
+        } 
       }
+      //
       if (writeUpWords.length) {
+        console.log('test',writeUpWords);
+        console.log('sentenceWords',sentenceWords);
+        console.log('sentenceWordsLength',sentenceWordsLength);
         for(senCounter = 0; senCounter < sentenceWordsLength; senCounter++ ) {
           words = sentenceWords[senCounter].split(",");
           wordLength = words.length;
@@ -187,6 +171,7 @@
           for (subSenCounter = 0; subSenCounter < wordLength; subSenCounter++) {
             findWord = words[subSenCounter];
             wordIndex = writeUpWords.indexOf(findWord);
+            console.log(wordIndex);
             if (wordIndex !== -1) {
               wordFound = true;
               delete writeUpWords[wordIndex];
@@ -224,15 +209,8 @@
         $('#jsWriteup').focus();
         $(this).prop("disabled", false);
       }
-    })
+    });
 
-  })
+  });
 </script>
 @endsection
-
-
-
-
-
-
-
