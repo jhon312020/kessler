@@ -169,7 +169,7 @@ class TraineeController extends Controller
             $traineeCurrentPosition = json_decode($records->session_current_position);
             if ($traineeCurrentPosition && $traineeCurrentPosition->position == 'review') {
             $action .= "<a href='$approve' class='btn btn-primary' role='button' title='Approve'><i class='fas fa-check-circle' title='Approve'></i></a>&nbsp;";
-            } else if ($records->round > 1) {
+            } else {
               $action .= "<a href='$storyView' class='btn btn-primary' role='button' title='View'><i class='fas fa-newspaper' title='Trainee Story'></i></a>&nbsp;";
             }      
           }
