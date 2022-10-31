@@ -449,11 +449,10 @@ class TraineeController extends Controller
       if ($recallWords) {
         $timeTaken = $recallWords->time_taken;
         $recallAnswers = json_decode($recallWords->answer);
-        $recallWords = explode(' ', $recallAnswers->words);
+        $recallWords = explode(', ', $recallAnswers->words);
         $recallWords = array_unique($recallWords);
         
         $foundWords = array_intersect($allStoryWords, $recallWords);
-        
         foreach($recallWords as $key=>$recallWord) {
           if (in_array($recallWord, $foundWords)) {
             $recallReport['words'][$key] = '<span class="correct"><i class="fa fa-check" aria-hidden="true">&nbsp;</i> '.$recallWord.'</span>';
@@ -474,7 +473,7 @@ class TraineeController extends Controller
       if ($recallWords) {
         $timeTaken = $recallWords->time_taken;
         $recallAnswers = json_decode($recallWords->answer);
-        $recallWords = explode(' ', $recallAnswers->words);
+        $recallWords = explode(', ', $recallAnswers->words);
 
         $wordsCount = array_count_values($allStoryWords);
         $foundWords = 0;
@@ -522,8 +521,12 @@ class TraineeController extends Controller
       $trainee = Trainee::find($id);
       $user = Auth::user();
       if ($trainee->trainer_id == $user->id || in_array($user->role, $this->adminRoles)) {
-        $traineeStory = TraineeStory::select('id', 'trainee_id', 'story_id', 'session_pin', 'original_story','round')->where('story_id', $trainee->session_number)->where('session_pin', $trainee->session_pin)->where('round', $trainee->round)->first();
-        return view('kessler.trainee.approve', compact('traineeStory'));
+        $traineeStory = TraineeStory::select('id', 'trainee_id', 'story_id', 'session_pin', 'original_story','updated_story','user_story_words','round')->where('story_id', $trainee->session_number)->where('session_pin', $trainee->session_pin)->where('round', $trainee->round)->first();
+        $wordStory = $this->getWords($trainee);
+        //$allWords = $wordStory->pluck('words')->toArray();
+        $allWords = $traineeStory->user_story_words;
+        $allWords = str_replace(array('"','[',']'),'',$allWords);
+        return view('kessler.trainee.approve', compact('traineeStory','allWords'));
       } else {
         return view($this->error);
       }
@@ -558,19 +561,51 @@ class TraineeController extends Controller
         foreach ($sentences as $key => $sentence) {
           $newString .= ($key & 1) == 0 ? ucfirst(strtolower(trim($sentence))) : $sentence.' ';
         }
-        
+        //$storyWords = $storyWords->toArray();
         if ($traineeObj->booster_id != 1) {
           //$revisedStory = $this->getRevisedStory($storyWords, $newString);
           foreach($storyWords as $word) {
           $searchWord = strtolower($word);
-                
+          //$spaceCount = substr_count($searchWord, ' ');
+          //echo '<br/>';
           $findWord = '/\b'.$searchWord.'\b/i';
-        
+          //echo 'Before replacenew string: '.$newString;
+          //echo '<br/>';
           $newString = preg_replace($findWord, $word, $newString);
+          //echo 'Find word: '.$findWord;
+          //echo '<br/>';
+          //echo 'after replace new string: '.$newString;
+          //echo '<br/>';
           }
-
-          preg_match_all('/\b([A-Z-]+)\b/', $newString, $userWords);
+          preg_match_all('/\b([A-Z]+)\b/', $newString, $userWords);
+          /*dd($storyWords, substr_count($storyWords, ' '));
+          exit();*/
+          
           $storyWords = $storyWords->toArray();
+          if(count($userWords[0]) > count($storyWords)) {
+          foreach ($storyWords as $words) {
+            if(str_contains(trim($words), ' ')) {
+                $explodedWords = explode(' ', $words);
+                //$this->pr($explodedWords);
+
+                $findWord = array_search($explodedWords[0], $userWords[0]);
+                $userWords[0][$findWord] = $words;
+                $wordsCount = count($explodedWords);
+
+                $count = 1;
+                while ($wordsCount > $count) {
+                  $userWords[0][$findWord+$count] = "";
+                  $count++;
+                }
+
+                //$this->pr($userWords[0]);
+                //$this->pr($explodedWords);
+              }
+            }
+          }    
+          
+          $userWords[0] = array_values(array_filter($userWords[0]));  
+
           if ($userWords) {
           foreach($userWords[0] as $word) {
             $word = strtoupper($word);
@@ -579,16 +614,24 @@ class TraineeController extends Controller
             }
           }
         }
+        
+        if(empty($userStoryWords)){
+          return redirect($this->traineePage)->with('error', 'Story field cannot be empty');
+        }
         $userStoryWords = array_values(array_unique($userStoryWords));
         $revisedStory = $story;
-
+        
         } else {
           $revisedStory = $this->getRevisedStoryForDirection($storyWords, $newString);
           $userStoryWords = array_values($storyWords->toArray());
         }
+        /*dd($revisedStory);
+        exit();*/
         $traineeStory->updated_story = $revisedStory;
         $traineeStory->user_story_words = $userStoryWords;
         $traineeStory->reviewed = 1;
+        
+        
         /*dd($traineeStory);
         exit();*/
         if ($traineeStory->save()) {
@@ -600,7 +643,7 @@ class TraineeController extends Controller
         }
         return redirect($this->traineePage)->with('success', 'Trainee story has been reviewed Successfully!');
       } else {
-        redirect($this->traineePage)->with('error', 'Invalid request!');
+        return redirect($this->traineePage)->with('error', 'Invalid request!');
       }
     }
     /**

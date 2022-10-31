@@ -322,25 +322,45 @@ class TraineeSessionController extends Controller
         foreach ($sentences as $key => $sentence) {
           $newString .= ($key & 1) == 0 ? ucfirst(strtolower(trim($sentence))) : $sentence.' ';
         }
-        
-        
-        /*dd($resultValue);
-        exit();*/
+
+        if ($traineeRecord->booster_id != 1) {
         foreach($storyWords as $word) {
           $searchWord = strtolower($word);
               
           $findWord = '/\b'.$searchWord.'\b/i';
 
-          $newString = preg_replace($findWord, $word, $newString);
+          $newString = preg_replace($findWord, $word, $newString); 
+          
+          
         }
         
+        preg_match_all('/\b([A-Z]+)\b/', $newString, $userWords);
         $wordsArr = $storyObj->pluck("word","question");
-        
-        preg_match_all('/\b([A-Z-]+)\b/', $newString, $userWords);
-        
         $storyWords = $storyWords->toArray();
 
-        $userStoryWords = array(); 
+        if(count($userWords[0]) > count($storyWords)) {
+          foreach ($storyWords as $words) {
+            if(str_contains(trim($words), ' ')) {
+                $explodedWords = explode(' ', $words);
+                //$this->pr($explodedWords);
+
+                $findWord = array_search($explodedWords[0], $userWords[0]);
+                $userWords[0][$findWord] = $words;
+                $wordsCount = count($explodedWords);
+
+                $count = 1;
+                while ($wordsCount > $count) {
+                  $userWords[0][$findWord+$count] = "";
+                  $count++;
+                }
+
+                //$this->pr($userWords[0]);
+                //$this->pr($explodedWords);
+              }
+            }
+          }    
+        $userWords[0] = array_values(array_filter($userWords[0])); 
+        
         if ($userWords) {
           foreach($userWords[0] as $word) {
             $word = strtoupper($word);
@@ -349,17 +369,21 @@ class TraineeSessionController extends Controller
             }
           }
         }
-        //$userStoryWords = array_unique($userStoryWords);
+
+        $revisedStory = $story;
         $userStoryWords = array_values(array_unique($userStoryWords));
+                
+        } else{
+          $revisedStory = $this->getRevisedStoryForDirection($storyWords, $newString);
+          $userStoryWords = array_values($storyWords->toArray());
+        }
+
         $traineeStory['trainee_id'] = $trainee['trainee_id'];
         $traineeStory['story_id'] = $trainee['session_number'];
         $traineeStory['session_pin'] = $trainee['session_pin'];
         $traineeStory['round'] = $trainee['round'];
         $traineeStory['original_story'] = $story;
-        /*$traineeStory['updated_story'] = $newString;
-        $userStoryWords = array_values(array_unique($userStoryWords));
-        $traineeStory['user_story_words'] = json_encode($userStoryWords);*/
-        $traineeStory['updated_story'] = $story;
+        $traineeStory['updated_story'] = $revisedStory;
         $traineeStory['user_story_words'] = json_encode($userStoryWords);
         /*dd($traineeStory);
         exit();*/

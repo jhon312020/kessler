@@ -58,7 +58,7 @@
       }
     });
    $(document).on('keyup', '#jsRecallWord', function(event) {
-      if (event.keyCode == 32 || event.keyCode == 13) {
+      if (event.keyCode == 13) {
         var typedWord = $('#jsRecallWord').val().toUpperCase().trim();
         if (typedWord != '') {
           words.push(typedWord);
@@ -110,7 +110,7 @@
         words.push($('#jsRecallWord').val().toUpperCase().trim());
       }
       $("#jsLoader").removeClass('d-none');
-      $('#jsRecallWord').val(words.join(' '));
+      $('#jsRecallWord').val(words.join(', '));
       var startTime = $("<input>").attr("name", "startTime").attr("type", "hidden").val(timer);
       $('#recallWords').append(startTime);
       var endTime = $("<input>").attr("name", "endTime").attr("type", "hidden").val(performance.now());
