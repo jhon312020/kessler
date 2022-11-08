@@ -41,7 +41,7 @@
     </div>
   </div>
 </div>
-@include('common.wordmodal')
+<!-- @include('common.wordmodal') -->
 <script type="text/javascript">
   $(document).ready( function() { 
     var totalwords = "{{ $allWords }}";
