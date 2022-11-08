@@ -523,10 +523,25 @@ class TraineeController extends Controller
       if ($trainee->trainer_id == $user->id || in_array($user->role, $this->adminRoles)) {
         $traineeStory = TraineeStory::select('id', 'trainee_id', 'story_id', 'session_pin', 'original_story','updated_story','user_story_words','round')->where('story_id', $trainee->session_number)->where('session_pin', $trainee->session_pin)->where('round', $trainee->round)->first();
         $wordStory = $this->getWords($trainee);
-        //$allWords = $wordStory->pluck('words')->toArray();
+        $sentenceWords = json_encode($wordStory->where('question', '<>', 'D')->pluck('question')->toArray());
+        $boosterID = $trainee->booster_id;
         $allWords = $traineeStory->user_story_words;
+        
+        /*$includeViewName = "msmt.sessions.partials.word-all";
+        $respClass = 'col-lg-6';*/
         $allWords = str_replace(array('"','[',']'),'',$allWords);
-        return view('kessler.trainee.approve', compact('traineeStory','allWords'));
+        $sentenceWords = str_replace(array('"','[',']'),'',$sentenceWords);
+        
+        //$wordslist = str_replace(array('"','[',']'),'',$wordslist);
+        /*dd($wordslist);
+        exit();*/
+        if($boosterID == 1){
+          $wordslist = $wordStory->pluck('words')->toArray();
+            return view('kessler.trainee.approvebooster', compact('traineeStory','allWords','wordslist','sentenceWords'));
+        } else{
+          $wordslist = $wordStory->pluck('word')->toArray();
+            return view('kessler.trainee.approve', compact('traineeStory','wordslist','allWords'));
+        }
       } else {
         return view($this->error);
       }
@@ -630,10 +645,9 @@ class TraineeController extends Controller
         $traineeStory->updated_story = $revisedStory;
         $traineeStory->user_story_words = $userStoryWords;
         $traineeStory->reviewed = 1;
-        
-        
         /*dd($traineeStory);
         exit();*/
+        
         if ($traineeStory->save()) {
           $traineeRecord = Trainee::where('session_pin', $traineeStory->session_pin)->first();
           if ($traineeRecord) {

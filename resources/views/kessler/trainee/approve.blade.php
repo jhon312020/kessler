@@ -120,7 +120,7 @@
               }
             }
           }
-          /*if (wordPosition != -1) {
+          if (wordPosition != -1) {
             //subStringLen = parseInt(wordPosition) + parseInt(wordCombination.length);
             console.log('Start', startOfWord, 'endOfWord', endOfWord);
             //For left user types lefthand in this case word left is getting matched so restting the substring
@@ -136,7 +136,7 @@
             updateWriteUp = updateWriteUp.replace(regExp, allWords[counter].toLowerCase());
             //console.log(updateWriteUp);
           }
-        }*/
+        }
       }
       $('#jsWriteup').val(updateWriteUp)
     });
@@ -151,9 +151,9 @@
       $(this).prop("disabled", true);
       if (wordCount == userUsedWordCount) {
         $("#jsFormWriteup").submit();
-        console.log(userUsedWordCount);
+        console.log('hai', userUsedWordCount);
       } else {
-        console.log(userUsedWordCount);
+        console.log('hello', userUsedWordCount);
         $('#jsUserMessage').addClass('alert-danger');
         $('#jsUserMessage').text('Please use all the words to build the story!');
         $('#jsUserMessage').removeClass('d-none').show();

@@ -374,10 +374,15 @@ class TraineeSessionController extends Controller
         $userStoryWords = array_values(array_unique($userStoryWords));
                 
         } else{
-          $revisedStory = $this->getRevisedStoryForDirection($storyWords, $newString);
-          $userStoryWords = array_values($storyWords->toArray());
+          $storyWords = $storyWords->toArray();   
+          $revisedStory = $story;
+          //$this->getRevisedStoryForDirection($storyWords, $newString);
+          
+          
+          $userStoryWords = array_values($storyWords);
         }
-
+        /*dd($revisedStory);
+        exit();*/
         $traineeStory['trainee_id'] = $trainee['trainee_id'];
         $traineeStory['story_id'] = $trainee['session_number'];
         $traineeStory['session_pin'] = $trainee['session_pin'];
