@@ -23,7 +23,7 @@
                 <textarea class="form-control py-4" name="story" id="jsWriteup" style="height: 218px;" rows="30" cols="150" placeholder="Enter Story ..." autofocus>{{$traineeStory->updated_story}}</textarea>
               </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
-                <!-- <a onclick='viewModal(this)' id = 'jsview' class='btn btn-primary' role='button' title='View'><i class='fas fa-eye' title='View'></i> View </a>&nbsp; -->
+                <a onclick='viewModal(this)' id = 'jsview' class='btn btn-primary' role='button' title='View'><i class='fas fa-eye' title='View'></i> View </a>&nbsp;
                 <button type="submit" id="jsSubmit" class="btn btn-primary"><i class="fas fa-thumbs-up">&nbsp;</i> Approve</button>
                 <a href="{{ url('/trainee')}}" class="ml-2 btn btn-danger" role="button"><i class="fas fa-times">&nbsp;</i> Cancel</a>
               </div>
@@ -41,7 +41,7 @@
     </div>
   </div>
 </div>
-<!-- @include('common.wordmodal') -->
+@include('common.wordmodal')
 <script type="text/javascript">
   $(document).ready( function() { 
     var totalwords = "{{ $allWords }}";
@@ -52,8 +52,6 @@
     sentenceWordsLength = sentenceWords.length;
     var userUsedWordCount = 0;
     var wordCount = totalwords.split(',').length;
-    var word = totalwords.split(',');
-    console.log('word', word);
     var writeUpWords = '';
     var subStringLen = 0;
     var writeup = '';
@@ -75,7 +73,8 @@
       writeUpWords = [];
       wordCount = allWords.length;
       $('#jsUserMessage').addClass('d-none');
-      //$('#jsWordContainer p').removeClass('strikeThrough');
+      $('.col-lg-10').removeClass('strikeThrough');
+      $('#jsWordContainer p span').removeClass('strikeThrough');
       writeup = $('#jsWriteup').val().toUpperCase();
       updateWriteUp = $('#jsWriteup').val();
       newWriteUp = '';
@@ -127,9 +126,9 @@
             //regExp = new RegExp(allWords[counter],"i");
             //updateWriteUp = updateWriteUp.replace(regExp, allWords[counter]);
             //userUsedWordCount++;
-            console.log('Matcing Combo ',matchingCombo);
-            console.log('Replace Combo ',replaceCombo);
-
+            
+            console.log('replaceCombo', replaceCombo);
+            //$('#jsWord-'+counter).addClass('strikeThrough');
             var regExp = new RegExp(matchingCombo,"i");
             updateWriteUp = updateWriteUp.replace(regExp, replaceCombo);
             userUsedWordCount++;
@@ -141,48 +140,54 @@
           }
         } 
       }
-      //
+
+      
+    
       if (writeUpWords.length) {
         //console.log('test',writeUpWords);
         //console.log('sentenceWords',sentenceWords);
         //console.log('sentenceWordsLength',sentenceWordsLength);
         for(senCounter = 0; senCounter < sentenceWordsLength; senCounter++ ) {
+          console.log('sentenceWordsLength', sentenceWordsLength);
           words = sentenceWords[senCounter].split(",");
           wordLength = words.length;
           wordFound = false;
           findWord = '';
           for (subSenCounter = 0; subSenCounter < wordLength; subSenCounter++) {
+           //console.log('subSenCounter', subSenCounter);
             findWord = words[subSenCounter];
             wordIndex = writeUpWords.indexOf(findWord);
-            console.log(wordIndex);
+            
+
             if (wordIndex !== -1) {
               wordFound = true;
               delete writeUpWords[wordIndex];
             } else {
               wordFound = false;
               break;
-            }
+            }            
           }
-         
-      /*if (words.some(v => findWord.includes(v))) {
-        console.log("came in");
-      } else {
-        console.log("no match");
-      }*/
-    
-          //if (wordFound == true ) {
-            //$('#jsWord-'+senCounter).addClass('strikeThrough');
+          if (wordFound == true ) {
+            console.log('came in');
+            $('#jsWord-'+senCounter).addClass('strikeThrough');
+            //$('#jsWord-'+subSenCounter).addClass('strikeThrough');
             //$('#jsWriteup').toUpperCase();
             //totalwords.map(f =>{ return f.toUpperCase(); });
-          //}
+          } 
         }
       }
+      
       $('#jsWriteup').val(updateWriteUp);
     });
-    $(document).on('click touchstart', '#jsStartSession', function() {
+
+    /*$(document).on('click touchstart', '#jsStartSession', function() {
       $('#jsTraineeSession').slideUp();
       $('#jsTraineeStory').removeClass('d-none').show();
-    });
+    });*/
+    /*$("#jsview").on('click', function() {
+      $('#jsWord-'+senCounter).removeClass('strikeThrough');
+      //$('#jsTraineeStory').removeClass('d-none').show();
+    });*/
     $("#jsSubmit").on('click touchstart', function(event) {
       event.preventDefault();
       $('#jsUserMessage').addClass('d-none');

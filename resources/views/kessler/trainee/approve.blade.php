@@ -23,6 +23,7 @@
                 <textarea class="form-control py-4" name="story" id="jsWriteup" style="height: 218px;" rows="30" cols="150" placeholder="Enter Story ..." autofocus>{{$traineeStory->updated_story}}</textarea>
               </div>
               <div class="form-group d-flex align-items-center float-right mt-4 mb-0">
+                <a onclick='viewModal(this)' id = 'jsview' class='btn btn-primary' role='button' title='View'><i class='fas fa-eye' title='View'></i> View </a>&nbsp;
                 <button type="submit" id="jsSubmit" class="btn btn-primary"><i class="fas fa-thumbs-up">&nbsp;</i> Approve</button>
                 <a href="{{ url('/trainee')}}" class="ml-2 btn btn-danger" role="button"><i class="fas fa-times">&nbsp;</i> Cancel</a>
               </div>
@@ -40,12 +41,13 @@
     </div>
   </div>
 </div>
-
+@include('common.wordmodal')
 <script type="text/javascript">
   $(document).ready( function() { 
     var totalwords = "{{ $allWords }}";
     var allWords = '';
     var wordCount = totalwords.split(',').length;
+    console.log('totalwords', wordCount);
     var userUsedWordCount = 0;
     var startOfWord = '';
     var endOfWord = '';
@@ -59,8 +61,8 @@
       allWords = totalwords.split(',');
       console.log(allWords);
       $('#jsUserMessage').addClass('d-none');
-      //$('#jsWordContainer p').removeClass('strikeThrough');
-      //$('#jsWordContainer p span').removeClass('strikeThrough');
+      $('.col-lg-5').removeClass('strikeThrough');
+      $('#jsWordContainer p span').removeClass('strikeThrough');
       writeup = $('#jsWriteup').val().toUpperCase();
       updateWriteUp = $('#jsWriteup').val();
       userUsedWordCount = 0;
@@ -127,7 +129,7 @@
             if ((startOfWord == '' || startOfWord == ' ') && (endOfWord =='.' || endOfWord == ',' || endOfWord == ' ' || endOfWord == '') && typeof(endOfWord) !== 'undefined') {
               // console.log("updateWriteUp", updateWriteUp);
               console.log('matchingCombo', matchingCombo, 'wordPosition',wordPosition);
-              //$('#jsWord-'+counter).addClass('strikeThrough');
+              $('#jsWord-'+counter).addClass('strikeThrough');
               var regExp = new RegExp(matchingCombo,"i");
               updateWriteUp = updateWriteUp.replace(regExp, replaceCombo);
               userUsedWordCount++;
@@ -151,9 +153,7 @@
       $(this).prop("disabled", true);
       if (wordCount == userUsedWordCount) {
         $("#jsFormWriteup").submit();
-        console.log('hai', userUsedWordCount);
       } else {
-        console.log('hello', userUsedWordCount);
         $('#jsUserMessage').addClass('alert-danger');
         $('#jsUserMessage').text('Please use all the words to build the story!');
         $('#jsUserMessage').removeClass('d-none').show();
@@ -165,6 +165,12 @@
     })
 
   })
+
+function viewModal(argument) {
+    
+    //$('#jsview').removeClass('d-none');
+    $('#editModal').modal('show');
+  }  
 </script>
 
 @endsection

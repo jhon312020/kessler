@@ -523,24 +523,34 @@ class TraineeController extends Controller
       if ($trainee->trainer_id == $user->id || in_array($user->role, $this->adminRoles)) {
         $traineeStory = TraineeStory::select('id', 'trainee_id', 'story_id', 'session_pin', 'original_story','updated_story','user_story_words','round')->where('story_id', $trainee->session_number)->where('session_pin', $trainee->session_pin)->where('round', $trainee->round)->first();
         $wordStory = $this->getWords($trainee);
-        $sentenceWords = json_encode($wordStory->where('question', '<>', 'D')->pluck('question')->toArray());
-        $boosterID = $trainee->booster_id;
+        $sentenceWords = $wordStory->where('question', '<>', 'D')->pluck('question')->toArray();
+        $sentenceWords = implode('**', $sentenceWords);
+        /*dd($sentenceWords);
+        exit();*/
         $allWords = $traineeStory->user_story_words;
+        $storyWord = json_decode($traineeStory->user_story_words);
+        //$allWords = array_chunk($storyWord, 5, true);
+        $allWords = implode(',', $storyWord);
+
+        $boosterID = $trainee->booster_id;
         
-        /*$includeViewName = "msmt.sessions.partials.word-all";
-        $respClass = 'col-lg-6';*/
-        $allWords = str_replace(array('"','[',']'),'',$allWords);
-        $sentenceWords = str_replace(array('"','[',']'),'',$sentenceWords);
+        
+        //$allWords = implode(',', $storyWord);
+        //$storyWord = array_chunk($allWords, 5, true)
+        /*dd($allWords);
+        exit();*/
+        
+        //$sentenceWords = str_replace(array('"','[',']'),'',$sentenceWords);
         
         //$wordslist = str_replace(array('"','[',']'),'',$wordslist);
         /*dd($wordslist);
         exit();*/
         if($boosterID == 1){
-          $wordslist = $wordStory->pluck('words')->toArray();
-            return view('kessler.trainee.approvebooster', compact('traineeStory','allWords','wordslist','sentenceWords'));
+          $wordslist = $wordStory->where('question', '<>', 'D')->pluck('word')->toArray();
+            return view('kessler.trainee.approvebooster', compact('traineeStory','boosterID','allWords','storyWord','wordslist','sentenceWords'));
         } else{
-          $wordslist = $wordStory->pluck('word')->toArray();
-            return view('kessler.trainee.approve', compact('traineeStory','wordslist','allWords'));
+          $wordslist = $wordStory->where('question', '<>', 'D')->pluck('word')->toArray();
+            return view('kessler.trainee.approve', compact('traineeStory','boosterID','wordslist','storyWord','allWords'));
         }
       } else {
         return view($this->error);
